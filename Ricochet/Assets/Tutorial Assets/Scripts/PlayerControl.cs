@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
 
     #region Inspector Variables
@@ -51,26 +51,18 @@ public class PlayerControl : MonoBehaviour
 		// The Speed animator parameter is set to the absolute value of the horizontal input.
 		anim.SetFloat("Speed", Mathf.Abs(h));
 
-		// If the player is changing direction (h has a different sign to velocity.x) or hasn't reached maxSpeed yet...
+        //player speed
 		if(h * rigid.velocity.x < maxSpeed)
-            // ... add a force to the player.
             rigid.AddForce(Vector2.right * h * moveForce);
-
-		// If the player's horizontal velocity is greater than the maxSpeed...
-		if(Mathf.Abs(rigid.velocity.x) > maxSpeed)
-            // ... set the player's velocity to the maxSpeed in the x axis.
+		else if(Mathf.Abs(rigid.velocity.x) > maxSpeed)
             rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
 
-		// If the input is moving the player right and the player is facing left...
+		// set sprite correctly
 		if(h > 0 && !facingRight)
-			// ... flip the player.
 			Flip();
-		// Otherwise if the input is moving the player left and the player is facing right...
 		else if(h < 0 && facingRight)
-			// ... flip the player.
 			Flip();
-
-		// If the player should jump...
+        
 		if(jump)
 		{
 			// Set the Jump animator trigger parameter.
@@ -92,9 +84,7 @@ public class PlayerControl : MonoBehaviour
 
     void Flip ()
 	{
-		// Switch the way the player is labelled as facing.
 		facingRight = !facingRight;
-
         body.flipX = !facingRight;
 	}
 }
