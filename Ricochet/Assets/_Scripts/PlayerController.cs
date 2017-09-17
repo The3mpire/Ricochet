@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
 
     #region Inspector Variables
@@ -10,6 +10,7 @@ public class PlayerControl : MonoBehaviour
     public float maxSpeed = 5f;             // The fastest the player can travel in the x axis.
     public float jumpForce = 1000f;         // Amount of force added when the player jumps.
     [Header("Reference Components")]
+    public Transform shieldTransform;
     public AudioClip[] jumpClips;           // Array of clips for when the player jumps.
 
     public SpriteRenderer body;
@@ -33,68 +34,82 @@ public class PlayerControl : MonoBehaviour
 
     #region MonoBehaviour
     void Update()
-	{
-		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
+    {
+        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
-		// If the jump button is pressed and the player is grounded then the player should jump.
-		if(Input.GetButtonDown("Jump" + playerNumber) && grounded)
-			jump = true;
-	}
+        if (Input.GetButtonDown("Jump" + playerNumber) && grounded)
+            jump = true;
+
+        RotateShield();
+    }
 
 
-	void FixedUpdate ()
-	{
-		// Cache the horizontal input.
-		float h = Input.GetAxis("Horizontal" + playerNumber);
+    void FixedUpdate()
+    {
+        // Cache the horizontal input.
+        float h = Input.GetAxis("Movement" + playerNumber);
 
-		// The Speed animator parameter is set to the absolute value of the horizontal input.
-		anim.SetFloat("Speed", Mathf.Abs(h));
+        // The Speed animator parameter is set to the absolute value of the horizontal input.
+        anim.SetFloat("Speed", Mathf.Abs(h));
 
-		// If the player is changing direction (h has a different sign to velocity.x) or hasn't reached maxSpeed yet...
-		if(h * rigid.velocity.x < maxSpeed)
-            // ... add a force to the player.
+        if (h * rigid.velocity.x < maxSpeed)
             rigid.AddForce(Vector2.right * h * moveForce);
-
-		// If the player's horizontal velocity is greater than the maxSpeed...
-		if(Mathf.Abs(rigid.velocity.x) > maxSpeed)
-            // ... set the player's velocity to the maxSpeed in the x axis.
+        else if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
             rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
 
-		// If the input is moving the player right and the player is facing left...
-		if(h > 0 && !facingRight)
-			// ... flip the player.
-			Flip();
-		// Otherwise if the input is moving the player left and the player is facing right...
-		else if(h < 0 && facingRight)
-			// ... flip the player.
-			Flip();
+        if (h > 0 && !facingRight)
+        {
+            Flip();
+        }
+        else if (h < 0 && facingRight)
+        {
+            Flip();
+        }
 
-		// If the player should jump...
-		if(jump)
-		{
-			// Set the Jump animator trigger parameter.
-			anim.SetTrigger("Jump");
+        if (jump)
+        {
+            // Set the Jump animator trigger parameter.
+            anim.SetTrigger("Jump");
 
-			// Play a random jump audio clip.
-			int i = Random.Range(0, jumpClips.Length);
-			AudioSource.PlayClipAtPoint(jumpClips[i], transform.position);
+            // Play a random jump audio clip.
+            int i = Random.Range(0, jumpClips.Length);
+            AudioSource.PlayClipAtPoint(jumpClips[i], transform.position);
 
             // Add a vertical force to the player.
             rigid.AddForce(new Vector2(0f, jumpForce));
 
-			// Make sure the player can't jump again until the jump conditions from Update are satisfied.
-			jump = false;
-		}
-	}
+            // Make sure the player can't jump again until the jump conditions from Update are satisfied.
+            jump = false;
+        }
+    }
+
+    void RotateShield()
+    {
+        float shieldHorizontal = Input.GetAxis("ShieldX" + playerNumber);
+        float shieldVertical = Input.GetAxis("ShieldY" + playerNumber);
+
+        //make sure there is magnitude
+        if (Mathf.Abs(shieldHorizontal) > 0 || Mathf.Abs(shieldVertical) > 0)
+        {
+
+            if (shieldHorizontal > 0)
+            {
+                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(shieldHorizontal, shieldVertical), Vector2.down) + 90));
+            }
+            else
+            {
+                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(shieldHorizontal, shieldVertical), Vector2.down) + 90));
+            }
+        }
+    }
     #endregion
 
 
-    void Flip ()
-	{
-		// Switch the way the player is labelled as facing.
-		facingRight = !facingRight;
+    void Flip()
+    {
+        // Switch the way the player is labelled as facing.
+        facingRight = !facingRight;
 
         body.flipX = !facingRight;
-	}
+    }
 }
