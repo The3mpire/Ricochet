@@ -6,10 +6,14 @@ public class Ball_Script : MonoBehaviour {
     public Vector2 initialForce = new Vector2(255, 157);
     public float resetDelay = 2f;
 
+    public float minimumSpeed = 1f;
+    public float speedUpForce = 2f;
+    public float maximumSpeed = 10f;
+
     private Rigidbody2D body;
     private Vector2 start;
     private SpriteRenderer sprite;
-    // should I be using a lock?
+    
     private bool hidden;
     // Use this for initialization
     void Start() {
@@ -19,6 +23,21 @@ public class Ball_Script : MonoBehaviour {
         start = transform.position;
 
         body.AddForce(initialForce);
+    }
+
+    void FixedUpdate()
+    {
+        // add the constant force
+        if(body.velocity.magnitude < minimumSpeed)
+        {
+            body.AddForce(body.velocity.normalized * speedUpForce);
+        }
+
+        // make sure we're not going super mega fast
+        if (body.velocity.magnitude > maximumSpeed)
+        {
+            body.velocity = body.velocity.normalized * maximumSpeed;
+        }
     }
 
     public void Reset()
