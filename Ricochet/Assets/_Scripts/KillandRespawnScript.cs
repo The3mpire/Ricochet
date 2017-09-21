@@ -21,15 +21,12 @@ public class KillandRespawnScript : MonoBehaviour {
 
 	}
 
-	void OnCollisionEnter2D(Collision2D other)
+	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (other.gameObject.tag == "Player") {
-			Debug.Log ("Called");
-			//isPlayerDead = true;
-			playerController = other.gameObject.GetComponent<PlayerController> ();
-			//Debug.Log (playerController.playerNumber);
-			playerNumber = playerController.playerNumber;
-			Destroy (other.gameObject);
+
+			playerNumber = other.transform.parent.gameObject.GetComponent<PlayerController> ().playerNumber;
+			Destroy(other.transform.parent.gameObject);
 			StartCoroutine (respawnPlayer (playerNumber));
 		}
 	}
@@ -37,10 +34,7 @@ public class KillandRespawnScript : MonoBehaviour {
 	private IEnumerator respawnPlayer(int playerNum)
 	{
 		yield return new WaitForSeconds (2f);
-		playerController = player.GetComponent<PlayerController> ();
-		playerController.playerNumber = playerNum;
-		Instantiate(player, respawnPoint.position, respawnPoint.rotation);
-		//isPlayerDead = false;
-
+		player.GetComponent<PlayerController> ().playerNumber = playerNum;
+		Instantiate (player, respawnPoint.position, respawnPoint.rotation);
 	}
 }
