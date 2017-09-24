@@ -13,13 +13,15 @@ public class KillAndRespawn : MonoBehaviour
     public Transform respawnPoint2;
     public GameObject player;
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D col)
     {
+        Collider2D other = col.collider;
         if (other.gameObject.tag == "Player")
         {
-            playerNumber = other.transform.parent.gameObject.GetComponent<PlayerController>().playerNumber;
-            teamNum = other.transform.parent.gameObject.GetComponent<PlayerController>().teamNumber;
-            Destroy(other.transform.parent.gameObject);
+            PlayerController pc = other.GetComponent<PlayerController>();
+            playerNumber = pc.playerNumber;
+            teamNum = pc.teamNumber;
+            Destroy(pc.gameObject);
             StartCoroutine(respawnPlayer(playerNumber));
         }
     }

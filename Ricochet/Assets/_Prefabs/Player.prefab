@@ -55,8 +55,6 @@ GameObject:
   - component: {fileID: 4510080024361964}
   - component: {fileID: 114273906525651764}
   - component: {fileID: 50980457896784662}
-  - component: {fileID: 61802905258670572}
-  - component: {fileID: 58941328370875678}
   - component: {fileID: 95759706151971760}
   - component: {fileID: 82468065174550080}
   - component: {fileID: 70838664386658332}
@@ -186,21 +184,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &58941328370875678
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1661296023868354}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 24ac79603fb61400588e37d9f6fe952a, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.45}
-  serializedVersion: 2
-  m_Radius: 0.37
 --- !u!61 &61746124642557380
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -226,21 +209,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.18, y: 1.94}
   m_EdgeRadius: 0
---- !u!61 &61802905258670572
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1661296023868354}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
 --- !u!70 &70838664386658332
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
@@ -456,8 +424,8 @@ MonoBehaviour:
   rigid: {fileID: 50980457896784662}
   groundCheck: {fileID: 4783560035124394}
   anim: {fileID: 95759706151971760}
-  playerNumber: 2
-  teamNumber: 2
+  playerNumber: 1
+  teamNumber: 1
   team1Color: {r: 1, g: 1, b: 1, a: 1}
   team2Color: {r: 1, g: 0, b: 0, a: 1}
   facingRight: 1
