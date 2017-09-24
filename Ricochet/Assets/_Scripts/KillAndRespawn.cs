@@ -8,12 +8,10 @@ public class KillAndRespawn : MonoBehaviour
     private PlayerController playerController;
     private int playerNumber;
     private int teamNum;
-
-    public bool isPlayerDead;
+    
     public Transform respawnPoint1;
     public Transform respawnPoint2;
     public GameObject player;
-    public SpriteRenderer sprite;
 
     void OnTriggerEnter2D(Collider2D other)
     {
