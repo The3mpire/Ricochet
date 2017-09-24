@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Goal_Script : MonoBehaviour {
+public class Goal : MonoBehaviour {
     public Text Score;
     private int _score = 0;
 
@@ -20,7 +20,7 @@ public class Goal_Script : MonoBehaviour {
         if (collision.tag == "Ball")
         {
             Score.text = (++_score).ToString();
-            collision.GetComponent<Ball_Script>().Reset();
+            collision.GetComponent<BallMovement>().Reset();
         }
     }
 }
