@@ -6,8 +6,8 @@ public class KillAndRespawn : MonoBehaviour
 {
 
     private PlayerController playerController;
-    private int playerNumber;
-    private int teamNum;
+    //private int playerNumber;
+    //private int teamNum;
     
     public Transform respawnPoint1;
     public Transform respawnPoint2;
@@ -19,26 +19,28 @@ public class KillAndRespawn : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerController pc = other.GetComponent<PlayerController>();
-            playerNumber = pc.playerNumber;
-            teamNum = pc.teamNumber;
+            int playerNumber = pc.playerNumber;
+            int teamNum = pc.teamNumber;
             Destroy(pc.gameObject);
-            StartCoroutine(respawnPlayer(playerNumber));
+            StartCoroutine(respawnPlayer(playerNumber, teamNum));
         }
     }
 
-    private IEnumerator respawnPlayer(int playerNum)
+    private IEnumerator respawnPlayer(int playerNum, int teamNum)
     {
         yield return new WaitForSeconds(2f);
-        player.GetComponent<PlayerController>().playerNumber = playerNum;
-        player.GetComponent<PlayerController>().teamNumber = teamNum;
-
+        PlayerController pc;
         switch (teamNum)
         {
             case 1:
-                Instantiate(player, respawnPoint1.position, respawnPoint1.rotation);
+                pc = Instantiate(player, respawnPoint1.position, respawnPoint1.rotation).GetComponent<PlayerController>();
+                pc.playerNumber = playerNum;
+                pc.teamNumber = teamNum;
                 break;
             case 2:
-                Instantiate(player, respawnPoint2.position, respawnPoint2.rotation);
+                pc = Instantiate(player, respawnPoint2.position, respawnPoint2.rotation).GetComponent<PlayerController>();
+                pc.playerNumber = playerNum;
+                pc.teamNumber = teamNum;
                 break;
         }
     }

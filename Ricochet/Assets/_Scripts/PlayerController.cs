@@ -20,8 +20,6 @@ public class PlayerController : MonoBehaviour
     [Header("Other Settings")]
     public int playerNumber = 1;
     public int teamNumber = 1;
-    public Color team1Color = Color.white;
-    public Color team2Color = Color.red;
     #endregion
 
     #region Hidden Variables
@@ -38,15 +36,7 @@ public class PlayerController : MonoBehaviour
     #region MonoBehaviour
     void Start()
     {
-        switch (teamNumber)
-        {
-            case 1:
-                body.color = team1Color;
-                break;
-            case 2:
-                body.color = team2Color;
-                break;
-        }
+        body.color = PlayerColorData.getColor(playerNumber, teamNumber);
     }
 
     void Update()
