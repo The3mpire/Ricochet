@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public Animator anim;                   // Reference to the player's animator component.
     [Header("Other Settings")]
     public int playerNumber = 1;
+    public int teamNumber = 1;
+    public Color team1Color = Color.white;
+    public Color team2Color = Color.red;
     #endregion
 
     #region Hidden Variables
@@ -33,6 +36,19 @@ public class PlayerController : MonoBehaviour
 
 
     #region MonoBehaviour
+    void Start()
+    {
+        switch (teamNumber)
+        {
+            case 1:
+                body.color = team1Color;
+                break;
+            case 2:
+                body.color = team2Color;
+                break;
+        }
+    }
+
     void Update()
     {
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball_Script : MonoBehaviour {
+public class BallMovement : MonoBehaviour {
     public Vector2 initialForce = new Vector2(255, 157);
     public float resetDelay = 2f;
 
