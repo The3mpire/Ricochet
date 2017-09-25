@@ -11,12 +11,10 @@ public class PlayerColorData : MonoBehaviour
 
     public static Color getColor(int playerNum, int teamNum)
     {
-        Debug.Log(playerNum);
         if(teamNum == 1)
         {
             if(playerNum % 2 == 0)
             {
-                Debug.Log("in asdkljfal;sjfal;sjf");
                 return team1player1;
             }
             else
