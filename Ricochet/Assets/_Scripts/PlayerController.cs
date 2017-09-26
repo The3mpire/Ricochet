@@ -1,5 +1,6 @@
 ﻿ using UnityEngine;
 using System.Collections;
+using Rewired;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public float moveForce = 365f;          // Amount of force added to move the player left and right.
     public float maxSpeed = 5f;             // The fastest the player can travel in the x axis.
     public float jumpForce = 1000f;         // Amount of force added when the player jumps.
+    public float stickJumpDeadZone = 0.1f;
+    public bool stickJump = true;
     [Header("Reference Components")]
     public Transform shieldTransform;
     public AudioClip[] jumpClips;           // Array of clips for when the player jumps.
@@ -20,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [Header("Other Settings")]
     public int playerNumber = 1;
     public int teamNumber = 1;
+   
     #endregion
 
     #region Hidden Variables
@@ -27,13 +31,18 @@ public class PlayerController : MonoBehaviour
     public bool facingRight = true;         // For determining which way the player is currently facing.
     [HideInInspector]
     public bool jump = false;               // Condition for whether the player should jump
-
+    private Player player;
     private bool grounded = false;          // Whether or not the player is grounded.
 
     #endregion
 
 
     #region MonoBehaviour
+    private void Awake()
+    {
+        player = ReInput.players.GetPlayer(playerNumber - 1);
+    }
+
     void Start()
     {
         body.color = PlayerColorData.getColor(playerNumber, teamNumber);
@@ -43,8 +52,10 @@ public class PlayerController : MonoBehaviour
     {
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
-        if (Input.GetButtonDown("Jump" + playerNumber) && grounded)
+        if ((player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone))) && grounded)
+        { 
             jump = true;
+        }
 
         RotateShield();
     }

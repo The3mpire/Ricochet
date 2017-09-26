@@ -6,12 +6,9 @@ public class KillAndRespawn : MonoBehaviour
 {
 
     private PlayerController playerController;
-    //private int playerNumber;
-    //private int teamNum;
-    
+
     public Transform respawnPoint1;
     public Transform respawnPoint2;
-    public GameObject player;
 
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -19,28 +16,27 @@ public class KillAndRespawn : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerController pc = other.GetComponent<PlayerController>();
-            int playerNumber = pc.playerNumber;
-            int teamNum = pc.teamNumber;
-            Destroy(pc.gameObject);
-            StartCoroutine(respawnPlayer(playerNumber, teamNum));
+          
+            pc.gameObject.SetActive(false);
+            pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            StartCoroutine(respawnPlayer(pc));
         }
     }
 
-    private IEnumerator respawnPlayer(int playerNum, int teamNum)
+    private IEnumerator respawnPlayer(PlayerController player)
     {
         yield return new WaitForSeconds(2f);
-        PlayerController pc;
-        switch (teamNum)
+        player.gameObject.SetActive(true);
+
+        switch (player.teamNumber)
         {
             case 1:
-                pc = Instantiate(player, respawnPoint1.position, respawnPoint1.rotation).GetComponent<PlayerController>();
-                pc.playerNumber = playerNum;
-                pc.teamNumber = teamNum;
+                player.transform.position = respawnPoint1.position;
+                player.transform.rotation = respawnPoint1.rotation;
                 break;
             case 2:
-                pc = Instantiate(player, respawnPoint2.position, respawnPoint2.rotation).GetComponent<PlayerController>();
-                pc.playerNumber = playerNum;
-                pc.teamNumber = teamNum;
+                player.transform.position = respawnPoint2.position;
+                player.transform.rotation = respawnPoint2.rotation;
                 break;
         }
     }
