@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4064051552517408}
   - component: {fileID: 212038286902879782}
-  - component: {fileID: 61746124642557380}
+  - component: {fileID: 60771036086147090}
   m_Layer: 10
   m_Name: Shield
   m_TagString: Untagged
@@ -101,13 +101,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1141639313954714}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 0.22652693, y: 0.22652695, z: 0.22652692}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9273645, w: 0.37415925}
+  m_LocalPosition: {x: 0.695, y: 0.12, z: 0}
+  m_LocalScale: {x: 0.91654265, y: 0.91654325, z: 0.9165431}
   m_Children: []
   m_Father: {fileID: 4527870232127600}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 136.05501}
 --- !u!4 &4366679281512066
 Transform:
   m_ObjectHideFlags: 1
@@ -128,7 +128,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1661296023868354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.2423854, y: 0.92003334, z: 0}
+  m_LocalPosition: {x: -8.492369, y: -0.7330142, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_Children:
   - {fileID: 4783560035124394}
@@ -184,8 +184,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &61746124642557380
-BoxCollider2D:
+--- !u!60 &60771036086147090
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -200,15 +200,36 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6.18, y: 1.94}
+    oldSize: {x: 1.28, y: 1.28}
     newSize: {x: 6.18, y: 1.94}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 6.18, y: 1.94}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.64, y: -0.42999998}
+      - {x: 0.64, y: -0.29}
+      - {x: 0.59, y: -0.22999999}
+      - {x: 0.38, y: -0.26999998}
+      - {x: 0.14, y: -0.22}
+      - {x: -0.17999999, y: 0.04}
+      - {x: -0.26999998, y: 0.37}
+      - {x: -0.26999998, y: 0.61}
+      - {x: -0.32, y: 0.64}
+      - {x: -0.42999998, y: 0.64}
+      - {x: -0.53999996, y: 0.51}
+      - {x: -0.64, y: 0.26999998}
+      - {x: -0.64, y: -0.089999996}
+      - {x: -0.62, y: -0.21}
+      - {x: -0.41, y: -0.48999998}
+      - {x: -0.32999998, y: -0.53}
+      - {x: -0.12, y: -0.62}
+      - {x: -0.049999997, y: -0.63}
+      - {x: 0.19999999, y: -0.63}
+      - {x: 0.31, y: -0.56}
+      - {x: 0.39999998, y: -0.44}
+      - {x: 0.62, y: -0.45}
 --- !u!70 &70838664386658332
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
@@ -415,6 +436,9 @@ MonoBehaviour:
   moveForce: 40
   maxSpeed: 8
   jumpForce: 1000
+  jumpTime: 1
+  stickJumpDeadZone: 0.1
+  stickJump: 0
   shieldTransform: {fileID: 4527870232127600}
   jumpClips:
   - {fileID: 8300000, guid: 50a8d8a939a0f4e77a0dac6ecd2e582b, type: 3}
@@ -424,8 +448,8 @@ MonoBehaviour:
   rigid: {fileID: 50980457896784662}
   groundCheck: {fileID: 4783560035124394}
   anim: {fileID: 95759706151971760}
-  playerNumber: 4
-  teamNumber: 2
+  playerNumber: 1
+  teamNumber: 1
   facingRight: 1
   jump: 0
 --- !u!212 &212038286902879782
@@ -460,7 +484,7 @@ SpriteRenderer:
   m_SortingLayerID: -1783731295
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 95b1596dc7c52854da2b0737d61c4f91, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 855416acab14f2a4d95913926c453ca1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

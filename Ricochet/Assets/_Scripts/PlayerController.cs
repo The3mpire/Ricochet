@@ -7,19 +7,20 @@ public class PlayerController : MonoBehaviour
 
     #region Inspector Variables
     [Header("Movement Settings")]
-    public float moveForce = 365f;          // Amount of force added to move the player left and right.
-    public float maxSpeed = 5f;             // The fastest the player can travel in the x axis.
-    public float jumpForce = 1000f;         // Amount of force added when the player jumps.
+    public float moveForce = 365f;          
+    public float maxSpeed = 5f;             
+    public float jumpForce = 1000f;
+    public float jumpTime = 1f;  
     public float stickJumpDeadZone = 0.1f;
     public bool stickJump = true;
     [Header("Reference Components")]
     public Transform shieldTransform;
-    public AudioClip[] jumpClips;           // Array of clips for when the player jumps.
+    public AudioClip[] jumpClips;         
 
     public SpriteRenderer body;
     public Rigidbody2D rigid;
-    public Transform groundCheck;			// A position marking where to check if the player is grounded.
-    public Animator anim;                   // Reference to the player's animator component.
+    public Transform groundCheck;			
+    public Animator anim;                   
     [Header("Other Settings")]
     public int playerNumber = 1;
     public int teamNumber = 1;
@@ -28,14 +29,13 @@ public class PlayerController : MonoBehaviour
 
     #region Hidden Variables
     [HideInInspector]
-    public bool facingRight = true;         // For determining which way the player is currently facing.
+    public bool facingRight = true;
     [HideInInspector]
-    public bool jump = false;               // Condition for whether the player should jump
+    public bool jump = false;
     private Player player;
-    private bool grounded = false;          // Whether or not the player is grounded.
+    private bool grounded = false;          
 
     #endregion
-
 
     #region MonoBehaviour
     private void Awake()
@@ -53,8 +53,9 @@ public class PlayerController : MonoBehaviour
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
         if ((player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone))) && grounded)
-        { 
+        {
             jump = true;
+            StartCoroutine(JumpRoutine());
         }
 
         RotateShield();
@@ -119,8 +120,27 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    #endregion
 
+    IEnumerator JumpRoutine()
+    {
+        rigid.velocity = Vector2.zero;
+        float timer = 0;
+
+        Debug.Log("alskjfdl;aksf");
+        while ((player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone))) && timer < jumpTime)
+        {
+            float proportionCompleted = timer / jumpTime;
+            Vector2 jumpVector = Vector2.up + rigid.velocity;
+            Vector2 thisFrameJumpVector = Vector2.Lerp(jumpVector, Vector2.zero, proportionCompleted);
+            rigid.AddForce(thisFrameJumpVector);
+            timer += Time.deltaTime;
+            
+            yield return null;
+        }
+
+        jump = false;
+    }
+    #endregion
 
     void Flip()
     {
