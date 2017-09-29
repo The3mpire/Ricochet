@@ -175,9 +175,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 1
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 24ac79603fb61400588e37d9f6fe952a, type: 2}
   m_Interpolate: 1
@@ -433,10 +433,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6804babace5cc47dd8b61abb292c4be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 800
-  maxSpeed: 8
-  jumpForce: 1000
+  moveForce: 700
+  maxSpeed: 5
+  jumpForce: 1800
   jumpTime: 1
+  decayRate: 0.01
   stickJumpDeadZone: 0.1
   stickJump: 0
   shieldTransform: {fileID: 4527870232127600}
@@ -444,6 +445,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 50a8d8a939a0f4e77a0dac6ecd2e582b, type: 3}
   - {fileID: 8300000, guid: fc55d077383484ac0ad66aa17fcd746f, type: 3}
   - {fileID: 8300000, guid: dafa1cc4eb8714341a7c595abfba35d8, type: 3}
+  timer: 0
   body: {fileID: 212154772360944668}
   rigid: {fileID: 50980457896784662}
   groundCheck: {fileID: 4783560035124394}

@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     #region Inspector Variables
     [Header("Movement Settings")]
     public float moveForce = 365f;          
-    public float maxSpeed = 5f;             
+    public float maxSpeed = 5f;
     public float jumpForce = 0.05f;
     public float jumpTime = 1f;  
 	public float decayRate = 0.01f;
@@ -76,8 +76,13 @@ public class PlayerController : MonoBehaviour
 
         // The Speed animator parameter is set to the absolute value of the horizontal input.
         anim.SetFloat("Speed", Mathf.Abs(h));
+        print(h);
 
-        if (h * rigid.velocity.x < maxSpeed)
+        if (h == 0 && rigid.velocity.x != 0)
+        {
+            rigid.velocity = new Vector2(0, rigid.velocity.y);
+        }
+        else if (h * rigid.velocity.x < maxSpeed)
             rigid.AddForce(Vector2.right * h * moveForce);
         else if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
             rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);

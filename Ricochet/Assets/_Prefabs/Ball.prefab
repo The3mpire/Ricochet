@@ -55,7 +55,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.5
+  m_Mass: 0.6
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e744b5b2d49223743aeea26531e57dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialForce: {x: 0, y: 150}
+  initialForce: {x: 0, y: 120}
   resetDelay: 2
   minimumSpeed: 0.5
   speedUpForce: 1
@@ -106,9 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d4f14e050844708954b0bcf44b5c90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayerDead: 0
-  respawnPoint: {fileID: 0}
-  player: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
+  respawnPoint1: {fileID: 0}
+  respawnPoint2: {fileID: 0}
 --- !u!212 &212697235011046966
 SpriteRenderer:
   m_ObjectHideFlags: 1
