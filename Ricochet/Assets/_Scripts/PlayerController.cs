@@ -57,11 +57,12 @@ public class PlayerController : MonoBehaviour
 		if ((player.GetButtonDown ("Jump") || (stickJump && (player.GetAxis ("MoveVertical") > stickJumpDeadZone))) && grounded) {
 			jump = true;
 			timer = 0;
-			rigid.AddForce (new Vector2 (0, jumpForce ));
+			rigid.AddForce (new Vector2 (0, jumpForce));
 			//StartCoroutine(JumpRoutine());
 		} else if (((player.GetButtonDown ("Jump") || (stickJump && (player.GetAxis ("MoveVertical") > stickJumpDeadZone)) && timer < jumpTime && jump))) {
-			timer += Time.deltaTime;
-			rigid.AddForce (new Vector2 (0, jumpForce *0.3f));
+            timer += Time.deltaTime;
+            rigid.velocity = new Vector2(rigid.velocity.x, 0);
+			rigid.AddForce (new Vector2 (0, jumpForce));
 		} else {
 			jump = false;
 		}
