@@ -1,4 +1,4 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using Rewired;
 
@@ -7,35 +7,46 @@ public class PlayerController : MonoBehaviour
 
     #region Inspector Variables
     [Header("Movement Settings")]
-    public float moveForce = 365f;          
+    public float moveForce = 365f;
     public float maxSpeed = 5f;
-    public float jumpForce = 0.05f;
-    public float jumpTime = 1f;  
-	public float decayRate = 0.01f;
+    public float initialJumpForce = 1f;
+    public float continualJumpForce = 0.005f;
+    public float maxJumpTime = 1f;
+    public float extraJumpForce = .5f;
+    public float decayRate = 0.01f;
     public float stickJumpDeadZone = 0.1f;
     public bool stickJump = true;
+    public int numberOfExtraJumps = 2;
+
     [Header("Reference Components")]
     public Transform shieldTransform;
-    public AudioClip[] jumpClips;    
-	public float timer= 0f;
+    public AudioClip[] jumpClips;
 
     public SpriteRenderer body;
     public Rigidbody2D rigid;
-    public Transform groundCheck;			
-    public Animator anim;                   
+    public Transform groundCheck;
+    public Animator anim;
     [Header("Other Settings")]
     public int playerNumber = 1;
     public int teamNumber = 1;
-   
+
     #endregion
 
     #region Hidden Variables
     [HideInInspector]
     public bool facingRight = true;
     [HideInInspector]
-    public bool jump = false;
+    public bool jumpPressed = false;
+    private bool isJumping = false;
+    [SerializeField]
+    private bool grounded = false;
+    [SerializeField]
+    private int jumpCounter = 0;
+    private float jumpTimer = 0f;
+    private bool jumpButtonHeld = false;
+
     private Player player;
-    private bool grounded = false;          
+
 
     #endregion
 
@@ -54,21 +65,36 @@ public class PlayerController : MonoBehaviour
     {
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
-		if ((player.GetButtonDown ("Jump") || (stickJump && (player.GetAxis ("MoveVertical") > stickJumpDeadZone))) && grounded) {
-			jump = true;
-			timer = 0;
-			rigid.AddForce (new Vector2 (0, jumpForce));
-			//StartCoroutine(JumpRoutine());
-		} else if (((player.GetButtonDown ("Jump") || (stickJump && (player.GetAxis ("MoveVertical") > stickJumpDeadZone)) && timer < jumpTime && jump))) {
-            timer += Time.deltaTime;
-            rigid.velocity = new Vector2(rigid.velocity.x, 0);
-			rigid.AddForce (new Vector2 (0, jumpForce));
-		} else {
-			jump = false;
-		}
+        // frame check
+        if(player.GetButton("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
+        {
+            jumpButtonHeld = true;
+        }
+        else
+        {
+            jumpButtonHeld = false;
+        }
+
+        // get jump input
+        if (player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
+        {
+            jumpPressed = true;
+            jumpButtonHeld = true;
+        }
+        // player hit the ground
+        else if (grounded)
+        {
+            jumpCounter = 0;
+        }
+
+        // player is not pressing button or out of jumps
+        if(isJumping && !jumpButtonHeld)
+        {
+            isJumping = false;
+        }
+
         RotateShield();
     }
-
 
     void FixedUpdate()
     {
@@ -77,17 +103,24 @@ public class PlayerController : MonoBehaviour
 
         // The Speed animator parameter is set to the absolute value of the horizontal input.
         anim.SetFloat("Speed", Mathf.Abs(h));
-        print(h);
 
-        if (h == 0 && rigid.velocity.x != 0)
+        // movement
+        if (h == 0)
         {
             rigid.velocity = new Vector2(0, rigid.velocity.y);
         }
-        else if (h * rigid.velocity.x < maxSpeed)
-            rigid.AddForce(Vector2.right * h * moveForce);
-        else if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
-            rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
+        else
+        { 
+            rigid.AddForce(new Vector2(Mathf.Sign(h) * moveForce, 0f), ForceMode2D.Impulse);
+        }
 
+        //Check if over max speed
+        if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
+        {
+            rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
+        }
+
+        // direction check
         if (h > 0 && !facingRight)
         {
             Flip();
@@ -97,20 +130,51 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
-        if (jump)
+        if (jumpPressed)
         {
-            // Set the Jump animator trigger parameter.
-            anim.SetTrigger("Jump");
+            StartJump();
+            jumpPressed = false;
+        }
 
-            // Play a random jump audio clip.
-            int i = Random.Range(0, jumpClips.Length);
-            AudioSource.PlayClipAtPoint(jumpClips[i], transform.position);
+        HoldJump();
+    }
+    #endregion
 
-            // Add a vertical force to the player.
-           // rigid.AddForce(new Vector2(0f, jumpForce));
+    void StartJump()
+    {
+        //first jump
+        if (grounded)
+        {
+            rigid.AddForce(new Vector2(0, initialJumpForce), ForceMode2D.Impulse);
+            jumpCounter++;
+            isJumping = true;
+            jumpTimer = 0f;
+        }
+        // extra jumps
+        else if (jumpCounter < numberOfExtraJumps)
+        {
+            if (rigid.velocity.y < 0)
+            {
+                rigid.velocity = new Vector2(rigid.velocity.x, 0);
+            }
+            rigid.AddForce(new Vector2(0, extraJumpForce), ForceMode2D.Impulse);
+            jumpCounter++;
+            isJumping = true;
+            jumpTimer = 0f;
+        }
+    }
 
-            // Make sure the player can't jump again until the jump conditions from Update are satisfied.
-            jump = false;
+    void HoldJump()
+    {
+        if (jumpButtonHeld && isJumping)
+        {
+            jumpTimer += Time.deltaTime;
+
+            //check if they can still add force
+            if (jumpTimer < maxJumpTime)
+            {
+                rigid.AddForce(new Vector2(0, continualJumpForce), ForceMode2D.Impulse);
+            }
         }
     }
 
@@ -133,48 +197,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    IEnumerator JumpRoutine()
-    {
-		//Debug.Log ("Called");
-		float timer = 0;
-		//rigid.AddForce (Vector2.up * jumpForce); 
-		//yield return null;
-
-		/*
-		float curForce = jumpForce;
-		while ((player.GetButton ("Jump") || (stickJump && (player.GetAxis ("MoveVertical") > stickJumpDeadZone))) && timer < jumpTime && curForce > 0) {
-			Debug.Log("alskjfdl;aksf");
-			rigid.AddForce (Vector2.up * curForce);        
-		    curForce -= decayRate * Time.deltaTime;
-			timer += Time.deltaTime;
-
-		}*/
-
-       rigid.velocity = Vector2.zero;
-		yield return null;
-			
-       
-
-       /* while ((player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone))) && timer < jumpTime)
-        {
-			Debug.Log("alskjfdl;aksf");
-
-            /*float proportionCompleted = timer / jumpTime;
-            Vector2 jumpVector = Vector2.up + rigid.velocity;
-            Vector2 thisFrameJumpVector = Vector2.Lerp(jumpVector, Vector2.zero, proportionCompleted);
-            rigid.AddForce(thisFrameJumpVector);
-            timer += Time.deltaTime;
-			yield return null;
-
-            
-        }*/
-
-		jump = false;			
-
-
-    }
-    #endregion
 
     void Flip()
     {

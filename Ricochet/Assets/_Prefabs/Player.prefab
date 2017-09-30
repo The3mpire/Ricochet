@@ -128,7 +128,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1661296023868354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.492369, y: -0.7330142, z: 0}
+  m_LocalPosition: {x: -9.5, y: -4.05, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_Children:
   - {fileID: 4783560035124394}
@@ -158,7 +158,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1855510553782160}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.9890461, z: 0}
+  m_LocalPosition: {x: 0, y: -1.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4510080024361964}
@@ -433,27 +433,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6804babace5cc47dd8b61abb292c4be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 700
-  maxSpeed: 5
-  jumpForce: 850
-  jumpTime: 1
+  moveForce: 15
+  maxSpeed: 10
+  initialJumpForce: 8
+  continualJumpForce: 0.9
+  maxJumpTime: 0.25
+  extraJumpForce: 4
   decayRate: 0.01
   stickJumpDeadZone: 0.1
   stickJump: 0
+  numberOfExtraJumps: 1
   shieldTransform: {fileID: 4527870232127600}
   jumpClips:
   - {fileID: 8300000, guid: 50a8d8a939a0f4e77a0dac6ecd2e582b, type: 3}
   - {fileID: 8300000, guid: fc55d077383484ac0ad66aa17fcd746f, type: 3}
   - {fileID: 8300000, guid: dafa1cc4eb8714341a7c595abfba35d8, type: 3}
-  timer: 0
   body: {fileID: 212154772360944668}
   rigid: {fileID: 50980457896784662}
   groundCheck: {fileID: 4783560035124394}
   anim: {fileID: 95759706151971760}
-  playerNumber: 1
+  playerNumber: 2
   teamNumber: 1
   facingRight: 1
-  jump: 0
+  jumpPressed: 0
+  grounded: 1
+  jumpCounter: 0
 --- !u!212 &212038286902879782
 SpriteRenderer:
   m_ObjectHideFlags: 1
