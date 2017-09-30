@@ -10,6 +10,8 @@ public class BallMovement : MonoBehaviour {
     public float speedUpForce = 2f;
     public float maximumSpeed = 10f;
 
+    public bool canScore = true;
+
     private Rigidbody2D body;
     private Vector2 start;
     private SpriteRenderer sprite;

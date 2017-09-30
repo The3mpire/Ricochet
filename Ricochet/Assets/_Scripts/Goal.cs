@@ -11,16 +11,17 @@ public class Goal : MonoBehaviour {
     {
         if (Score == null)
         {
-            throw new System.Exception("No score text object assigned to goal");
+            Debug.LogError("No score text object assigned to goal", gameObject);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Ball")
+        BallMovement ball = collision.GetComponent<BallMovement>();
+        if (collision.tag == "Ball" && ball.canScore)
         {
             Score.text = (++_score).ToString();
-            collision.GetComponent<BallMovement>().Reset();
+            ball.Reset();
         }
     }
 }
