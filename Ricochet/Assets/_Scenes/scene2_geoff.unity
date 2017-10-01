@@ -460,6 +460,16 @@ Prefab:
       propertyPath: m_Offset.y
       value: -0.72
       objectReference: {fileID: 0}
+    - target: {fileID: 114532150001325618, guid: f9cac8f859f7f9845b6008dfe37f4fe5,
+        type: 2}
+      propertyPath: ScoreUI
+      value: 
+      objectReference: {fileID: 442307665}
+    - target: {fileID: 114532150001325618, guid: f9cac8f859f7f9845b6008dfe37f4fe5,
+        type: 2}
+      propertyPath: OpposingTeam
+      value: 114
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f9cac8f859f7f9845b6008dfe37f4fe5, type: 2}
   m_IsPrefabParent: 0
@@ -842,6 +852,64 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &442307664
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -0.66857606
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.18211566
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815160407208958, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+      propertyPath: m_RootOrder
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 114939598683620218, guid: ae1141f049e059b4c8cc71aa746be1a2,
+        type: 2}
+      propertyPath: RedScore
+      value: 
+      objectReference: {fileID: 2116133100}
+    - target: {fileID: 114939598683620218, guid: ae1141f049e059b4c8cc71aa746be1a2,
+        type: 2}
+      propertyPath: BlueScore
+      value: 
+      objectReference: {fileID: 684195419}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
+  m_IsPrefabParent: 0
+--- !u!114 &442307665 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114939598683620218, guid: ae1141f049e059b4c8cc71aa746be1a2,
+    type: 2}
+  m_PrefabInternal: {fileID: 442307664}
+  m_Script: {fileID: 11500000, guid: b1fbab407626fd74389eb88f4a0884e0, type: 3}
 --- !u!1 &464392902
 GameObject:
   m_ObjectHideFlags: 0
@@ -2575,6 +2643,11 @@ Prefab:
       propertyPath: m_Color.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114809476023684600, guid: 13992abdb900475439efa8908950cb8f,
+        type: 2}
+      propertyPath: ScoreUI
+      value: 
+      objectReference: {fileID: 442307665}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13992abdb900475439efa8908950cb8f, type: 2}
   m_IsPrefabParent: 0
@@ -2925,6 +2998,16 @@ Prefab:
       propertyPath: Score
       value: 
       objectReference: {fileID: 2116133100}
+    - target: {fileID: 114549464125624832, guid: 63f5dd73eb2c0da4d9df47994ae0c6c1,
+        type: 2}
+      propertyPath: OpposingTeam
+      value: 114
+      objectReference: {fileID: 0}
+    - target: {fileID: 114549464125624832, guid: 63f5dd73eb2c0da4d9df47994ae0c6c1,
+        type: 2}
+      propertyPath: ScoreUI
+      value: 
+      objectReference: {fileID: 442307665}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 63f5dd73eb2c0da4d9df47994ae0c6c1, type: 2}
   m_IsPrefabParent: 0

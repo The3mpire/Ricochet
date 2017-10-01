@@ -18,24 +18,24 @@ public class KillAndRespawn : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerController pc = other.GetComponent<PlayerController>();
-          
+
             pc.gameObject.SetActive(false);
             pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-	    ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
+            ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
             StartCoroutine(RespawnPlayer(pc));
         }
-        else if(other.name == "Shield")
+        else if (other.name == "Shield")
         {
             PlayerController player = other.gameObject.GetComponentInParent<PlayerController>();
             //see if they have the power up
-            if(player.hasPowerUp)
+            if (player.hasPowerUp)
             {
                 SpawnBalls();
                 player.hasPowerUp = false;
                 player.shield.color = Color.white;
             }
         }
-        
+
     }
 
     private void SpawnBalls()
