@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUp : MonoBehaviour {
-
+public class PowerUp : MonoBehaviour
+{
     public Color shieldColor = Color.red;
 
     #region MonoBehaviour
@@ -12,10 +12,9 @@ public class PowerUp : MonoBehaviour {
         PlayerController player = collision.GetComponent<PlayerController>();
         if (collision.tag == "Player")
         {
-            Debug.Log("Hit the player");
-
             player.shield.color = shieldColor;
             player.hasPowerUp = true;
+            GameManager.instance.RespawnPowerUp(this.gameObject);
             gameObject.SetActive(false);
         }
     }

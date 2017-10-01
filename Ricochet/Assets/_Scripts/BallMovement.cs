@@ -10,6 +10,7 @@ public class BallMovement : MonoBehaviour {
     public float speedUpForce = 2f;
     public float maximumSpeed = 10f;
 
+    public bool isTempBall = false;
     public bool canScore = true;
 
     private Rigidbody2D body;
@@ -47,7 +48,10 @@ public class BallMovement : MonoBehaviour {
         if (!hidden)
         {
             SetVisible(false);
-            StartCoroutine(DelayedStart());
+            if(!isTempBall)
+            {
+                StartCoroutine(DelayedStart());
+            }
         }
     }
 

@@ -38,8 +38,11 @@ public class KillAndRespawn : MonoBehaviour
 
     private void SpawnBalls()
     {
-        Instantiate(ball);
-        Instantiate(ball);
+        GameObject ball1 = Instantiate(ball);
+        GameObject ball2 = Instantiate(ball);
+
+        ball1.GetComponent<BallMovement>().isTempBall = true;
+        ball2.GetComponent<BallMovement>().isTempBall = true;
     }
 
     private IEnumerator RespawnPlayer(PlayerController player)
