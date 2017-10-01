@@ -7,6 +7,7 @@ public class KillAndRespawn : MonoBehaviour
     public Transform respawnPoint1;
     public Transform respawnPoint2;
 
+    public ScoreManager ScoreUI;
     public GameObject ball;
 
     private PlayerController playerController;
@@ -20,6 +21,7 @@ public class KillAndRespawn : MonoBehaviour
           
             pc.gameObject.SetActive(false);
             pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+	    ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
             StartCoroutine(RespawnPlayer(pc));
         }
         else if(other.name == "Shield")
