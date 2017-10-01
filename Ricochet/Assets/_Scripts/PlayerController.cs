@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [Header("Reference Components")]
     public Transform shieldTransform;
     public AudioClip[] jumpClips;
-
+    public SpriteRenderer shield;
     public SpriteRenderer body;
     public Rigidbody2D rigid;
     public Transform groundCheck;
@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
     public bool facingRight = true;
     [HideInInspector]
     public bool jumpPressed = false;
+    [HideInInspector]
+    public bool hasPowerUp = false;
     private bool isJumping = false;
     [SerializeField]
     private bool grounded = false;
@@ -138,6 +140,8 @@ public class PlayerController : MonoBehaviour
 
         HoldJump();
     }
+
+
     #endregion
 
     void StartJump()

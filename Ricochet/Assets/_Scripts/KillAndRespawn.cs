@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class KillAndRespawn : MonoBehaviour
 {
-
-    private PlayerController playerController;
-
     public Transform respawnPoint1;
     public Transform respawnPoint2;
+
+    public GameObject ball;
+
+    private PlayerController playerController;
 
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -19,11 +20,29 @@ public class KillAndRespawn : MonoBehaviour
           
             pc.gameObject.SetActive(false);
             pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            StartCoroutine(respawnPlayer(pc));
+            StartCoroutine(RespawnPlayer(pc));
         }
+        else if(other.name == "Shield")
+        {
+            PlayerController player = other.gameObject.GetComponentInParent<PlayerController>();
+            //see if they have the power up
+            if(player.hasPowerUp)
+            {
+                SpawnBalls();
+                player.hasPowerUp = false;
+                player.shield.color = Color.white;
+            }
+        }
+        
     }
 
-    private IEnumerator respawnPlayer(PlayerController player)
+    private void SpawnBalls()
+    {
+        Instantiate(ball);
+        Instantiate(ball);
+    }
+
+    private IEnumerator RespawnPlayer(PlayerController player)
     {
         yield return new WaitForSeconds(2f);
         player.gameObject.SetActive(true);
