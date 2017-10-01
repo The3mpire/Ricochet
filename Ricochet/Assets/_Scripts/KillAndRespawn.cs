@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class KillAndRespawn : MonoBehaviour
 {
-
-    private PlayerController playerController;
-
     public Transform respawnPoint1;
     public Transform respawnPoint2;
+
+    public ScoreManager ScoreUI;
+
+    private PlayerController playerController;
 
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -19,6 +20,7 @@ public class KillAndRespawn : MonoBehaviour
           
             pc.gameObject.SetActive(false);
             pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
             StartCoroutine(respawnPlayer(pc));
         }
     }

@@ -4,14 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Goal : MonoBehaviour {
-    public Text Score;
-    private int _score = 0;
+    public ScoreManager ScoreUI;
+    /// <summary>
+    /// Must be 'b' or 'r'
+    /// Blue team's goal should have a 'r' and red team a 'b'
+    /// This prevents the need to invert it when passing to ScoreUI.Score(_, _);
+    /// </summary>
+    public char OpposingTeam = '\0';
 
     private void Start()
     {
-        if (Score == null)
+        if (ScoreUI == null)
         {
-            Debug.LogError("No score text object assigned to goal", gameObject);
+            Debug.LogError("No score manager script linked to goal");
+        }
+
+        OpposingTeam = char.ToLower(OpposingTeam);
+        if (OpposingTeam == '\0')
+        {
+            Debug.LogError("Goal not assigned team");
+        }
+        else if(OpposingTeam != 'b' && OpposingTeam != 'r')
+        {
+            Debug.LogWarning("Goal given improper team character (must be 'b' or 'r'):" + OpposingTeam);
         }
     }
 
@@ -20,7 +35,7 @@ public class Goal : MonoBehaviour {
         BallMovement ball = collision.GetComponent<BallMovement>();
         if (collision.tag == "Ball" && ball.canScore)
         {
-            Score.text = (++_score).ToString();
+            ScoreUI.Score(OpposingTeam, 1);
             ball.Reset();
         }
     }
