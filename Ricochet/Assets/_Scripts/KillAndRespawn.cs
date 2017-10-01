@@ -8,6 +8,7 @@ public class KillAndRespawn : MonoBehaviour
     public Transform respawnPoint2;
 
     public ScoreManager ScoreUI;
+    public GameObject ball;
 
     private PlayerController playerController;
 
@@ -20,12 +21,30 @@ public class KillAndRespawn : MonoBehaviour
           
             pc.gameObject.SetActive(false);
             pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
-            StartCoroutine(respawnPlayer(pc));
+	    ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
+            StartCoroutine(RespawnPlayer(pc));
         }
+        else if(other.name == "Shield")
+        {
+            PlayerController player = other.gameObject.GetComponentInParent<PlayerController>();
+            //see if they have the power up
+            if(player.hasPowerUp)
+            {
+                SpawnBalls();
+                player.hasPowerUp = false;
+                player.shield.color = Color.white;
+            }
+        }
+        
     }
 
-    private IEnumerator respawnPlayer(PlayerController player)
+    private void SpawnBalls()
+    {
+        Instantiate(ball);
+        Instantiate(ball);
+    }
+
+    private IEnumerator RespawnPlayer(PlayerController player)
     {
         yield return new WaitForSeconds(2f);
         player.gameObject.SetActive(true);
