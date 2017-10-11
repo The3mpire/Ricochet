@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Rewired;
+using Enumerables;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,12 +21,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Reference Components")]
     public Transform shieldTransform;
-    public AudioClip[] jumpClips;
     public SpriteRenderer shield;
     public SpriteRenderer body;
     public Rigidbody2D rigid;
     public Transform groundCheck;
-    public Animator anim;
+
     [Header("Other Settings")]
     public int playerNumber = 1;
     public int teamNumber = 1;
@@ -37,8 +37,7 @@ public class PlayerController : MonoBehaviour
     public bool facingRight = true;
     [HideInInspector]
     public bool jumpPressed = false;
-    [HideInInspector]
-    public bool hasPowerUp = false;
+    private bool hasPowerUp = false;
     private bool isJumping = false;
     [SerializeField]
     private bool grounded = false;
@@ -68,7 +67,7 @@ public class PlayerController : MonoBehaviour
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
         // frame check
-        if(player.GetButton("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
+        if (player.GetButton("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
         {
             jumpButtonHeld = true;
         }
@@ -90,7 +89,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // player is not pressing button or out of jumps
-        if(isJumping && !jumpButtonHeld)
+        if (isJumping && !jumpButtonHeld)
         {
             isJumping = false;
         }
@@ -103,16 +102,13 @@ public class PlayerController : MonoBehaviour
         // Cache the horizontal input.
         float h = Input.GetAxis("Movement" + playerNumber);
 
-        // The Speed animator parameter is set to the absolute value of the horizontal input.
-        anim.SetFloat("Speed", Mathf.Abs(h));
-
         // movement
         if (h == 0)
         {
             rigid.velocity = new Vector2(0, rigid.velocity.y);
         }
         else
-        { 
+        {
             rigid.AddForce(new Vector2(Mathf.Sign(h) * moveForce, 0f), ForceMode2D.Impulse);
         }
 
@@ -144,6 +140,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region PrivateHelpers
     void StartJump()
     {
         //first jump
@@ -168,7 +165,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void HoldJump()
+    private void HoldJump()
     {
         if (jumpButtonHeld && isJumping)
         {
@@ -182,7 +179,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void RotateShield()
+    private void RotateShield()
     {
         float shieldHorizontal = Input.GetAxis("ShieldX" + playerNumber);
         float shieldVertical = Input.GetAxis("ShieldY" + playerNumber);
@@ -202,11 +199,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Flip()
+    private void Flip()
     {
         // Switch the way the player is labelled as facing.
         facingRight = !facingRight;
 
         body.flipX = !facingRight;
     }
+    #endregion
+
+    #region ExternalFunctions
+
+    public void ReceivePowerUp(EPowerUp powerUp)
+    {
+        switch (powerUp)
+        {
+            case EPowerUp.InfiniteJump:
+                Debug.LogError("InfiniteJump not implemented", gameObject);
+                break;
+            case EPowerUp.Multiball:
+                break;
+        }
+    }
+
+    #endregion
 }

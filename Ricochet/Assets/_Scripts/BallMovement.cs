@@ -13,17 +13,15 @@ public class BallMovement : MonoBehaviour {
     public bool isTempBall = false;
     public bool canScore = true;
 
-    private Rigidbody2D body;
-    private Vector2 start;
-    private SpriteRenderer sprite;
+    public SpriteRenderer sprite;
+    public Rigidbody2D body;
+
+    private Vector2 initialPosition;
     
     private bool hidden;
     // Use this for initialization
     void Start() {
-        body = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
-
-        start = transform.position;
+        initialPosition = transform.position;
 
         body.AddForce(initialForce);
     }
@@ -65,7 +63,7 @@ public class BallMovement : MonoBehaviour {
     {
         yield return new WaitForSeconds(resetDelay);
 
-        transform.position = start;
+        transform.position = initialPosition;
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         body.AddForce(initialForce);
 

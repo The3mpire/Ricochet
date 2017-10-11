@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("How long the power up takes to respawn in seconds")]
     public static float powerUpRespawn = 10f;
 
+    public Transform[] teamOneRespawns;
+    public Transform[] teamTwoRespawns;
+
     void Awake()
     {
         if (instance != null && instance != this)
