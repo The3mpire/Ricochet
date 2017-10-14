@@ -32,7 +32,7 @@ public class Goal : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        BallMovement ball = collision.GetComponent<BallMovement>();
+        Ball ball = collision.GetComponent<Ball>();
         if (collision.tag == "Ball" && ball.canScore)
         {
             ScoreUI.Score(OpposingTeam, 1);

@@ -6,20 +6,26 @@ using Enumerables;
 
 public class PowerUp : MonoBehaviour
 {
-    public Color shieldColor = Color.red;
-    public EPowerUp powerUpType;
+    [SerializeField]
+    private Color shieldColor = Color.red;
+    [SerializeField]
+    private EPowerUp powerUpType;
+
+    private GameManager gameManagerInstance;
 
     #region MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
-            PlayerController player = collision.GetComponent<PlayerController>();
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                PlayerController player = collision.GetComponent<PlayerController>();
 
-            player.shield.color = shieldColor;
-           // player.hasPowerUp = true;
-            GameManager.instance.RespawnPowerUp(this.gameObject);
-            gameObject.SetActive(false);
+                player.GetShieldSpriteRenderer().color = shieldColor;
+                gameManagerInstance.RespawnPowerUp(gameObject);
+                gameObject.SetActive(false);
+            }
         }
     }
     #endregion 

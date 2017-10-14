@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Rewired;
 using Enumerables;
 
@@ -8,46 +9,80 @@ public class PlayerController : MonoBehaviour
 
     #region Inspector Variables
     [Header("Movement Settings")]
-    public float moveForce = 365f;
-    public float maxSpeed = 5f;
-    public float initialJumpForce = 1f;
-    public float continualJumpForce = 0.005f;
-    public float maxJumpTime = 1f;
-    public float extraJumpForce = .5f;
-    public float decayRate = 0.01f;
-    public float stickJumpDeadZone = 0.1f;
-    public bool stickJump = true;
-    public int numberOfExtraJumps = 2;
+    [Tooltip("How fast the player moves (force)")]
+    [SerializeField]
+    private float moveForce = 365f;
+    [Tooltip("The fastest the player is allowed to move (velocity)")]
+    [SerializeField]
+    private float maxSpeed = 5f;
+    [Tooltip("How strong the player's first jump is (from the ground)")]
+    [SerializeField]
+    private float initialJumpForce = 1f;
+    [Tooltip("How much higher the player goes continues from holding down the button (force)")]
+    [SerializeField]
+    private float continualJumpForce = 0.005f;
+    [Tooltip("How long the player can hold the button before it doesn't do anything")]
+    [SerializeField]
+    private float maxJumpTime = 1f;
+    [Tooltip("How strong the player's extra jumps are (already in the air)")]
+    [SerializeField]
+    private float extraJumpForce = .5f;
+    [Tooltip("How sensitive the left stick is before acknowledging input")]
+    [SerializeField]
+    private float stickJumpDeadZone = 0.1f;
+    [Tooltip("Whether the player can jump using the left stick")]
+    [SerializeField]
+    private bool stickJump = true;
+    [Tooltip("How many jumps the player gets while in the air")]
+    [SerializeField]
+    private int numberOfExtraJumps = 1;
 
     [Header("Reference Components")]
-    public Transform shieldTransform;
-    public SpriteRenderer shield;
-    public SpriteRenderer body;
-    public Rigidbody2D rigid;
-    public Transform groundCheck;
+    [Tooltip("Drag the player's shieldContainer here")]
+    [SerializeField]
+    private Transform shieldTransform;
+    [Tooltip("Drag the player's shield here")]
+    [SerializeField]
+    private SpriteRenderer shield;
+    [Tooltip("Drag the player's body here")]
+    [SerializeField]
+    private SpriteRenderer body;
+    [Tooltip("Drag the player's body here")]
+    [SerializeField]
+    private Rigidbody2D rigid;
+    [Tooltip("Drag the player's \"groundCheck\" here")]
+    [SerializeField]
+    private Transform groundCheck;
 
     [Header("Other Settings")]
-    public int playerNumber = 1;
-    public int teamNumber = 1;
+    [Tooltip("Which player this is")]
+    [SerializeField]
+    private int playerNumber = 1;
+    [Tooltip("Which team the player is on")]
+    [SerializeField]
+    private int teamNumber = 1;
 
     #endregion
 
     #region Hidden Variables
-    [HideInInspector]
-    public bool facingRight = true;
-    [HideInInspector]
-    public bool jumpPressed = false;
+    private bool facingRight = true;
+    private bool jumpPressed = false;
     private bool hasPowerUp = false;
     private bool isJumping = false;
+
     [SerializeField]
     private bool grounded = false;
+
     [SerializeField]
     private int jumpCounter = 0;
     private float jumpTimer = 0f;
     private bool jumpButtonHeld = false;
 
+    private EPowerUp currPowerUp = EPowerUp.None;
+
     private Player player;
 
+    private GameManager gameManagerInstance = null;
 
     #endregion
 
@@ -93,7 +128,7 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
-
+        //TODO state based + infinite jump :)
         RotateShield();
     }
 
@@ -210,17 +245,23 @@ public class PlayerController : MonoBehaviour
 
     #region ExternalFunctions
 
+    //TODO reroute through Game Manager
     public void ReceivePowerUp(EPowerUp powerUp)
     {
-        switch (powerUp)
-        {
-            case EPowerUp.InfiniteJump:
-                Debug.LogError("InfiniteJump not implemented", gameObject);
-                break;
-            case EPowerUp.Multiball:
-                break;
-        }
+        currPowerUp = powerUp;
     }
 
+    #endregion
+
+    #region Getters
+    public SpriteRenderer GetShieldSpriteRenderer()
+    {
+        return shield;
+    }
+
+    public EPowerUp GetCurrentPowerUp()
+    {
+        return currPowerUp;
+    }
     #endregion
 }
