@@ -4,7 +4,7 @@ using UnityEngine;
 using Enumerables;
 
 
-public class PowerUp : MonoBehaviour
+public class MultiBallPowerup : Powerup
 {
     [SerializeField]
     private Color shieldColor = Color.red;
@@ -30,4 +30,22 @@ public class PowerUp : MonoBehaviour
         }
     }
     #endregion 
+
+    protected override EPowerUp PowerUpType
+    {
+        get
+        {
+            return powerUpType;
+        }
+
+    }
+
+    protected override Color ShieldColor
+    {
+        get
+        {
+            return shieldColor;
+        }
+    }
+
 }

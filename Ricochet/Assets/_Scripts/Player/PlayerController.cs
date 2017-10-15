@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+
     #region MonoBehaviour
     private void Awake()
     {
@@ -172,7 +173,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region PrivateHelpers
+    #region Private Helpers
     void StartJump()
     {
         //first jump
@@ -240,9 +241,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region ExternalFunctions
-
-    //TODO reroute through Game Manager
+    #region External Functions
     public void ReceivePowerUp(EPowerUp powerUp)
     {
         hasPowerUp = true;
@@ -264,7 +263,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region GettersAndSetters
+    #region Getters and Setters
     public SpriteRenderer GetShieldSpriteRenderer()
     {
         return shield;

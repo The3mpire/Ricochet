@@ -5,10 +5,10 @@ using Enumerables;
 
 public class PlayerColorData : MonoBehaviour
 {
-    public static Color blueTeamPlayer1 = Color.cyan;
-    public static Color blueTeamPlayer2 = Color.blue;
-    public static Color redTeamPlayer1 = Color.red;
-    public static Color redTeamPlayer2 = Color.magenta;
+    private static Color blueTeamPlayer1 = Color.cyan;
+    private static Color blueTeamPlayer2 = Color.blue;
+    private static Color redTeamPlayer1 = Color.red;
+    private static Color redTeamPlayer2 = Color.magenta;
 
     public static Color getColor(int playerNum, ETeam team)
     {

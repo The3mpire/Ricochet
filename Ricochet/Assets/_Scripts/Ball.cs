@@ -5,8 +5,6 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     #region Inspector Variables
-
-    //TODO make private this hurts
     [Tooltip("How hard the ball was hit when it spawns")]
     [SerializeField]
     private Vector2 initialForce = new Vector2(255, 157);
