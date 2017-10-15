@@ -4,32 +4,42 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    #region Inspector Variables
+
     //TODO make private this hurts
-    public Vector2 initialForce = new Vector2(255, 157);
-    public float resetDelay = 2f;
+    [Tooltip("How hard the ball was hit when it spawns")]
+    [SerializeField]
+    private Vector2 initialForce = new Vector2(255, 157);
 
-    public float minimumSpeed = 1f;
-    public float speedUpForce = 2f;
-    public float maximumSpeed = 10f;
+    [Tooltip("The slowest the ball can travel")]
+    [SerializeField]
+    private float minimumSpeed = 1f;
+    [Tooltip("How much the ball gains speed when just bouncing around")]
+    [SerializeField]
+    private float speedUpForce = 2f;
+    [Tooltip("The fastest the ball can travel")]
+    [SerializeField]
+    private float maximumSpeed = 10f;
 
-    public bool isTempBall = false;
-    public bool canScore = true;
+    [Tooltip("Whether this ball should respawn")]
+    [SerializeField]
+    private bool isTempBall = false;
+    [Tooltip("Whether this ball can score goals")]
+    [SerializeField]
+    private bool canScore = true;
 
-    public SpriteRenderer sprite;
-    public Rigidbody2D body;
-
-    private Vector2 initialPosition;
-
-    private bool hidden;
+    [Tooltip("Drag the ball here")]
+    [SerializeField]
+    private Rigidbody2D body;
+    #endregion
 
     private GameManager gameManagerInstance;
 
     #region MonoBehaviour
 
-    private void Start()
+    private void OnEnable()
     {
-        initialPosition = transform.position;
-
+        body.velocity = Vector3.zero;
         body.AddForce(initialForce);
     }
 
@@ -51,21 +61,16 @@ public class Ball : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         Collider2D hitCollider = col.collider;
-        if (hitCollider.tag == "Player")
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            PlayerController pc = hitCollider.GetComponent<PlayerController>();
-
-            //TODO go through game manager (which then goes to score manager)
-            pc.gameObject.SetActive(false);
-            //pc.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            //ScoreUI.Score(pc.teamNumber == 1 ? 'b' : 'r', -1);
-            //StartCoroutine(RespawnPlayer(pc));
-        }
-        else if (hitCollider.tag == "Shield")
-        {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            if (hitCollider.tag == "Player")
             {
-                gameManagerInstance.CheckBallShieldCollision(hitCollider.gameObject, this);
+                gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
+
+            }
+            else if (hitCollider.tag == "Shield")
+            {
+                gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
             }
         }
 
@@ -73,32 +78,25 @@ public class Ball : MonoBehaviour
 
     #endregion
 
-    public void Reset()
+    #region Getters and Setters
+    public bool GetTempStatus()
     {
-        if (!hidden)
-        {
-            SetVisible(false);
-            if (!isTempBall)
-            {
-                StartCoroutine(DelayedStart());
-            }
-        }
+        return isTempBall;
     }
 
-    private void SetVisible(bool value)
+    public void SetTempStatus(bool status)
     {
-        body.simulated = value;
-        sprite.enabled = value;
+        isTempBall = status;
     }
 
-    IEnumerator DelayedStart()
+    public bool GetCanScore()
     {
-        yield return new WaitForSeconds(resetDelay);
-
-        transform.position = initialPosition;
-        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        body.AddForce(initialForce);
-
-        SetVisible(true);
+        return canScore;
     }
+
+    public void SetCanScore(bool value)
+    {
+        canScore = value;
+    }
+    #endregion
 }

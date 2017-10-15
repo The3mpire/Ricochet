@@ -163,6 +163,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efa3ed3b93be61419d5481b6f65e33e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modeManager: {fileID: 0}
+  powerUpRespawnTime: 10
+  playerRespawnTime: 2
+  ballRespawnTime: 2
+  redTeamRespawns:
+  - {fileID: 0}
+  blueTeamRespawns:
+  - {fileID: 0}
+  ballRespawns:
+  - {fileID: 0}
 --- !u!124 &124825466531352990
 Behaviour:
   m_ObjectHideFlags: 1

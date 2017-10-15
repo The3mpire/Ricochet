@@ -11,25 +11,25 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     [Tooltip("How fast the player moves (force)")]
     [SerializeField]
-    private float moveForce = 365f;
+    private float moveForce = 15f;
     [Tooltip("The fastest the player is allowed to move (velocity)")]
     [SerializeField]
-    private float maxSpeed = 5f;
+    private float maxSpeed = 10f;
     [Tooltip("How strong the player's first jump is (from the ground)")]
     [SerializeField]
-    private float initialJumpForce = 1f;
+    private float initialJumpForce = 8f;
     [Tooltip("How much higher the player goes continues from holding down the button (force)")]
     [SerializeField]
-    private float continualJumpForce = 0.005f;
+    private float continualJumpForce = 0.9f;
     [Tooltip("How long the player can hold the button before it doesn't do anything")]
     [SerializeField]
-    private float maxJumpTime = 1f;
+    private float maxJumpTime = 0.25f;
     [Tooltip("How strong the player's extra jumps are (already in the air)")]
     [SerializeField]
-    private float extraJumpForce = .5f;
+    private float extraJumpForce = 4f;
     [Tooltip("How sensitive the left stick is before acknowledging input")]
     [SerializeField]
-    private float stickJumpDeadZone = 0.1f;
+    private float stickJumpDeadZone = 0.01f;
     [Tooltip("Whether the player can jump using the left stick")]
     [SerializeField]
     private bool stickJump = true;
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     private int playerNumber = 1;
     [Tooltip("Which team the player is on")]
     [SerializeField]
-    private int teamNumber = 1;
+    private ETeam team;
 
     #endregion
 
@@ -69,15 +69,12 @@ public class PlayerController : MonoBehaviour
     private bool jumpPressed = false;
     private bool hasPowerUp = false;
     private bool isJumping = false;
-
-    [SerializeField]
     private bool grounded = false;
-
-    [SerializeField]
-    private int jumpCounter = 0;
-    private float jumpTimer = 0f;
     private bool jumpButtonHeld = false;
 
+    private int jumpCounter = 0;
+    private float jumpTimer = 0f;   
+    
     private EPowerUp currPowerUp = EPowerUp.None;
 
     private Player player;
@@ -94,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        body.color = PlayerColorData.getColor(playerNumber, teamNumber);
+        body.color = PlayerColorData.getColor(playerNumber, team);
     }
 
     void Update()
@@ -248,12 +245,26 @@ public class PlayerController : MonoBehaviour
     //TODO reroute through Game Manager
     public void ReceivePowerUp(EPowerUp powerUp)
     {
+        hasPowerUp = true;
         currPowerUp = powerUp;
+    }
+
+    public void RemovePowerUp()
+    {
+        hasPowerUp = false;
+        currPowerUp = EPowerUp.None;
+        shield.color = Color.white;
+    }
+
+    public void KillPlayer()
+    {
+        rigid.velocity = Vector3.zero;
+        gameObject.SetActive(false);
     }
 
     #endregion
 
-    #region Getters
+    #region GettersAndSetters
     public SpriteRenderer GetShieldSpriteRenderer()
     {
         return shield;
@@ -263,5 +274,12 @@ public class PlayerController : MonoBehaviour
     {
         return currPowerUp;
     }
+
+    public ETeam GetTeamNumber()
+    {
+        return team;
+    }
+    
     #endregion
+
 }

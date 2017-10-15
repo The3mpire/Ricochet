@@ -23,7 +23,6 @@ GameObject:
   - component: {fileID: 212697235011046966}
   - component: {fileID: 58140022429831294}
   - component: {fileID: 114207744323565628}
-  - component: {fileID: 114809476023684600}
   m_Layer: 8
   m_Name: Ball
   m_TagString: Ball
@@ -99,21 +98,6 @@ MonoBehaviour:
   canScore: 1
   sprite: {fileID: 212697235011046966}
   body: {fileID: 50130466550821870}
---- !u!114 &114809476023684600
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355428870620704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46d4f14e050844708954b0bcf44b5c90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  respawnPoint1: {fileID: 0}
-  respawnPoint2: {fileID: 0}
-  ScoreUI: {fileID: 0}
-  ball: {fileID: 1355428870620704}
 --- !u!212 &212697235011046966
 SpriteRenderer:
   m_ObjectHideFlags: 1

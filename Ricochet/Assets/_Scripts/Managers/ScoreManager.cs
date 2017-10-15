@@ -1,43 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
+using Enumerables;
 
-public class ScoreManager : MonoBehaviour {
+public class ScoreManager : ModeManager
+{
+    [Tooltip("Drag the Score UI's Red Team's Text here")]
+    [SerializeField]
+    private Text RedTeamText;
+    [Tooltip("Drag the Score UI's Team One Text here")]
+    [SerializeField]
+    private Text BlueTeamText;
 
-    public Text RedScore;
-    public Text BlueScore;
+    private int redTeamScore = 0;
+    private int blueTeamScore = 0;
 
-    private int _blueScore = 0;
-    private int _redScore = 0;
-	// Use this for initialization
-	void Start () {
-		if (RedScore == null || BlueScore == null)
-        {
-            Debug.LogError("Score UI does not have a link to a score UI text");
-        }
-	}
-	
-    /// <summary>
-    /// Incriments score for a specific team by a given value
-    /// </summary>
-    /// <param name="team">'b' for blue 'r' for red</param>
-    /// <param name="value">points to be awarded</param>
-	public void Score(char team, int value)
+    public override void UpdateScore(Enumerables.ETeam team, int value)
     {
-        if (team == 'b')
+        switch (team)
         {
-            _blueScore = value + _blueScore > 0 ? value + _blueScore : 0;
-            BlueScore.text = _blueScore.ToString();
-        }
-        else if (team == 'r')
-        {
-            _redScore = value + _redScore > 0 ? value + _redScore : 0;
-            RedScore.text = _redScore.ToString();
-        }
-        else
-        {
-            Debug.LogWarning("Score expected 'b' or 'r' as a team, was given: " + team);
+            // it increments the opposing team (this way the inspector variables make more sense, 
+            // and all the reverse logic is done in the code)
+            case ETeam.RedTeam:
+                blueTeamScore += value;
+                BlueTeamText.text = blueTeamScore.ToString();
+                break;
+            case ETeam.BlueTeam:
+                redTeamScore += value;
+                RedTeamText.text = redTeamScore.ToString();
+                break;
         }
     }
 }

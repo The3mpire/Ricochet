@@ -23,6 +23,7 @@ public class PowerUp : MonoBehaviour
                 PlayerController player = collision.GetComponent<PlayerController>();
 
                 player.GetShieldSpriteRenderer().color = shieldColor;
+                player.ReceivePowerUp(powerUpType);
                 gameManagerInstance.RespawnPowerUp(gameObject);
                 gameObject.SetActive(false);
             }
