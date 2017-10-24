@@ -26,6 +26,10 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private bool canScore = true;
 
+    [Tooltip("How many players back to last touch the ball.")]
+    [SerializeField]
+    private int lastTouchedByCount = 2;
+
     [Tooltip("Drag the ball here")]
     [SerializeField]
     private Rigidbody2D body;
@@ -33,7 +37,14 @@ public class Ball : MonoBehaviour
 
     private GameManager gameManagerInstance;
 
+    private Queue<PlayerController> lastTouchedBy;
+
     #region MonoBehaviour
+
+    private void Awake()
+    {
+        lastTouchedBy = new Queue<PlayerController>();
+    }
 
     private void OnEnable()
     {
@@ -96,5 +107,19 @@ public class Ball : MonoBehaviour
     {
         canScore = value;
     }
+    
+    public void SetLastTouchedBy(PlayerController player)
+    {
+        if (player != lastTouchedBy.Peek())
+        {
+            lastTouchedBy.Enqueue(player);
+        }
+        if (lastTouchedBy.Count > lastTouchedByCount)
+        { 
+            lastTouchedBy.Dequeue();
+        }
+    }
+
     #endregion
+
 }

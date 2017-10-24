@@ -85,6 +85,9 @@ public class GameManager : MonoBehaviour
                 SpawnMultipleBalls(ball);
                 break;
         }
+
+        // The last player to touch the ball 
+        ball.SetLastTouchedBy(playerController);
     }
 
     public void BallPlayerCollision(GameObject player, Ball ball)
