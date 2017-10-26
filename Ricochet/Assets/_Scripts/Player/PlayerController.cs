@@ -97,35 +97,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-
-        // frame check
-        if (player.GetButton("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
-        {
-            jumpButtonHeld = true;
-        }
-        else
-        {
-            jumpButtonHeld = false;
-        }
-
-        // get jump input
-        if (player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
-        {
-            jumpPressed = true;
-            jumpButtonHeld = true;
-        }
-        // player hit the ground
-        else if (grounded)
-        {
-            jumpCounter = 0;
-        }
-
-        // player is not pressing button or out of jumps
-        if (isJumping && !jumpButtonHeld)
-        {
-            isJumping = false;
-        }
         //TODO state based + infinite jump :)
         RotateShield();
     }
@@ -133,23 +104,30 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Cache the horizontal input.
-        float h = Input.GetAxis("Movement" + playerNumber);
+        float h = player.GetAxis("MoveHorizontal");
+        float v = player.GetAxis("MoveVertical");
 
+        Vector2 targetVelocity = new Vector2(h, v);
+        GetComponent<Rigidbody2D>().velocity = targetVelocity * maxSpeed;
         // movement
-        if (h == 0)
-        {
-            rigid.velocity = new Vector2(0, rigid.velocity.y);
-        }
-        else
-        {
-            rigid.AddForce(new Vector2(Mathf.Sign(h) * moveForce, 0f), ForceMode2D.Impulse);
-        }
+        //if (h == 0)
+        //{
+        //    rigid.velocity = new Vector2(0, rigid.velocity.y);
+        //}
+        //else
+        //{
+        //    rigid.AddForce(new Vector2(Mathf.Sign(h) * moveForce, 0f), ForceMode2D.Impulse);
+        //}
 
         //Check if over max speed
-        if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
-        {
-            rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
-        }
+        //if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
+        //{
+        //    rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
+        //}
+        //if (Mathf.Abs(rigid.velocity.y) > maxSpeed)
+        //{
+        //    rigid.velocity = new Vector2(rigid.velocity.x, Mathf.Sign(rigid.velocity.y) * maxSpeed);
+        //}
 
         // direction check
         if (h > 0 && !facingRight)
@@ -161,13 +139,13 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
-        if (jumpPressed)
-        {
-            StartJump();
-            jumpPressed = false;
-        }
+        //if (jumpPressed)
+        //{
+        //    StartJump();
+        //    jumpPressed = false;
+        //}
 
-        HoldJump();
+        //HoldJump();
     }
 
 
@@ -214,8 +192,8 @@ public class PlayerController : MonoBehaviour
 
     private void RotateShield()
     {
-        float shieldHorizontal = Input.GetAxis("ShieldX" + playerNumber);
-        float shieldVertical = Input.GetAxis("ShieldY" + playerNumber);
+        float shieldHorizontal = player.GetAxis("RightStickHorizontal");
+        float shieldVertical = -player.GetAxis("RightStickVertical");
 
         //make sure there is magnitude
         if (Mathf.Abs(shieldHorizontal) > 0 || Mathf.Abs(shieldVertical) > 0)
