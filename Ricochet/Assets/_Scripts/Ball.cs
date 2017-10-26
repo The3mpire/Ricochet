@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -37,13 +39,13 @@ public class Ball : MonoBehaviour
 
     private GameManager gameManagerInstance;
 
-    private Queue<PlayerController> lastTouchedBy;
+    private LinkedList<PlayerController> lastTouchedBy;
 
     #region MonoBehaviour
 
     private void Awake()
     {
-        lastTouchedBy = new Queue<PlayerController>();
+        lastTouchedBy = new LinkedList<PlayerController>();
     }
 
     private void OnEnable()
@@ -87,6 +89,12 @@ public class Ball : MonoBehaviour
 
     #endregion
 
+    public void OnBallGoalCollision()
+    {
+        gameObject.SetActive(false);
+        lastTouchedBy.Clear();
+    }
+
     #region Getters and Setters
     public bool GetTempStatus()
     {
@@ -110,14 +118,39 @@ public class Ball : MonoBehaviour
     
     public void SetLastTouchedBy(PlayerController player)
     {
-        if (player != lastTouchedBy.Peek())
+        if (lastTouchedBy.Count == 0 || player != lastTouchedBy.Last.Value)
         {
-            lastTouchedBy.Enqueue(player);
+            lastTouchedBy.AddLast(player);
         }
         if (lastTouchedBy.Count > lastTouchedByCount)
         { 
-            lastTouchedBy.Dequeue();
+            lastTouchedBy.RemoveFirst();
         }
+    }
+
+    // If player isn't null, don't return the player passed in unless it is the only one in the list.
+    // returns null if no one has touched the ball yet
+    public PlayerController GetLastTouchedBy(PlayerController player = null)
+    {
+        if (lastTouchedBy.Count == 0)
+        {
+            return null;
+        }
+        if (player == null)
+        {
+            return lastTouchedBy.Last.Value;
+        }
+        else
+        {
+            foreach (PlayerController p in lastTouchedBy.Reverse())
+            {
+                if (p != player)
+                {
+                    return p;
+                }
+            }
+        }
+        return player;
     }
 
     #endregion
