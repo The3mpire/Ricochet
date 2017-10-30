@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour
         }
 
         instance = this;
+
+        Cursor.visible = false;
     }
     #endregion
 
@@ -64,6 +66,28 @@ public class GameManager : MonoBehaviour
             return true;
         }
     }
+
+    #region UI Controls
+    public void ExitLevel()
+    {
+        Debug.LogError("Not implemented", gameObject);
+    }
+
+    public void StartGame()
+    {
+        Debug.LogError("Not implemented", gameObject);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    private void ChangeScene()
+    {
+        Debug.LogError("Not implemented", gameObject);
+    }
+    #endregion
 
     #region Collision Management
 
@@ -114,7 +138,7 @@ public class GameManager : MonoBehaviour
 
     public void RespawnBall(GameObject ball)
     {
-        if(!ball.GetComponent<Ball>().GetTempStatus())
+        if (!ball.GetComponent<Ball>().GetTempStatus())
         {
             StartCoroutine(SpawnBallCoroutine(ball));
         }
@@ -125,10 +149,23 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RespawnPowerUpRoutine(powerUp));
     }
 
+    private void SpawnMultipleBalls(Ball origBall)
+    {
+        Ball ball1 = Instantiate(origBall);
+        Ball ball2 = Instantiate(origBall);
 
-    #endregion
+        ball1.SetTempStatus(true);
+        ball2.SetTempStatus(true);
+    }
 
-    #region Private Helpers
+    private IEnumerator SpawnBallCoroutine(GameObject ball)
+    {
+        yield return new WaitForSeconds(ballRespawnTime);
+
+        ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
+
+        ball.SetActive(true);
+    }
 
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
@@ -148,28 +185,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnMultipleBalls(Ball origBall)
-    {
-        Ball ball1 = Instantiate(origBall);
-        Ball ball2 = Instantiate(origBall);
-
-        ball1.SetTempStatus(true);
-        ball2.SetTempStatus(true);
-    }
-
     private IEnumerator RespawnPowerUpRoutine(GameObject powerUp)
     {
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
-    }
-
-    private IEnumerator SpawnBallCoroutine(GameObject ball)
-    {
-        yield return new WaitForSeconds(ballRespawnTime);
-
-        ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
-
-        ball.SetActive(true);
     }
 
     #endregion
