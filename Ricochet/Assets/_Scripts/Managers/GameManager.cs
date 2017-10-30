@@ -97,8 +97,11 @@ public class GameManager : MonoBehaviour
             playerDictionary.Add(player, playerController);
         }
 
-        playerController.KillPlayer();
-        StartCoroutine(RespawnPlayer(playerController));
+        var killed = playerController.KillPlayer();
+        if (killed)
+        {
+            StartCoroutine(RespawnPlayer(playerController));
+        }
     }
 
     public void BallGoalCollision(GameObject ball, ETeam team, int value)

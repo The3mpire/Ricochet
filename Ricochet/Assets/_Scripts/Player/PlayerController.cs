@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How many jumps the player gets while in the air")]
     [SerializeField]
     private int numberOfExtraJumps = 1;
+    [Tooltip("How many hits the player can take")]
+    [SerializeField]
+    private int hits = 2;
 
     [Header("Reference Components")]
     [Tooltip("Drag the player's shieldContainer here")]
@@ -73,7 +76,9 @@ public class PlayerController : MonoBehaviour
     private bool jumpButtonHeld = false;
 
     private int jumpCounter = 0;
-    private float jumpTimer = 0f;   
+    private float jumpTimer = 0f;
+
+    private int currentHits = 0;
     
     private EPowerUp currPowerUp = EPowerUp.None;
 
@@ -88,6 +93,11 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         player = ReInput.players.GetPlayer(playerNumber - 1);
+    }
+
+    private void OnEnable()
+    {
+        currentHits = hits;
     }
 
     void Start()
@@ -233,10 +243,20 @@ public class PlayerController : MonoBehaviour
         shield.color = Color.white;
     }
 
-    public void KillPlayer()
+    public bool KillPlayer()
     {
-        rigid.velocity = Vector3.zero;
-        gameObject.SetActive(false);
+        if (currentHits <= 1)
+        {
+            rigid.velocity = Vector3.zero;
+            gameObject.SetActive(false);
+            return true;
+        }
+        else
+        {
+            currentHits--;
+            return false;
+        }
+        
     }
 
     #endregion
