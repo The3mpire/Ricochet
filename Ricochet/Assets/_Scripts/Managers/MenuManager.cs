@@ -17,16 +17,16 @@ public class MenuManager : MonoBehaviour
     private GameObject defaultSelectedButton;
     #endregion
 
+    #region Hidden Variables
     private bool pauseMenuShowing = false;
     private GameManager gameManagerInstance;
 
+    #endregion
 
     #region MonoBehaviour
     void Awake()
     {
-        // hardcoded as zero due to build settings. 
-        // check to see if we're in the mainMenu
-        if(SceneManager.GetActiveScene().buildIndex == 0)
+        if(SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
         {
             EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
         }

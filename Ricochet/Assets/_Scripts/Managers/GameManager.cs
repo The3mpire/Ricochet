@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enumerables;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Hidden Variables
+
     private static GameManager instance = null;
 
     // dictionary of players cached based off the GameObject
@@ -70,12 +72,12 @@ public class GameManager : MonoBehaviour
     #region UI Controls
     public void ExitLevel()
     {
-        Debug.LogError("Not implemented", gameObject);
+        SceneManager.LoadSceneAsync(LevelIndex.MAIN_MENU);
     }
 
     public void StartGame()
     {
-        Debug.LogError("Not implemented", gameObject);
+        SceneManager.LoadSceneAsync(LevelIndex.LEVEL_ONE);
     }
 
     public void ExitGame()
