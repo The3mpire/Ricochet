@@ -84,6 +84,8 @@ public class PlayerController : MonoBehaviour
 
     private Player player;
 
+    private List<PlayerController> killList = new List<PlayerController>();
+
     private GameManager gameManagerInstance = null;
 
     #endregion
@@ -260,7 +262,19 @@ public class PlayerController : MonoBehaviour
         shield.color = Color.white;
     }
 
-    public void KillPlayer()
+    public void RegisterKill(PlayerController otherPlayer)
+    {
+        Debug.Log(name + " killed player " + otherPlayer.name);
+        killList.Add(otherPlayer);
+        string s = name + " has killed: ";
+        foreach (PlayerController p in killList)
+        {
+            s += p.name + " ";
+        }
+        Debug.Log(s);
+    }
+
+    public void PlayerDead()
     {
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
