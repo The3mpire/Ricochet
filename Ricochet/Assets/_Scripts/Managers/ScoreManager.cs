@@ -15,8 +15,9 @@ public class ScoreManager : ModeManager
 
     private int redTeamScore = 0;
     private int blueTeamScore = 0;
+    private int scoreGoal = 2;
 
-    public override void UpdateScore(Enumerables.ETeam team, int value)
+    public override bool UpdateScore(Enumerables.ETeam team, int value)
     {
         switch (team)
         {
@@ -25,11 +26,12 @@ public class ScoreManager : ModeManager
             case ETeam.RedTeam:
                 blueTeamScore += value;
                 BlueTeamText.text = blueTeamScore.ToString();
-                break;
+                return blueTeamScore % scoreGoal == 0;
             case ETeam.BlueTeam:
                 redTeamScore += value;
                 RedTeamText.text = redTeamScore.ToString();
-                break;
+                return redTeamScore % scoreGoal == 0;
         }
+        return false;
     }
 }

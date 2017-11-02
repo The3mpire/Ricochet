@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
 
     private void ChangeScene()
     {
-        Debug.LogError("Not implemented", gameObject);
+        SceneManager.LoadSceneAsync(Random.Range(1, SceneManager.sceneCountInBuildSettings));
     }
     #endregion
 
@@ -129,9 +129,15 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int value)
     {
-        modeManager.UpdateScore(team, value);
-        ball.SetActive(false);
-        RespawnBall(ball);
+        if (!modeManager.UpdateScore(team, value))
+        {
+            ball.SetActive(false);
+            RespawnBall(ball);
+        }
+        else
+        {
+            ChangeScene();
+        }
     }
 
     #endregion
