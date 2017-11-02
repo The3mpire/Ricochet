@@ -32,4 +32,20 @@ public class ScoreManager : ModeManager
                 break;
         }
     }
+
+    public override Enumerables.ETeam ReturnWinningTeam()
+    {
+        if(redTeamScore > blueTeamScore)
+        {
+            return ETeam.RedTeam;
+        }
+        else if(redTeamScore < blueTeamScore)
+        {
+            return ETeam.BlueTeam;
+        }
+        else
+        {
+            return ETeam.None;
+        }
+    }
 }

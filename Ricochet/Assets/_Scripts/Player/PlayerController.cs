@@ -54,6 +54,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform groundCheck;
 
+    [Header("Secondary Items")]
+    [Tooltip("Drag the player's power up circle shield here")]
+    [SerializeField]
+    private GameObject circleShield;
+
     [Header("Other Settings")]
     [Tooltip("Which player this is")]
     [SerializeField]
@@ -259,6 +264,16 @@ public class PlayerController : MonoBehaviour
     {
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
+    }
+
+    public void EnableSecondaryShield(bool status)
+    {
+        switch (currPowerUp)
+        {
+            case EPowerUp.CircleShield:
+                circleShield.SetActive(status);
+                break;
+        }
     }
 
     #endregion

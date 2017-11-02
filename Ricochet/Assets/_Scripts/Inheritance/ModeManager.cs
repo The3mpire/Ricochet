@@ -7,4 +7,6 @@ using Enumerables;
 public abstract class ModeManager : MonoBehaviour
 {
     public abstract void UpdateScore(Enumerables.ETeam team, int value);
+
+    public abstract Enumerables.ETeam ReturnWinningTeam();
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Enumerables;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +11,20 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
     private ModeManager modeManager;
+
+    [Header("Game Match Variables")]
+    [Tooltip("How long the selected game lasts in seconds")]
+    [SerializeField]
+    private float gameMatchTime = 120f;
+    [Tooltip("Drag the timer from the UI screen here")]
+    [SerializeField]
+    private Text gameTimerText;
+    [Tooltip("Drag the Game Menu UI here")]
+    [SerializeField]
+    private Canvas gameMenuUI;
+    [Tooltip("Drag the winning team text here")]
+    [SerializeField]
+    private Text winningTeamText;
 
     [Header("Respawn Timers")]
     [Tooltip("How long the power up takes to respawn in seconds")]
@@ -38,6 +53,8 @@ public class GameManager : MonoBehaviour
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
+
+    private float currentMatchTime = 0.0f;
     #endregion
 
     #region MonoBehaviour
@@ -49,6 +66,11 @@ public class GameManager : MonoBehaviour
         }
 
         instance = this;
+    }
+
+    void Update()
+    {
+        matchTimer();
     }
     #endregion
 
@@ -87,6 +109,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void BallSecondaryShieldCollision(GameObject secondaryShield, Ball ball)
+    {
+        PlayerController playerController = secondaryShield.GetComponent<Shield>().GetPlayer();
+        switch (playerController.GetCurrentPowerUp())
+        {
+            case EPowerUp.CircleShield:
+                playerController.EnableSecondaryShield(false);
+                playerController.RemovePowerUp();
+                break;
+        }
+    }
+
     public void BallPlayerCollision(GameObject player, Ball ball)
     {
         PlayerController playerController;
@@ -114,7 +148,7 @@ public class GameManager : MonoBehaviour
 
     public void RespawnBall(GameObject ball)
     {
-        if(!ball.GetComponent<Ball>().GetTempStatus())
+        if (!ball.GetComponent<Ball>().GetTempStatus())
         {
             StartCoroutine(SpawnBallCoroutine(ball));
         }
@@ -170,6 +204,54 @@ public class GameManager : MonoBehaviour
         ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
+    }
+
+    private void matchTimer()
+    {
+        if (currentMatchTime < gameMatchTime)
+        {
+            currentMatchTime += Time.deltaTime;
+            string minutes = ((int)(currentMatchTime / 60)).ToString();
+            int seconds_num = (int)(currentMatchTime % 60);
+            string seconds;
+            if (seconds_num < 10)
+            {
+                seconds = '0' + seconds_num.ToString();
+            }
+            else
+            {
+                seconds = seconds_num.ToString();
+            }
+            gameTimerText.text = minutes + ':' + seconds;
+        }
+        else
+        {
+            //if we want to disable the players during the win screen not sure exactly what to do here so need some team input
+            foreach (KeyValuePair<GameObject, PlayerController> player in playerDictionary)
+            {
+                //player.Value.enabled = false;
+            }
+            Enumerables.ETeam winningTeam = modeManager.ReturnWinningTeam();
+            Debug.Log(winningTeam);
+            gameMenuUI.gameObject.SetActive(true);
+            winningTeamText.gameObject.SetActive(true);
+            if (winningTeam == ETeam.BlueTeam)
+            {
+                winningTeamText.text = "Congradulations Blue Team!";
+                winningTeamText.color = Color.blue;
+            }
+            else if (winningTeam == ETeam.RedTeam)
+            {
+                winningTeamText.text = "Congradulations Red Team!";
+                winningTeamText.color = Color.red;
+            }
+            else
+            {
+                winningTeamText.text = "Draw...";
+                winningTeamText.color = Color.white;
+            }
+            //start the coorutine that will wait a few seconds so this is displayed and then switch scene
+        }
     }
 
     #endregion

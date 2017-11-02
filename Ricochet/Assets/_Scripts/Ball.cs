@@ -64,11 +64,14 @@ public class Ball : MonoBehaviour
             if (hitCollider.tag == "Player")
             {
                 gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
-
             }
             else if (hitCollider.tag == "Shield")
             {
                 gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
+            }
+            else if (hitCollider.tag == "SecondaryShield")
+            {
+                gameManagerInstance.BallSecondaryShieldCollision(hitCollider.gameObject, this);
             }
         }
 
