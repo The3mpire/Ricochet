@@ -5,36 +5,32 @@ public class DontGoThroughThings : MonoBehaviour
 {
 	#region Inspector Variables
 	[SerializeField]
-	private bool sendTriggerMessage = false;
-	[Tooltip("")]
+    [Tooltip("The layerMask this object is on")]
+    private LayerMask layerMask = -1;
 	[SerializeField]
-	private LayerMask layerMask = -1;
-	[Tooltip("")]
-	[SerializeField]
-	private float skinWidth = 0.1f;
-	[Tooltip("")]
+    [Tooltip("How wide the objects outline is")]
+    private float skinWidth = 0.1f;
+    [SerializeField]
+    [Tooltip("Drag the objects ridigBody2D here")]
+    private Rigidbody2D rigid;
+    [SerializeField]
+    [Tooltip("Drag the objects collider here")]
+    private Collider2D myCollider;
 
-	#endregion
+    #endregion
 
-	#region Hidden Variables
-	private float minimumExtent;
+    #region Hidden Variables
+    private float minimumExtent;
 	private float partialExtent;
 	private float sqrMinimumExtent;
 
-	private Vector3 previousPosition;
-
-	private Rigidbody myRigidbody;
-
-	private Collider myCollider;
-
+	private Vector2 previousPosition;
 	#endregion
 
 	#region MonoBehavior
 	void Start()
 	{
-		myRigidbody = GetComponent<Rigidbody>();
-		myCollider = GetComponent<Collider>();
-		previousPosition = myRigidbody.position;
+		previousPosition = rigid.position;
 		minimumExtent = Mathf.Min(Mathf.Min(myCollider.bounds.extents.x, myCollider.bounds.extents.y), myCollider.bounds.extents.z);
 		partialExtent = minimumExtent * (1.0f - skinWidth);
 		sqrMinimumExtent = minimumExtent * minimumExtent;
@@ -42,7 +38,7 @@ public class DontGoThroughThings : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		Vector3 movementThisStep = myRigidbody.position - previousPosition;
+		Vector3 movementThisStep = rigid.position - previousPosition;
 		float movementSqrMagnitude = movementThisStep.sqrMagnitude;
 
 		if (movementSqrMagnitude > sqrMinimumExtent)
@@ -62,11 +58,11 @@ public class DontGoThroughThings : MonoBehaviour
 				}
 				if (!hitInfo.collider.isTrigger)
 				{
-					myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
+					rigid.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
 				}
 			}
 		}
-		previousPosition = myRigidbody.position;
+		previousPosition = rigid.position;
 	}
 
 	#endregion

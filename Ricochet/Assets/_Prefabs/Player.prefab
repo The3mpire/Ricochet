@@ -57,7 +57,6 @@ GameObject:
   - component: {fileID: 114273906525651764}
   - component: {fileID: 50980457896784662}
   - component: {fileID: 95759706151971760}
-  - component: {fileID: 82468065174550080}
   - component: {fileID: 70838664386658332}
   - component: {fileID: 114001765546412982}
   m_Layer: 9
@@ -247,86 +246,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.050182544, y: -0.0026411482}
   m_Size: {x: 0.60036516, y: 1.2905309}
   m_Direction: 0
---- !u!82 &82468065174550080
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1661296023868354}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
 --- !u!82 &82902860311652620
 AudioSource:
   m_ObjectHideFlags: 1
@@ -435,11 +354,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd1ecc840f24ac58e994fc06b362db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sendTriggerMessage: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   skinWidth: 0.1
+  rigid: {fileID: 50980457896784662}
+  myCollider: {fileID: 70838664386658332}
 --- !u!114 &114273906525651764
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -451,13 +371,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6804babace5cc47dd8b61abb292c4be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 365
-  maxSpeed: 5
-  initialJumpForce: 1
-  continualJumpForce: 0.005
-  maxJumpTime: 1
-  extraJumpForce: 0.5
-  stickJumpDeadZone: 0.1
+  moveForce: 15
+  maxSpeed: 10
+  initialJumpForce: 8
+  continualJumpForce: 0.9
+  maxJumpTime: 0.25
+  extraJumpForce: 4
+  stickJumpDeadZone: 0.01
   stickJump: 0
   numberOfExtraJumps: 1
   shieldTransform: {fileID: 4527870232127600}
@@ -466,7 +386,7 @@ MonoBehaviour:
   rigid: {fileID: 50980457896784662}
   groundCheck: {fileID: 4783560035124394}
   playerNumber: 1
-  team: 0
+  team: 1
 --- !u!114 &114566766358683072
 MonoBehaviour:
   m_ObjectHideFlags: 1

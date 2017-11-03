@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
     public void BallGoalCollision(GameObject ball, ETeam team, int value)
     {
         modeManager.UpdateScore(team, value);
-        ball.OnBallGoalCollision();
+        ball.GetComponent<Ball>().OnBallGoalCollision();
         RespawnBall(ball);
     }
 
