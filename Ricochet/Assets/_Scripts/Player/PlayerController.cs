@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Cache the horizontal input.
-        float h = Input.GetAxis("Movement" + playerNumber);
+        float h = player.GetAxis("MoveHorizontal");
 
         // movement
         if (h == 0)
@@ -216,8 +216,8 @@ public class PlayerController : MonoBehaviour
 
     private void RotateShield()
     {
-        float shieldHorizontal = Input.GetAxis("ShieldX" + playerNumber);
-        float shieldVertical = Input.GetAxis("ShieldY" + playerNumber);
+        float shieldHorizontal = player.GetAxis("RightStickHorizontal");
+        float shieldVertical = -player.GetAxis("RightStickVertical"); 
 
         //make sure there is magnitude
         if (Mathf.Abs(shieldHorizontal) > 0 || Mathf.Abs(shieldVertical) > 0)
