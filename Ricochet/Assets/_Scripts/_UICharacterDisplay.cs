@@ -1,34 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-#region MonoBehaviour
 public class _UICharacterDisplay : MonoBehaviour {
 	#region Inspector Variables
 	[Header("Player Sprites")]
-	[Tooltip("Red Bean Sprite")]
+    [Tooltip("No selection sprite (should be enabled)")]
+    [SerializeField]
+    private Image noSelect;
+    [Tooltip("Red Bean Sprite")]
 	[SerializeField]
-	private SpriteRenderer redBean1;
+	private Image redBean;
 	[Tooltip("Blue Bean Sprite")]
 	[SerializeField]
-	private SpriteRenderer blueBean1;
+	private Image blueBean;
 	[Tooltip("Red Eggplant Sprite")]
 	[SerializeField]
-	private SpriteRenderer redEggplant1;
-	[Tooltip("Blue EggPlant Sprite")]
+	private Image redEggplant;
+	[Tooltip("Blue Eggplant Sprite")]
 	[SerializeField]
-	private SpriteRenderer blueEggplant1;
+	private Image blueEggplant;
 
 	[Header("Cursor Sprites")]
 	[Tooltip("Bean Cursor")]
 	[SerializeField]
-	private SpriteRenderer beanCursor;
-	[Tooltip("Eggbplant Cursor")]
+	private Image beanCursor;
+	[Tooltip("Eggplant Cursor")]
 	[SerializeField]
-	private SpriteRenderer eggplantCursor;
-	#region
+	private Image eggplantCursor;
+    #endregion
 
-	public void UpdateCharacter(string newCharacter) {
+    #region UI Behaviour
+    public void UpdateCharacter(string newCharacter) {
 		
 	}
 	public void MoveCursor(string selection) {
@@ -40,5 +44,5 @@ public class _UICharacterDisplay : MonoBehaviour {
 	public void SetReady(bool state) {
 		
 	}
+    #endregion
 }
-#endregion
