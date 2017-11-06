@@ -34,6 +34,7 @@ public class _UICharacterSelectView : MonoBehaviour {
     #region Private Variables
     private bool active = false;
     private int currentTeam = 1;
+	private string currentSpriteString;
     private GameObject currentSprite;
     private GameObject currentCursor;
     #endregion
@@ -41,13 +42,17 @@ public class _UICharacterSelectView : MonoBehaviour {
     #region MonoBenavior
     private void Awake()
     {
-        
+		currentSpriteString = "bean";
+		currentSprite = noSelect;
+		currentCursor = beanCursor;
     }
     #endregion
 
     #region UI Behaviour
     public void UpdateCharacter(string newCharacter)
     {
+		currentSpriteString = newCharacter;
+
         if (newCharacter == "bean")
         {
             if (currentTeam == 1)
@@ -94,7 +99,13 @@ public class _UICharacterSelectView : MonoBehaviour {
 
 	public void SetReady(bool state)
     {
-		
+		Debug.Log ("You are now ready!");
+	}
+
+	public void UpdateTeam(int playerTeam)
+	{
+		currentTeam = playerTeam;
+		UpdateCharacter (currentSpriteString);
 	}
 
     public void Enable()

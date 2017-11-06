@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 public class _UICharacterSelectModel : MonoBehaviour {
-    private class PlayerData
+    public class PlayerData
 	{
         public bool active = false;
 		public int team = 1;
@@ -38,8 +38,8 @@ public class _UICharacterSelectModel : MonoBehaviour {
     #region Private Variables
 	private Dictionary<int, PlayerData> players;
 	private Dictionary<int, _UICharacterSelectView> spriteHandlers;
-	private string[,] characters = { { "redbean", "eggplant" } };
-    int numberOfPlayers = 4;
+	private string[,] characters = { { "bean", "eggplant" } };
+    private int numberOfPlayers = 4;
 
     #endregion
 
@@ -93,18 +93,64 @@ public class _UICharacterSelectModel : MonoBehaviour {
     /// <param name="direction">1: up, 2: right, 3: down, 4: left</param>
 	public void MovePlayerSelection(int playerID, int direction)
     {
+		if (CheckPlayer (playerID) == true) {
+			Debug.Log ("cant change");
+			return;
+		}
+		PlayerData player = players [playerID];
+		_UICharacterSelectView playerView = spriteHandlers [playerID];
 
+		switch (direction) {
+		// check this if you make another row in the array
+		case 1:
+			player.yPos += 1;
+			player.yPos = player.yPos >= characters.GetLength(0) ? player.yPos - 1 : player.yPos;
+			break;
+		case 2:
+			player.xPos += 1;
+			player.xPos = player.xPos >= characters.Length ? player.xPos - 1 : player.xPos;
+			break;
+		case 3:
+			player.yPos -= 1;
+			player.yPos = player.yPos  < 0 ? player.yPos + 1 : player.yPos;
+			break;
+		case 4:
+			player.xPos -= 1;
+			player.xPos = player.xPos < 0 ?  player.xPos + 1 : player.xPos;
+			break;
+		default:
+			Debug.LogError ("Selection change direction not within expected bounds: " + direction, gameObject);
+			return;
+			break;
+		}
+
+		playerView.MoveCursor (characters [player.yPos, player.xPos]);
+		playerView.UpdateCharacter (characters [player.yPos, player.xPos]);
     }
 
+	/// <summary>
+	/// Returns the status of the player(ready or not ready) and sets them as active.
+	/// </summary>
+	/// <returns><c>true</c>, if player was checked, <c>false</c> otherwise.</returns>
+	/// <param name="playerID">Player I.</param>
+	private bool CheckPlayer(int playerID)
+	{
+		players [playerID].active = true;
+		return players [playerID].ready;
+	}
+
 	public void ChangeTeam(int playerID)
-    {
+	{ 
+		if (CheckPlayer (playerID) == true) {
+			return;
+		}
         PlayerData player = players[playerID];
 		player.team++;
 		if (player.team > numberOfTeams) {
 			player.team = 1;
 		}
 		// update team color
-		//spriteHandlers[playerID].UpdateTeam(player.team);
+		spriteHandlers[playerID].UpdateTeam(player.team);
 	}
 
 	public void ToggleReady(int playerID)
@@ -113,7 +159,13 @@ public class _UICharacterSelectModel : MonoBehaviour {
 		player.ready = !player.ready;
         // update ready
         spriteHandlers[playerID].SetReady(player.ready);
+		players [playerID].active = true;
+
 	}
 
+	public Dictionary<int, PlayerData> GetPlayerData() 
+	{
+		return players;
+	}
 }
 
