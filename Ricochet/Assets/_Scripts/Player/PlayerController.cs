@@ -1,249 +1,184 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Enumerables;
 using Rewired;
-using Enumerables;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Player Settings")]
+    [Tooltip("Which player this is")]
+    [SerializeField] private int playerNumber = 1;
+    [Tooltip("Which team the player is on")]
+    [SerializeField] private ETeam team;
 
-    #region Inspector Variables
     [Header("Movement Settings")]
-    [Tooltip("How fast the player moves (force)")]
-    [SerializeField]
-    private float moveForce = 15f;
-    [Tooltip("The fastest the player is allowed to move (velocity)")]
-    [SerializeField]
-    private float maxSpeed = 10f;
-    [Tooltip("How strong the player's first jump is (from the ground)")]
-    [SerializeField]
-    private float initialJumpForce = 8f;
-    [Tooltip("How much higher the player goes continues from holding down the button (force)")]
-    [SerializeField]
-    private float continualJumpForce = 0.9f;
-    [Tooltip("How long the player can hold the button before it doesn't do anything")]
-    [SerializeField]
-    private float maxJumpTime = 0.25f;
-    [Tooltip("How strong the player's extra jumps are (already in the air)")]
-    [SerializeField]
-    private float extraJumpForce = 4f;
-    [Tooltip("How sensitive the left stick is before acknowledging input")]
-    [SerializeField]
-    private float stickJumpDeadZone = 0.01f;
-    [Tooltip("Whether the player can jump using the left stick")]
-    [SerializeField]
-    private bool stickJump = true;
-    [Tooltip("How many jumps the player gets while in the air")]
-    [SerializeField]
-    private int numberOfExtraJumps = 1;
+    [Tooltip("How fast the player moves")]
+    [SerializeField] private float moveSpeed = 10f;
+    [Tooltip("How fast the player moves during dash")]
+    [SerializeField] private float dashSpeed = 35f;
+    [Tooltip("How long the dash lasts")]
+    [SerializeField] private float dashTime = .1f;
+    [Tooltip("How much fuel in seconds to spend on dash")]
+    [SerializeField] private float dashCost = 2f;
+    [Tooltip("Gravity scale on player")]
+    [SerializeField] private float gravScale = 4f;
+    [Tooltip("Time in seconds of jetback fuel")]
+    [SerializeField] private float startFuel = 5f;
+    [Tooltip("Fuel/second recharge when grounded")]
+    [SerializeField] private float groundRechargeRate = 2.5f;
+    [Tooltip("Fuel/second recharge when grounded")]
+    [SerializeField] private float airRechargeRate = 1f;
 
     [Header("Reference Components")]
     [Tooltip("Drag the player's shieldContainer here")]
-    [SerializeField]
-    private Transform shieldTransform;
+    [SerializeField] private Transform shieldTransform;
     [Tooltip("Drag the player's shield here")]
-    [SerializeField]
-    private SpriteRenderer shield;
-    [Tooltip("Drag the player's body here")]
-    [SerializeField]
-    private SpriteRenderer body;
-    [Tooltip("Drag the player's body here")]
-    [SerializeField]
-    private Rigidbody2D rigid;
+    [SerializeField] private SpriteRenderer shield;
+    [Tooltip("Drag the player's bodySprite here")]
+    [SerializeField] private SpriteRenderer body;
+    [Tooltip("Drag the player's rigidbody here")]
+    [SerializeField] private Rigidbody2D rigid;
     [Tooltip("Drag the player's \"groundCheck\" here")]
-    [SerializeField]
-    private Transform groundCheck;
+    [SerializeField] private Transform groundCheck;
 
-    [Header("Other Settings")]
-    [Tooltip("Which player this is")]
-    [SerializeField]
-    private int playerNumber = 1;
-    [Tooltip("Which team the player is on")]
-    [SerializeField]
-    private ETeam team;
-
-    #endregion
-
-    #region Hidden Variables
-    private bool facingRight = true;
-    private bool jumpPressed = false;
-    private bool hasPowerUp = false;
-    private bool isJumping = false;
-    private bool grounded = false;
-    private bool jumpButtonHeld = false;
-
-    private int jumpCounter = 0;
-    private float jumpTimer = 0f;   
+#region Hidden Variables
+    private GameManager gameManagerInstance;
     
     private EPowerUp currPowerUp = EPowerUp.None;
-
     private Player player;
+    private List<PlayerController> killList;
 
-    private List<PlayerController> killList = new List<PlayerController>();
+    private bool hasPowerUp;
+    private bool dashing;
+    private bool grounded;
+    private bool jumpButtonHeld;
 
-    private GameManager gameManagerInstance = null;
+    private float currentFuel;
+    private float maxFuel;
+    private float timeSinceDash;
+    private Vector2 dashDirection;
 
-    #endregion
+    private float leftStickHorz;
+    private float leftStickVert;
+    private float rightStickHorz;
+    private float rightStickVert;
+#endregion
 
-
-    #region MonoBehaviour
+#region Monobehaviour
     private void Awake()
     {
-        player = ReInput.players.GetPlayer(playerNumber - 1);
+        killList = new List<PlayerController>();
+        currentFuel = startFuel;
+        maxFuel = startFuel;
+        timeSinceDash = 0f;
     }
 
-    void Start()
+    private void Start()
     {
+        player = ReInput.players.GetPlayer(playerNumber - 1);
         body.color = PlayerColorData.getColor(playerNumber, team);
     }
-
-    void Update()
+	
+	private void Update()
     {
+        // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-
-        // frame check
-        if (player.GetButton("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
+        jumpButtonHeld = false;
+        rigid.gravityScale = gravScale;
+        leftStickHorz = player.GetAxis("MoveHorizontal");
+        leftStickVert = player.GetAxis("MoveVertical");
+        rightStickHorz = player.GetAxis("RightStickHorizontal");
+        rightStickVert = player.GetAxis("RightStickVertical");
+        timeSinceDash += Time.deltaTime;
+        
+        // Check if still dashing
+        if (timeSinceDash >= dashTime)
         {
-            jumpButtonHeld = true;
-        }
-        else
-        {
-            jumpButtonHeld = false;
-        }
-
-        // get jump input
-        if (player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
-        {
-            jumpPressed = true;
-            jumpButtonHeld = true;
-        }
-        // player hit the ground
-        else if (grounded)
-        {
-            jumpCounter = 0;
+            dashing = false;
         }
 
-        // player is not pressing button or out of jumps
-        if (isJumping && !jumpButtonHeld)
-        {
-            isJumping = false;
-        }
-        //TODO state based + infinite jump :)
+        if (playerNumber == 1 && grounded)
+            Debug.Log("help");
+        
+        BasicMovement();
+        DashCheck();
         RotateShield();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        // Cache the horizontal input.
-        float h = player.GetAxis("MoveHorizontal");
-
-        // movement
-        if (h == 0)
-        {
-            rigid.velocity = new Vector2(0, rigid.velocity.y);
+        // Find moveDirection
+        Vector3 moveDirection;
+        if (jumpButtonHeld)
+        { 
+            moveDirection = new Vector2(leftStickHorz, leftStickVert);
         }
         else
         {
-            rigid.AddForce(new Vector2(Mathf.Sign(h) * moveForce, 0f), ForceMode2D.Impulse);
+            moveDirection = new Vector2(leftStickHorz, 0);
         }
 
-        //Check if over max speed
-        if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
+        // Apply movement speed
+        rigid.velocity = moveDirection * moveSpeed;
+
+        // Add dash velocity to movement
+        if (dashing)
         {
-            rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
+            rigid.velocity += dashDirection * dashSpeed;
         }
 
-        // direction check
-        if (h > 0 && !facingRight)
-        {
-            Flip();
-        }
-        else if (h < 0 && facingRight)
-        {
-            Flip();
-        }
-
-        if (jumpPressed)
-        {
-            StartJump();
-            jumpPressed = false;
-        }
-
-        HoldJump();
     }
+#endregion
 
-
-    #endregion
-
-    #region Private Helpers
-    void StartJump()
+#region Helpers
+    private void BasicMovement()
     {
-        //first jump
-        if (grounded)
+        if (player.GetButton("Jump") && currentFuel > 0)
         {
-            rigid.AddForce(new Vector2(0, initialJumpForce), ForceMode2D.Impulse);
-            jumpCounter++;
-            isJumping = true;
-            jumpTimer = 0f;
-        }
-        // extra jumps
-        else if (jumpCounter < numberOfExtraJumps)
+            rigid.gravityScale = 0;
+            jumpButtonHeld = true;
+            grounded = false;
+            currentFuel -= Time.deltaTime;
+        } // recharge fuel on ground
+        else if (grounded && currentFuel < maxFuel)
         {
-            if (rigid.velocity.y < 0)
-            {
-                rigid.velocity = new Vector2(rigid.velocity.x, 0);
-            }
-            rigid.AddForce(new Vector2(0, extraJumpForce), ForceMode2D.Impulse);
-            jumpCounter++;
-            isJumping = true;
-            jumpTimer = 0f;
+            currentFuel += groundRechargeRate * Time.deltaTime;
+        } // recharge fuel in air
+        else if (currentFuel < maxFuel)
+        {
+            currentFuel += airRechargeRate * Time.deltaTime;
         }
     }
 
-    private void HoldJump()
+    private void DashCheck()
     {
-        if (jumpButtonHeld && isJumping)
+        if (player.GetButtonDown("Dash") && !dashing && currentFuel >= dashCost)
         {
-            jumpTimer += Time.deltaTime;
-
-            //check if they can still add force
-            if (jumpTimer < maxJumpTime)
-            {
-                rigid.AddForce(new Vector2(0, continualJumpForce), ForceMode2D.Impulse);
-            }
+            currentFuel -= dashCost;
+            dashDirection = new Vector2(rightStickHorz, rightStickVert);
+            dashing = true;
+            timeSinceDash = 0f;
         }
     }
-
     private void RotateShield()
     {
-        float shieldHorizontal = player.GetAxis("RightStickHorizontal");
-        float shieldVertical = -player.GetAxis("RightStickVertical"); 
-
         //make sure there is magnitude
-        if (Mathf.Abs(shieldHorizontal) > 0 || Mathf.Abs(shieldVertical) > 0)
+        if (Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0)
         {
 
-            if (shieldHorizontal > 0)
+            if (rightStickHorz > 0)
             {
-                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(shieldHorizontal, shieldVertical), Vector2.down) + 90));
+                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
             }
             else
             {
-                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(shieldHorizontal, shieldVertical), Vector2.down) + 90));
+                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
             }
         }
     }
+#endregion
 
-    private void Flip()
-    {
-        // Switch the way the player is labelled as facing.
-        facingRight = !facingRight;
-
-        body.flipX = !facingRight;
-    }
-    #endregion
-
-    #region External Functions
+#region External Functions
     public void ReceivePowerUp(EPowerUp powerUp)
     {
         hasPowerUp = true;
@@ -261,12 +196,12 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log(name + " killed player " + otherPlayer.name);
         killList.Add(otherPlayer);
-        string s = name + " has killed: ";
-        foreach (PlayerController p in killList)
-        {
-            s += p.name + " ";
-        }
-        Debug.Log(s);
+        //string s = name + " has killed: ";
+        //foreach (PC2 p in killList)
+        //{
+        //    s += p.name + " ";
+        //}
+        //Debug.Log(s);
     }
 
     public void PlayerDead()
@@ -274,10 +209,9 @@ public class PlayerController : MonoBehaviour
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
+#endregion
 
-    #endregion
-
-    #region Getters and Setters
+#region Getters and Setters
     public SpriteRenderer GetShieldSpriteRenderer()
     {
         return shield;
@@ -292,7 +226,6 @@ public class PlayerController : MonoBehaviour
     {
         return team;
     }
-    
-    #endregion
 
+#endregion
 }
