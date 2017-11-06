@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
     public void BallShieldCollision(GameObject shield, Ball ball)
     {
         PlayerController playerController;
-
+        
         // check if the player is cached / cache it
         if (!playerDictionary.TryGetValue(shield, out playerController))
         {
@@ -111,19 +111,28 @@ public class GameManager : MonoBehaviour
                 SpawnMultipleBalls(ball);
                 break;
         }
+
+        // The last player to touch the ball 
+        ball.SetLastTouchedBy(playerController);
     }
 
     public void BallPlayerCollision(GameObject player, Ball ball)
     {
         PlayerController playerController;
-
         if (!playerDictionary.TryGetValue(player, out playerController))
         {
             playerController = player.GetComponent<PlayerController>();
             playerDictionary.Add(player, playerController);
         }
 
-        playerController.KillPlayer();
+        // Check if the ball has been touched by anyone
+        PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
+        if (lastTouchedBy != null)
+        {
+            lastTouchedBy.RegisterKill(playerController);
+        }
+
+        playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
     }
 
@@ -131,6 +140,7 @@ public class GameManager : MonoBehaviour
     {
         if (!modeManager.UpdateScore(team, value))
         {
+            ball.GetComponent<Ball>().OnBallGoalCollision();
             ball.SetActive(false);
             RespawnBall(ball);
         }

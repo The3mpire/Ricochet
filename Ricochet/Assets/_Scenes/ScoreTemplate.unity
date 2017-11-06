@@ -1142,6 +1142,16 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca0fe33769750fa439937536ad72a1e4, type: 2}
   m_IsPrefabParent: 0
+--- !u!58 &265276695 stripped
+CircleCollider2D:
+  m_PrefabParentObject: {fileID: 58140022429831294, guid: 13992abdb900475439efa8908950cb8f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1356860320}
+--- !u!50 &265276697 stripped
+Rigidbody2D:
+  m_PrefabParentObject: {fileID: 50130466550821870, guid: 13992abdb900475439efa8908950cb8f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1356860320}
 --- !u!1001 &284610495
 Prefab:
   m_ObjectHideFlags: 0
@@ -1365,46 +1375,6 @@ Prefab:
     - target: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
       propertyPath: m_Name
       value: Player1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: initialJumpForce
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: moveForce
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: maxSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: continualJumpForce
-      value: 0.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: maxJumpTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: extraJumpForce
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: stickJumpDeadZone
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 114273906525651764, guid: 020d32f49d242df459a2d7a80b279690,
-        type: 2}
-      propertyPath: team
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
@@ -3783,6 +3753,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114162606431095018, guid: 13992abdb900475439efa8908950cb8f,
+        type: 2}
+      propertyPath: rigid
+      value: 
+      objectReference: {fileID: 265276697}
+    - target: {fileID: 114162606431095018, guid: 13992abdb900475439efa8908950cb8f,
+        type: 2}
+      propertyPath: myCollider
+      value: 
+      objectReference: {fileID: 265276695}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13992abdb900475439efa8908950cb8f, type: 2}
   m_IsPrefabParent: 0
