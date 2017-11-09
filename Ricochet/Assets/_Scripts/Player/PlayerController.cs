@@ -5,41 +5,58 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+#region Instance Variables
     [Header("Player Settings")]
     [Tooltip("Which player this is")]
-    [SerializeField] private int playerNumber = 1;
+    [SerializeField]
+    private int playerNumber = 1;
     [Tooltip("Which team the player is on")]
-    [SerializeField] private ETeam team;
+    [SerializeField]
+    private ETeam team;
 
     [Header("Movement Settings")]
     [Tooltip("How fast the player moves")]
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField]
+    private float moveSpeed = 10f;
     [Tooltip("How fast the player moves during dash")]
-    [SerializeField] private float dashSpeed = 35f;
+    [SerializeField]
+    private float dashSpeed = 35f;
     [Tooltip("How long the dash lasts")]
-    [SerializeField] private float dashTime = .1f;
+    [SerializeField]
+    private float dashTime = .1f;
     [Tooltip("How much fuel in seconds to spend on dash")]
-    [SerializeField] private float dashCost = 2f;
+    [SerializeField]
+    private float dashCost = 2f;
     [Tooltip("Gravity scale on player")]
-    [SerializeField] private float gravScale = 4f;
+    [SerializeField]
+    private float gravScale = 4f;
     [Tooltip("Time in seconds of jetback fuel")]
-    [SerializeField] private float startFuel = 5f;
+    [SerializeField]
+    private float startFuel = 5f;
     [Tooltip("Fuel/second recharge when grounded")]
-    [SerializeField] private float groundRechargeRate = 2.5f;
-    [Tooltip("Fuel/second recharge when grounded")]
-    [SerializeField] private float airRechargeRate = 1f;
+    [SerializeField]
+    private float groundRechargeRate = 2.5f;
+    [Tooltip("Fuel/second recharge when falling")]
+    [SerializeField]
+    private float airRechargeRate = 1f;
 
     [Header("Reference Components")]
     [Tooltip("Drag the player's shieldContainer here")]
-    [SerializeField] private Transform shieldTransform;
+    [SerializeField]
+    private Transform shieldTransform;
     [Tooltip("Drag the player's shield here")]
-    [SerializeField] private SpriteRenderer shield;
+    [SerializeField]
+    private SpriteRenderer shield;
     [Tooltip("Drag the player's bodySprite here")]
-    [SerializeField] private SpriteRenderer body;
+    [SerializeField]
+    private SpriteRenderer body;
     [Tooltip("Drag the player's rigidbody here")]
-    [SerializeField] private Rigidbody2D rigid;
+    [SerializeField]
+    private Rigidbody2D rigid;
     [Tooltip("Drag the player's \"groundCheck\" here")]
-    [SerializeField] private Transform groundCheck;
+    [SerializeField]
+    private Transform groundCheck;
+#endregion
 
 #region Hidden Variables
     private GameManager gameManagerInstance;
@@ -96,9 +113,6 @@ public class PlayerController : MonoBehaviour
         {
             dashing = false;
         }
-
-        if (playerNumber == 1 && grounded)
-            Debug.Log("help");
         
         BasicMovement();
         DashCheck();
@@ -126,7 +140,6 @@ public class PlayerController : MonoBehaviour
         {
             rigid.velocity += dashDirection * dashSpeed;
         }
-
     }
 #endregion
 
@@ -194,14 +207,7 @@ public class PlayerController : MonoBehaviour
 
     public void RegisterKill(PlayerController otherPlayer)
     {
-        Debug.Log(name + " killed player " + otherPlayer.name);
         killList.Add(otherPlayer);
-        //string s = name + " has killed: ";
-        //foreach (PC2 p in killList)
-        //{
-        //    s += p.name + " ";
-        //}
-        //Debug.Log(s);
     }
 
     public void PlayerDead()
