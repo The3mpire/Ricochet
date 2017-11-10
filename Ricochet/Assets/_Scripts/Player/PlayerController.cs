@@ -2,6 +2,7 @@
 using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,30 +16,43 @@ public class PlayerController : MonoBehaviour
     private ETeam team;
 
     [Header("Movement Settings")]
-    [Tooltip("How fast the player moves")]
+    [Tooltip("Gravity scale on player")]
     [SerializeField]
-    private float moveSpeed = 10f;
+    private float gravScale = 8f;
+    [Tooltip("Move speed while using jetpack w/ no directional input")]
+    [SerializeField]
+    private float upThrusterSpeed = 5f;
+    [Tooltip("Move speed while using jetpack w/ directional input")]
+    [SerializeField]
+    private float thrusterSpeed = 15f;
+    [Tooltip("Move speed while in the air, not using jetpack")]
+    [SerializeField]
+    private float airMoveSpeed = 5f;
+    [Tooltip("Move speed while grounded")]
+    [SerializeField]
+    private float groundedMoveSpeed = 12.5f;
+
+    [Header("Fuel Settings")]
+    [Tooltip("Time in seconds of jetback fuel")]
+    [SerializeField]
+    private float startFuel = 7f;
+    [Tooltip("Fuel/second recharge when grounded")]
+    [SerializeField]
+    private float groundRechargeRate = 3.5f;
+    [Tooltip("Fuel/second recharge when falling")]
+    [SerializeField]
+    private float airRechargeRate = 1.5f;
+
+    [Header("Dash Settings")]
     [Tooltip("How fast the player moves during dash")]
     [SerializeField]
     private float dashSpeed = 35f;
     [Tooltip("How long the dash lasts")]
     [SerializeField]
-    private float dashTime = .1f;
+    private float dashTime = .2f;
     [Tooltip("How much fuel in seconds to spend on dash")]
     [SerializeField]
     private float dashCost = 2f;
-    [Tooltip("Gravity scale on player")]
-    [SerializeField]
-    private float gravScale = 4f;
-    [Tooltip("Time in seconds of jetback fuel")]
-    [SerializeField]
-    private float startFuel = 5f;
-    [Tooltip("Fuel/second recharge when grounded")]
-    [SerializeField]
-    private float groundRechargeRate = 2.5f;
-    [Tooltip("Fuel/second recharge when falling")]
-    [SerializeField]
-    private float airRechargeRate = 1f;
 
     [Header("Reference Components")]
     [Tooltip("Drag the player's shieldContainer here")]
@@ -64,7 +78,7 @@ public class PlayerController : MonoBehaviour
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
-
+    
     private bool hasPowerUp;
     private bool dashing;
     private bool grounded;
@@ -114,26 +128,15 @@ public class PlayerController : MonoBehaviour
             dashing = false;
         }
         
-        BasicMovement();
+        MovementPreperation();
         DashCheck();
         RotateShield();
+        Flip();
     }
 
     private void FixedUpdate()
     {
-        // Find moveDirection
-        Vector3 moveDirection;
-        if (jumpButtonHeld)
-        { 
-            moveDirection = new Vector2(leftStickHorz, leftStickVert);
-        }
-        else
-        {
-            moveDirection = new Vector2(leftStickHorz, 0);
-        }
-
-        // Apply movement speed
-        rigid.velocity = moveDirection * moveSpeed;
+        Move();
 
         // Add dash velocity to movement
         if (dashing)
@@ -144,7 +147,52 @@ public class PlayerController : MonoBehaviour
 #endregion
 
 #region Helpers
-    private void BasicMovement()
+    private void Move()
+    {
+        Vector2 moveDirection;
+        if (jumpButtonHeld)
+        {
+            moveDirection = new Vector2(leftStickHorz, leftStickVert);
+
+            // If there is no directional input, just go up with upThrusterSpeed
+            if (moveDirection == Vector2.zero)
+            {
+                moveDirection = Vector2.up;
+                rigid.velocity = moveDirection * upThrusterSpeed;
+            } // else go in the direction of input with thruster speed
+            else
+            {
+                rigid.velocity = moveDirection * thrusterSpeed;
+            }
+        }
+        else
+        { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
+            moveDirection = new Vector2(leftStickHorz, 0);
+            if (grounded)
+            {
+                rigid.velocity = moveDirection * groundedMoveSpeed;
+            }
+            else
+            {
+                rigid.velocity = moveDirection * airMoveSpeed;
+            }
+        }
+
+    }
+
+    private void Flip()
+    {
+        if (leftStickHorz < 0 && !body.flipX)
+        {
+            body.flipX = true;
+        }
+        else if (leftStickHorz > 0 && body.flipX)
+        {
+            body.flipX = false;
+        }
+    }
+
+    private void MovementPreperation()
     {
         if (player.GetButton("Jump") && currentFuel > 0)
         {
@@ -212,6 +260,10 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerDead()
     {
+        currentFuel = startFuel;
+        maxFuel = startFuel;
+        dashing = false;
+        timeSinceDash = 0f;
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
@@ -233,5 +285,15 @@ public class PlayerController : MonoBehaviour
         return team;
     }
 
-#endregion
+    internal float GetMaxFuel()
+    {
+        return maxFuel;
+    }
+
+    internal float GetCurrentFuel()
+    {
+        return currentFuel;
+    }
+
+    #endregion
 }
