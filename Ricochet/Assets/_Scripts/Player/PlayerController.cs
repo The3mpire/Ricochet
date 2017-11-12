@@ -1,41 +1,58 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Enumerables;
 using Rewired;
-using Enumerables;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
+#region Instance Variables
+    [Header("Player Settings")]
+    [Tooltip("Which player this is")]
+    [SerializeField]
+    private int playerNumber = 1;
+    [Tooltip("Which team the player is on")]
+    [SerializeField]
+    private ETeam team;
 
-    #region Inspector Variables
     [Header("Movement Settings")]
-    [Tooltip("How fast the player moves (force)")]
+    [Tooltip("Gravity scale on player")]
     [SerializeField]
-    private float moveForce = 15f;
-    [Tooltip("The fastest the player is allowed to move (velocity)")]
+    private float gravScale = 8f;
+    [Tooltip("Move speed while using jetpack w/ no directional input")]
     [SerializeField]
-    private float maxSpeed = 10f;
-    [Tooltip("How strong the player's first jump is (from the ground)")]
+    private float upThrusterSpeed = 5f;
+    [Tooltip("Move speed while using jetpack w/ directional input")]
     [SerializeField]
-    private float initialJumpForce = 8f;
-    [Tooltip("How much higher the player goes continues from holding down the button (force)")]
+    private float thrusterSpeed = 15f;
+    [Tooltip("Move speed while in the air, not using jetpack")]
     [SerializeField]
-    private float continualJumpForce = 0.9f;
-    [Tooltip("How long the player can hold the button before it doesn't do anything")]
+    private float airMoveSpeed = 5f;
+    [Tooltip("Move speed while grounded")]
     [SerializeField]
-    private float maxJumpTime = 0.25f;
-    [Tooltip("How strong the player's extra jumps are (already in the air)")]
+    private float groundedMoveSpeed = 12.5f;
+
+    [Header("Fuel Settings")]
+    [Tooltip("Time in seconds of jetback fuel")]
     [SerializeField]
-    private float extraJumpForce = 4f;
-    [Tooltip("How sensitive the left stick is before acknowledging input")]
+    private float startFuel = 7f;
+    [Tooltip("Fuel/second recharge when grounded")]
     [SerializeField]
-    private float stickJumpDeadZone = 0.01f;
-    [Tooltip("Whether the player can jump using the left stick")]
+    private float groundRechargeRate = 3.5f;
+    [Tooltip("Fuel/second recharge when falling")]
     [SerializeField]
-    private bool stickJump = true;
-    [Tooltip("How many jumps the player gets while in the air")]
+    private float airRechargeRate = 1.5f;
+
+    [Header("Dash Settings")]
+    [Tooltip("How fast the player moves during dash")]
     [SerializeField]
-    private int numberOfExtraJumps = 1;
+    private float dashSpeed = 35f;
+    [Tooltip("How long the dash lasts")]
+    [SerializeField]
+    private float dashTime = .2f;
+    [Tooltip("How much fuel in seconds to spend on dash")]
+    [SerializeField]
+    private float dashCost = 2f;
 
     [Header("Reference Components")]
     [Tooltip("Drag the player's shieldContainer here")]
@@ -44,206 +61,185 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's shield here")]
     [SerializeField]
     private SpriteRenderer shield;
-    [Tooltip("Drag the player's body here")]
+    [Tooltip("Drag the player's bodySprite here")]
     [SerializeField]
     private SpriteRenderer body;
-    [Tooltip("Drag the player's body here")]
+    [Tooltip("Drag the player's rigidbody here")]
     [SerializeField]
     private Rigidbody2D rigid;
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
+#endregion
 
-    [Header("Other Settings")]
-    [Tooltip("Which player this is")]
-    [SerializeField]
-    private int playerNumber = 1;
-    [Tooltip("Which team the player is on")]
-    [SerializeField]
-    private ETeam team;
-
-    #endregion
-
-    #region Hidden Variables
-    private bool facingRight = true;
-    private bool jumpPressed = false;
-    private bool hasPowerUp = false;
-    private bool isJumping = false;
-    private bool grounded = false;
-    private bool jumpButtonHeld = false;
-
-    private int jumpCounter = 0;
-    private float jumpTimer = 0f;   
+#region Hidden Variables
+    private GameManager gameManagerInstance;
     
     private EPowerUp currPowerUp = EPowerUp.None;
-
     private Player player;
+    private List<PlayerController> killList;
+    
+    private bool hasPowerUp;
+    private bool dashing;
+    private bool grounded;
+    private bool jumpButtonHeld;
 
-    private List<PlayerController> killList = new List<PlayerController>();
+    private float currentFuel;
+    private float maxFuel;
+    private float timeSinceDash;
+    private Vector2 dashDirection;
 
-    private GameManager gameManagerInstance = null;
+    private float leftStickHorz;
+    private float leftStickVert;
+    private float rightStickHorz;
+    private float rightStickVert;
+#endregion
 
-    #endregion
-
-
-    #region MonoBehaviour
+#region Monobehaviour
     private void Awake()
     {
-        player = ReInput.players.GetPlayer(playerNumber - 1);
+        killList = new List<PlayerController>();
+        currentFuel = startFuel;
+        maxFuel = startFuel;
+        timeSinceDash = 0f;
     }
 
-    void Start()
+    private void Start()
     {
+        player = ReInput.players.GetPlayer(playerNumber - 1);
         body.color = PlayerColorData.getColor(playerNumber, team);
     }
-
-    void Update()
+	
+	private void Update()
     {
+        // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-
-        // frame check
-        if (player.GetButton("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
+        jumpButtonHeld = false;
+        rigid.gravityScale = gravScale;
+        leftStickHorz = player.GetAxis("MoveHorizontal");
+        leftStickVert = player.GetAxis("MoveVertical");
+        rightStickHorz = player.GetAxis("RightStickHorizontal");
+        rightStickVert = player.GetAxis("RightStickVertical");
+        timeSinceDash += Time.deltaTime;
+        
+        // Check if still dashing
+        if (timeSinceDash >= dashTime)
         {
-            jumpButtonHeld = true;
+            dashing = false;
         }
-        else
-        {
-            jumpButtonHeld = false;
-        }
-
-        // get jump input
-        if (player.GetButtonDown("Jump") || (stickJump && (player.GetAxis("MoveVertical") > stickJumpDeadZone)))
-        {
-            jumpPressed = true;
-            jumpButtonHeld = true;
-        }
-        // player hit the ground
-        else if (grounded)
-        {
-            jumpCounter = 0;
-        }
-
-        // player is not pressing button or out of jumps
-        if (isJumping && !jumpButtonHeld)
-        {
-            isJumping = false;
-        }
-        //TODO state based + infinite jump :)
+        
+        MovementPreperation();
+        DashCheck();
         RotateShield();
+        Flip();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        // Cache the horizontal input.
-        float h = player.GetAxis("MoveHorizontal");
+        Move();
 
-        // movement
-        if (h == 0)
+        // Add dash velocity to movement
+        if (dashing)
         {
-            rigid.velocity = new Vector2(0, rigid.velocity.y);
+            rigid.velocity += dashDirection * dashSpeed;
+        }
+    }
+#endregion
+
+#region Helpers
+    private void Move()
+    {
+        Vector2 moveDirection;
+        if (jumpButtonHeld)
+        {
+            moveDirection = new Vector2(leftStickHorz, leftStickVert);
+
+            // If there is no directional input, just go up with upThrusterSpeed
+            if (moveDirection == Vector2.zero)
+            {
+                moveDirection = Vector2.up;
+                rigid.velocity = moveDirection * upThrusterSpeed;
+            } // else go in the direction of input with thruster speed
+            else
+            {
+                rigid.velocity = moveDirection * thrusterSpeed;
+            }
         }
         else
-        {
-            rigid.AddForce(new Vector2(Mathf.Sign(h) * moveForce, 0f), ForceMode2D.Impulse);
-        }
-
-        //Check if over max speed
-        if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
-        {
-            rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
-        }
-
-        // direction check
-        if (h > 0 && !facingRight)
-        {
-            Flip();
-        }
-        else if (h < 0 && facingRight)
-        {
-            Flip();
-        }
-
-        if (jumpPressed)
-        {
-            StartJump();
-            jumpPressed = false;
-        }
-
-        HoldJump();
-    }
-
-
-    #endregion
-
-    #region Private Helpers
-    void StartJump()
-    {
-        //first jump
-        if (grounded)
-        {
-            rigid.AddForce(new Vector2(0, initialJumpForce), ForceMode2D.Impulse);
-            jumpCounter++;
-            isJumping = true;
-            jumpTimer = 0f;
-        }
-        // extra jumps
-        else if (jumpCounter < numberOfExtraJumps)
-        {
-            if (rigid.velocity.y < 0)
+        { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
+            moveDirection = new Vector2(leftStickHorz, 0);
+            if (grounded)
             {
-                rigid.velocity = new Vector2(rigid.velocity.x, 0);
-            }
-            rigid.AddForce(new Vector2(0, extraJumpForce), ForceMode2D.Impulse);
-            jumpCounter++;
-            isJumping = true;
-            jumpTimer = 0f;
-        }
-    }
-
-    private void HoldJump()
-    {
-        if (jumpButtonHeld && isJumping)
-        {
-            jumpTimer += Time.deltaTime;
-
-            //check if they can still add force
-            if (jumpTimer < maxJumpTime)
-            {
-                rigid.AddForce(new Vector2(0, continualJumpForce), ForceMode2D.Impulse);
-            }
-        }
-    }
-
-    private void RotateShield()
-    {
-        float shieldHorizontal = player.GetAxis("RightStickHorizontal");
-        float shieldVertical = -player.GetAxis("RightStickVertical"); 
-
-        //make sure there is magnitude
-        if (Mathf.Abs(shieldHorizontal) > 0 || Mathf.Abs(shieldVertical) > 0)
-        {
-
-            if (shieldHorizontal > 0)
-            {
-                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(shieldHorizontal, shieldVertical), Vector2.down) + 90));
+                rigid.velocity = moveDirection * groundedMoveSpeed;
             }
             else
             {
-                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(shieldHorizontal, shieldVertical), Vector2.down) + 90));
+                rigid.velocity = moveDirection * airMoveSpeed;
             }
         }
+
     }
 
     private void Flip()
     {
-        // Switch the way the player is labelled as facing.
-        facingRight = !facingRight;
-
-        body.flipX = !facingRight;
+        if (leftStickHorz < 0 && !body.flipX)
+        {
+            body.flipX = true;
+        }
+        else if (leftStickHorz > 0 && body.flipX)
+        {
+            body.flipX = false;
+        }
     }
-    #endregion
 
-    #region External Functions
+    private void MovementPreperation()
+    {
+        if (player.GetButton("Jump") && currentFuel > 0)
+        {
+            rigid.gravityScale = 0;
+            jumpButtonHeld = true;
+            grounded = false;
+            currentFuel -= Time.deltaTime;
+        } // recharge fuel on ground
+        else if (grounded && currentFuel < maxFuel)
+        {
+            currentFuel += groundRechargeRate * Time.deltaTime;
+        } // recharge fuel in air
+        else if (currentFuel < maxFuel)
+        {
+            currentFuel += airRechargeRate * Time.deltaTime;
+        }
+    }
+
+    private void DashCheck()
+    {
+        if (player.GetButtonDown("Dash") && !dashing && currentFuel >= dashCost)
+        {
+            currentFuel -= dashCost;
+            dashDirection = new Vector2(rightStickHorz, rightStickVert);
+            dashing = true;
+            timeSinceDash = 0f;
+        }
+    }
+    private void RotateShield()
+    {
+        //make sure there is magnitude
+        if (Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0)
+        {
+
+            if (rightStickHorz > 0)
+            {
+                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
+            }
+            else
+            {
+                shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
+            }
+        }
+    }
+#endregion
+
+#region External Functions
     public void ReceivePowerUp(EPowerUp powerUp)
     {
         hasPowerUp = true;
@@ -259,25 +255,21 @@ public class PlayerController : MonoBehaviour
 
     public void RegisterKill(PlayerController otherPlayer)
     {
-        Debug.Log(name + " killed player " + otherPlayer.name);
         killList.Add(otherPlayer);
-        string s = name + " has killed: ";
-        foreach (PlayerController p in killList)
-        {
-            s += p.name + " ";
-        }
-        Debug.Log(s);
     }
 
     public void PlayerDead()
     {
+        currentFuel = startFuel;
+        maxFuel = startFuel;
+        dashing = false;
+        timeSinceDash = 0f;
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
+#endregion
 
-    #endregion
-
-    #region Getters and Setters
+#region Getters and Setters
     public SpriteRenderer GetShieldSpriteRenderer()
     {
         return shield;
@@ -292,7 +284,16 @@ public class PlayerController : MonoBehaviour
     {
         return team;
     }
-    
-    #endregion
 
+    internal float GetMaxFuel()
+    {
+        return maxFuel;
+    }
+
+    internal float GetCurrentFuel()
+    {
+        return currentFuel;
+    }
+
+    #endregion
 }
