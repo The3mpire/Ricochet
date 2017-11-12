@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
     public void BallGoalCollision(GameObject ball, ETeam team, int value)
     {
         modeManager.UpdateScore(team, value);
-        ball.OnBallGoalCollision();
+        ball.GetComponent<Ball>().OnBallGoalCollision();
         RespawnBall(ball);
     }
 
@@ -238,7 +238,7 @@ public class GameManager : MonoBehaviour
             //if we want to disable the players during the win screen not sure exactly what to do here so need some team input
             foreach (KeyValuePair<GameObject, PlayerController> player in playerDictionary)
             {
-                //player.Value.enabled = false;
+                player.Value.enabled = false;
             }
             Enumerables.ETeam winningTeam = modeManager.ReturnWinningTeam();
             Debug.Log(winningTeam);

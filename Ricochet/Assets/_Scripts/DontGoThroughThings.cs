@@ -23,17 +23,17 @@ public class DontGoThroughThings : MonoBehaviour
 
 	private Vector3 previousPosition;
 
-	private Rigidbody myRigidbody;
+	private Rigidbody2D myRigidbody;
 
-	private Collider myCollider;
+	private Collider2D myCollider;
 
 	#endregion
 
 	#region MonoBehavior
 	void Start()
 	{
-		myRigidbody = GetComponent<Rigidbody>();
-		myCollider = GetComponent<Collider>();
+		myRigidbody = GetComponent<Rigidbody2D>();
+		myCollider = GetComponent<Collider2D>();
 		previousPosition = myRigidbody.position;
 		minimumExtent = Mathf.Min(Mathf.Min(myCollider.bounds.extents.x, myCollider.bounds.extents.y), myCollider.bounds.extents.z);
 		partialExtent = minimumExtent * (1.0f - skinWidth);
@@ -42,7 +42,7 @@ public class DontGoThroughThings : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		Vector3 movementThisStep = myRigidbody.position - previousPosition;
+		Vector3 movementThisStep = myRigidbody.position - (Vector2)previousPosition;
 		float movementSqrMagnitude = movementThisStep.sqrMagnitude;
 
 		if (movementSqrMagnitude > sqrMinimumExtent)
