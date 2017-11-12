@@ -13,13 +13,13 @@ public class Ball : MonoBehaviour {
 
 	[Tooltip("The slowest the ball can travel")]
 	[SerializeField]
-	private float minimumSpeed = 1f;
+	private float minimumSpeed = 5f;
 	[Tooltip("How quickly the ball slows to its normal speed after accelerating")]
 	[SerializeField]
-	private float slowRate = 2f;
+	private float slowRate = 1f;
 	[Tooltip("The fastest the ball can travel")]
 	[SerializeField]
-	private float maximumSpeed = 10f;
+	private float maximumSpeed = 27f;
 
 	[Tooltip("Whether this ball should respawn")]
 	[SerializeField]
