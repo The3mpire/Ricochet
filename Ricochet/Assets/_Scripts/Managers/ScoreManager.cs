@@ -6,16 +6,20 @@ using Enumerables;
 
 public class ScoreManager : ModeManager
 {
+    #region Inspector Variables
     [Tooltip("Drag the Score UI's Red Team's Text here")]
     [SerializeField]
     private Text RedTeamText;
     [Tooltip("Drag the Score UI's Team One Text here")]
     [SerializeField]
     private Text BlueTeamText;
+    #endregion
 
+    #region Hidden Variables
     private int redTeamScore = 0;
     private int blueTeamScore = 0;
     private int scoreGoal = 2;
+    #endregion
 
     public override bool UpdateScore(Enumerables.ETeam team, int value)
     {
