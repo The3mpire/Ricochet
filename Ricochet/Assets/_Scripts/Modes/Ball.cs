@@ -4,155 +4,159 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
-{
-    #region Inspector Variables
-    [Tooltip("How hard the ball was hit when it spawns")]
-    [SerializeField]
-    private Vector2 initialForce = new Vector2(255, 157);
+public class Ball : MonoBehaviour {
 
-    [Tooltip("The slowest the ball can travel")]
-    [SerializeField]
-    private float minimumSpeed = 1f;
-    [Tooltip("How much the ball gains speed when just bouncing around")]
-    [SerializeField]
-    private float speedUpForce = 2f;
-    [Tooltip("The fastest the ball can travel")]
-    [SerializeField]
-    private float maximumSpeed = 10f;
+	#region Inspector Variables
+	[Tooltip("The ball travel direction on spawn")]
+	[SerializeField]
+	private Vector2 initialDirection = new Vector2(0, -1);
 
-    [Tooltip("Whether this ball should respawn")]
-    [SerializeField]
-    private bool isTempBall = false;
-    [Tooltip("Whether this ball can score goals")]
-    [SerializeField]
-    private bool canScore = true;
+	[Tooltip("The slowest the ball can travel")]
+	[SerializeField]
+	private float minimumSpeed = 5f;
+	[Tooltip("How quickly the ball slows to its normal speed after accelerating")]
+	[SerializeField]
+	private float slowRate = 1f;
+	[Tooltip("The fastest the ball can travel")]
+	[SerializeField]
+	private float maximumSpeed = 27f;
 
-    [Tooltip("How many players back to last touch the ball.")]
-    [SerializeField]
-    private int lastTouchedByCount = 2;
+	[Tooltip("Whether this ball should respawn")]
+	[SerializeField]
+	private bool isTempBall = false;
+	[Tooltip("Whether this ball can score goals")]
+	[SerializeField]
+	private bool canScore = true;
 
-    [Tooltip("Drag the ball here")]
-    [SerializeField]
-    private Rigidbody2D body;
-    #endregion
+	[Tooltip("How many players back to last touch the ball.")]
+	[SerializeField]
+	private int lastTouchedByCount = 2;
 
-    private GameManager gameManagerInstance;
+	[Tooltip("Drag the ball here")]
+	[SerializeField]
+	private Rigidbody2D body;
+	#endregion
 
-    private LinkedList<PlayerController> lastTouchedBy;
+	#region Hidden Variables
+	private GameManager gameManagerInstance;
+	private LinkedList<PlayerController> lastTouchedBy;
+	#endregion
 
-    #region MonoBehaviour
+	#region MonoBehaviour
 
-    private void Awake()
-    {
-        lastTouchedBy = new LinkedList<PlayerController>();
-    }
+	private void Awake()
+	{
+		lastTouchedBy = new LinkedList<PlayerController>();
+	}
 
-    private void OnEnable()
-    {
-        body.velocity = Vector3.zero;
-        body.AddForce(initialForce);
-    }
+	private void OnEnable()
+	{
+		body.velocity = initialDirection.normalized * minimumSpeed;
+	}
 
-    private void FixedUpdate()
-    {
-        // add the constant force
-        if (body.velocity.magnitude < minimumSpeed)
-        {
-            body.AddForce(body.velocity.normalized * speedUpForce);
-        }
+	private void FixedUpdate()
+	{
+		// add the constant force
+		if (body.velocity.magnitude < minimumSpeed)
+		{
+			body.velocity = body.velocity.normalized * minimumSpeed;
+		}
+		// make sure we're not going super mega fast
+		else if (body.velocity.magnitude > maximumSpeed)
+		{
+			body.velocity = body.velocity.normalized * maximumSpeed;
+		}
+		else if (body.velocity.magnitude > minimumSpeed)
+		{
+			body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * Time.deltaTime);
+		}
+	}
 
-        // make sure we're not going super mega fast
-        if (body.velocity.magnitude > maximumSpeed)
-        {
-            body.velocity = body.velocity.normalized * maximumSpeed;
-        }
-    }
+	private void OnCollisionEnter2D(Collision2D col)
+	{
+		Collider2D hitCollider = col.collider;
+		if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+		{
+			if (hitCollider.tag == "Player")
+			{
+				gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
 
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-        Collider2D hitCollider = col.collider;
-        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-        {
-            if (hitCollider.tag == "Player")
-            {
-                gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
+			}
+			else if (hitCollider.tag == "Shield")
+			{
+				gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
+			}
+		}
 
-            }
-            else if (hitCollider.tag == "Shield")
-            {
-                gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
-            }
-        }
+	}
 
-    }
+	#endregion
 
-    #endregion
+	#region External Functions
+	public void OnBallGoalCollision()
+	{
+		gameObject.SetActive(false);
+		lastTouchedBy.Clear();
+	}
+	#endregion
 
-    public void OnBallGoalCollision()
-    {
-        gameObject.SetActive(false);
-        lastTouchedBy.Clear();
-    }
+	#region Getters and Setters
+	public bool GetTempStatus()
+	{
+		return isTempBall;
+	}
 
-    #region Getters and Setters
-    public bool GetTempStatus()
-    {
-        return isTempBall;
-    }
+	public void SetTempStatus(bool status)
+	{
+		isTempBall = status;
+	}
 
-    public void SetTempStatus(bool status)
-    {
-        isTempBall = status;
-    }
+	public bool GetCanScore()
+	{
+		return canScore;
+	}
 
-    public bool GetCanScore()
-    {
-        return canScore;
-    }
+	public void SetCanScore(bool value)
+	{
+		canScore = value;
+	}
 
-    public void SetCanScore(bool value)
-    {
-        canScore = value;
-    }
-    
-    public void SetLastTouchedBy(PlayerController player)
-    {
-        if (lastTouchedBy.Count == 0 || player != lastTouchedBy.Last.Value)
-        {
-            lastTouchedBy.AddLast(player);
-        }
-        if (lastTouchedBy.Count > lastTouchedByCount)
-        { 
-            lastTouchedBy.RemoveFirst();
-        }
-    }
+	public void SetLastTouchedBy(PlayerController player)
+	{
+		if (lastTouchedBy.Count == 0 || player != lastTouchedBy.Last.Value)
+		{
+			lastTouchedBy.AddLast(player);
+		}
+		if (lastTouchedBy.Count > lastTouchedByCount)
+		{ 
+			lastTouchedBy.RemoveFirst();
+		}
+	}
 
-    // If player isn't null, don't return the player passed in unless it is the only one in the list.
-    // returns null if no one has touched the ball yet
-    public PlayerController GetLastTouchedBy(PlayerController player = null)
-    {
-        if (lastTouchedBy.Count == 0)
-        {
-            return null;
-        }
-        if (player == null)
-        {
-            return lastTouchedBy.Last.Value;
-        }
-        else
-        {
-            foreach (PlayerController p in lastTouchedBy.Reverse())
-            {
-                if (p != player)
-                {
-                    return p;
-                }
-            }
-        }
-        return player;
-    }
+	// If player isn't null, don't return the player passed in unless it is the only one in the list.
+	// returns null if no one has touched the ball yet
+	public PlayerController GetLastTouchedBy(PlayerController player = null)
+	{
+		if (lastTouchedBy.Count == 0)
+		{
+			return null;
+		}
+		if (player == null)
+		{
+			return lastTouchedBy.Last.Value;
+		}
+		else
+		{
+			foreach (PlayerController p in lastTouchedBy.Reverse())
+			{
+				if (p != player)
+				{
+					return p;
+				}
+			}
+		}
+		return player;
+	}
 
-    #endregion
-
+	#endregion
 }
