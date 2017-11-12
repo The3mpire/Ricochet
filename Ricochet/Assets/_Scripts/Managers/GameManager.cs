@@ -13,18 +13,22 @@ public class GameManager : MonoBehaviour
     private ModeManager modeManager;
 
     [Header("Game Match Variables")]
+    [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
+    [SerializeField]
+    private Canvas gameMenuUI;
     [Tooltip("How long the selected game lasts in seconds")]
     [SerializeField]
     private float gameMatchTime = 120f;
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private Text gameTimerText;
-    [Tooltip("Drag the Game Menu UI here")]
-    [SerializeField]
-    private Canvas gameMenuUI;
     [Tooltip("Drag the winning team text here")]
     [SerializeField]
     private Text winningTeamText;
+    [Tooltip("Time to wait for before switching back to game select menu (in seconds)")]
+    [SerializeField]
+    private int winScreenWaitTime = 3;
+
 
     [Header("Respawn Timers")]
     [Tooltip("How long the power up takes to respawn in seconds")]
@@ -70,7 +74,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        matchTimer();
+        if (gameMenuUI != null)
+        {
+            matchTimer();
+        }
     }
     #endregion
 
@@ -261,6 +268,17 @@ public class GameManager : MonoBehaviour
             }
             //start the coorutine that will wait a few seconds so this is displayed and then switch scene
         }
+    }
+
+    IEnumerator LoadYourAsyncScene()
+    {
+        yield return new WaitForSeconds(winScreenWaitTime);
+        /*AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Scene2");
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }*/
     }
 
     #endregion
