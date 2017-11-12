@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private ModeManager modeManager;
 
-    [Header("Respawn Timers")]
+    [Header("Timers")]
     [Tooltip("How long the power up takes to respawn in seconds")]
     [SerializeField]
     private float powerUpRespawnTime = 10f;
@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("How long the ball takes to respawn in seconds")]
     [SerializeField]
     private float ballRespawnTime = 2f;
+    [Tooltip("How long a player can hold a ball with CatchNThrow")]
+    [SerializeField]
+    private float ballHoldTime = 1f;
+
     [Header("Respawn Zones")]
     [Tooltip("Locations for where Red Team can spawn")]
     [SerializeField]
@@ -84,6 +88,13 @@ public class GameManager : MonoBehaviour
                 playerController.RemovePowerUp();
                 SpawnMultipleBalls(ball);
                 break;
+            case EPowerUp.CatchNThrow:
+                playerController.RemovePowerUp();
+                playerController.SetBallHeld(ball);
+                ball.SetHeld(true);
+                ball.transform.SetParent(playerController.GetShieldTransform());
+                StartCoroutine(DropBallCoroutine(playerController, ball));
+                break;
         }
 
         // The last player to touch the ball 
@@ -134,7 +145,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RespawnPowerUpRoutine(powerUp));
     }
 
-
     #endregion
 
     #region Private Helpers
@@ -179,6 +189,15 @@ public class GameManager : MonoBehaviour
         ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
+    }
+
+    private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)
+    {
+        yield return new WaitForSeconds(ballHoldTime);
+
+        player.SetBallHeld(null);
+        ball.SetHeld(false);
+        ball.transform.SetParent(null, true);
     }
 
     #endregion

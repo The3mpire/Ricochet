@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Enumerables;
 
-public class MultiBallPowerup : Powerup
+public class CatchNThrow : Powerup
 {
     [SerializeField]
-    private Color shieldColor = Color.red;
+    private Color shieldColor = Color.black;
     [SerializeField]
     private EPowerUp powerUpType;
 

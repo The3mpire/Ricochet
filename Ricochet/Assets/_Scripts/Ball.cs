@@ -28,6 +28,10 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private bool canScore = true;
 
+    [Tooltip("How fast the ball magnets to a shield")]
+    [SerializeField]
+    private float magnetSpeed = 5f;
+
     [Tooltip("How many players back to last touch the ball.")]
     [SerializeField]
     private int lastTouchedByCount = 2;
@@ -114,6 +118,20 @@ public class Ball : MonoBehaviour
     public void SetCanScore(bool value)
     {
         canScore = value;
+    }
+
+    public void SetHeld(bool held)
+    {
+        if (held)
+        {
+            body.bodyType = RigidbodyType2D.Kinematic;
+            body.simulated = false;
+        }
+        else
+        {
+            body.bodyType = RigidbodyType2D.Dynamic;
+            body.simulated = true;
+        }
     }
     
     public void SetLastTouchedBy(PlayerController player)
