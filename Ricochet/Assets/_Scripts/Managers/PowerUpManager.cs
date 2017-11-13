@@ -5,18 +5,23 @@ public class PowerUpManager : MonoBehaviour
 {
     #region Inspector Variables
     [Header("Multi Ball")]
+    [Tooltip("The color of multiball powerup objects")]
     [SerializeField]
     private Color multiBallPowerUpColor;
+    [Tooltip("The color of shields with a multiball powerup")]
     [SerializeField]
     private Color multiBallShieldColor = Color.black;
 
     [Header("Catch N Throw")]
+    [Tooltip("The color of catch n throw powerup objects")]
     [SerializeField]
     private Color catchNThrowPowerUpColor;
+    [Tooltip("The color of shields with a catch n throw powerup")]
     [SerializeField]
     private Color catchNThrowShieldColor = Color.red;
     #endregion
 
+    #region External Functions
     public Color GetPowerUpColor(EPowerUp ePowerUp)
     {
         Color c = Color.white;
@@ -46,4 +51,5 @@ public class PowerUpManager : MonoBehaviour
         }
         return c;
     }
+    #endregion
 }
