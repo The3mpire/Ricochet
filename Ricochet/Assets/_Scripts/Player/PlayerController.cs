@@ -101,6 +101,8 @@ public class PlayerController : MonoBehaviour
         currentFuel = startFuel;
         maxFuel = startFuel;
         timeSinceDash = 0f;
+        rightStickHorz = 1;
+        rightStickVert = 0;
     }
 
     private void Start()
@@ -117,8 +119,14 @@ public class PlayerController : MonoBehaviour
         rigid.gravityScale = gravScale;
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
-        rightStickHorz = player.GetAxis("RightStickHorizontal");
-        rightStickVert = player.GetAxis("RightStickVertical");
+        if (player.GetAxis("RightStickHorizontal") != 0)
+        {
+            rightStickHorz = player.GetAxis("RightStickHorizontal");
+        }
+        if (player.GetAxis("RightStickVertical") != 0)
+        {
+            rightStickVert = player.GetAxis("RightStickVertical");
+        }
         timeSinceDash += Time.deltaTime;
         
         // Check if still dashing
@@ -151,7 +159,7 @@ public class PlayerController : MonoBehaviour
         Vector2 moveDirection;
         if (jumpButtonHeld)
         {
-            moveDirection = new Vector2(leftStickHorz, leftStickVert);
+            moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
 
             // If there is no directional input, just go up with upThrusterSpeed
             if (moveDirection == Vector2.zero)
@@ -166,7 +174,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
-            moveDirection = new Vector2(leftStickHorz, 0);
+            moveDirection = new Vector2(leftStickHorz, 0).normalized;
             if (grounded)
             {
                 rigid.velocity = moveDirection * groundedMoveSpeed;
@@ -215,7 +223,7 @@ public class PlayerController : MonoBehaviour
         if (player.GetButtonDown("Dash") && !dashing && currentFuel >= dashCost)
         {
             currentFuel -= dashCost;
-            dashDirection = new Vector2(rightStickHorz, rightStickVert);
+            dashDirection = new Vector2(rightStickHorz, rightStickVert).normalized;
             dashing = true;
             timeSinceDash = 0f;
         }
