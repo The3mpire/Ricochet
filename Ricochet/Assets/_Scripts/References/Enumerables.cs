@@ -4,8 +4,7 @@
     {
         None = -1,
         Multiball = 0,
-        InfiniteJump = 1,
-        CatchNThrow = 2
+        CatchNThrow = 1
     }
 
     public enum EMode

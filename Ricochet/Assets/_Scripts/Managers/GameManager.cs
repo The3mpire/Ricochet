@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
     private ModeManager modeManager;
+    [Tooltip("Drag the powerup manager here")]
+    [SerializeField]
+    private PowerUpManager powerUpManager;
 
     [Header("Timers")]
     [Tooltip("How long the power up takes to respawn in seconds")]
@@ -108,19 +111,22 @@ public class GameManager : MonoBehaviour
             playerDictionary.Add(shield, playerController);
         }
 
-        switch (playerController.GetCurrentPowerUp())
+        EPowerUp currentPowerUp = playerController.GetCurrentPowerUp();
+        if (currentPowerUp != EPowerUp.None)
         {
-            case EPowerUp.Multiball:
-                playerController.RemovePowerUp();
-                SpawnMultipleBalls(ball);
-                break;
-            case EPowerUp.CatchNThrow:
-                playerController.RemovePowerUp();
-                playerController.SetBallHeld(ball);
-                ball.SetHeld(true);
-                ball.transform.SetParent(playerController.GetShieldTransform());
-                StartCoroutine(DropBallCoroutine(playerController, ball));
-                break;
+            playerController.RemovePowerUp();
+            switch (currentPowerUp)
+            {
+                case EPowerUp.Multiball:
+                    SpawnMultipleBalls(ball);
+                    break;
+                case EPowerUp.CatchNThrow:
+                    playerController.SetBallHeld(ball);
+                    ball.SetHeld(true);
+                    ball.transform.SetParent(playerController.GetShieldTransform());
+                    StartCoroutine(DropBallCoroutine(playerController, ball));
+                    break;
+            }
         }
 
         // The last player to touch the ball 
@@ -159,6 +165,19 @@ public class GameManager : MonoBehaviour
         {
             ChangeScene();
         }
+    }
+
+    public void PlayerPowerUpCollision(GameObject player, PowerUp powerUp)
+    {
+        PlayerController playerController;
+        if (!playerDictionary.TryGetValue(player, out playerController))
+        {
+            playerController = player.GetComponent<PlayerController>();
+            playerDictionary.Add(player, playerController);
+        }
+        EPowerUp powerUpType = powerUp.GetPowerUpType();
+        Color powerUpShieldColor = powerUp.GetShieldColor();
+        playerController.ReceivePowerUp(powerUpType, powerUpShieldColor);
     }
 
     #endregion

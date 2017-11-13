@@ -236,8 +236,7 @@ public class PlayerController : MonoBehaviour
             {
                 shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
             }
-            if (ballHeld == null) ;
-            else
+            if (ballHeld != null)
             {
                 if (rightStickHorz > 0)
                 {
@@ -253,10 +252,11 @@ public class PlayerController : MonoBehaviour
 #endregion
 
 #region External Functions
-    public void ReceivePowerUp(EPowerUp powerUp)
+    public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
     {
         hasPowerUp = true;
         currPowerUp = powerUp;
+        shield.color = shieldColor;
     }
 
     public void RemovePowerUp()
