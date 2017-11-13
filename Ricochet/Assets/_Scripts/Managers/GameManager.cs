@@ -197,8 +197,8 @@ public class GameManager : MonoBehaviour
                 playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
