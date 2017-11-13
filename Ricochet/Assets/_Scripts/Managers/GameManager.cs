@@ -32,6 +32,12 @@ public class GameManager : MonoBehaviour
     [Tooltip("Locations where the ball can spawn")]
     [SerializeField]
     private Transform[] ballRespawns;
+    [Tooltip("Score limit to win the match")]
+    [SerializeField]
+    private int scoreLimit;
+    [Tooltip("Time limit for the match")]
+    [SerializeField]
+    private int timeLimit;
     #endregion
 
     #region Hidden Variables
@@ -53,6 +59,8 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
+        GameData.matchScoreLimit = scoreLimit;
+        GameData.matchTimeLimit = timeLimit;
     }
     #endregion
 
@@ -88,6 +96,11 @@ public class GameManager : MonoBehaviour
     private void ChangeScene()
     {
         SceneManager.LoadSceneAsync(Random.Range(1, SceneManager.sceneCountInBuildSettings));
+    }
+
+    private void EndMatch()
+    {
+        SceneManager.LoadSceneAsync("EndGame");
     }
     #endregion
 
@@ -136,9 +149,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RespawnPlayer(playerController));
     }
 
-    public void BallGoalCollision(GameObject ball, ETeam team, int value)
+    public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        if (!modeManager.UpdateScore(team, value))
+        if (!modeManager.UpdateScore(team, points, scoreLimit))
         {
             ball.GetComponent<Ball>().OnBallGoalCollision();
             ball.SetActive(false);
@@ -146,6 +159,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            EndMatch();
             ChangeScene();
         }
     }

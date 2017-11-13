@@ -18,10 +18,9 @@ public class ScoreManager : ModeManager
     #region Hidden Variables
     private int redTeamScore = 0;
     private int blueTeamScore = 0;
-    private int scoreGoal = 2;
     #endregion
 
-    public override bool UpdateScore(Enumerables.ETeam team, int value)
+    public override bool UpdateScore(Enumerables.ETeam team, int value, int matchLimit)
     {
         switch (team)
         {
@@ -29,12 +28,14 @@ public class ScoreManager : ModeManager
             // and all the reverse logic is done in the code)
             case ETeam.RedTeam:
                 blueTeamScore += value;
+                GameData.blueTeamScore += value;
                 BlueTeamText.text = blueTeamScore.ToString();
-                return blueTeamScore % scoreGoal == 0;
+                return blueTeamScore % GameData.matchScoreLimit == 0;
             case ETeam.BlueTeam:
                 redTeamScore += value;
+                GameData.redTeamScore += value;
                 RedTeamText.text = redTeamScore.ToString();
-                return redTeamScore % scoreGoal == 0;
+                return redTeamScore % GameData.matchScoreLimit == 0;
         }
         return false;
     }
