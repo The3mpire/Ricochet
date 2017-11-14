@@ -241,6 +241,21 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.size
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4330474610093544, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -272,6 +287,61 @@ Prefab:
     - target: {fileID: 4330474610093544, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[4]._elementIdentifierId
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[8]._actionId
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[8]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[8]._elementIdentifierId
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[8]._id
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[8]._name
+      value: Dash
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[8]._type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[8]._descriptiveName
+      value: Dash
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[8]._userAssignable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[8]
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionIdCounter
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
@@ -432,7 +502,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1075867255}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 378.5, y: 213, z: 0}
+  m_LocalPosition: {x: 433, y: 243.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 329951343}

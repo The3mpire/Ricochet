@@ -299,6 +299,26 @@ public class PlayerController : MonoBehaviour
         return team;
     }
 
+    public void SetBodyType(Sprite image)
+    {
+        body.sprite = image;
+    }
+
+    public void SetBodyScale(float scaleSize)
+    {
+        body.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
+    }
+
+    public void SetPlayerNumber(int num)
+    {
+        playerNumber = num;
+    }
+
+    public void SetTeam(ETeam teamValue)
+    {
+        team = teamValue;
+    }
+
     internal float GetMaxFuel()
     {
         return maxFuel;

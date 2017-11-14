@@ -87,6 +87,10 @@ public class Ball : MonoBehaviour
             {
                 gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
             }
+            else if (hitCollider.tag == "SecondaryShield")
+            {
+                gameManagerInstance.BallSecondaryShieldCollision(hitCollider.gameObject, this);
+            }
         }
 
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
 using System;
+using PlayerSelectData;
 
 public class _UICharacterSelectControler : MonoBehaviour
 {

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
+using PlayerSelectData;
 
 public class GameManager : MonoBehaviour
 {
@@ -51,11 +52,33 @@ public class GameManager : MonoBehaviour
     [Tooltip("Locations where the ball can spawn")]
     [SerializeField]
     private Transform[] ballRespawns;
+
+    [Header("Players in match")]
+    [Tooltip("The gameobject players in the match")]
+    [SerializeField]
+    private GameObject[] players;
+
+    [Header("Character Variables")]
+    [Tooltip("Image of first playable character")]
+    [SerializeField]
+    private Sprite character1Sprite;
+    [Tooltip("Scale of the character 1 so the body image fits correctly")]
+    [SerializeField]
+    private float character1BodyScale;
+    [Tooltip("Image of second playable character")]
+    [SerializeField]
+    private Sprite character2Sprite;
+    [Tooltip("Scale of the character 2 so the body image fits correctly")]
+    [SerializeField]
+    private float character2BodyScale;
+
     #endregion
 
     #region Hidden Variables
 
     private static GameManager instance = null;
+
+    private static Dictionary<int, PlayerData> playerSelectedData = null;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -71,6 +94,42 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if(playerSelectedData != null)
+        {
+            for (int i = 0; i < players.Length; i++)
+            {
+                PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
+                currentPlayer.SetPlayerNumber(i + 1);
+                if (playerSelectedData[i + 1].ready)
+                {
+                    if (playerSelectedData[i + 1].team == 1)
+                    {
+                        currentPlayer.SetTeam(ETeam.RedTeam);
+                    }
+                    else
+                    {
+                        currentPlayer.SetTeam(ETeam.BlueTeam);
+                    }
+                    if (playerSelectedData[i + 1].character == "bean")
+                    {
+                        currentPlayer.SetBodyType(character1Sprite);
+                        currentPlayer.SetBodyScale(character1BodyScale);
+                    }
+                    else
+                    {
+                        currentPlayer.SetBodyType(character2Sprite);
+                        currentPlayer.SetBodyScale(character2BodyScale);
+                    }
+                    NoWaitRespawnPlayer(currentPlayer);
+                }
+                else
+                {
+                    players[i].SetActive(false);
+                }
+            }
+            playerSelectedData = null;
+        }
+
         instance = this;
 
         Cursor.visible = false;
@@ -80,7 +139,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameMenuUI != null)
         {
-            matchTimer();
+            MatchTimer();
         }
     }
     #endregion
@@ -104,9 +163,15 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync(LevelIndex.MAIN_MENU);
     }
 
-    public void StartGame()
+    public void CharacterSelect()
     {
-        SceneManager.LoadSceneAsync(LevelIndex.LEVEL_ONE);
+        SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
+    }
+
+    public void StartGame(Dictionary<int, PlayerData> playerData)
+    {
+        playerSelectedData = playerData;
+        AsyncOperation async = SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
     }
 
     public void ExitGame()
@@ -244,13 +309,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void NoWaitRespawnPlayer(PlayerController playerController)
+    {
+        playerController.gameObject.SetActive(true);
+
+        switch (playerController.GetTeamNumber())
+        {
+            case ETeam.RedTeam:
+                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                break;
+            case ETeam.BlueTeam:
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                break;
+        }
+    }
+
     private IEnumerator RespawnPowerUpRoutine(GameObject powerUp)
     {
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
     }
 
-    private void matchTimer()
+    private void MatchTimer()
     {
         if (currentMatchTime < gameMatchTime)
         {
@@ -294,19 +376,14 @@ public class GameManager : MonoBehaviour
                 winningTeamText.text = "Draw...";
                 winningTeamText.color = Color.white;
             }
-            //start the coorutine that will wait a few seconds so this is displayed and then switch scene
+            StartCoroutine(DelayedWinScreen());
         }
     }
 
-    IEnumerator LoadYourAsyncScene()
+    IEnumerator DelayedWinScreen()
     {
         yield return new WaitForSeconds(winScreenWaitTime);
-        /*AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Scene2");
-
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }*/
+        CharacterSelect();
     }
 
     #endregion
