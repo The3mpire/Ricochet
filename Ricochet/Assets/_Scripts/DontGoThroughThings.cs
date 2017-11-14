@@ -3,71 +3,67 @@ using System.Collections;
 
 public class DontGoThroughThings : MonoBehaviour
 {
-	#region Inspector Variables
-	[SerializeField]
-	private bool sendTriggerMessage = false;
-	[Tooltip("")]
-	[SerializeField]
-	private LayerMask layerMask = -1;
-	[Tooltip("")]
-	[SerializeField]
-	private float skinWidth = 0.1f;
-	[Tooltip("")]
+    #region Inspector Variables
+    [SerializeField]
+    [Tooltip("The layerMask this object is on")]
+    private LayerMask layerMask = -1;
+    [SerializeField]
+    [Tooltip("How wide the objects outline is")]
+    private float skinWidth = 0.1f;
+    [SerializeField]
+    [Tooltip("Drag the objects ridigBody2D here")]
+    private Rigidbody2D rigid;
+    [SerializeField]
+    [Tooltip("Drag the objects collider here")]
+    private Collider2D myCollider;
 
-	#endregion
+    #endregion
 
-	#region Hidden Variables
-	private float minimumExtent;
-	private float partialExtent;
-	private float sqrMinimumExtent;
+    #region Hidden Variables
+    private float minimumExtent;
+    private float partialExtent;
+    private float sqrMinimumExtent;
 
-	private Vector3 previousPosition;
+    private Vector2 previousPosition;
+    #endregion
 
-	private Rigidbody2D myRigidbody;
+    #region MonoBehavior
+    void Start()
+    {
+        previousPosition = rigid.position;
+        minimumExtent = Mathf.Min(Mathf.Min(myCollider.bounds.extents.x, myCollider.bounds.extents.y), myCollider.bounds.extents.z);
+        partialExtent = minimumExtent * (1.0f - skinWidth);
+        sqrMinimumExtent = minimumExtent * minimumExtent;
+    }
 
-	private Collider2D myCollider;
+    void FixedUpdate()
+    {
+        Vector3 movementThisStep = rigid.position - previousPosition;
+        float movementSqrMagnitude = movementThisStep.sqrMagnitude;
 
-	#endregion
+        if (movementSqrMagnitude > sqrMinimumExtent)
+        {
+            float movementMagnitude = Mathf.Sqrt(movementSqrMagnitude);
 
-	#region MonoBehavior
-	void Start()
-	{
-		myRigidbody = GetComponent<Rigidbody2D>();
-		myCollider = GetComponent<Collider2D>();
-		previousPosition = myRigidbody.position;
-		minimumExtent = Mathf.Min(Mathf.Min(myCollider.bounds.extents.x, myCollider.bounds.extents.y), myCollider.bounds.extents.z);
-		partialExtent = minimumExtent * (1.0f - skinWidth);
-		sqrMinimumExtent = minimumExtent * minimumExtent;
-	}
+            RaycastHit hitInfo;
+            if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
+            {
+                if (!hitInfo.collider)
+                {
+                    return;
+                }
+                if (hitInfo.collider.isTrigger)
+                {
+                    hitInfo.collider.SendMessage("OnTriggerEnter", myCollider);
+                }
+                if (!hitInfo.collider.isTrigger)
+                {
+                    rigid.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
+                }
+            }
+        }
+        previousPosition = rigid.position;
+    }
 
-	void FixedUpdate()
-	{
-		Vector3 movementThisStep = myRigidbody.position - (Vector2)previousPosition;
-		float movementSqrMagnitude = movementThisStep.sqrMagnitude;
-
-		if (movementSqrMagnitude > sqrMinimumExtent)
-		{
-			float movementMagnitude = Mathf.Sqrt(movementSqrMagnitude);
-
-			RaycastHit hitInfo;
-			if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
-			{
-				if (!hitInfo.collider)
-				{
-					return;
-				}
-				if (hitInfo.collider.isTrigger)
-				{
-					hitInfo.collider.SendMessage("OnTriggerEnter", myCollider);
-				}
-				if (!hitInfo.collider.isTrigger)
-				{
-					myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
-				}
-			}
-		}
-		previousPosition = myRigidbody.position;
-	}
-
-	#endregion
+    #endregion
 }
