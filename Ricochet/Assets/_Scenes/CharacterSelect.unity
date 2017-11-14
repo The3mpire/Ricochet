@@ -520,7 +520,7 @@ GameObject:
   - component: {fileID: 339930845}
   - component: {fileID: 339930844}
   m_Layer: 5
-  m_Name: Eggplant
+  m_Name: Carrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -702,7 +702,7 @@ GameObject:
   - component: {fileID: 351979815}
   - component: {fileID: 351979816}
   m_Layer: 0
-  m_Name: RedEggplant
+  m_Name: RedCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -714,13 +714,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 351979813}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19179, y: 0.19179, z: 0.19179}
   m_Children: []
   m_Father: {fileID: 1929802724}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -751,7 +751,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1100,6 +1100,21 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.size
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4330474610093544, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1131,6 +1146,146 @@ Prefab:
     - target: {fileID: 4330474610093544, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[5]._actionId
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[5]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[5]._elementIdentifierId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[5]._id
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[5]._name
+      value: A Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[5]._type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[5]._descriptiveName
+      value: A
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[5]._userAssignable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[5]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionIdCounter
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[6]._id
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[6]._name
+      value: B Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[6]._type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[6]._descriptiveName
+      value: B
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[6]._userAssignable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[6]
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[6]._actionId
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[6]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[6]._elementIdentifierId
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[7]._id
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[7]._name
+      value: Start Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[7]._type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[7]._descriptiveName
+      value: Start
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[7]._userAssignable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[7]
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[7]._actionId
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[7]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[7]._elementIdentifierId
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
@@ -1214,7 +1369,7 @@ GameObject:
   - component: {fileID: 854644499}
   - component: {fileID: 854644498}
   m_Layer: 0
-  m_Name: BlueEggplant
+  m_Name: BlueCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1239,7 +1394,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1259,13 +1414,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 854644497}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19178967, y: 0.19178964, z: 0.19178964}
   m_Children: []
   m_Father: {fileID: 1929802724}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -1282,7 +1437,7 @@ GameObject:
   - component: {fileID: 969378465}
   - component: {fileID: 969378464}
   m_Layer: 0
-  m_Name: BlueEggplant
+  m_Name: BlueCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1307,7 +1462,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1327,13 +1482,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 969378463}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19178967, y: 0.19178964, z: 0.19178964}
   m_Children: []
   m_Father: {fileID: 1674526939}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -1350,7 +1505,7 @@ GameObject:
   - component: {fileID: 1000394498}
   - component: {fileID: 1000394499}
   m_Layer: 0
-  m_Name: RedEggplant
+  m_Name: RedCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1362,13 +1517,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1000394496}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19179, y: 0.19179, z: 0.19179}
   m_Children: []
   m_Father: {fileID: 1674526939}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -1399,7 +1554,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1558,7 +1713,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1061804661}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 562.5, y: 316.5, z: 0}
+  m_LocalPosition: {x: 433, y: 243.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1162813786}
@@ -1586,6 +1741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfTeams: 2
+  validationNeeded: 0
   player1: {fileID: 1466155485}
   player2: {fileID: 1339857326}
   player3: {fileID: 1674526938}
@@ -1650,6 +1806,11 @@ Prefab:
         type: 2}
       propertyPath: orthographic size
       value: 9.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 114347462270385642, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
@@ -1733,7 +1894,7 @@ GameObject:
   - component: {fileID: 1156133296}
   - component: {fileID: 1156133295}
   m_Layer: 0
-  m_Name: BlueEggplant
+  m_Name: BlueCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1758,7 +1919,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1778,13 +1939,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1156133294}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19178967, y: 0.19178964, z: 0.19178964}
   m_Children: []
   m_Father: {fileID: 1466155486}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -1923,10 +2084,10 @@ MonoBehaviour:
   noSelect: {fileID: 637904743}
   redBean: {fileID: 735219393}
   blueBean: {fileID: 839043536}
-  redEggplant: {fileID: 1984987416}
-  blueEggplant: {fileID: 1357620778}
+  redCarrot: {fileID: 1984987416}
+  blueCarrot: {fileID: 1357620778}
   beanCursor: {fileID: 1149064675}
-  eggplantCursor: {fileID: 1593202017}
+  carrotCursor: {fileID: 1593202017}
 --- !u!4 &1339857327
 Transform:
   m_ObjectHideFlags: 0
@@ -1957,7 +2118,7 @@ GameObject:
   - component: {fileID: 1357620780}
   - component: {fileID: 1357620779}
   m_Layer: 0
-  m_Name: BlueEggplant
+  m_Name: BlueCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1982,7 +2143,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2002,13 +2163,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1357620778}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19178967, y: 0.19178964, z: 0.19178964}
   m_Children: []
   m_Father: {fileID: 1339857327}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -2248,10 +2409,10 @@ MonoBehaviour:
   noSelect: {fileID: 114170659}
   redBean: {fileID: 195506104}
   blueBean: {fileID: 538823655}
-  redEggplant: {fileID: 1832389511}
-  blueEggplant: {fileID: 1156133294}
+  redCarrot: {fileID: 1832389511}
+  blueCarrot: {fileID: 1156133294}
   beanCursor: {fileID: 1508981700}
-  eggplantCursor: {fileID: 235502176}
+  carrotCursor: {fileID: 235502176}
 --- !u!4 &1466155486
 Transform:
   m_ObjectHideFlags: 0
@@ -2611,7 +2772,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Eggplant
+  m_Text: Carrot
 --- !u!222 &1650723173
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2648,10 +2809,10 @@ MonoBehaviour:
   noSelect: {fileID: 1362904439}
   redBean: {fileID: 1420475919}
   blueBean: {fileID: 343102976}
-  redEggplant: {fileID: 1000394496}
-  blueEggplant: {fileID: 969378463}
+  redCarrot: {fileID: 1000394496}
+  blueCarrot: {fileID: 969378463}
   beanCursor: {fileID: 1499301283}
-  eggplantCursor: {fileID: 1879758030}
+  carrotCursor: {fileID: 1879758030}
 --- !u!4 &1674526939
 Transform:
   m_ObjectHideFlags: 0
@@ -2955,7 +3116,7 @@ GameObject:
   - component: {fileID: 1832389513}
   - component: {fileID: 1832389514}
   m_Layer: 0
-  m_Name: RedEggplant
+  m_Name: RedCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2967,13 +3128,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1832389511}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19179, y: 0.19179, z: 0.19179}
   m_Children: []
   m_Father: {fileID: 1466155486}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -3004,7 +3165,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3248,10 +3409,10 @@ MonoBehaviour:
   noSelect: {fileID: 153646177}
   redBean: {fileID: 1028940933}
   blueBean: {fileID: 2026621830}
-  redEggplant: {fileID: 351979813}
-  blueEggplant: {fileID: 854644497}
+  redCarrot: {fileID: 351979813}
+  blueCarrot: {fileID: 854644497}
   beanCursor: {fileID: 1774105488}
-  eggplantCursor: {fileID: 1710170063}
+  carrotCursor: {fileID: 1710170063}
 --- !u!4 &1929802724
 Transform:
   m_ObjectHideFlags: 0
@@ -3282,7 +3443,7 @@ GameObject:
   - component: {fileID: 1984987418}
   - component: {fileID: 1984987419}
   m_Layer: 0
-  m_Name: RedEggplant
+  m_Name: RedCarrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3294,13 +3455,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1984987416}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26803505, w: 0.9634092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -191, y: -101, z: 0}
   m_LocalScale: {x: 0.19179, y: 0.19179, z: 0.19179}
   m_Children: []
   m_Father: {fileID: 1339857327}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -31.095001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -191, y: -101}
@@ -3331,7 +3492,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 14b3f395a62a3ab499eb1e7297086630, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

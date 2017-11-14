@@ -8,6 +8,7 @@ public class _UICharacterSelectModel : MonoBehaviour {
 	{
         public bool active = false;
 		public int team = 1;
+        public bool selected = false;
 		public string character = "bean";
 		public int xPos = 0;
 		public int yPos = 0;
@@ -19,8 +20,11 @@ public class _UICharacterSelectModel : MonoBehaviour {
 	[Tooltip("Default number of teams")]
 	[SerializeField]
 	private int numberOfTeams = 2;
+    [Tooltip("Whether players need to be on both sides to play a game(for testing purposes)")]
+    [SerializeField]
+    private bool validationNeeded = true;
 
-	[Header("Player UI Objects")]
+    [Header("Player UI Objects")]
 	[Tooltip("Player 1")]
 	[SerializeField]
 	private _UICharacterSelectView player1;
@@ -38,7 +42,7 @@ public class _UICharacterSelectModel : MonoBehaviour {
     #region Private Variables
 	private Dictionary<int, PlayerData> players;
 	private Dictionary<int, _UICharacterSelectView> spriteHandlers;
-	private string[,] characters = { { "bean", "eggplant" } };
+	private string[,] characters = { { "bean", "carrot" } };
     private int numberOfPlayers = 4;
 
     #endregion
@@ -83,7 +87,14 @@ public class _UICharacterSelectModel : MonoBehaviour {
                 }
             }
         }
-        return team1 && team2;
+        if (validationNeeded)
+        {
+            return team1 && team2;
+        }
+        else
+        {
+            return team1 || team2;
+        }
     }
 
     /// <summary>
@@ -100,6 +111,7 @@ public class _UICharacterSelectModel : MonoBehaviour {
 		PlayerData player = players [playerID];
 		_UICharacterSelectView playerView = spriteHandlers [playerID];
 
+        player.selected = true;
 		switch (direction) {
 		// check this if you make another row in the array
 		case 1:
@@ -153,15 +165,34 @@ public class _UICharacterSelectModel : MonoBehaviour {
 		spriteHandlers[playerID].UpdateTeam(player.team);
 	}
 
-	public void ToggleReady(int playerID)
+	public void ToggleReady(int playerID, bool selectedValue)
     {
         PlayerData player = players[playerID];
-		player.ready = !player.ready;
-        // update ready
-        spriteHandlers[playerID].SetReady(player.ready);
-		players [playerID].active = true;
-
+        if (player.selected)
+        {
+            player.ready = selectedValue;
+            // update ready
+            spriteHandlers[playerID].SetReady(player.ready);
+            players[playerID].active = true; //not sure if this active set is needed look into it
+        }
 	}
+
+    public void StartGame()
+    {
+        bool readyToStartGame = true;
+        for (int i = 1; i < players.Count + 1; i++)
+        {
+            if(players[i].active && !players[i].ready)
+            {
+                readyToStartGame = false;
+                break;
+            }
+        }
+        if(readyToStartGame)
+        {
+            Debug.Log("Switch Scenes");
+        }
+    }
 
 	public Dictionary<int, PlayerData> GetPlayerData() 
 	{

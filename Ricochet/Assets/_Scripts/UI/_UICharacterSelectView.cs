@@ -15,20 +15,20 @@ public class _UICharacterSelectView : MonoBehaviour {
 	[Tooltip("Blue Bean Sprite")]
 	[SerializeField]
 	private GameObject blueBean;
-	[Tooltip("Red Eggplant Sprite")]
+	[Tooltip("Red Carrot Sprite")]
 	[SerializeField]
-	private GameObject redEggplant;
-	[Tooltip("Blue Eggplant Sprite")]
+	private GameObject redCarrot;
+	[Tooltip("Blue Carrot Sprite")]
 	[SerializeField]
-	private GameObject blueEggplant;
+	private GameObject blueCarrot;
 
 	[Header("Cursor Sprites")]
 	[Tooltip("Bean Cursor")]
 	[SerializeField]
 	private GameObject beanCursor;
-	[Tooltip("Eggplant Cursor")]
+	[Tooltip("Carrot Cursor")]
 	[SerializeField]
-	private GameObject eggplantCursor;
+	private GameObject carrotCursor;
     #endregion
 
     #region Private Variables
@@ -64,15 +64,15 @@ public class _UICharacterSelectView : MonoBehaviour {
                 UpdateCharacterImage(blueBean);
             }
         }
-        else if (newCharacter == "eggplant")
+        else if (newCharacter == "carrot")
         {
             if (currentTeam == 1)
             {
-                UpdateCharacterImage(redEggplant);
+                UpdateCharacterImage(redCarrot);
             }
             else if (currentTeam == 2)
             {
-                UpdateCharacterImage(blueEggplant);
+                UpdateCharacterImage(blueCarrot);
             }
         }
         else
@@ -87,9 +87,9 @@ public class _UICharacterSelectView : MonoBehaviour {
         {
             UpdateCursorImage(beanCursor);
         }
-        else if (selection == "eggplant")
+        else if (selection == "carrot")
         {
-            UpdateCursorImage(eggplantCursor);
+            UpdateCursorImage(carrotCursor);
         }
         else
         {
@@ -99,7 +99,14 @@ public class _UICharacterSelectView : MonoBehaviour {
 
 	public void SetReady(bool state)
     {
-		Debug.Log ("You are now ready!");
+        if (state)
+        {
+            Debug.Log("You are now ready!");
+        }
+        else
+        {
+            Debug.Log("No longer ready");
+        }
 	}
 
 	public void UpdateTeam(int playerTeam)

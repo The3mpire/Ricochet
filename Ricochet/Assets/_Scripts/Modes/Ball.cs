@@ -6,20 +6,21 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+
     #region Inspector Variables
-    [Tooltip("How hard the ball was hit when it spawns")]
+    [Tooltip("The ball travel direction on spawn")]
     [SerializeField]
-    private Vector2 initialForce = new Vector2(255, 157);
+    private Vector2 initialDirection = new Vector2(0, -1);
 
     [Tooltip("The slowest the ball can travel")]
     [SerializeField]
-    private float minimumSpeed = 1f;
-    [Tooltip("How much the ball gains speed when just bouncing around")]
+    private float minimumSpeed = 5f;
+    [Tooltip("How quickly the ball slows to its normal speed after accelerating")]
     [SerializeField]
-    private float speedUpForce = 2f;
+    private float slowRate = 1f;
     [Tooltip("The fastest the ball can travel")]
     [SerializeField]
-    private float maximumSpeed = 10f;
+    private float maximumSpeed = 27f;
 
     [Tooltip("Whether this ball should respawn")]
     [SerializeField]
@@ -37,9 +38,10 @@ public class Ball : MonoBehaviour
     private Rigidbody2D body;
     #endregion
 
+    #region Hidden Variables
     private GameManager gameManagerInstance;
-
     private LinkedList<PlayerController> lastTouchedBy;
+    #endregion
 
     #region MonoBehaviour
 
@@ -50,8 +52,7 @@ public class Ball : MonoBehaviour
 
     private void OnEnable()
     {
-        body.velocity = Vector3.zero;
-        body.AddForce(initialForce);
+        body.velocity = initialDirection.normalized * minimumSpeed;
     }
 
     private void FixedUpdate()
@@ -59,13 +60,16 @@ public class Ball : MonoBehaviour
         // add the constant force
         if (body.velocity.magnitude < minimumSpeed)
         {
-            body.AddForce(body.velocity.normalized * speedUpForce);
+            body.velocity = body.velocity.normalized * minimumSpeed;
         }
-
         // make sure we're not going super mega fast
-        if (body.velocity.magnitude > maximumSpeed)
+        else if (body.velocity.magnitude > maximumSpeed)
         {
             body.velocity = body.velocity.normalized * maximumSpeed;
+        }
+        else if (body.velocity.magnitude > minimumSpeed)
+        {
+            body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * Time.deltaTime);
         }
     }
 
@@ -77,14 +81,11 @@ public class Ball : MonoBehaviour
             if (hitCollider.tag == "Player")
             {
                 gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
+
             }
             else if (hitCollider.tag == "Shield")
             {
                 gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
-            }
-            else if (hitCollider.tag == "SecondaryShield")
-            {
-                gameManagerInstance.BallSecondaryShieldCollision(hitCollider.gameObject, this);
             }
         }
 
@@ -92,11 +93,13 @@ public class Ball : MonoBehaviour
 
     #endregion
 
+    #region External Functions
     public void OnBallGoalCollision()
     {
         gameObject.SetActive(false);
         lastTouchedBy.Clear();
     }
+    #endregion
 
     #region Getters and Setters
     public bool GetTempStatus()
@@ -118,7 +121,7 @@ public class Ball : MonoBehaviour
     {
         canScore = value;
     }
-    
+
     public void SetLastTouchedBy(PlayerController player)
     {
         if (lastTouchedBy.Count == 0 || player != lastTouchedBy.Last.Value)
@@ -126,7 +129,7 @@ public class Ball : MonoBehaviour
             lastTouchedBy.AddLast(player);
         }
         if (lastTouchedBy.Count > lastTouchedByCount)
-        { 
+        {
             lastTouchedBy.RemoveFirst();
         }
     }
@@ -157,5 +160,4 @@ public class Ball : MonoBehaviour
     }
 
     #endregion
-
 }
