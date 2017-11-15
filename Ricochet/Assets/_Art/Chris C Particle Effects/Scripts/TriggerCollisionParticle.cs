@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CCParticles
@@ -9,49 +8,69 @@ namespace CCParticles
         #region Inspector Variables
 
         [SerializeField]
-        private ParticleSystem particleSystem;
+        [Tooltip("The particle system that will be played when a collision is detected")]
+        private ParticleSystem system;
 
         [SerializeField]
+        [Tooltip("The layer that this can collide with to trigger the particle")]
         private LayerMask collisionLayer;
+
+        [SerializeField]
+        [Tooltip("Enables OnCollisionEnter detection")]
+        private bool enableStandardCollision = true;
+
+        [SerializeField]
+        [Tooltip("Enables OnTriggerEnter detection")]
+        private bool enableTriggerColliision = true;
 
         #endregion
 
+        #region Monobehaviour
+
+        private void OnEnable()
+        {
+            if (this.system)
+            {
+                this.system.gameObject.SetActive(false);
+            }
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            CheckAndPlay(collision.collider);
+            CheckAndPlay(collision.collider, this.enableStandardCollision);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            CheckAndPlay(collision);
+            CheckAndPlay(collision, this.enableTriggerColliision);
         }
 
-        private void OnDisable()
-        {
-            this.particleSystem.gameObject.SetActive(false);
-        }
+        #endregion
 
-        private void CheckAndPlay(Collider2D collision)
+        #region Private Helpers
+
+        private void CheckAndPlay(Collider2D collider, bool collisionTypeEnabled)
         {
-            if (this.particleSystem != null)
+            if (this.system != null && collisionTypeEnabled && gameObject.activeSelf)
             {
-                if (((1 << collision.gameObject.layer) & this.collisionLayer) != 0)
+                if (((1 << collider.gameObject.layer) & this.collisionLayer) != 0)
                 {
-                    StartCoroutine(PlayParticleSystem(this.particleSystem));
+                    StartCoroutine(PlayParticleSystem(this.system));
                 }
             }
         }
 
-        IEnumerator PlayParticleSystem(ParticleSystem system)
+        private IEnumerator PlayParticleSystem(ParticleSystem system)
         {
-            particleSystem.gameObject.SetActive(true);
-            particleSystem.Play();
-            while (particleSystem.isPlaying)
+            this.system.gameObject.SetActive(true);
+            this.system.Play();
+            while (this.system.isPlaying)
             {
                 yield return null;
             }
-            particleSystem.gameObject.SetActive(false);
+            this.system.gameObject.SetActive(false);
         }
 
+        #endregion
     }
 }
