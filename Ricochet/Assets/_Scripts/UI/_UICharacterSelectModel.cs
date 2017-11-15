@@ -193,10 +193,11 @@ namespace PlayerSelectData
             {
                 if (players[i].active && !players[i].ready)
                 {
-                    readyToStartGame = false;
-                    break;
+                    //readyToStartGame = false;
+                    //break;
                 }
             }
+            readyToStartGame = ValidateSetup();
             if (readyToStartGame)
             {
                 if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))

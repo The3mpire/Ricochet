@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
 
-    private float currentMatchTime = 0.0f;
+    private float currentMatchTime;
     #endregion
 
     #region MonoBehaviour
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        currentMatchTime = gameMatchTime;
         if(playerSelectedData != null)
         {
             for (int i = 0; i < players.Length; i++)
@@ -334,9 +334,9 @@ public class GameManager : MonoBehaviour
 
     private void MatchTimer()
     {
-        if (currentMatchTime < gameMatchTime)
+        if (currentMatchTime > 0)
         {
-            currentMatchTime += Time.deltaTime;
+            currentMatchTime -= Time.deltaTime;
             string minutes = ((int)(currentMatchTime / 60)).ToString();
             int seconds_num = (int)(currentMatchTime % 60);
             string seconds;
