@@ -189,14 +189,6 @@ namespace PlayerSelectData
         public void StartGame()
         {
             bool readyToStartGame = true;
-            for (int i = 1; i < players.Count + 1; i++)
-            {
-                if (players[i].active && !players[i].ready)
-                {
-                    //readyToStartGame = false;
-                    //break;
-                }
-            }
             readyToStartGame = ValidateSetup();
             if (readyToStartGame)
             {

@@ -58,7 +58,6 @@ public class _UICharacterSelectControler : MonoBehaviour
             {
                 if (joystickAcceptingInput[i + 1])
                 {
-                    //Debug.Log ("WE HERE BOI");
                     joystickAcceptingInput[i + 1] = false;
                     StartCoroutine(ReactivateAfterDelay(i + 1));
                     HandOffInput(i + 1, input);
@@ -99,12 +98,10 @@ public class _UICharacterSelectControler : MonoBehaviour
         {
             if (x < 0)
             {
-                //Debug.Log ("left");
                 model.MovePlayerSelection(playerID, 4);
             }
             else
             {
-                //Debug.Log ("right");
                 model.MovePlayerSelection(playerID, 2);
             }
         }
@@ -112,12 +109,10 @@ public class _UICharacterSelectControler : MonoBehaviour
         {
             if (y < 0)
             {
-                //Debug.Log ("down");
                 model.MovePlayerSelection(playerID, 3);
             }
             else
             {
-                //Debug.Log ("up");
                 model.MovePlayerSelection(playerID, 1);
             }
         }
@@ -125,9 +120,7 @@ public class _UICharacterSelectControler : MonoBehaviour
 
     private IEnumerator ReactivateAfterDelay(int playerID)
     {
-        //Debug.Log ("waiting...");
         yield return new WaitForSeconds(inputDelay);
         joystickAcceptingInput[playerID] = true;
-        //Debug.Log ("REACTIVATED: " + playerID);
     }
 }
