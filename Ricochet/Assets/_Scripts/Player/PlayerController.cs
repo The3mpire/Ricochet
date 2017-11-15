@@ -6,55 +6,72 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-#region Instance Variables
+    #region Instance Variables
     [Header("Player Settings")]
     [Tooltip("Which player this is")]
-    [SerializeField] private int playerNumber = 1;
+    [SerializeField]
+    private int playerNumber = 1;
     [Tooltip("Which team the player is on")]
-    [SerializeField] private ETeam team;
+    [SerializeField]
+    private ETeam team;
 
     [Header("Movement Settings")]
     [Tooltip("Gravity scale on player")]
-    [SerializeField] private float gravScale = 8f;
+    [SerializeField]
+    private float gravScale = 8f;
     [Tooltip("Move speed while using jetpack w/ no directional input")]
-    [SerializeField] private float upThrusterSpeed = 5f;
+    [SerializeField]
+    private float upThrusterSpeed = 5f;
     [Tooltip("Move speed while using jetpack w/ directional input")]
-    [SerializeField] private float thrusterSpeed = 15f;
+    [SerializeField]
+    private float thrusterSpeed = 15f;
     [Tooltip("Move speed while in the air, not using jetpack")]
-    [SerializeField] private float airMoveSpeed = 5f;
+    [SerializeField]
+    private float airMoveSpeed = 5f;
     [Tooltip("Move speed while grounded")]
-    [SerializeField] private float groundedMoveSpeed = 12.5f;
+    [SerializeField]
+    private float groundedMoveSpeed = 12.5f;
 
     [Header("Fuel Settings")]
     [Tooltip("Time in seconds of jetback fuel")]
-    [SerializeField] private float startFuel = 7f;
+    [SerializeField]
+    private float startFuel = 7f;
     [Tooltip("Fuel/second recharge when grounded")]
-    [SerializeField] private float groundRechargeRate = 3.5f;
+    [SerializeField]
+    private float groundRechargeRate = 3.5f;
     [Tooltip("Fuel/second recharge when falling")]
-    [SerializeField] private float airRechargeRate = 1.5f;
+    [SerializeField]
+    private float airRechargeRate = 1.5f;
 
     [Header("Dash Settings")]
     [Tooltip("How fast the player moves during dash")]
-    [SerializeField] private float dashSpeed = 35f;
+    [SerializeField]
+    private float dashSpeed = 35f;
     [Tooltip("How long the dash lasts")]
-    [SerializeField] private float dashTime = .2f;
+    [SerializeField]
+    private float dashTime = .2f;
     [Tooltip("How much fuel in seconds to spend on dash")]
-    [SerializeField] private float dashCost = 2f;
+    [SerializeField]
+    private float dashCost = 2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
-    [SerializeField] private Transform shieldTransform;
+    [SerializeField]
+    private Transform shieldTransform;
     [Tooltip("Drag the SpriteRenderer here")]
-    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField]
+    private SpriteRenderer sprite;
     [Tooltip("Drag the player's rigidbody here")]
-    [SerializeField] private Rigidbody2D rigid;
+    [SerializeField]
+    private Rigidbody2D rigid;
     [Tooltip("Drag the player's \"groundCheck\" here")]
-    [SerializeField] private Transform groundCheck;
-#endregion
+    [SerializeField]
+    private Transform groundCheck;
+    #endregion
 
-#region Hidden Variables
+    #region Hidden Variables
     private GameManager gameManagerInstance;
-    
+
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
@@ -75,9 +92,9 @@ public class PlayerController : MonoBehaviour
     private float leftStickVert;
     private float rightStickHorz;
     private float rightStickVert;
-#endregion
+    #endregion
 
-#region Monobehaviour
+    #region Monobehaviour
     private void Awake()
     {
         killList = new List<PlayerController>();
@@ -93,8 +110,8 @@ public class PlayerController : MonoBehaviour
         player = ReInput.players.GetPlayer(playerNumber - 1);
         sprite.color = PlayerColorData.getColor(playerNumber, team);
     }
-	
-	private void Update()
+
+    private void Update()
     {
         // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
@@ -111,13 +128,13 @@ public class PlayerController : MonoBehaviour
             rightStickVert = player.GetAxis("RightStickVertical");
         }
         timeSinceDash += Time.deltaTime;
-        
+
         // Check if still dashing
         if (timeSinceDash >= dashTime)
         {
             dashing = false;
         }
-        
+
         MovementPreperation();
         DashCheck();
         RotateShield();
@@ -134,9 +151,9 @@ public class PlayerController : MonoBehaviour
             rigid.velocity += dashDirection * dashSpeed;
         }
     }
-#endregion
+    #endregion
 
-#region Helpers
+    #region Helpers
     private void MovementPreperation()
     {
         if (player.GetButton("Jump") && (currentFuel > 0 || infiniteFuel))
@@ -228,9 +245,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-#endregion
+    #endregion
 
-#region External Functions
+    #region External Functions
     public void ReceivePowerUp(EPowerUp powerUp)
     {
         hasPowerUp = true;
@@ -257,11 +274,10 @@ public class PlayerController : MonoBehaviour
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
-#endregion
+    #endregion
 
     #region Getters and Setters
-
-    public void InfiniteFuel(bool active)
+    public void SetInfiniteFuel(bool active)
     {
         infiniteFuel = active;
     }

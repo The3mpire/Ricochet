@@ -101,6 +101,11 @@ public class GameManager : MonoBehaviour
         if (!playerDictionary.TryGetValue(shield, out playerController))
         {
             playerController = shield.GetComponent<Shield>().GetPlayer();
+            if (playerController == null)
+            {
+                return;
+            }
+
             playerDictionary.Add(shield, playerController);
         }
 

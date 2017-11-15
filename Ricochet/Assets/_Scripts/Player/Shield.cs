@@ -13,7 +13,7 @@ public class Shield : MonoBehaviour
     [SerializeField] private Vector2 endPointHandler;
 
     [SerializeField] private float lineRendererWidth;
-    [SerializeField] private Gradient lineRendererColor;
+    [SerializeField] private Gradient lineRendererColor = new Gradient();
 
     [SerializeField] private Material lineRendererMaterial;
     [SerializeField] private float colliderEdgeRadius;
@@ -57,6 +57,7 @@ public class Shield : MonoBehaviour
         lineRenderer.sharedMaterial = lineRendererMaterial;
         lineRenderer.widthMultiplier = lineRendererWidth;
         lineRenderer.colorGradient = lineRendererColor;
+        lineRenderer.useWorldSpace = false;
 
         if (numberOfPoints < 2 || startPoint == endPoint)
         {
@@ -110,7 +111,6 @@ public class Shield : MonoBehaviour
     #region Setters
     public void SetColor(Color color)
     {
-        Gradient g = new Gradient();
         GradientColorKey[] gck = new GradientColorKey[2];
         GradientAlphaKey[] gak = new GradientAlphaKey[2];
 
