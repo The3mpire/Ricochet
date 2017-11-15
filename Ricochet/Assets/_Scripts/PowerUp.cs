@@ -7,9 +7,6 @@ public class PowerUp : MonoBehaviour
     [Tooltip("Which type of powerup this is")]
     [SerializeField]
     private EPowerUp powerUpType;
-    [Tooltip("Drag the PowerUp Manager here")]
-    [SerializeField]
-    private PowerUpManager powerUpManager;
     #endregion
 
     #region Hidden Variables
@@ -21,8 +18,11 @@ public class PowerUp : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        powerUpColor = powerUpManager.GetPowerUpColor(powerUpType);
-        shieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            powerUpColor = gameManagerInstance.GetPowerUpColor(powerUpType);
+            shieldColor = gameManagerInstance.GetPowerUpShieldColor(powerUpType);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

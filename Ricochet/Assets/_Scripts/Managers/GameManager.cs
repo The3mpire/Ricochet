@@ -248,4 +248,18 @@ public class GameManager : MonoBehaviour
         ball.transform.SetParent(null, true);
     }
     #endregion
+
+    #region Rerouters
+
+    public Color GetPowerUpColor(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpColor(powerup);
+    }
+
+    public Color GetPowerUpShieldColor(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpShieldColor(powerup);
+    }
+
+    #endregion
 }
