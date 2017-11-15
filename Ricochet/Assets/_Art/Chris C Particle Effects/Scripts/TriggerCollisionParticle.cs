@@ -62,13 +62,13 @@ namespace CCParticles
 
         private IEnumerator PlayParticleSystem(ParticleSystem system)
         {
-            this.system.gameObject.SetActive(true);
-            this.system.Play();
-            while (this.system.isPlaying)
+            system.gameObject.SetActive(true);
+            system.Play();
+            while (system.isPlaying)
             {
                 yield return null;
             }
-            this.system.gameObject.SetActive(false);
+            system.gameObject.SetActive(false);
         }
 
         #endregion
