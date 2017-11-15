@@ -1502,19 +1502,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b97a6a185c7f9409831266d0c16654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpType: 2
-  powerUpManager: {fileID: 0}
-  powerUpColor:
-    r: 0
-    g: 0
-    b: 0
-    a: 0
-  shieldColor:
-    r: 0
-    g: 0
-    b: 0
-    a: 0
-  gameManagerInstance: {fileID: 0}
 --- !u!1001 &719005443
 Prefab:
   m_ObjectHideFlags: 0
@@ -2237,6 +2224,11 @@ Prefab:
       propertyPath: ballRespawns.Array.data[0]
       value: 
       objectReference: {fileID: 1828434336}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: powerUpManager
+      value: 
+      objectReference: {fileID: 1437963994}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
@@ -2599,6 +2591,76 @@ Prefab:
     - target: {fileID: 4537691214618018, guid: c6dcd50896ad86e42896dfa40e42b1e1, type: 2}
       propertyPath: m_RootOrder
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallPowerUpColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallPowerUpColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallPowerUpColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallShieldColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallShieldColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallShieldColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: catchNThrowPowerUpColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: catchNThrowPowerUpColor.g
+      value: 0.7241379
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: catchNThrowPowerUpColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: catchNThrowPowerUpColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: catchNThrowShieldColor.g
+      value: 0.7254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: catchNThrowShieldColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallShieldColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114033011329474458, guid: c6dcd50896ad86e42896dfa40e42b1e1,
+        type: 2}
+      propertyPath: multiBallPowerUpColor.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c6dcd50896ad86e42896dfa40e42b1e1, type: 2}
@@ -3835,6 +3897,11 @@ Prefab:
       propertyPath: powerUpManager
       value: 
       objectReference: {fileID: 1437963994}
+    - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
+        type: 2}
+      propertyPath: powerUpType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
   m_IsPrefabParent: 0

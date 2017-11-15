@@ -10,8 +10,6 @@ public class PowerUp : MonoBehaviour
     #endregion
 
     #region Hidden Variables
-    private Color powerUpColor;
-    private Color shieldColor;
     private GameManager gameManagerInstance;
     #endregion
 
@@ -20,8 +18,7 @@ public class PowerUp : MonoBehaviour
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            powerUpColor = gameManagerInstance.GetPowerUpColor(powerUpType);
-            shieldColor = gameManagerInstance.GetPowerUpShieldColor(powerUpType);
+            gameObject.GetComponent<SpriteRenderer>().color = gameManagerInstance.GetPowerUpColor(powerUpType);
         }
     }
 
@@ -43,11 +40,6 @@ public class PowerUp : MonoBehaviour
     public EPowerUp GetPowerUpType()
     {
         return powerUpType;
-    }
-
-    public Color GetShieldColor()
-    {
-        return shieldColor;
     }
     #endregion
 }

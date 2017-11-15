@@ -170,13 +170,15 @@ public class GameManager : MonoBehaviour
     public void PlayerPowerUpCollision(GameObject player, PowerUp powerUp)
     {
         PlayerController playerController;
+
+        // If player is not cached, cache them
         if (!playerDictionary.TryGetValue(player, out playerController))
         {
             playerController = player.GetComponent<PlayerController>();
             playerDictionary.Add(player, playerController);
         }
         EPowerUp powerUpType = powerUp.GetPowerUpType();
-        Color powerUpShieldColor = powerUp.GetShieldColor();
+        Color powerUpShieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
         playerController.ReceivePowerUp(powerUpType, powerUpShieldColor);
     }
 

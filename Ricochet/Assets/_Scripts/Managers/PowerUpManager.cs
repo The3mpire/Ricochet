@@ -37,17 +37,15 @@ public class PowerUpManager : MonoBehaviour
 
     public Color GetPowerUpShieldColor(EPowerUp ePowerUp)
     {
-        Color c = Color.white;
         switch (ePowerUp)
         {
             case EPowerUp.Multiball:
-                c = multiBallShieldColor;
-                break;
+                return multiBallShieldColor;
             case EPowerUp.CatchNThrow:
-                c = catchNThrowShieldColor;
-                break;
+                return catchNThrowShieldColor;
+            default:
+                return Color.white;
         }
-        return c;
     }
     #endregion
 }
