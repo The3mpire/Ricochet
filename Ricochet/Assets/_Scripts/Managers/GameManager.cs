@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
     private ModeManager modeManager;
+    [Tooltip("Drag the powerup manager here")]
+    [SerializeField]
+    private PowerUpManager powerUpManager;
 
     [Header("Game Match Variables")]
     [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
@@ -31,7 +34,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int winScreenWaitTime = 3;
 
-
     [Header("Respawn Timers")]
     [Tooltip("How long the power up takes to respawn in seconds")]
     [SerializeField]
@@ -42,6 +44,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("How long the ball takes to respawn in seconds")]
     [SerializeField]
     private float ballRespawnTime = 2f;
+    [Tooltip("How long a player can hold a ball with CatchNThrow")]
+    [SerializeField]
+    private float ballHoldTime = 1f;
+
     [Header("Respawn Zones")]
     [Tooltip("Locations for where Red Team can spawn")]
     [SerializeField]
@@ -94,7 +100,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         currentMatchTime = gameMatchTime;
-        if(playerSelectedData != null)
+        if (playerSelectedData != null)
         {
             for (int i = 0; i < players.Length; i++)
             {
@@ -198,12 +204,23 @@ public class GameManager : MonoBehaviour
             playerDictionary.Add(shield, playerController);
         }
 
-        switch (playerController.GetCurrentPowerUp())
+        EPowerUp currentPowerUp = playerController.GetCurrentPowerUp();
+        if (currentPowerUp != EPowerUp.None)
         {
-            case EPowerUp.Multiball:
-                playerController.RemovePowerUp();
-                SpawnMultipleBalls(ball);
-                break;
+            switch (currentPowerUp)
+            {
+                case EPowerUp.Multiball:
+                    playerController.RemovePowerUp();
+                    SpawnMultipleBalls(ball);
+                    break;
+                case EPowerUp.CatchNThrow:
+                    playerController.RemovePowerUp();
+                    playerController.SetBallHeld(ball);
+                    ball.SetHeld(true);
+                    ball.transform.SetParent(playerController.GetShieldTransform());
+                    StartCoroutine(DropBallCoroutine(playerController, ball));
+                    break;
+            }
         }
 
         // The last player to touch the ball 
@@ -244,15 +261,32 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int value)
     {
-        if (!modeManager.UpdateScore(team, value))
+        modeManager.UpdateScore(team, value);
+        ball.GetComponent<Ball>().OnBallGoalCollision();
+        ball.SetActive(false);
+        RespawnBall(ball);
+    }
+
+    public void PlayerPowerUpCollision(GameObject player, PowerUp powerUp)
+    {
+        PlayerController playerController;
+
+        // If player is not cached, cache them
+        if (!playerDictionary.TryGetValue(player, out playerController))
         {
-            ball.GetComponent<Ball>().OnBallGoalCollision();
-            ball.SetActive(false);
-            RespawnBall(ball);
+            playerController = player.GetComponent<PlayerController>();
+            playerDictionary.Add(player, playerController);
         }
-        else
+        if (playerController.GetCurrentPowerUp() != EPowerUp.None)
         {
-            ChangeScene();
+            playerController.RemovePowerUp();
+        }
+        EPowerUp powerUpType = powerUp.GetPowerUpType();
+        Color powerUpShieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
+        playerController.ReceivePowerUp(powerUpType, powerUpShieldColor);
+        if (powerUpType == EPowerUp.CircleShield) //need to have a list of powerups that reference a secondary shield
+        {
+            playerController.EnableSecondaryShield(true);
         }
     }
 
@@ -294,6 +328,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
         yield return new WaitForSeconds(playerRespawnTime);
+        playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
 
         switch (playerController.GetTeamNumber())
@@ -384,6 +419,28 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(winScreenWaitTime);
         CharacterSelect();
+    }
+
+    private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)
+    {
+        yield return new WaitForSeconds(ballHoldTime);
+
+        player.SetBallHeld(null);
+        ball.SetHeld(false);
+        ball.transform.SetParent(null, true);
+    }
+    #endregion
+
+    #region Rerouters
+
+    public Color GetPowerUpColor(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpColor(powerup);
+    }
+
+    public Color GetPowerUpShieldColor(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpShieldColor(powerup);
     }
 
     #endregion

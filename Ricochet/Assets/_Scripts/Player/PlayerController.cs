@@ -79,6 +79,9 @@ public class PlayerController : MonoBehaviour
  #region Hidden Variables
     private GameManager gameManagerInstance;
 
+
+    private Ball ballHeld;
+    
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
@@ -99,55 +102,55 @@ public class PlayerController : MonoBehaviour
     private float rightStickVert;
  #endregion
 
-    #region Monobehaviour
-    private void Awake()
-    {
-        killList = new List<PlayerController>();
-        currentFuel = startFuel;
-        maxFuel = startFuel;
-        timeSinceDash = 0f;
-    }
+#region Monobehaviour
+private void Awake()
+{
+    killList = new List<PlayerController>();
+    currentFuel = startFuel;
+    maxFuel = startFuel;
+    timeSinceDash = 0f;
+}
 
-    private void Start()
-    {
-        player = ReInput.players.GetPlayer(playerNumber - 1);
-        body.color = PlayerColorData.getColor(playerNumber, team);
-    }
+private void Start()
+{
+    player = ReInput.players.GetPlayer(playerNumber - 1);
+    body.color = PlayerColorData.getColor(playerNumber, team);
+}
 	
-	private void Update()
-    {
-        // Update vars
-        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-        jumpButtonHeld = false;
-        rigid.gravityScale = gravScale;
-        leftStickHorz = player.GetAxis("MoveHorizontal");
-        leftStickVert = player.GetAxis("MoveVertical");
-        rightStickHorz = player.GetAxis("RightStickHorizontal");
-        rightStickVert = player.GetAxis("RightStickVertical");
-        timeSinceDash += Time.deltaTime;
+private void Update()
+{
+    // Update vars
+    grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+    jumpButtonHeld = false;
+    rigid.gravityScale = gravScale;
+    leftStickHorz = player.GetAxis("MoveHorizontal");
+    leftStickVert = player.GetAxis("MoveVertical");
+    rightStickHorz = player.GetAxis("RightStickHorizontal");
+    rightStickVert = player.GetAxis("RightStickVertical");
+    timeSinceDash += Time.deltaTime;
         
-        // Check if still dashing
-        if (timeSinceDash >= dashTime)
-        {
-            dashing = false;
-        }
-        
-        MovementPreperation();
-        DashCheck();
-        RotateShield();
-        Flip();
-    }
-
-    private void FixedUpdate()
+    // Check if still dashing
+    if (timeSinceDash >= dashTime)
     {
-        Move();
-
-        // Add dash velocity to movement
-        if (dashing)
-        {
-            rigid.velocity += dashDirection * dashSpeed;
-        }
+        dashing = false;
     }
+        
+    MovementPreperation();
+    DashCheck();
+    RotateShield();
+    Flip();
+}
+
+private void FixedUpdate()
+{
+    Move();
+
+    // Add dash velocity to movement
+    if (dashing)
+    {
+        rigid.velocity += dashDirection * dashSpeed;
+    }
+}
 #endregion
 
 #region Helpers
@@ -239,20 +242,33 @@ public class PlayerController : MonoBehaviour
             {
                 shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
             }
+            if (ballHeld != null)
+            {
+                if (rightStickHorz > 0)
+                {
+                    ballHeld.transform.localRotation = Quaternion.Euler(new Vector3(ballHeld.transform.localRotation.eulerAngles.x, ballHeld.transform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
+                }
+                else
+                {
+                    ballHeld.transform.localRotation = Quaternion.Euler(new Vector3(ballHeld.transform.localRotation.eulerAngles.x, ballHeld.transform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
+                }
+            }
         }
     }
 #endregion
 
 #region External Functions
-    public void ReceivePowerUp(EPowerUp powerUp)
+    public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
     {
         hasPowerUp = true;
         currPowerUp = powerUp;
+        shield.color = shieldColor;
     }
 
     public void RemovePowerUp()
     {
         hasPowerUp = false;
+        EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
         shield.color = Color.white;
     }
@@ -287,6 +303,16 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer GetShieldSpriteRenderer()
     {
         return shield;
+    }
+
+    public Transform GetShieldTransform()
+    {
+        return shieldTransform;
+    }
+
+    public void SetBallHeld(Ball ball)
+    {
+        ballHeld = ball;
     }
 
     public EPowerUp GetCurrentPowerUp()
