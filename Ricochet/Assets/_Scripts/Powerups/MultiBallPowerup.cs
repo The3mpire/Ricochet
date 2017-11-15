@@ -22,7 +22,7 @@ public class MultiBallPowerup : Powerup
             {
                 PlayerController player = collision.GetComponent<PlayerController>();
 
-                player.GetShieldSpriteRenderer().color = shieldColor;
+                player.GetShield().SetColor(shieldColor);
                 player.ReceivePowerUp(powerUpType);
                 gameManagerInstance.RespawnPowerUp(gameObject);
                 gameObject.SetActive(false);
