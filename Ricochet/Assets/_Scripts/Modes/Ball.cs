@@ -121,7 +121,21 @@ public class Ball : MonoBehaviour {
 		canScore = value;
 	}
 
-	public void SetLastTouchedBy(PlayerController player)
+    public void SetHeld(bool held)
+    {
+        if (held)
+        {
+            body.bodyType = RigidbodyType2D.Kinematic;
+            body.simulated = false;
+        }
+        else
+        {
+            body.bodyType = RigidbodyType2D.Dynamic;
+            body.simulated = true;
+        }
+    }
+
+    public void SetLastTouchedBy(PlayerController player)
 	{
 		if (lastTouchedBy.Count == 0 || player != lastTouchedBy.Last.Value)
 		{
