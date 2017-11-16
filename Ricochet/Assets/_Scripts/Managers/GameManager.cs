@@ -182,6 +182,29 @@ public class GameManager : MonoBehaviour
         playerController.ReceivePowerUp(powerUpType, powerUpShieldColor);
     }
 
+    public void KillZoneCollision(GameObject haplessSoul)
+    {
+        switch (haplessSoul.tag)
+        {
+            case "Player":
+                PlayerController playerController;
+                if (!playerDictionary.TryGetValue(haplessSoul, out playerController))
+                {
+                    playerController = haplessSoul.GetComponent<PlayerController>();
+                    playerDictionary.Add(haplessSoul, playerController);
+                }
+                playerController.PlayerDead();
+                StartCoroutine(RespawnPlayer(playerController));
+                break;
+            case "Ball":
+                haplessSoul.GetComponent<Ball>().OnBallGoalCollision();
+                haplessSoul.SetActive(false);
+                RespawnBall(haplessSoul);
+                break;
+        }
+        
+    }
+
     #endregion
 
     #region Respawners
