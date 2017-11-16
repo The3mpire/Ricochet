@@ -71,7 +71,9 @@ public class PlayerController : MonoBehaviour
 
     #region Hidden Variables
     private GameManager gameManagerInstance;
-
+    private Shield shield;
+    private Ball ballHeld;
+    
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
@@ -103,6 +105,7 @@ public class PlayerController : MonoBehaviour
         timeSinceDash = 0f;
         rightStickHorz = 1;
         rightStickVert = 0;
+        shield = GetComponent<Shield>();
     }
 
     private void Start()
@@ -243,15 +246,27 @@ public class PlayerController : MonoBehaviour
             {
                 shieldTransform.localRotation = Quaternion.Euler(new Vector3(shieldTransform.localRotation.eulerAngles.x, shieldTransform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
             }
+            if (ballHeld != null)
+            {
+                if (rightStickHorz > 0)
+                {
+                    ballHeld.transform.localRotation = Quaternion.Euler(new Vector3(ballHeld.transform.localRotation.eulerAngles.x, ballHeld.transform.localRotation.eulerAngles.y, -Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
+                }
+                else
+                {
+                    ballHeld.transform.localRotation = Quaternion.Euler(new Vector3(ballHeld.transform.localRotation.eulerAngles.x, ballHeld.transform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
+                }
+            }
         }
     }
     #endregion
 
-    #region External Functions
-    public void ReceivePowerUp(EPowerUp powerUp)
+#region External Functions
+    public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
     {
         hasPowerUp = true;
         currPowerUp = powerUp;
+        shield.SetColor(shieldColor);
     }
 
     public void RemovePowerUp()
@@ -280,6 +295,16 @@ public class PlayerController : MonoBehaviour
     public void SetInfiniteFuel(bool active)
     {
         infiniteFuel = active;
+    }
+
+    public Transform GetShieldTransform()
+    {
+        return shieldTransform;
+    }
+
+    public void SetBallHeld(Ball ball)
+    {
+        ballHeld = ball;
     }
 
     public EPowerUp GetCurrentPowerUp()

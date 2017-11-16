@@ -11,8 +11,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
     private ModeManager modeManager;
+    [Tooltip("Drag the powerup manager here")]
+    [SerializeField]
+    private PowerUpManager powerUpManager;
 
-    [Header("Respawn Timers")]
+    [Header("Timers")]
     [Tooltip("How long the power up takes to respawn in seconds")]
     [SerializeField]
     private float powerUpRespawnTime = 10f;
@@ -22,6 +25,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("How long the ball takes to respawn in seconds")]
     [SerializeField]
     private float ballRespawnTime = 2f;
+    [Tooltip("How long a player can hold a ball with CatchNThrow")]
+    [SerializeField]
+    private float ballHoldTime = 1f;
+
     [Header("Respawn Zones")]
     [Tooltip("Locations for where Red Team can spawn")]
     [SerializeField]
@@ -109,12 +116,22 @@ public class GameManager : MonoBehaviour
             playerDictionary.Add(shield, playerController);
         }
 
-        switch (playerController.GetCurrentPowerUp())
+        EPowerUp currentPowerUp = playerController.GetCurrentPowerUp();
+        if (currentPowerUp != EPowerUp.None)
         {
-            case EPowerUp.Multiball:
-                playerController.RemovePowerUp();
-                SpawnMultipleBalls(ball);
-                break;
+            playerController.RemovePowerUp();
+            switch (currentPowerUp)
+            {
+                case EPowerUp.Multiball:
+                    SpawnMultipleBalls(ball);
+                    break;
+                case EPowerUp.CatchNThrow:
+                    playerController.SetBallHeld(ball);
+                    ball.SetHeld(true);
+                    ball.transform.SetParent(playerController.GetShieldTransform());
+                    StartCoroutine(DropBallCoroutine(playerController, ball));
+                    break;
+            }
         }
 
         // The last player to touch the ball 
@@ -153,6 +170,21 @@ public class GameManager : MonoBehaviour
         {
             ChangeScene();
         }
+    }
+
+    public void PlayerPowerUpCollision(GameObject player, PowerUp powerUp)
+    {
+        PlayerController playerController;
+
+        // If player is not cached, cache them
+        if (!playerDictionary.TryGetValue(player, out playerController))
+        {
+            playerController = player.GetComponent<PlayerController>();
+            playerDictionary.Add(player, playerController);
+        }
+        EPowerUp powerUpType = powerUp.GetPowerUpType();
+        Color powerUpShieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
+        playerController.ReceivePowerUp(powerUpType, powerUpShieldColor);
     }
 
     #endregion
@@ -212,6 +244,28 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
+    }
+
+    private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)
+    {
+        yield return new WaitForSeconds(ballHoldTime);
+
+        player.SetBallHeld(null);
+        ball.SetHeld(false);
+        ball.transform.SetParent(null, true);
+    }
+    #endregion
+
+    #region Rerouters
+
+    public Color GetPowerUpColor(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpColor(powerup);
+    }
+
+    public Color GetPowerUpShieldColor(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpShieldColor(powerup);
     }
 
     #endregion
