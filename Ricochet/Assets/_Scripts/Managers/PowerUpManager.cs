@@ -10,7 +10,7 @@ public class PowerUpManager : MonoBehaviour
     private Color multiBallPowerUpColor;
     [Tooltip("The color of shields with a multiball powerup")]
     [SerializeField]
-    private Color multiBallShieldColor = Color.black;
+    private Color multiBallShieldColor = Color.red;
 
     [Header("Catch N Throw")]
     [Tooltip("The color of catch n throw powerup objects")]
@@ -19,6 +19,14 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("The color of shields with a catch n throw powerup")]
     [SerializeField]
     private Color catchNThrowShieldColor = Color.red;
+
+    [Header("Circle Shield")]
+    [Tooltip("The color of circle shield powerup objects")]
+    [SerializeField]
+    private Color circleShieldColor;
+    [Tooltip("The color of shields with a catch n throw powerup")]
+    [SerializeField]
+    private Color circleShieldShieldColor = Color.blue;
     #endregion
 
     #region External Functions
@@ -30,6 +38,8 @@ public class PowerUpManager : MonoBehaviour
                 return multiBallPowerUpColor;
             case EPowerUp.CatchNThrow:
                 return catchNThrowPowerUpColor;
+            case EPowerUp.CircleShield:
+                return circleShieldColor;
             default:
                 return Color.white;
         }
@@ -43,6 +53,8 @@ public class PowerUpManager : MonoBehaviour
                 return multiBallShieldColor;
             case EPowerUp.CatchNThrow:
                 return catchNThrowShieldColor;
+            case EPowerUp.CircleShield:
+                return circleShieldShieldColor;
             default:
                 return Color.white;
         }

@@ -72,23 +72,26 @@ public class Ball : MonoBehaviour {
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D col)
-	{
-		Collider2D hitCollider = col.collider;
-		if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-		{
-			if (hitCollider.tag == "Player")
-			{
-				gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        Collider2D hitCollider = col.collider;
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            if (hitCollider.tag == "Player")
+            {
+                gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
 
-			}
-			else if (hitCollider.tag == "Shield")
-			{
-				gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
-			}
-		}
-
-	}
+            }
+            else if (hitCollider.tag == "Shield")
+            {
+                gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
+            }
+            else if (hitCollider.tag == "SecondaryShield")
+            {
+                gameManagerInstance.BallSecondaryShieldCollision(hitCollider.gameObject, this);
+            }
+        }
+    }
 
 	#endregion
 
