@@ -67,13 +67,19 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
+
+    [Header("Secondary Items")]
+    [Tooltip("Drag the player's power up circle shield here")]
+    [SerializeField]
+    private GameObject circleShield;
     #endregion
 
     #region Hidden Variables
     private GameManager gameManagerInstance;
     private Shield shield;
+
     private Ball ballHeld;
-    
+
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
@@ -261,7 +267,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-#region External Functions
+    #region External Functions
     public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
     {
         hasPowerUp = true;
@@ -272,6 +278,7 @@ public class PlayerController : MonoBehaviour
     public void RemovePowerUp()
     {
         hasPowerUp = false;
+        EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
     }
 
@@ -288,6 +295,16 @@ public class PlayerController : MonoBehaviour
         timeSinceDash = 0f;
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
+    }
+
+    public void EnableSecondaryShield(bool status)
+    {
+        switch (currPowerUp)
+        {
+            case EPowerUp.CircleShield:
+                circleShield.SetActive(status);
+                break;
+        }
     }
     #endregion
 
@@ -315,6 +332,26 @@ public class PlayerController : MonoBehaviour
     public ETeam GetTeamNumber()
     {
         return team;
+    }
+
+    public void SetBodyType(Sprite image)
+    {
+        sprite.sprite = image;
+    }
+
+    public void SetBodyScale(float scaleSize)
+    {
+        sprite.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
+    }
+
+    public void SetPlayerNumber(int num)
+    {
+        playerNumber = num;
+    }
+
+    public void SetTeam(ETeam teamValue)
+    {
+        team = teamValue;
     }
 
     internal float GetMaxFuel()
