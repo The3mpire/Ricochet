@@ -69,17 +69,23 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
-#endregion
 
-#region Hidden Variables
+    [Header("Secondary Items")]
+    [Tooltip("Drag the player's power up circle shield here")]
+    [SerializeField]
+    private GameObject circleShield;
+    #endregion
+
+ #region Hidden Variables
     private GameManager gameManagerInstance;
+
 
     private Ball ballHeld;
     
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
-    
+
     private bool hasPowerUp;
     private bool dashing;
     private bool grounded;
@@ -94,57 +100,57 @@ public class PlayerController : MonoBehaviour
     private float leftStickVert;
     private float rightStickHorz;
     private float rightStickVert;
-#endregion
+ #endregion
 
 #region Monobehaviour
-    private void Awake()
-    {
-        killList = new List<PlayerController>();
-        currentFuel = startFuel;
-        maxFuel = startFuel;
-        timeSinceDash = 0f;
-    }
+private void Awake()
+{
+    killList = new List<PlayerController>();
+    currentFuel = startFuel;
+    maxFuel = startFuel;
+    timeSinceDash = 0f;
+}
 
-    private void Start()
-    {
-        player = ReInput.players.GetPlayer(playerNumber - 1);
-        body.color = PlayerColorData.getColor(playerNumber, team);
-    }
+private void Start()
+{
+    player = ReInput.players.GetPlayer(playerNumber - 1);
+    body.color = PlayerColorData.getColor(playerNumber, team);
+}
 	
-	private void Update()
-    {
-        // Update vars
-        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-        jumpButtonHeld = false;
-        rigid.gravityScale = gravScale;
-        leftStickHorz = player.GetAxis("MoveHorizontal");
-        leftStickVert = player.GetAxis("MoveVertical");
-        rightStickHorz = player.GetAxis("RightStickHorizontal");
-        rightStickVert = player.GetAxis("RightStickVertical");
-        timeSinceDash += Time.deltaTime;
+private void Update()
+{
+    // Update vars
+    grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+    jumpButtonHeld = false;
+    rigid.gravityScale = gravScale;
+    leftStickHorz = player.GetAxis("MoveHorizontal");
+    leftStickVert = player.GetAxis("MoveVertical");
+    rightStickHorz = player.GetAxis("RightStickHorizontal");
+    rightStickVert = player.GetAxis("RightStickVertical");
+    timeSinceDash += Time.deltaTime;
         
-        // Check if still dashing
-        if (timeSinceDash >= dashTime)
-        {
-            dashing = false;
-        }
-        
-        MovementPreperation();
-        DashCheck();
-        RotateShield();
-        Flip();
-    }
-
-    private void FixedUpdate()
+    // Check if still dashing
+    if (timeSinceDash >= dashTime)
     {
-        Move();
-
-        // Add dash velocity to movement
-        if (dashing)
-        {
-            rigid.velocity += dashDirection * dashSpeed;
-        }
+        dashing = false;
     }
+        
+    MovementPreperation();
+    DashCheck();
+    RotateShield();
+    Flip();
+}
+
+private void FixedUpdate()
+{
+    Move();
+
+    // Add dash velocity to movement
+    if (dashing)
+    {
+        rigid.velocity += dashDirection * dashSpeed;
+    }
+}
 #endregion
 
 #region Helpers
@@ -262,6 +268,7 @@ public class PlayerController : MonoBehaviour
     public void RemovePowerUp()
     {
         hasPowerUp = false;
+        EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
         shield.color = Color.white;
     }
@@ -279,6 +286,16 @@ public class PlayerController : MonoBehaviour
         timeSinceDash = 0f;
         rigid.velocity = Vector3.zero;
         gameObject.SetActive(false);
+    }
+
+    public void EnableSecondaryShield(bool status)
+    {
+        switch (currPowerUp)
+        {
+            case EPowerUp.CircleShield:
+                circleShield.SetActive(status);
+                break;
+        }
     }
 #endregion
 
@@ -306,6 +323,26 @@ public class PlayerController : MonoBehaviour
     public ETeam GetTeamNumber()
     {
         return team;
+    }
+
+    public void SetBodyType(Sprite image)
+    {
+        body.sprite = image;
+    }
+
+    public void SetBodyScale(float scaleSize)
+    {
+        body.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
+    }
+
+    public void SetPlayerNumber(int num)
+    {
+        playerNumber = num;
+    }
+
+    public void SetTeam(ETeam teamValue)
+    {
+        team = teamValue;
     }
 
     internal float GetMaxFuel()

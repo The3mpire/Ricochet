@@ -75,7 +75,7 @@ public class MenuManager : MonoBehaviour
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            gameManagerInstance.StartGame();
+            gameManagerInstance.CharacterSelect();
         }
     }
     
