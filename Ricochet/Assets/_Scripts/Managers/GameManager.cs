@@ -315,7 +315,6 @@ public class GameManager : MonoBehaviour
                 RespawnBall(haplessSoul);
                 break;
         }
-        
     }
 
     #endregion
