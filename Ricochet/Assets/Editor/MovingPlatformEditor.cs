@@ -8,6 +8,7 @@ using UnityEditor;
 public class MovingPlatformEditor : Editor
 {
     private MovingPlatform platform;
+    private Transform platformTransform;
 
     private SerializedProperty useRandom;
     private SerializedProperty minWaitTime;
@@ -18,6 +19,7 @@ public class MovingPlatformEditor : Editor
     private void OnEnable()
     {
         platform = target as MovingPlatform;
+        platformTransform = platform.transform;
 
         useRandom = serializedObject.FindProperty("useRandomWaitTime");
         minWaitTime = serializedObject.FindProperty("minWaitTime");
@@ -29,6 +31,11 @@ public class MovingPlatformEditor : Editor
         {
             platform.transform.hideFlags = HideFlags.HideInInspector;
         }
+    }
+
+    public void OnDestroy()
+    {
+        platformTransform.hideFlags = HideFlags.None;
     }
 
     public override void OnInspectorGUI()
