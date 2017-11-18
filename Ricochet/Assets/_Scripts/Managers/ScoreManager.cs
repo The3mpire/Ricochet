@@ -13,12 +13,14 @@ public class ScoreManager : ModeManager
     [Tooltip("Drag the Score UI's Team One Text here")]
     [SerializeField]
     private Text BlueTeamText;
+    [Tooltip("Max score per scene")]
+    [SerializeField]
+    private int scoreGoal = 20;
     #endregion
 
     #region Hidden Variables
     private int redTeamScore = 0;
     private int blueTeamScore = 0;
-    private int scoreGoal = 2;
     #endregion
 
     public override bool UpdateScore(Enumerables.ETeam team, int value)
