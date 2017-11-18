@@ -425,12 +425,12 @@ public class GameManager : MonoBehaviour
             winningTeamText.gameObject.SetActive(true);
             if (winningTeam == ETeam.BlueTeam)
             {
-                winningTeamText.text = "Congradulations Blue Team!";
+                winningTeamText.text = "Congratulations Blue Team!";
                 winningTeamText.color = Color.blue;
             }
             else if (winningTeam == ETeam.RedTeam)
             {
-                winningTeamText.text = "Congradulations Red Team!";
+                winningTeamText.text = "Congratulations Red Team!";
                 winningTeamText.color = Color.red;
             }
             else
