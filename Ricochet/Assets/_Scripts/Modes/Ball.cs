@@ -14,12 +14,23 @@ public class Ball : MonoBehaviour {
 	[Tooltip("The slowest the ball can travel")]
 	[SerializeField]
 	private float minimumSpeed = 5f;
-	[Tooltip("How quickly the ball slows to its normal speed after accelerating")]
-	[SerializeField]
-	private float slowRate = 1f;
 	[Tooltip("The fastest the ball can travel")]
 	[SerializeField]
 	private float maximumSpeed = 27f;
+
+	[Tooltip("Enabled: the ball slows according to an inverse square curve\n" +
+		"Disabled: the ball slows linearly")]
+	[SerializeField]
+	private bool curveSlow = false;
+	[Tooltip("How quickly the ball slows to its normal speed after accelerating\n" +
+		"Higher number means velocity decreases faster")]
+	[SerializeField]
+	private float slowRate = 1f;
+	[Tooltip("Adjust if using curve slowing; ignored if not\n" +
+		"Higher number means velocity decreases slower")]
+	[SerializeField]
+	private float curveModifier = 10f;
+
 
 	[Tooltip("Whether this ball should respawn")]
 	[SerializeField]
@@ -40,6 +51,7 @@ public class Ball : MonoBehaviour {
 	#region Hidden Variables
 	private GameManager gameManagerInstance;
 	private LinkedList<PlayerController> lastTouchedBy;
+	private float curveTimer;
 	#endregion
 
 	#region MonoBehaviour
@@ -52,6 +64,7 @@ public class Ball : MonoBehaviour {
 	private void OnEnable()
 	{
 		body.velocity = initialDirection.normalized * minimumSpeed;
+		curveTimer = slowRate;
 	}
 
 	private void FixedUpdate()
@@ -68,12 +81,22 @@ public class Ball : MonoBehaviour {
 		}
 		else if (body.velocity.magnitude > minimumSpeed)
 		{
-			body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * Time.deltaTime);
+			if (curveSlow)
+			{
+				float velDiff = body.velocity.magnitude - minimumSpeed;
+				body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * velDiff * Time.deltaTime / curveModifier);
+			}
+			else
+			{
+				body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * Time.deltaTime);
+			}
 		}
+		Debug.Log (body.velocity.magnitude);
 	}
 
     private void OnCollisionEnter2D(Collision2D col)
     {
+		curveTimer = slowRate;
         Collider2D hitCollider = col.collider;
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
