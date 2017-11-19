@@ -20,7 +20,7 @@ public class ScoreManager : ModeManager
     private int blueTeamScore = 0;
     #endregion
 
-    public override bool UpdateScore(Enumerables.ETeam team, int value, int matchLimit)
+    public override bool UpdateScore(Enumerables.ETeam team, int value)
     {
         switch (team)
         {
@@ -30,29 +30,25 @@ public class ScoreManager : ModeManager
                 blueTeamScore += value;
                 GameData.blueTeamScore += value;
                 BlueTeamText.text = blueTeamScore.ToString();
-                return blueTeamScore % GameData.matchScoreLimit == 0;
+                return CheckWin(GameData.blueTeamScore);
             case ETeam.BlueTeam:
                 redTeamScore += value;
                 GameData.redTeamScore += value;
                 RedTeamText.text = redTeamScore.ToString();
-                return redTeamScore % GameData.matchScoreLimit == 0;
+                return CheckWin(GameData.redTeamScore);
         }
         return false;
     }
 
-    public override Enumerables.ETeam ReturnWinningTeam()
+    public bool CheckWin(int score)
     {
-        if(redTeamScore > blueTeamScore)
+        if (GameData.matchScoreLimit > 0)
         {
-            return ETeam.RedTeam;
-        }
-        else if(redTeamScore < blueTeamScore)
-        {
-            return ETeam.BlueTeam;
+            return score % GameData.matchScoreLimit == 0;
         }
         else
         {
-            return ETeam.None;
+            return false;
         }
     }
 }

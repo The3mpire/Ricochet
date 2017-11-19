@@ -11,6 +11,7 @@ public static class GameData {
 
     #region Game Statistics
     private static int _blueTeamScore, _redTeamScore;
+    private static Enumerables.ETeam _gameWinner;
     private static Dictionary<string, List<string>> _playerKills;
     private static Dictionary<string, int> _playerDeaths;
     #endregion
@@ -29,7 +30,7 @@ public static class GameData {
             {
                 _matchScoreLimit = 10;
             }
-            else if(value > 100)
+            else if (value > 100)
             {
                 _matchScoreLimit = 100;
             }
@@ -119,6 +120,11 @@ public static class GameData {
             }
         }
     }
+    public static Enumerables.ETeam gameWinner
+    {
+        get { return _gameWinner; }
+        set { _gameWinner = value; }
+    }
     public static Dictionary<string, List<string>> playerKills
     {
         get
@@ -140,6 +146,26 @@ public static class GameData {
         {
             _playerDeaths = value;
         }
+    }
+    #endregion
+
+    #region Functions
+    public static void ResetGameSetup()
+    {
+        _matchScoreLimit = 0;
+        _matchTimeLimit = 0;
+        _playerCount = 0;
+    }
+    /// <summary>
+    /// Resets all variables in Game Statistics region
+    /// </summary>
+    public static void ResetGameStatistics()
+    {
+        _blueTeamScore = 0;
+        _redTeamScore = 0;
+        _gameWinner = Enumerables.ETeam.None;
+        _playerKills = null;
+        _playerDeaths = null;
     }
     #endregion
 }

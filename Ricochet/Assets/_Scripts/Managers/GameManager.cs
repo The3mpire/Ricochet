@@ -274,7 +274,7 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        if (!modeManager.UpdateScore(team, points, scoreLimit))
+        if (!modeManager.UpdateScore(team, points))
         {
             ball.GetComponent<Ball>().OnBallGoalCollision();
             ball.SetActive(false);
@@ -282,6 +282,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            GameData.gameWinner = team;
             EndMatch();
             ChangeScene();
         }
@@ -430,31 +431,32 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //if we want to disable the players during the win screen not sure exactly what to do here so need some team input
-            foreach (KeyValuePair<GameObject, PlayerController> player in playerDictionary)
-            {
-                player.Value.enabled = false;
-            }
-            Enumerables.ETeam winningTeam = modeManager.ReturnWinningTeam();
-            Debug.Log(winningTeam);
-            gameMenuUI.gameObject.SetActive(true);
-            winningTeamText.gameObject.SetActive(true);
-            if (winningTeam == ETeam.BlueTeam)
-            {
-                winningTeamText.text = "Congradulations Blue Team!";
-                winningTeamText.color = Color.blue;
-            }
-            else if (winningTeam == ETeam.RedTeam)
-            {
-                winningTeamText.text = "Congradulations Red Team!";
-                winningTeamText.color = Color.red;
-            }
-            else
-            {
-                winningTeamText.text = "Draw...";
-                winningTeamText.color = Color.white;
-            }
-            StartCoroutine(DelayedWinScreen());
+            EndMatch();
+            ////if we want to disable the players during the win screen not sure exactly what to do here so need some team input
+            //foreach (KeyValuePair<GameObject, PlayerController> player in playerDictionary)
+            //{
+            //    player.Value.enabled = false;
+            //}
+            //Enumerables.ETeam winningTeam = modeManager.ReturnWinningTeam();
+            //Debug.Log(winningTeam);
+            //gameMenuUI.gameObject.SetActive(true);
+            //winningTeamText.gameObject.SetActive(true);
+            //if (winningTeam == ETeam.BlueTeam)
+            //{
+            //    winningTeamText.text = "Congradulations Blue Team!";
+            //    winningTeamText.color = Color.blue;
+            //}
+            //else if (winningTeam == ETeam.RedTeam)
+            //{
+            //    winningTeamText.text = "Congradulations Red Team!";
+            //    winningTeamText.color = Color.red;
+            //}
+            //else
+            //{
+            //    winningTeamText.text = "Draw...";
+            //    winningTeamText.color = Color.white;
+            //}
+            //StartCoroutine(DelayedWinScreen());
         }
     }
 
