@@ -13,6 +13,9 @@ public class ScoreManager : ModeManager
     [Tooltip("Drag the Score UI's Team One Text here")]
     [SerializeField]
     private Text BlueTeamText;
+    [Tooltip("Max score per scene")]
+    [SerializeField]
+    private int scoreGoal = 20;
     #endregion
 
     #region Hidden Variables

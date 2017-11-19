@@ -19,7 +19,6 @@ public class Goal : MonoBehaviour
     private GameManager gameManagerInstance = null;
 
     #region MonoBehaviour
-
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if(gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))

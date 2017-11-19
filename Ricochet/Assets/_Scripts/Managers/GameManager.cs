@@ -214,6 +214,11 @@ public class GameManager : MonoBehaviour
         if (!playerDictionary.TryGetValue(shield, out playerController))
         {
             playerController = shield.GetComponent<Shield>().GetPlayer();
+            if (playerController == null)
+            {
+                return;
+            }
+
             playerDictionary.Add(shield, playerController);
         }
 
@@ -331,7 +336,6 @@ public class GameManager : MonoBehaviour
                 RespawnBall(haplessSoul);
                 break;
         }
-        
     }
 
     #endregion
@@ -399,8 +403,8 @@ public class GameManager : MonoBehaviour
                 playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -432,31 +436,6 @@ public class GameManager : MonoBehaviour
         else
         {
             EndMatch();
-            ////if we want to disable the players during the win screen not sure exactly what to do here so need some team input
-            //foreach (KeyValuePair<GameObject, PlayerController> player in playerDictionary)
-            //{
-            //    player.Value.enabled = false;
-            //}
-            //Enumerables.ETeam winningTeam = modeManager.ReturnWinningTeam();
-            //Debug.Log(winningTeam);
-            //gameMenuUI.gameObject.SetActive(true);
-            //winningTeamText.gameObject.SetActive(true);
-            //if (winningTeam == ETeam.BlueTeam)
-            //{
-            //    winningTeamText.text = "Congradulations Blue Team!";
-            //    winningTeamText.color = Color.blue;
-            //}
-            //else if (winningTeam == ETeam.RedTeam)
-            //{
-            //    winningTeamText.text = "Congradulations Red Team!";
-            //    winningTeamText.color = Color.red;
-            //}
-            //else
-            //{
-            //    winningTeamText.text = "Draw...";
-            //    winningTeamText.color = Color.white;
-            //}
-            //StartCoroutine(DelayedWinScreen());
         }
     }
 
