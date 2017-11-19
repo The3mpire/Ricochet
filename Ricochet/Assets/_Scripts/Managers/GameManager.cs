@@ -78,6 +78,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float character2BodyScale;
 
+    [Tooltip("Score limit to win the match")]
+    [SerializeField]
+    private int scoreLimit;
+    [Tooltip("Time limit for the match")]
+    [SerializeField]
+    private int timeLimit;
     #endregion
 
     #region Hidden Variables
@@ -139,6 +145,8 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
+        GameData.matchScoreLimit = scoreLimit;
+        GameData.matchTimeLimit = timeLimit;
     }
 
     void Update()
@@ -188,6 +196,11 @@ public class GameManager : MonoBehaviour
     private void ChangeScene()
     {
         SceneManager.LoadSceneAsync(Random.Range(1, SceneManager.sceneCountInBuildSettings));
+    }
+
+    private void EndMatch()
+    {
+        SceneManager.LoadSceneAsync("EndGame");
     }
     #endregion
 
@@ -264,12 +277,20 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RespawnPlayer(playerController));
     }
 
-    public void BallGoalCollision(GameObject ball, ETeam team, int value)
+    public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        modeManager.UpdateScore(team, value);
-        ball.GetComponent<Ball>().OnBallGoalCollision();
-        ball.SetActive(false);
-        RespawnBall(ball);
+        if (!modeManager.UpdateScore(team, points))
+        {
+            ball.GetComponent<Ball>().OnBallGoalCollision();
+            ball.SetActive(false);
+            RespawnBall(ball);
+        }
+        else
+        {
+            GameData.gameWinner = team;
+            EndMatch();
+            ChangeScene();
+        }
     }
 
     public void PlayerPowerUpCollision(GameObject player, PowerUp powerUp)
@@ -414,31 +435,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //if we want to disable the players during the win screen not sure exactly what to do here so need some team input
-            foreach (KeyValuePair<GameObject, PlayerController> player in playerDictionary)
-            {
-                player.Value.enabled = false;
-            }
-            Enumerables.ETeam winningTeam = modeManager.ReturnWinningTeam();
-            Debug.Log(winningTeam);
-            gameMenuUI.gameObject.SetActive(true);
-            winningTeamText.gameObject.SetActive(true);
-            if (winningTeam == ETeam.BlueTeam)
-            {
-                winningTeamText.text = "Congratulations Blue Team!";
-                winningTeamText.color = Color.blue;
-            }
-            else if (winningTeam == ETeam.RedTeam)
-            {
-                winningTeamText.text = "Congratulations Red Team!";
-                winningTeamText.color = Color.red;
-            }
-            else
-            {
-                winningTeamText.text = "Draw...";
-                winningTeamText.color = Color.white;
-            }
-            StartCoroutine(DelayedWinScreen());
+            EndMatch();
         }
     }
 
