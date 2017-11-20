@@ -76,7 +76,7 @@ public class _UICharacterSelectControler : MonoBehaviour
             {
                 model.ToggleReady(i + 1, false);
             }
-            if(input.GetButtonDown("Start Button"))
+            if(input.GetButtonDown("Start"))
             {
                 model.StartGame();
             }
@@ -86,8 +86,6 @@ public class _UICharacterSelectControler : MonoBehaviour
 
     private void HandOffInput(int playerID, Player player)
     {
-        Debug.Log("PLAYER: " + playerID);
-
         double x = player.GetAxis("MoveHorizontal");
         double y = player.GetAxis("MoveVertical");
 

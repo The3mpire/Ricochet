@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the powerup manager here")]
     [SerializeField]
     private PowerUpManager powerUpManager;
+    [Tooltip("Drag the menu manager here")]
+    [SerializeField]
+    private MenuManager menuManager;
 
     [Header("Game Match Variables")]
     [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
@@ -185,12 +188,24 @@ public class GameManager : MonoBehaviour
     public void StartGame(Dictionary<int, PlayerData> playerData)
     {
         playerSelectedData = playerData;
-        AsyncOperation async = SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
+        SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
     }
 
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void PauseUnpauseGame()
+    {
+        if(menuManager.GetPaused())
+        {
+            menuManager.UnpauseGame();
+        }
+        else
+        {
+            menuManager.PauseGame();
+        }
     }
 
     private void ChangeScene()
