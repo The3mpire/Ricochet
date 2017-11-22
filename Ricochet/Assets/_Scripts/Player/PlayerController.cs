@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed while grounded")]
     [SerializeField]
     private float groundedMoveSpeed = 12.5f;
+    [Tooltip("How quickly the player can accelerate")]
+    [SerializeField] private float inertia = 1.5f;
 
     [Header("Fuel Settings")]
     [Tooltip("Time in seconds of jetback fuel")]
@@ -89,6 +91,8 @@ public class PlayerController : MonoBehaviour
     private float maxFuel;
     private float timeSinceDash;
     private Vector2 dashDirection;
+    private int inertiaTime;
+    private bool inertiaSwitch;
 
     private float leftStickHorz;
     private float leftStickVert;
@@ -103,6 +107,7 @@ public class PlayerController : MonoBehaviour
         currentFuel = startFuel;
         maxFuel = startFuel;
         timeSinceDash = 0f;
+        inertiaTime = 2;
     }
 
     private void Start()
@@ -116,7 +121,6 @@ public class PlayerController : MonoBehaviour
         // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
         jumpButtonHeld = false;
-        rigid.gravityScale = gravScale;
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         rightStickHorz = player.GetAxis("RightStickHorizontal");
@@ -195,9 +199,11 @@ public class PlayerController : MonoBehaviour
 
     private void MovementPreperation()
     {
-        if (player.GetButton("Jump") && currentFuel > 0)
+        bool jumping = player.GetButton("Jump");
+        InertiaFunction("logarithmic",jumping);
+
+        if (jumping && currentFuel > 0)
         {
-            rigid.gravityScale = 0;
             jumpButtonHeld = true;
             grounded = false;
             currentFuel -= Time.deltaTime;
@@ -222,6 +228,7 @@ public class PlayerController : MonoBehaviour
             timeSinceDash = 0f;
         }
     }
+
     private void RotateShield()
     {
         //make sure there is magnitude
@@ -249,7 +256,37 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-#endregion
+
+    private void InertiaFunction(string function, bool acc)
+    {
+        switch (function)
+        {
+            case "linear":
+                if (acc)
+                {
+                    rigid.gravityScale += (rigid.gravityScale > 0) ? -inertia : 0 - rigid.gravityScale;
+                }
+                else
+                {
+                    rigid.gravityScale += (rigid.gravityScale < gravScale) ? inertia : gravScale - rigid.gravityScale;
+                }
+                break;
+            case "logarithmic":
+                inertiaTime = (acc == inertiaSwitch) ? (inertiaTime + 1) : 1;
+                inertiaSwitch = acc;
+                if (acc)
+                {
+                    rigid.gravityScale = (rigid.gravityScale <= 0) ? 0 : rigid.gravityScale - Mathf.Log((inertiaTime / inertia) + 1);
+                }
+                else
+                {
+                    rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
+                }
+                break;
+        }
+
+    }
+    #endregion
 
 #region External Functions
     public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
