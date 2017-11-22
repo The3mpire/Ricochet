@@ -14,4 +14,12 @@ public class KillZone : MonoBehaviour {
             gameManagerInstance.KillZoneCollision(hitCollider.gameObject);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            gameManagerInstance.KillZoneCollision(other.gameObject);
+        }
+    }
 }

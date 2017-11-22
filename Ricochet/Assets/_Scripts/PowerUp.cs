@@ -31,6 +31,7 @@ public class PowerUp : MonoBehaviour
                 gameManagerInstance.PlayerPowerUpCollision(collider.gameObject, this);
                 gameManagerInstance.RespawnPowerUp(gameObject);
                 gameObject.SetActive(false);
+                
             }
         }
     }
