@@ -5,90 +5,44 @@ using Rewired;
 
 public class CharSelect_Assign : MonoBehaviour {
 
-    // Static
-
-    private static CharSelect_Assign instance;
-
-    public static Rewired.Player GetRewiredPlayer(int gamePlayerId)
-    {
-        if (!Rewired.ReInput.isReady) return null;
-        if (instance == null)
-        {
-            Debug.LogError("Not initialized. Do you have a PressStartToJoinPlayerSelector in your scene?");
-            return null;
-        }
-        for (int i = 0; i < instance.playerMaps.Count; i++)
-        {
-            if (instance.playerMaps[i].gamePlayerId == gamePlayerId) return ReInput.players.GetPlayer(instance.playerMaps[i].rewiredPlayerId);
-        }
-        return null;
-    }
-
-    // Instance
-    [Tooltip("Maximum number of players allowed")]
-    [SerializeField]
-    private int maxPlayers = 4;
-
-    private List<PlayerMap> playerMaps; // Maps Rewired Player ids to game player ids
-    private int gamePlayerIdCounter = 0;
-
+#region MonoBehaviour
     void Awake()
     {
-        playerMaps = new List<PlayerMap>();
-        instance = this; // set up the singleton
-    }
+        ReInput.ControllerConnectedEvent += OnControllerConnected;
 
-    void Update()
-    {
-        
-        // Watch for JoinGame action in each Player
-        for (int i = 0; i < ReInput.players.playerCount; i++)
+        // Assign each Joystick to a Player initially
+        foreach (Joystick j in ReInput.controllers.Joysticks)
         {
-            if (ReInput.players.GetPlayer(i).GetButtonDown("JoinGame"))
+            if (ReInput.controllers.IsJoystickAssigned(j))
             {
-                AssignNextPlayer(i);
+                Debug.Log("Controller already assigned.");
+                continue;
             }
+            
+            AssignJoystickToNextOpenPlayer(j);
         }
     }
-
-    void AssignNextPlayer(int rewiredPlayerId)
+#endregion
+    #region Rewired
+    void OnControllerConnected(ControllerStatusChangedEventArgs args)
     {
-        if (playerMaps.Count >= maxPlayers)
+        if (args.controllerType != ControllerType.Joystick) return;
+        
+        AssignJoystickToNextOpenPlayer(ReInput.controllers.GetJoystick(args.controllerId));
+    }
+    #endregion
+    #region Helpers
+    void AssignJoystickToNextOpenPlayer(Joystick j)
+    {
+        foreach (Player p in ReInput.players.Players)
         {
-            Debug.LogError("Max player limit already reached!");
+            if (p.controllers.joystickCount > 0)
+            {
+                continue;
+            }
+            p.controllers.AddController(j, true);
             return;
         }
-
-        int gamePlayerId = GetNextGamePlayerId();
-        // Add the Rewired Player as the next open game player slot
-        playerMaps.Add(new PlayerMap(rewiredPlayerId, gamePlayerId));
-
-        Player rewiredPlayer = ReInput.players.GetPlayer(rewiredPlayerId);
-
-        // Disable the Assignment map category in Player so no more JoinGame Actions return
-        rewiredPlayer.controllers.maps.SetMapsEnabled(false, "Assignment");
-
-        // Enable UI control for this Player now that he has joined
-        rewiredPlayer.controllers.maps.SetMapsEnabled(true, "Default");
-
-        Debug.Log("Added Rewired Player id " + rewiredPlayerId + " to game player " + gamePlayerId);
     }
-
-    private int GetNextGamePlayerId()
-    {
-        return gamePlayerIdCounter++;
-    }
-
-    // This class is used to map the Rewired Player Id to your game player id
-    private class PlayerMap
-    {
-        public int rewiredPlayerId;
-        public int gamePlayerId;
-
-        public PlayerMap(int rewiredPlayerId, int gamePlayerId)
-        {
-            this.rewiredPlayerId = rewiredPlayerId;
-            this.gamePlayerId = gamePlayerId;
-        }
-    }
+    #endregion
 }
