@@ -303,6 +303,16 @@ public class PlayerController : MonoBehaviour
                     rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
                 }
                 break;
+            case "none":
+                if (acc)
+                {
+                    rigid.gravityScale = 0;
+                }
+                else
+                {
+                    rigid.gravityScale = 8;
+                }
+                break;
         }
 
     }
