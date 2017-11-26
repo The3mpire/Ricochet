@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
     private float leftStickVert;
     private float rightStickHorz;
     private float rightStickVert;
+    private float leftTriggerAxis;
     #endregion
 
     #region Monobehaviour
@@ -170,14 +171,11 @@ public class PlayerController : MonoBehaviour
 
     private void MovementPreperation()
     {
-        bool jumping = player.GetButton("Jump");
-        InertiaFunction("logarithmic", jumping);
-
-        if (jumping && currentFuel > 0)
+        Debug.Log(currentFuel);
+        if (leftTriggerAxis != 0 && currentFuel > 0)
         {
-            jumpButtonHeld = true;
             grounded = false;
-            currentFuel -= Time.deltaTime;
+            currentFuel -= Time.deltaTime * leftTriggerAxis;
         } // recharge fuel on ground
         else if (grounded && currentFuel < maxFuel)
         {
@@ -187,24 +185,29 @@ public class PlayerController : MonoBehaviour
         {
             currentFuel += airRechargeRate * Time.deltaTime;
         }
+        leftTriggerAxis = player.GetAxis("Jetpack");
+        InertiaFunction("logarithmic", leftTriggerAxis != 0);
     }
 
     private void Move()
     {
         Vector2 moveDirection;
-        if (jumpButtonHeld)
+        float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
+
+        if (leftTriggerAxis != 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
+            moveDirection *= fuelFactor;
 
             // If there is no directional input, just go up with upThrusterSpeed
             if (moveDirection == Vector2.zero)
             {
-                moveDirection = Vector2.up;
-                rigid.velocity = moveDirection * upThrusterSpeed;
+                moveDirection = Vector2.up * fuelFactor;
+                rigid.velocity = moveDirection * upThrusterSpeed * leftTriggerAxis;
             } // else go in the direction of input with thruster speed
             else
             {
-                rigid.velocity = moveDirection * thrusterSpeed;
+                rigid.velocity = moveDirection * thrusterSpeed * leftTriggerAxis;
             }
         }
         else
