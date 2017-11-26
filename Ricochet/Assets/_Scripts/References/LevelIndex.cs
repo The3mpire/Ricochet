@@ -5,4 +5,5 @@
     public const int LEVEL_TWO = 2;
     public const int CHARACTER_SELECT = 3;
     public const int UP_N_OVER = 4;
+    public const int GAME_SETTINGS = 5;
 }

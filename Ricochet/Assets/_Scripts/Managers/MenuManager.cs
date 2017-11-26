@@ -10,12 +10,16 @@ using Rewired;
 public class MenuManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Tooltip("Whether this scene needs a pause panel")]
+    [SerializeField]
+    private bool hasPausePanel;
     [Tooltip("The Pause gui")]
     [SerializeField]
-    private GameObject pausePanel;
+    private GameObject pausePanel = null;
     [Tooltip("The button that is first highlighted")]
     [SerializeField]
     private GameObject defaultSelectedButton;
+    
     #endregion
 
     #region Hidden Variables
@@ -27,7 +31,8 @@ public class MenuManager : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        if(SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (sceneIndex == LevelIndex.MAIN_MENU || sceneIndex == LevelIndex.GAME_SETTINGS)
         {
             EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
         }
@@ -55,7 +60,10 @@ public class MenuManager : MonoBehaviour
     public void ExitLevel()
     {
         Time.timeScale = 1;
-        pausePanel.SetActive(false);
+        if(hasPausePanel)
+        {
+            pausePanel.SetActive(false);
+        }
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             gameManagerInstance.ExitLevel();

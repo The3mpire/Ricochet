@@ -125,7 +125,6 @@ public class PlayerController : MonoBehaviour
         // see if anybody has paused
         if (player.GetButtonDown("Start"))
         {
-            Debug.Log("pressed start");
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
                 gameManagerInstance.PauseUnpauseGame();
