@@ -91,7 +91,6 @@ public class Ball : MonoBehaviour {
 				body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * Time.deltaTime);
 			}
 		}
-		Debug.Log (body.velocity.magnitude);
 	}
 
     private void OnCollisionEnter2D(Collision2D col)
