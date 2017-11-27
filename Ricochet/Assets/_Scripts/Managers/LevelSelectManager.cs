@@ -8,16 +8,22 @@ using UnityEngine.SceneManagement;
 public class LevelSelectManager : MonoBehaviour
 {
 
+    #region Inspector Variables
     [SerializeField] private RectTransform levelSelectMenu;
     [SerializeField] private RectTransform settingsMenu;
+
     [SerializeField] private GameObject defaultSelectedLevelButton;
     [SerializeField] private GameObject defaultSelectedSettingsItem;
 
     [SerializeField] private string loadLevelName;
+    #endregion
 
+    #region Private Variables
     private bool levelSelected;
     private IList<Player> players;
+    #endregion
 
+    #region Monobehaviours
     private void Awake()
     {
         levelSelected = false;
@@ -50,7 +56,9 @@ public class LevelSelectManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region Public Functions
     public void SetMatchScoreLimit(int value)
     {
         GameData.matchScoreLimit = value;
@@ -80,6 +88,7 @@ public class LevelSelectManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        SceneManager.LoadScene(loadLevelName);
+        SceneManager.LoadSceneAsync(loadLevelName);
     }
+    #endregion
 }

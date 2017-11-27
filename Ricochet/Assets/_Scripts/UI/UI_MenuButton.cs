@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MenuSelectButton : MonoBehaviour, IDeselectHandler, ISelectHandler
+public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
 {
     private Image image;
 
