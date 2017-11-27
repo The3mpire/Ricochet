@@ -58,7 +58,7 @@ public class CharSelect_PlayerController : MonoBehaviour
     private Enumerables.ECharacter GetCursorTarget(GameObject curs)
     {
         //Code to be place in a MonoBehaviour with a GraphicRaycaster component
-        GraphicRaycaster gr = this.GetComponent<GraphicRaycaster>();
+        GraphicRaycaster gr = cursor.GetComponent<GraphicRaycaster>();
         //Create the PointerEventData with null for the EventSystem
         PointerEventData ped = new PointerEventData(null);
         //Set required parameters, in this case, mouse position

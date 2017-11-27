@@ -4,8 +4,12 @@ using UnityEngine;
 using Rewired;
 
 public class CharSelect_Assign : MonoBehaviour {
-
-#region MonoBehaviour
+    #region Private
+    [SerializeField]
+    [Tooltip("Drag player cursor objects here")]
+    private GameObject[] cursors;
+    #endregion
+    #region MonoBehaviour
     void Awake()
     {
         ReInput.ControllerConnectedEvent += OnControllerConnected;
@@ -41,6 +45,7 @@ public class CharSelect_Assign : MonoBehaviour {
                 continue;
             }
             p.controllers.AddController(j, true);
+            //cursors[p.id-1].SetActive(true);
             return;
         }
     }
