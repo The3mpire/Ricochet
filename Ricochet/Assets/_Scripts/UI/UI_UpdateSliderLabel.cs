@@ -23,6 +23,12 @@ public class UI_UpdateSliderLabel : MonoBehaviour, ISelectHandler, IDeselectHand
     {
         lastValue = (int)slider.value;
     }
+
+    private void Start()
+    {
+        GameData.matchScoreLimit = (int)slider.value;
+        GameData.matchTimeLimit = (int)slider.value;
+    }
     #endregion
 
     #region Public Functions
