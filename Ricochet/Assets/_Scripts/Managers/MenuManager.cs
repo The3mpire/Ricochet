@@ -5,20 +5,25 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Enumerables;
+using Rewired;
 
 public class MenuManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Tooltip("Whether this scene needs a pause panel")]
+    [SerializeField]
+    private bool hasPausePanel;
     [Tooltip("The Pause gui")]
     [SerializeField]
-    private GameObject pausePanel;
+    private GameObject pausePanel = null;
     [Tooltip("The button that is first highlighted")]
     [SerializeField]
     private GameObject defaultSelectedButton;
+    
     #endregion
 
     #region Hidden Variables
-    private bool pauseMenuShowing = false;
+    private bool paused = false;
     private GameManager gameManagerInstance;
 
     #endregion
@@ -26,45 +31,39 @@ public class MenuManager : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        if(SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (sceneIndex == LevelIndex.MAIN_MENU || sceneIndex == LevelIndex.GAME_SETTINGS)
         {
             EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetButtonDown("Cancel") && !pauseMenuShowing)
-        {
-            pausePanel.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
-            pauseMenuShowing = true;
-            Cursor.visible = true;
-            Time.timeScale = 0;
-        }
-        else if (Input.GetButtonDown("Cancel") && pauseMenuShowing)
-        {
-            pausePanel.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(null);
-            pauseMenuShowing = false;
-            Time.timeScale = 1;
         }
     }
     #endregion
 
     #region Button Functions
-    public void ResumeGame()
+    public void PauseGame()
     {
-        pausePanel.SetActive(false);
+        pausePanel.SetActive(true);
+        paused = true;
+        Cursor.visible = true;
+        Time.timeScale = 0;
+        EventSystem.current.SetSelectedGameObject(pausePanel.GetComponentInChildren<Button>().gameObject);
+    }
+
+    public void UnpauseGame()
+    {
         EventSystem.current.SetSelectedGameObject(null);
-        pauseMenuShowing = false;
+        pausePanel.SetActive(false);
+        paused = false;
         Time.timeScale = 1;
     }
-    
+
     public void ExitLevel()
     {
         Time.timeScale = 1;
-        pausePanel.SetActive(false);
+        if(hasPausePanel)
+        {
+            pausePanel.SetActive(false);
+        }
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             gameManagerInstance.ExitLevel();
@@ -85,6 +84,13 @@ public class MenuManager : MonoBehaviour
         {
             gameManagerInstance.ExitGame();
         }
+    }
+    #endregion
+
+    #region Getters And Setters
+    public bool GetPaused()
+    {
+        return paused;
     }
     #endregion
 }

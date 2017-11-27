@@ -122,6 +122,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // see if anybody has paused
+        if (player.GetButtonDown("Start"))
+        {
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                gameManagerInstance.PauseUnpauseGame();
+            }
+        }
+
         // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
         jumpButtonHeld = false;
