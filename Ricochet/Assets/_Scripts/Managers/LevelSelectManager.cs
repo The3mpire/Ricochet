@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelSelectManager : MonoBehaviour
 {
@@ -59,14 +60,14 @@ public class LevelSelectManager : MonoBehaviour
     #endregion
 
     #region Public Functions
-    public void SetMatchScoreLimit(int value)
+    public void SetMatchScoreLimit(Slider slider)
     {
-        GameData.matchScoreLimit = value;
+        GameData.matchScoreLimit = (int)slider.value;
     }
 
-    public void SetMatchTimeLimit(float value)
+    public void SetMatchTimeLimit(Slider slider)
     {
-        GameData.matchTimeLimit = (int)(value * 60);
+        GameData.matchTimeLimit = (int)slider.value;
     }
 
     public void SetLoadLevel(string levelName)
