@@ -45,7 +45,7 @@ public class CharSelect_Assign : MonoBehaviour {
                 continue;
             }
             p.controllers.AddController(j, true);
-            //cursors[p.id-1].SetActive(true);
+            cursors[p.id-1].SetActive(true);
             return;
         }
     }
