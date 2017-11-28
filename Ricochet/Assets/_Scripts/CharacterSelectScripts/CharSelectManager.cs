@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Enumerables;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -105,6 +106,8 @@ public class CharSelectManager : MonoBehaviour
         SetActiveTokens();
         SetDefaultTeams();
         timer = waitTime;
+        GameData.playerCharacters = new ECharacter[4];
+        GameData.playerTeams = new ETeam[4];
     }
 
     void Update()
@@ -227,7 +230,7 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        GameData.p1Character = selected.getCharacterId();
+                        GameData.playerCharacters[0] = selected.getCharacterId();
                         p1TeamImage.sprite = selected.getCharacterImage();
                         color.a = 1;
                         p1TeamImage.color = color;
@@ -243,7 +246,7 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        GameData.p2Character = selected.getCharacterId();
+                        GameData.playerCharacters[1] = selected.getCharacterId();
                         p2TeamImage.sprite = selected.getCharacterImage();
                         color.a = 1;
                         p2TeamImage.color = color;
@@ -259,7 +262,7 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        GameData.p3Character = selected.getCharacterId();
+                        GameData.playerCharacters[2] = selected.getCharacterId();
                         p3TeamImage.sprite = selected.getCharacterImage();
                         color.a = 1;
                         p3TeamImage.color = color;
@@ -275,7 +278,7 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        GameData.p4Character = selected.getCharacterId();
+                        GameData.playerCharacters[3] = selected.getCharacterId();
                         p4TeamImage.sprite = selected.getCharacterImage();
                         color.a = 1;
                         p3TeamImage.color = color;
@@ -318,22 +321,22 @@ public class CharSelectManager : MonoBehaviour
             case 1:
                 playerPhase[0] = SelectionPhase.Ready;
                 readyTags[0].SetActive(true);
-                GameData.p1Team = p1Team;
+                GameData.playerTeams[0] = p1Team;
                 break;
             case 2:
                 playerPhase[1] = SelectionPhase.Ready;
                 readyTags[1].SetActive(true);
-                GameData.p2Team = p2Team;
+                GameData.playerTeams[1] = p2Team;
                 break;
             case 3:
                 playerPhase[2] = SelectionPhase.Ready;
                 readyTags[2].SetActive(true);
-                GameData.p3Team = p3Team;
+                GameData.playerTeams[2] = p3Team;
                 break;
             case 4:
                 playerPhase[3] = SelectionPhase.Ready;
                 readyTags[3].SetActive(true);
-                GameData.p4Team = p4Team;
+                GameData.playerTeams[3] = p4Team;
                 break;
         }
     }
@@ -387,7 +390,7 @@ public class CharSelectManager : MonoBehaviour
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("Level Select");
+        SceneManager.LoadSceneAsync("Art Showcase");
     }
 
     private void CountdownToLevelSelect()
@@ -474,7 +477,7 @@ public class CharSelectManager : MonoBehaviour
         switch (playerNumber)
         {
             case 1:
-                GameData.p1Character = Enumerables.ECharacter.None;
+                GameData.playerCharacters[0] = Enumerables.ECharacter.None;
                 p1TeamImage.sprite = null;
                 color = p1TeamImage.color;
                 color.a = 0;
@@ -484,7 +487,7 @@ public class CharSelectManager : MonoBehaviour
                 playerPhase[0] = SelectionPhase.CharacterSelect;
                 break;
             case 2:
-                GameData.p2Character = Enumerables.ECharacter.None;
+                GameData.playerCharacters[1] = Enumerables.ECharacter.None;
                 p2TeamImage.sprite = null;
                 color = p2TeamImage.color;
                 color.a = 0;
@@ -494,7 +497,7 @@ public class CharSelectManager : MonoBehaviour
                 playerPhase[1] = SelectionPhase.CharacterSelect;
                 break;
             case 3:
-                GameData.p3Character = Enumerables.ECharacter.None;
+                GameData.playerCharacters[2] = Enumerables.ECharacter.None;
                 p3TeamImage.sprite = null;
                 color = p3TeamImage.color;
                 color.a = 0;
@@ -504,7 +507,7 @@ public class CharSelectManager : MonoBehaviour
                 playerPhase[2] = SelectionPhase.CharacterSelect;
                 break;
             case 4:
-                GameData.p4Character = Enumerables.ECharacter.None;
+                GameData.playerCharacters[3] = Enumerables.ECharacter.None;
                 p4TeamImage.sprite = null;
                 color = p4TeamImage.color;
                 color.a = 0;

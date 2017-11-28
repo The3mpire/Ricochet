@@ -1,20 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using UnityEngine.Experimental.Rendering;
 
 public static class GameData {
     #region Private
     #region Game Setup
     private static int _matchScoreLimit;
-    private static int _matchTimeLimit;
+    private static float _matchTimeLimit;
     private static int _playerCount;
-    private static Enumerables.ECharacter _p1Character;
-    private static Enumerables.ECharacter _p2Character;
-    private static Enumerables.ECharacter _p3Character;
-    private static Enumerables.ECharacter _p4Character;
-    private static Enumerables.ETeam _p1Team;
-    private static Enumerables.ETeam _p2Team;
-    private static Enumerables.ETeam _p3Team;
-    private static Enumerables.ETeam _p4Team;
+    private static Enumerables.ECharacter[] _playerCharacters;
+    private static Enumerables.ETeam[] _playerTeams;
     #endregion
 
     #region Game Statistics
@@ -48,7 +44,7 @@ public static class GameData {
             }
         }
     }
-    public static int matchTimeLimit
+    public static float matchTimeLimit
     {
         get
         {
@@ -92,45 +88,17 @@ public static class GameData {
             }
         }
     }
-    public static Enumerables.ECharacter p1Character
+
+    public static Enumerables.ECharacter[] playerCharacters
     {
-        get { return _p1Character; }
-        set { _p1Character = value; }
+        get { return _playerCharacters; }
+        set { _playerCharacters = value; }
     }
-    public static Enumerables.ECharacter p2Character
+
+    public static Enumerables.ETeam[] playerTeams
     {
-        get { return _p2Character; }
-        set { _p2Character = value; }
-    }
-    public static Enumerables.ECharacter p3Character
-    {
-        get { return _p3Character; }
-        set { _p3Character = value; }
-    }
-    public static Enumerables.ECharacter p4Character
-    {
-        get { return _p4Character; }
-        set { _p4Character = value; }
-    }
-    public static Enumerables.ETeam p1Team
-    {
-        get { return _p1Team; }
-        set { _p1Team = value; }
-    }
-    public static Enumerables.ETeam p2Team
-    {
-        get { return _p2Team; }
-        set { _p2Team = value; }
-    }
-    public static Enumerables.ETeam p3Team
-    {
-        get { return _p3Team; }
-        set { _p3Team = value; }
-    }
-    public static Enumerables.ETeam p4Team
-    {
-        get { return _p4Team; }
-        set { _p4Team = value; }
+        get { return _playerTeams; }
+        set { _playerTeams = value; }
     }
     public static int blueTeamScore
     {

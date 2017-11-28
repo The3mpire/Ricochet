@@ -216,7 +216,7 @@ RectTransform:
   m_GameObject: {fileID: 9671976}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 90}
-  m_LocalScale: {x: 0.024084328, y: 0.024084328, z: 0.024084328}
+  m_LocalScale: {x: 0.024088541, y: 0.024088541, z: 0.024088541}
   m_Children:
   - {fileID: 1196352541}
   - {fileID: 238606580}
@@ -1867,8 +1867,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialDirection: {x: 0, y: -1}
   minimumSpeed: 5
-  slowRate: 8
   maximumSpeed: 25
+  curveSlow: 0
+  slowRate: 8
+  curveModifier: 10
   isTempBall: 0
   canScore: 1
   lastTouchedByCount: 2
@@ -2587,10 +2589,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeManager: {fileID: 1991289191}
   powerUpManager: {fileID: 0}
-  gameMenuUI: {fileID: 0}
-  gameMatchTime: 120
-  gameTimerText: {fileID: 0}
-  winningTeamText: {fileID: 0}
+  gameMatchTime: 60
+  gameTimerText: {fileID: 1196352542}
   winScreenWaitTime: 3
   powerUpRespawnTime: 10
   playerRespawnTime: 2
@@ -2607,6 +2607,8 @@ MonoBehaviour:
   character1BodyScale: 0
   character2Sprite: {fileID: 0}
   character2BodyScale: 0
+  scoreLimit: 0
+  nextLevel: EndGame
 --- !u!4 &1061753677 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4959578173942762, guid: 50a1ba6435392ee4d8e4c602da85ea82,
@@ -3106,7 +3108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1196352541
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3115,7 +3117,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1196352540}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1381989, y: 231, z: 0}
+  m_LocalPosition: {x: 1.1381989, y: 456, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 9671981}
@@ -3123,7 +3125,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.1382, y: 231}
+  m_AnchoredPosition: {x: 1.1382, y: 456}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1196352542
