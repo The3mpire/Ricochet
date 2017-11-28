@@ -9,6 +9,9 @@ using Enumerables;
 public class MenuManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Tooltip("Whether this scene has a pause panel")]
+    [SerializeField]
+    private bool hasPausePanel;
     [Tooltip("The Pause gui")]
     [SerializeField]
     private GameObject pausePanel;
@@ -26,7 +29,8 @@ public class MenuManager : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        if(SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
+        Cursor.visible = true;
+        if (SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
         {
             EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
         }
@@ -34,7 +38,7 @@ public class MenuManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel") && !pauseMenuShowing)
+        if (hasPausePanel && Input.GetButtonDown("Cancel") && !pauseMenuShowing)
         {
             pausePanel.SetActive(true);
             EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
@@ -42,7 +46,7 @@ public class MenuManager : MonoBehaviour
             Cursor.visible = true;
             Time.timeScale = 0;
         }
-        else if (Input.GetButtonDown("Cancel") && pauseMenuShowing)
+        else if (hasPausePanel && Input.GetButtonDown("Cancel") && pauseMenuShowing)
         {
             pausePanel.SetActive(false);
             EventSystem.current.SetSelectedGameObject(null);
@@ -55,22 +59,30 @@ public class MenuManager : MonoBehaviour
     #region Button Functions
     public void ResumeGame()
     {
-        pausePanel.SetActive(false);
+        if (hasPausePanel)
+        {
+            pausePanel.SetActive(false);
+        }
         EventSystem.current.SetSelectedGameObject(null);
         pauseMenuShowing = false;
         Time.timeScale = 1;
     }
-    
+
     public void ExitLevel()
     {
         Time.timeScale = 1;
-        pausePanel.SetActive(false);
+
+        if (hasPausePanel)
+        {
+            pausePanel.SetActive(false);
+        }
+
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             gameManagerInstance.ExitLevel();
         }
     }
-    
+
     public void StartGame()
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
@@ -78,7 +90,7 @@ public class MenuManager : MonoBehaviour
             gameManagerInstance.CharacterSelect();
         }
     }
-    
+
     public void ExitGame()
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
