@@ -71,11 +71,11 @@ public class MovingPlatformEditor : Editor
             Vector3 currPoint = positions[posInd];
             
             // store the starting point of the line segment
-            lineSegments[pointIndex] = prevPoint;
+            lineSegments[pointIndex] = platformTransform.localPosition + prevPoint;
             pointIndex++;
 
             // store the ending point of the line segment
-            lineSegments[pointIndex] = currPoint;
+            lineSegments[pointIndex] = platformTransform.localPosition + currPoint;
             pointIndex++;
 
             prevPoint = currPoint;
