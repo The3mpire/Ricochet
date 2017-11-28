@@ -19528,7 +19528,7 @@ Prefab:
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
       propertyPath: _userData.actions.Array.size
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
@@ -19547,8 +19547,13 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
-      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.size
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.size
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.size
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4330474610093544, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}
       propertyPath: m_LocalPosition.x
@@ -19605,12 +19610,12 @@ Prefab:
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
       propertyPath: _userData.actions.Array.data[9]._id
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
       propertyPath: _userData.actions.Array.data[9]._name
-      value: JoinGame
+      value: A Button
       objectReference: {fileID: 0}
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
@@ -19620,7 +19625,7 @@ Prefab:
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
       propertyPath: _userData.actions.Array.data[9]._descriptiveName
-      value: Used only in Assignment map
+      value: Action0
       objectReference: {fileID: 0}
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
@@ -19630,7 +19635,7 @@ Prefab:
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
       propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[9]
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
@@ -19700,7 +19705,82 @@ Prefab:
     - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
         type: 2}
       propertyPath: _userData.actionIdCounter
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[10]._id
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[10]._name
+      value: B Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[10]._type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[10]._descriptiveName
+      value: Action0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actions.Array.data[10]._userAssignable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[10]
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[6]._actionId
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[6]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[6]._elementIdentifierId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[7]._actionId
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[7]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[7]._elementIdentifierId
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[8]._actionId
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[8]._elementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114328713743810350, guid: e582572c123e96f4e9c6f843788aa8a7,
+        type: 2}
+      propertyPath: _userData.joystickMaps.Array.data[0].actionElementMaps.Array.data[8]._elementIdentifierId
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e582572c123e96f4e9c6f843788aa8a7, type: 2}

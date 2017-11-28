@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS0649
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -118,6 +117,11 @@ public class CharSelectManager : MonoBehaviour
     }
     #endregion
 
+    #region Public
+    /// <summary>
+    /// Activates to given player. Enables selection token and moves player to Character Selection phase.
+    /// </summary>
+    /// <param name="playerNumber">Player ID to activate</param>
     public void ActivatePlayer(int playerNumber)
     {
         switch (playerNumber)
@@ -140,6 +144,7 @@ public class CharSelectManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     #region InputRouting
     public void routeInputAxis(int playerNumber, int direction)
@@ -193,7 +198,7 @@ public class CharSelectManager : MonoBehaviour
     #region Selection Functions
     private void MoveSelectionToken(int playerNumber, int direction)
     {
-        
+
         switch (playerNumber)
         {
             case 1:
@@ -289,7 +294,7 @@ public class CharSelectManager : MonoBehaviour
         {
             case 1:
                 p1Team = GetNextTeam(p1Team);
-                p1TeamPanel.color = GetTeamColor(p1Team);                
+                p1TeamPanel.color = GetTeamColor(p1Team);
                 break;
             case 2:
                 p2Team = GetNextTeam(p2Team);
@@ -297,11 +302,11 @@ public class CharSelectManager : MonoBehaviour
                 break;
             case 3:
                 p3Team = GetNextTeam(p3Team);
-                p3TeamPanel.color = GetTeamColor(p3Team);                
+                p3TeamPanel.color = GetTeamColor(p3Team);
                 break;
             case 4:
                 p4Team = GetNextTeam(p4Team);
-                p4TeamPanel.color = GetTeamColor(p4Team);                
+                p4TeamPanel.color = GetTeamColor(p4Team);
                 break;
         }
     }
@@ -360,14 +365,14 @@ public class CharSelectManager : MonoBehaviour
     {
         var allReady = true;
         int readyCount = 0;
-        foreach(var item in playerPhase)
+        foreach (var item in playerPhase)
         {
-            if(item == SelectionPhase.CharacterSelect || item == SelectionPhase.TeamSelect)
+            if (item == SelectionPhase.CharacterSelect || item == SelectionPhase.TeamSelect)
             {
                 allReady = false;
                 break;
             }
-            if(item == SelectionPhase.Ready)
+            if (item == SelectionPhase.Ready)
             {
                 readyCount++;
             }
@@ -382,14 +387,14 @@ public class CharSelectManager : MonoBehaviour
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("EndGame");
+        SceneManager.LoadSceneAsync("Level Select");
     }
 
     private void CountdownToLevelSelect()
     {
         timer -= Time.deltaTime;
         int seconds = (int)(timer % 60);
-        if(seconds >= 0)
+        if (seconds >= 0)
         {
             timerText.text = "Level Select in: " + seconds;
         }

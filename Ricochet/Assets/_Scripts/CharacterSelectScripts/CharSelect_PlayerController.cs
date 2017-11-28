@@ -26,6 +26,7 @@ public class CharSelect_PlayerController : MonoBehaviour
     private float inputDelay = 1.25f;
 
     #endregion
+    #region MonoBehaviour
     // Use this for initialization
     void Awake()
     {
@@ -37,7 +38,7 @@ public class CharSelect_PlayerController : MonoBehaviour
     void Update()
     {
         var moveX = Math.Sign(player.GetAxis("MoveHorizontal"));
-        if(moveX != 0 && joystickAcceptingInput)
+        if (moveX != 0 && joystickAcceptingInput)
         {
             joystickAcceptingInput = false;
             manager.routeInputAxis(playerNumber, moveX);
@@ -48,17 +49,20 @@ public class CharSelect_PlayerController : MonoBehaviour
         {
             manager.routeInputA(playerNumber);
         }
-        if(player.GetButtonDown("B Button"))
+        if (player.GetButtonDown("B Button"))
         {
             manager.routeInputB(playerNumber);
 
         }
     }
+    #endregion
 
+    #region Private Helpers
     private IEnumerator ReactivateAfterDelay()
     {
         yield return new WaitForSeconds(inputDelay);
         joystickAcceptingInput = true;
     }
+    #endregion
 
 }
