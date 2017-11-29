@@ -118,6 +118,8 @@ public class PlayerController : MonoBehaviour
         rightStickHorz = 1;
         rightStickVert = 0;
         shield = GetComponent<Shield>();
+        team = GameData.playerTeams[playerNumber-1];
+        //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
     private void Start()
@@ -418,6 +420,28 @@ public class PlayerController : MonoBehaviour
     internal Shield GetShield()
     {
         return shieldTransform.GetComponent<Shield>();
+    }
+
+    private Sprite GetCharacterSprite(Enumerables.ECharacter character)
+    {
+        Sprite charSprite = null;
+        
+        switch (character)
+        {
+            case ECharacter.CatManWT:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreview");
+                break;
+            case ECharacter.CatManP:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreviewAlt");
+                break;
+            case ECharacter.Computer:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Y2K_01");
+                break;
+            case ECharacter.MallCop:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Forward");
+                break;
+        }
+        return charSprite;
     }
     #endregion
 }

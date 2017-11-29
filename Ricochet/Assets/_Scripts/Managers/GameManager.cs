@@ -17,19 +17,13 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PowerUpManager powerUpManager;
 
-    [Header("Game Match Variables")]
-    [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
-    [SerializeField]
-    private Canvas gameMenuUI;
     [Tooltip("How long the selected game lasts in seconds")]
     [SerializeField]
     private float gameMatchTime = 120f;
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private Text gameTimerText;
-    [Tooltip("Drag the winning team text here")]
-    [SerializeField]
-    private Text winningTeamText;
+
     [Tooltip("Time to wait for before switching back to game select menu (in seconds)")]
     [SerializeField]
     private int winScreenWaitTime = 3;
@@ -81,9 +75,6 @@ public class GameManager : MonoBehaviour
     [Tooltip("Score limit to win the match")]
     [SerializeField]
     private int scoreLimit;
-    [Tooltip("Time limit for the match")]
-    [SerializeField]
-    private int timeLimit;
     #endregion
 
     #region Hidden Variables
@@ -96,6 +87,9 @@ public class GameManager : MonoBehaviour
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
 
     private float currentMatchTime;
+    [SerializeField]
+    [Tooltip("Name of level to transition to")]
+    private string nextLevel;
     #endregion
 
     #region MonoBehaviour
@@ -146,15 +140,13 @@ public class GameManager : MonoBehaviour
 
         Cursor.visible = false;
         GameData.matchScoreLimit = scoreLimit;
-        GameData.matchTimeLimit = timeLimit;
+        GameData.matchTimeLimit = gameMatchTime;
     }
 
     void Update()
     {
-        if (gameMenuUI != null)
-        {
-            MatchTimer();
-        }
+        MatchTimer();
+        
     }
     #endregion
 
@@ -200,7 +192,14 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        SceneManager.LoadSceneAsync("EndGame");
+        if (nextLevel != null)
+        {
+            SceneManager.LoadSceneAsync(nextLevel);
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync("EndGame");
+        }
     }
     #endregion
 

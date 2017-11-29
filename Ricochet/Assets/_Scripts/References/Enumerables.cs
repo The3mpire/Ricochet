@@ -20,4 +20,13 @@
         RedTeam = 0,
         BlueTeam = 1
     }
+
+    public enum ECharacter
+    {
+        None = -1,
+        CatManWT = 0,
+        Computer = 1,
+        MallCop = 2,
+        CatManP = 3
+    }
 }
