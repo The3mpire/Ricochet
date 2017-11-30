@@ -149,6 +149,11 @@ Transform:
   m_Father: {fileID: 832949260}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &188737901 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 1011565230}
 --- !u!1 &294186931
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,6 +771,11 @@ Transform:
   m_Father: {fileID: 832949260}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &640060475 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 1932621973}
 --- !u!1001 &700363670
 Prefab:
   m_ObjectHideFlags: 0
@@ -1268,6 +1278,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: players.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4935417453643964, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1376,6 +1391,58 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: character1BodyScale
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: character2BodyScale
+      value: 0.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: character1Sprite
+      value: 
+      objectReference: {fileID: 21300004, guid: e7d3a1e0e2fac4bd48b6734c2daf4fe1,
+        type: 3}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: character2Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 90d3ae0246e654247879cc3ef3e8517e,
+        type: 3}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: scoreLimit
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: timeLimit
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: players.Array.data[0]
+      value: 
+      objectReference: {fileID: 1640514033}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: players.Array.data[1]
+      value: 
+      objectReference: {fileID: 188737901}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: players.Array.data[2]
+      value: 
+      objectReference: {fileID: 640060475}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: players.Array.data[3]
+      value: 
+      objectReference: {fileID: 1921272574}
     m_RemovedComponents:
     - {fileID: 92846435387118090, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
@@ -2617,6 +2684,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4740018903045330, guid: fb24e8837c5f84b12ae2dedb80666f10,
     type: 2}
   m_PrefabInternal: {fileID: 1548279929}
+--- !u!1 &1640514033 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 400374298}
 --- !u!1 &1740308242
 GameObject:
   m_ObjectHideFlags: 0
@@ -2947,6 +3019,11 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!1 &1921272574 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 700363670}
 --- !u!1001 &1932621973
 Prefab:
   m_ObjectHideFlags: 0

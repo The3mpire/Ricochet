@@ -21,9 +21,6 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
     [SerializeField]
     private Canvas gameMenuUI;
-    [Tooltip("How long the selected game lasts in seconds")]
-    [SerializeField]
-    private float gameMatchTime = 120f;
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private Text gameTimerText;
@@ -80,10 +77,10 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("Score limit to win the match")]
     [SerializeField]
-    private int scoreLimit;
+    private int scoreLimit = 5;
     [Tooltip("Time limit for the match")]
     [SerializeField]
-    private int timeLimit;
+    private int timeLimit = 120;
     #endregion
 
     #region Hidden Variables
@@ -105,7 +102,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        currentMatchTime = gameMatchTime;
+        currentMatchTime = timeLimit;
         if (playerSelectedData != null)
         {
             for (int i = 0; i < players.Length; i++)
@@ -284,12 +281,12 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().OnBallGoalCollision();
             ball.SetActive(false);
             RespawnBall(ball);
+            NoWaitRespawnAllPlayers();
         }
         else
         {
             GameData.gameWinner = team;
             EndMatch();
-            ChangeScene();
         }
     }
 
@@ -406,6 +403,18 @@ public class GameManager : MonoBehaviour
                 playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
                 playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
+        }
+    }
+
+    private void NoWaitRespawnAllPlayers()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
+            if (players[i].activeSelf)
+            {
+                NoWaitRespawnPlayer(currentPlayer);
+            }
         }
     }
 

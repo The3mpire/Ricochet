@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Rewired;
 
-public class EndGameSceneManager : MonoBehaviour {
+public class EndGameSceneManager : MonoBehaviour
+{
     #region Private
     [Tooltip("Drag the UI's EndGameText here")]
     [SerializeField]
@@ -14,11 +15,12 @@ public class EndGameSceneManager : MonoBehaviour {
     #region MonoBehaviour
     private void Start()
     {
-        EndGameText.text = "Congratulations "+ GameData.gameWinner.ToString() + "!";    
+        EndGameText.text = "Congratulations " + GameData.gameWinner.ToString() + "!";
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         foreach (var player in ReInput.players.AllPlayers)
         {
             if (player.GetButtonDown("A Button"))
