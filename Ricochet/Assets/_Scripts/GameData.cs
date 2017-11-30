@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using UnityEngine.Experimental.Rendering;
 
 public static class GameData {
     #region Private
     #region Game Setup
     private static int _matchScoreLimit;
-    private static int _matchTimeLimit;
+    private static float _matchTimeLimit;
     private static int _playerCount;
+    private static Enumerables.ECharacter[] _playerCharacters;
+    private static Enumerables.ETeam[] _playerTeams;
     #endregion
 
     #region Game Statistics
@@ -40,7 +44,7 @@ public static class GameData {
             }
         }
     }
-    public static int matchTimeLimit
+    public static float matchTimeLimit
     {
         get
         {
@@ -83,6 +87,18 @@ public static class GameData {
                 _playerCount = value;
             }
         }
+    }
+
+    public static Enumerables.ECharacter[] playerCharacters
+    {
+        get { return _playerCharacters; }
+        set { _playerCharacters = value; }
+    }
+
+    public static Enumerables.ETeam[] playerTeams
+    {
+        get { return _playerTeams; }
+        set { _playerTeams = value; }
     }
     public static int blueTeamScore
     {
