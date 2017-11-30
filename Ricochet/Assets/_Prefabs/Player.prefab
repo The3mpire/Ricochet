@@ -181,7 +181,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1661296023868354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.36, y: -11.29, z: 0}
+  m_LocalPosition: {x: -12.548142, y: -11.182493, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224260401677033344}
@@ -267,8 +267,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.01, y: 0}
-  m_Size: {x: 0.6, y: 1.1}
+  m_Offset: {x: -0.03302145, y: 0.02509594}
+  m_Size: {x: 0.3418703, y: 0.8203602}
   m_Direction: 0
 --- !u!95 &95759706151971760
 Animator:
@@ -432,6 +432,7 @@ MonoBehaviour:
   thrusterSpeed: 22
   airMoveSpeed: 8
   groundedMoveSpeed: 12.5
+  inertia: 1.5
   startFuel: 8
   groundRechargeRate: 5
   airRechargeRate: 1.5
