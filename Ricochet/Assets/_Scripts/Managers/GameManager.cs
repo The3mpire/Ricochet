@@ -101,8 +101,21 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
+        scoreLimit = GameData.matchScoreLimit == 0 ? SetDefaultScoreLimit() : GameData.matchScoreLimit;
+        gameMatchTime = GameData.matchTimeLimit == 0.0 ? SetDefaultTimeLimit() : GameData.matchTimeLimit;
+    }
+
+    private int SetDefaultScoreLimit()
+    {
+        scoreLimit = 2;
         GameData.matchScoreLimit = scoreLimit;
+        return scoreLimit;
+    }
+    private float SetDefaultTimeLimit()
+    {
+        gameMatchTime = 60;
         GameData.matchTimeLimit = gameMatchTime;
+        return gameMatchTime;
     }
 
     void Update()
@@ -144,11 +157,6 @@ public class GameManager : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-    }
-
-    private void ChangeScene()
-    {
-        SceneManager.LoadSceneAsync(Random.Range(1, SceneManager.sceneCountInBuildSettings));
     }
 
     private void EndMatch()
@@ -249,7 +257,6 @@ public class GameManager : MonoBehaviour
         {
             GameData.gameWinner = team;
             EndMatch();
-            ChangeScene();
         }
     }
 
@@ -328,7 +335,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(ballRespawnTime);
 
-        ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
+        ball.transform.position = ballRespawns[UnityEngine.Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
     }
@@ -342,12 +349,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -359,12 +366,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }

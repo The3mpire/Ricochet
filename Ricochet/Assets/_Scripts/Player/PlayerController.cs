@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
         rightStickHorz = 1;
         rightStickVert = 0;
         shield = GetComponent<Shield>();
-        team = GameData.playerTeams[playerNumber-1];
+        team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
@@ -173,7 +173,6 @@ public class PlayerController : MonoBehaviour
 
     private void MovementPreperation()
     {
-        Debug.Log(currentFuel);
         if (leftTriggerAxis != 0 && currentFuel > 0)
         {
             grounded = false;
