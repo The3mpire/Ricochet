@@ -45,11 +45,11 @@ public class CharSelect_PlayerController : MonoBehaviour
             StartCoroutine(ReactivateAfterDelay());
         }
 
-        if (player.GetButtonDown("A Button"))
+        if (player.GetButtonDown("UISubmit"))
         {
             manager.routeInputA(playerNumber);
         }
-        if (player.GetButtonDown("B Button"))
+        if (player.GetButtonDown("UICancel"))
         {
             manager.routeInputB(playerNumber);
 

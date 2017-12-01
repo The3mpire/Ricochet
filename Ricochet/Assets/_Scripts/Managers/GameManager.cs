@@ -120,8 +120,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        MatchTimer();
-        
+        if(gameTimerText != null)
+        {
+            MatchTimer();
+        }
     }
     #endregion
 
@@ -161,7 +163,7 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        if (nextLevel != null)
+        if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
         }

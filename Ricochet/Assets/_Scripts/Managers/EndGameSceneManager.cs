@@ -21,12 +21,12 @@ public class EndGameSceneManager : MonoBehaviour {
     void Update () {
         foreach (var player in ReInput.players.AllPlayers)
         {
-            if (player.GetButtonDown("A Button"))
+            if (player.GetButtonDown("UISubmit"))
             {
                 GameData.ResetGameStatistics();
                 SceneManager.LoadSceneAsync("CharacterSelect");
             }
-            if (player.GetButtonDown("B Button"))
+            if (player.GetButtonDown("UICancel"))
             {
                 GameData.ResetGameStatistics();
                 SceneManager.LoadSceneAsync("MainMenu");
