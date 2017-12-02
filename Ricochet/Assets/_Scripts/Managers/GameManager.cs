@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
-using PlayerSelectData;
-using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -82,8 +80,6 @@ public class GameManager : MonoBehaviour
 
     private static GameManager instance = null;
 
-    private static Dictionary<int, PlayerData> playerSelectedData = null;
-
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
 
@@ -101,42 +97,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         currentMatchTime = gameMatchTime;
-        if (playerSelectedData != null)
-        {
-            for (int i = 0; i < players.Length; i++)
-            {
-                PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
-                currentPlayer.SetPlayerNumber(i + 1);
-                if (playerSelectedData[i + 1].ready)
-                {
-                    if (playerSelectedData[i + 1].team == 1)
-                    {
-                        currentPlayer.SetTeam(ETeam.RedTeam);
-                    }
-                    else
-                    {
-                        currentPlayer.SetTeam(ETeam.BlueTeam);
-                    }
-                    if (playerSelectedData[i + 1].character == "bean")
-                    {
-                        currentPlayer.SetBodyType(character1Sprite);
-                        currentPlayer.SetBodyScale(character1BodyScale);
-                    }
-                    else
-                    {
-                        currentPlayer.SetBodyType(character2Sprite);
-                        currentPlayer.SetBodyScale(character2BodyScale);
-                    }
-                    NoWaitRespawnPlayer(currentPlayer);
-                }
-                else
-                {
-                    players[i].SetActive(false);
-                }
-            }
-            playerSelectedData = null;
-        }
-
+        
         instance = this;
 
         Cursor.visible = false;
@@ -159,8 +120,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        MatchTimer();
-        
+        if(gameTimerText != null)
+        {
+            MatchTimer();
+        }
     }
     #endregion
 
@@ -188,9 +151,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
     }
 
-    public void StartGame(Dictionary<int, PlayerData> playerData)
+    public void StartGame()
     {
-        playerSelectedData = playerData;
         AsyncOperation async = SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
     }
 
@@ -201,7 +163,7 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        if (nextLevel != null)
+        if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
         }

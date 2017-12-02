@@ -390,7 +390,7 @@ public class CharSelectManager : MonoBehaviour
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("Art Showcase");
+        SceneManager.LoadSceneAsync("Level Select");
     }
 
     private void CountdownToLevelSelect()
