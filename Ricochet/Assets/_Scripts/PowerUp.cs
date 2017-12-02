@@ -1,5 +1,8 @@
 ﻿using Enumerables;
 using UnityEngine;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 public class PowerUp : MonoBehaviour
 {
@@ -11,14 +14,24 @@ public class PowerUp : MonoBehaviour
 
     #region Hidden Variables
     private GameManager gameManagerInstance;
+    private System.Random rng;
+    private List<EPowerUp> powerups;
+    private EPowerUp instanceType;
     #endregion
 
     #region MonoBehaviour
     void Awake()
     {
-        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        if (powerUpType == EPowerUp.Random)
         {
-            gameObject.GetComponent<SpriteRenderer>().color = gameManagerInstance.GetPowerUpColor(powerUpType);
+            rng = new System.Random();
+            powerups = Enum.GetValues(typeof(EPowerUp)).Cast<EPowerUp>().ToList();
+            powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None)).ToList();
+        }
+        else
+        {
+            instanceType = powerUpType;
+            UpdateSprite();
         }
     }
 
@@ -31,8 +44,17 @@ public class PowerUp : MonoBehaviour
                 gameManagerInstance.PlayerPowerUpCollision(collider.gameObject, this);
                 gameManagerInstance.RespawnPowerUp(gameObject);
                 gameObject.SetActive(false);
-                
             }
+        }
+    }
+
+    void OnEnable()
+    {
+        if (powerUpType == EPowerUp.Random)
+        {
+            instanceType = powerups[rng.Next(powerups.Count)];
+            Debug.Log("POWER UP SPAWNED: " + instanceType);
+            UpdateSprite();
         }
     }
     #endregion
@@ -40,7 +62,15 @@ public class PowerUp : MonoBehaviour
     #region External Functions
     public EPowerUp GetPowerUpType()
     {
-        return powerUpType;
+        return instanceType;
+    }
+
+    private void UpdateSprite()
+    {
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = gameManagerInstance.GetPowerUpColor(instanceType);
+        }
     }
     #endregion
 }

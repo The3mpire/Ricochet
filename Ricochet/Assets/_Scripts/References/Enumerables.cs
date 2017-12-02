@@ -3,9 +3,10 @@
     public enum EPowerUp
     {
         None = -1,
-        Multiball = 0,
-        CatchNThrow = 1,
-        CircleShield = 2
+        Random = 0,
+        Multiball = 1,
+        CatchNThrow = 2,
+        CircleShield = 3
     }
 
     public enum EMode
