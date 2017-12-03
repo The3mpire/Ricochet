@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
+
 		if (sceneName != "MainMenu" && sceneName != "CharacterSelect" && sceneName != "Level Select" && sceneName != "EndGame") 
 		{
 			LoadMatchSettings ();
@@ -176,6 +177,9 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {        
+        //GameData.gameWinner = GetMatchWinner();
+        
+
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -270,7 +274,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
             GameData.gameWinner = GetOpposingTeam(team);
             EndMatch();
         }
@@ -452,20 +455,25 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
     #region Private Helpers
     private ETeam GetOpposingTeam(ETeam team)
     {
-        var opTeam = ETeam.None;
-        if(team == ETeam.BlueTeam)
+        var winner = ETeam.None;
+        var bTeam = GameData.blueTeamScore;
+        var rTeam = GameData.redTeamScore;
+        if (bTeam > rTeam)
         {
-            opTeam = ETeam.RedTeam;
+            winner = ETeam.BlueTeam;
+        }
+        else if (rTeam > bTeam)
+        {
+            winner = ETeam.RedTeam;
         }
         else
         {
-            opTeam = ETeam.BlueTeam;
+            winner = ETeam.None;
         }
-        return opTeam;
-    }
+        return winner;
+    #region Private Helpers
     #endregion
 }
