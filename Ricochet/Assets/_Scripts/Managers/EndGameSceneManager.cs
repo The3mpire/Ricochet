@@ -14,7 +14,7 @@ public class EndGameSceneManager : MonoBehaviour {
     #region MonoBehaviour
     private void Start()
     {
-        EndGameText.text = GameData.gameWinner == null ? "Game Over" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
+        EndGameText.text = GameData.gameWinner == Enumerables.ETeam.None ? "Tie Game!" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
     }
 
     // Update is called once per frame

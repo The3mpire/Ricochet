@@ -395,7 +395,7 @@ public class CharSelectManager : MonoBehaviour
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("Level Select");
+        SceneManager.LoadSceneAsync(LevelIndex.LEVEL_SELECT);
     }
 
     private void CountdownToLevelSelect()

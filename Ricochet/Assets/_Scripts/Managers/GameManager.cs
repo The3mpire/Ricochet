@@ -97,31 +97,35 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        currentMatchTime = gameMatchTime;
-        
         instance = this;
 
         Cursor.visible = false;
-        scoreLimit = GameData.matchScoreLimit == 0 ? SetDefaultScoreLimit() : GameData.matchScoreLimit;
-        gameMatchTime = GameData.matchTimeLimit == 0.0 ? SetDefaultTimeLimit() : GameData.matchTimeLimit;
+        LoadMatchSettings();
+        currentMatchTime = gameMatchTime;
+        if (gameMatchTime > 0)
+        {
+            gameTimerText.gameObject.SetActive(true);
+        }
     }
 
-    private int SetDefaultScoreLimit()
+    private void LoadMatchSettings()
     {
-        scoreLimit = 2;
-        GameData.matchScoreLimit = scoreLimit;
-        return scoreLimit;
-    }
-    private float SetDefaultTimeLimit()
-    {
-        gameMatchTime = 60;
-        GameData.matchTimeLimit = gameMatchTime;
-        return gameMatchTime;
+        //Both match limit settings are 0. Set inspector values for both.
+        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        {
+            GameData.matchScoreLimit = scoreLimit;
+            GameData.matchTimeLimit = gameMatchTime;
+        }
+        else
+        {
+            scoreLimit = GameData.matchScoreLimit;
+            gameMatchTime = GameData.matchTimeLimit;
+        }
     }
 
     void Update()
     {
-        if(gameTimerText != null)
+        if (gameTimerText != null && gameMatchTime > 0)
         {
             MatchTimer();
         }
@@ -164,6 +168,8 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
+        GameData.gameWinner = GetMatchWinner();
+        
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -258,7 +264,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameData.gameWinner = GetOpposingTeam(team);
             EndMatch();
         }
     }
@@ -439,19 +444,25 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Private Helpers
-    private ETeam GetOpposingTeam(ETeam team)
+    #region Helpers
+    private ETeam GetMatchWinner()
     {
-        var opTeam = ETeam.None;
-        if(team == ETeam.BlueTeam)
+        var winner = ETeam.None;
+        var bTeam = GameData.blueTeamScore;
+        var rTeam = GameData.redTeamScore;
+        if (bTeam > rTeam)
         {
-            opTeam = ETeam.RedTeam;
+            winner = ETeam.BlueTeam;
+        }
+        else if (rTeam > bTeam)
+        {
+            winner = ETeam.RedTeam;
         }
         else
         {
-            opTeam = ETeam.BlueTeam;
+            winner = ETeam.None;
         }
-        return opTeam;
-    }
+        return winner;
+    #region Private Helpers
     #endregion
 }
