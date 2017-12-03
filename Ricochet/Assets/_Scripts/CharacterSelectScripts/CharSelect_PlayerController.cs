@@ -37,22 +37,26 @@ public class CharSelect_PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var moveX = Math.Sign(player.GetAxis("MoveHorizontal"));
+        var moveX = Math.Sign(player.GetAxis("UIHorizontal"));
         if (moveX != 0 && joystickAcceptingInput)
         {
             joystickAcceptingInput = false;
-            manager.routeInputAxis(playerNumber, moveX);
+            manager.RouteInputAxis(playerNumber, moveX);
             StartCoroutine(ReactivateAfterDelay());
         }
 
-        if (player.GetButtonDown("A Button"))
+        if (player.GetButtonDown("UISubmit"))
         {
-            manager.routeInputA(playerNumber);
+            manager.RouteInputA(playerNumber);
         }
-        if (player.GetButtonDown("B Button"))
+        if (player.GetButtonDown("UICancel"))
         {
-            manager.routeInputB(playerNumber);
+            manager.RouteInputB(playerNumber);
 
+        }
+        if (player.GetButtonDown("UIMenu"))
+        {
+            manager.RouteInputBack();
         }
     }
     #endregion

@@ -72,7 +72,7 @@ public class LevelSelectManager : MonoBehaviour
                     cancel = true;
                     break;
                 }
-                if (p.GetButton("UIOptions"))
+                if (p.GetButton("UIMenu"))
                 {
                     options = true;
                     break;
@@ -89,6 +89,7 @@ public class LevelSelectManager : MonoBehaviour
                 OpenOptionsMenu();
             }
         }
+
     }
     #endregion
 
@@ -106,6 +107,7 @@ public class LevelSelectManager : MonoBehaviour
     public void SetLoadLevel(string levelName)
     {
         loadLevelName = levelName;
+        LevelSelect.LoadLevel(levelName);
     }
 
     public void OpenOptionsMenu()

@@ -19,19 +19,19 @@ public class EndGameSceneManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        foreach (var player in ReInput.players.AllPlayers)
-        {
-            if (player.GetButtonDown("A Button"))
-            {
-                GameData.ResetGameStatistics();
-                SceneManager.LoadSceneAsync("CharacterSelect");
-            }
-            if (player.GetButtonDown("B Button"))
-            {
-                GameData.ResetGameStatistics();
-                SceneManager.LoadSceneAsync("MainMenu");
-            }
-        }
+        //foreach (var player in ReInput.players.AllPlayers)
+        //{
+        //    if (player.GetButtonDown("UISubmit"))
+        //    {
+        //        GameData.ResetGameStatistics();
+        //        SceneManager.LoadSceneAsync("CharacterSelect");
+        //    }
+        //    if (player.GetButtonDown("UICancel"))
+        //    {
+        //        GameData.ResetGameStatistics();
+        //        SceneManager.LoadSceneAsync("MainMenu");
+        //    }
+        //}
     }
     #endregion
 }
