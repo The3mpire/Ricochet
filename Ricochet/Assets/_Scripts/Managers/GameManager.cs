@@ -167,7 +167,6 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        //TODO: Get winning team based on score.
         GameData.gameWinner = GetMatchWinner();
         
         if (nextLevel != "")
