@@ -19,27 +19,33 @@ public class UI_GameOverMenu : MonoBehaviour
 
     public void PlayAgain()
     {
-       // TODO: Once GameData stores the level being played, then we can load that level again here.
+        GameData.ResetGameStatistics();
+        // TODO: Once GameData stores the level being played, then we can load that level again here.
     }
 
     public void PlayRandomLevel()
     {
+        GameData.ResetGameStatistics();
         // TODO: Switch here on GameData game type to load from correct playlist
         LevelSelect.LoadRandomLevel(LevelSelect.glitchBallClassicLevels);
     }
 
     public void LoadLevelSelect()
     {
+        GameData.ResetGameStatistics();
         LevelSelect.LoadLevelSelect();
     }
 
     public void LoadCharacterSelect()
     {
+        GameData.ResetGameStatistics();
         LevelSelect.LoadCharacterSelect();
     }
 
     public void LoadMainMenu()
     {
+        GameData.ResetGameStatistics();
+        GameData.ResetGameSetup();
         LevelSelect.LoadMainMenu();
     }
 }
