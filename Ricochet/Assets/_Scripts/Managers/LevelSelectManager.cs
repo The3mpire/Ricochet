@@ -61,33 +61,30 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Update()
     {
-        if (optionsOpen)
+        bool options = false;
+        bool cancel = false;
+        foreach (Player p in players)
         {
-            bool options = false;
-            bool cancel = false;
-            foreach (Player p in players)
+            if (p.GetButtonDown("UICancel"))
             {
-                if (p.GetButton("UICancel"))
-                {
-                    cancel = true;
-                    break;
-                }
-                if (p.GetButton("UIMenu"))
-                {
-                    options = true;
-                    break;
-                }
+                cancel = true;
+                break;
             }
+            if (p.GetButtonDown("UIOptions"))
+            {
+                options = true;
+                break;
+            }
+        }
 
-            if (cancel)
-            {
-                OnCancel();
-            }
+        if (cancel)
+        {
+            OnCancel();
+        }
 
-            if (options)
-            {
-                OpenOptionsMenu();
-            }
+        if (options)
+        {
+            OpenOptionsMenu();
         }
 
     }
@@ -122,7 +119,7 @@ public class LevelSelectManager : MonoBehaviour
         if (optionsOpen)
         {
             optionsOpen = false;
-            settingsMenu.DOLocalMove(Vector3.right * 200, .4f);
+            settingsMenu.DOLocalMove(Vector3.right * 400, .4f);
             EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
         }
         else
