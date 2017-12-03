@@ -1497,6 +1497,18 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0520336bb7ce00740a81c526a9600622, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &707590621 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114013953915829580, guid: 0520336bb7ce00740a81c526a9600622,
+    type: 2}
+  m_PrefabInternal: {fileID: 707590620}
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+--- !u!114 &707590622 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114914448554999032, guid: 0520336bb7ce00740a81c526a9600622,
+    type: 2}
+  m_PrefabInternal: {fileID: 707590620}
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!4 &715318214 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4959578173942762, guid: 50a1ba6435392ee4d8e4c602da85ea82,
@@ -8454,9 +8466,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1fbab407626fd74389eb88f4a0884e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RedTeamText: {fileID: 0}
-  BlueTeamText: {fileID: 0}
-  scoreGoal: 20
+  RedTeamText: {fileID: 707590622}
+  BlueTeamText: {fileID: 707590621}
 --- !u!1001 &2001002560
 Prefab:
   m_ObjectHideFlags: 0

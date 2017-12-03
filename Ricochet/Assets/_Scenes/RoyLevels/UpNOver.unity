@@ -286,6 +286,18 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 8263246}
   m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+--- !u!114 &8263248 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114013953915829580, guid: 0520336bb7ce00740a81c526a9600622,
+    type: 2}
+  m_PrefabInternal: {fileID: 8263246}
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+--- !u!114 &8263249 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114914448554999032, guid: 0520336bb7ce00740a81c526a9600622,
+    type: 2}
+  m_PrefabInternal: {fileID: 8263246}
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &69974765
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,12 +801,12 @@ Prefab:
         type: 2}
       propertyPath: RedTeamText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8263249}
     - target: {fileID: 114939598683620218, guid: ae1141f049e059b4c8cc71aa746be1a2,
         type: 2}
       propertyPath: BlueTeamText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8263248}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae1141f049e059b4c8cc71aa746be1a2, type: 2}
   m_IsPrefabParent: 0
