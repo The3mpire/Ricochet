@@ -171,6 +171,8 @@ public static class GameData {
         _matchScoreLimit = 0;
         _matchTimeLimit = 0;
         _playerCount = 0;
+        _playerTeams = null;
+        _playerCharacters = null;
     }
     /// <summary>
     /// Resets all variables in Game Statistics region

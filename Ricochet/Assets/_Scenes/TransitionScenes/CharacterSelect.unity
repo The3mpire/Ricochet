@@ -372,7 +372,7 @@ RectTransform:
   m_GameObject: {fileID: 197403165}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.9040489, y: 4.23, z: 90.2022}
-  m_LocalScale: {x: 0.034114584, y: 0.034114584, z: 0.034114584}
+  m_LocalScale: {x: 0.03414313, y: 0.03414313, z: 0.03414313}
   m_Children:
   - {fileID: 542277403}
   - {fileID: 553967224}
@@ -11756,7 +11756,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 530045682}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -355.66663, z: 0}
+  m_LocalPosition: {x: 0, y: -355.4526, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1548041769}
@@ -11765,7 +11765,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -347.5}
+  m_AnchoredPosition: {x: 0, y: -347.49997}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &530045684
@@ -11900,7 +11900,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 542277402}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 130.66667, z: 0}
+  m_LocalPosition: {x: 0, y: 130.45262, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1630322080}
@@ -12112,7 +12112,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 553967223}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -225, z: 0}
+  m_LocalPosition: {x: 0, y: -225.00003, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 816519744}
@@ -34135,7 +34135,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: b53e8085153eeb94daec64879f516016, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a298f411a5948874f8c3c59c158cce50, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -34488,6 +34488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efa3ed3b93be61419d5481b6f65e33e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGameScene: 0
   modeManager: {fileID: 0}
   powerUpManager: {fileID: 0}
   gameMatchTime: 120

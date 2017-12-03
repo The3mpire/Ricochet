@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         rightStickVert = 0;
         shield = GetComponent<Shield>();
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
-        //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
+        SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
     private void Start()
@@ -423,6 +423,7 @@ public class PlayerController : MonoBehaviour
 
     private Sprite GetCharacterSprite(Enumerables.ECharacter character)
     {
+		Debug.Log (character);
         Sprite charSprite = null;
         
         switch (character)
@@ -433,8 +434,8 @@ public class PlayerController : MonoBehaviour
             case ECharacter.CatManP:
                 charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreviewAlt");
                 break;
-            case ECharacter.Computer:
-                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Y2K_01");
+		case ECharacter.Computer:
+				charSprite = Resources.Load<Sprite> ("_Art/2D Sprites/Characters/Y2K_01");
                 break;
             case ECharacter.MallCop:
                 charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Forward");

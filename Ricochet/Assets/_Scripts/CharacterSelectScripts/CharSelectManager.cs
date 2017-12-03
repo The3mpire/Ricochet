@@ -150,7 +150,7 @@ public class CharSelectManager : MonoBehaviour
     #endregion
 
     #region InputRouting
-    public void routeInputAxis(int playerNumber, int direction)
+    public void RouteInputAxis(int playerNumber, int direction)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -166,7 +166,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void routeInputA(int playerNumber)
+    public void RouteInputA(int playerNumber)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -181,7 +181,7 @@ public class CharSelectManager : MonoBehaviour
                 break;
         }
     }
-    public void routeInputB(int playerNumber)
+    public void RouteInputB(int playerNumber)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -195,6 +195,11 @@ public class CharSelectManager : MonoBehaviour
                 UndoReady(playerNumber);
                 break;
         }
+    }
+
+    public void RouteInputBack()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
     #endregion
 
@@ -379,18 +384,20 @@ public class CharSelectManager : MonoBehaviour
             {
                 readyCount++;
             }
+
         }
         if (readyCount < 2)
         {
             allReady = false;
         }
+		GameData.playerCount = readyCount;
         return allReady;
     }
 
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("Level Select");
+        SceneManager.LoadSceneAsync(LevelIndex.LEVEL_SELECT);
     }
 
     private void CountdownToLevelSelect()
