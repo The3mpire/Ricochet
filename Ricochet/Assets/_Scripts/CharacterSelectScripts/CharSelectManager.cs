@@ -380,10 +380,10 @@ public class CharSelectManager : MonoBehaviour
                 readyCount++;
             }
         }
-        if (readyCount < 2)
+       /* if (readyCount < 2)
         {
             allReady = false;
-        }
+        }*/
         return allReady;
     }
 

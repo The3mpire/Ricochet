@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour
         rightStickVert = 0;
         shield = GetComponent<Shield>();
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
+		Debug.Log (team);
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 

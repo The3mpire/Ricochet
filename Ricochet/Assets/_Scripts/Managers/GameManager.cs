@@ -92,6 +92,11 @@ public class GameManager : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
+		//Getting the current scene's name, because gameinstance is dependent on the play button, therefore we need an instance running at all times. 
+		//However, we dont need the timers in UI levels, hence the check.
+		Scene currentScene = SceneManager.GetActiveScene ();
+		string sceneName = currentScene.name;
+
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -99,12 +104,15 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
-        LoadMatchSettings();
-        currentMatchTime = gameMatchTime;
-        if (gameMatchTime > 0)
-        {
-            gameTimerText.gameObject.SetActive(true);
-        }
+		if (sceneName != "MainMenu" && sceneName != "CharacterSelect" && sceneName != "Level Select" && sceneName != "EndGame") 
+		{
+			LoadMatchSettings ();
+			currentMatchTime = gameMatchTime;
+			if (gameMatchTime > 0) 
+			{
+				gameTimerText.gameObject.SetActive (true);
+			}
+		}
     }
 
     private void LoadMatchSettings()
