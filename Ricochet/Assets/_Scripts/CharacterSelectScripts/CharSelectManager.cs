@@ -107,7 +107,9 @@ public class CharSelectManager : MonoBehaviour
         SetDefaultTeams();
         timer = waitTime;
         GameData.playerCharacters = new ECharacter[4];
-        GameData.playerTeams = new ETeam[4];
+		GameData.playerTeams = new ETeam[4];
+
+		GameData.ResetPlayerActive (4);
     }
 
     void Update()
@@ -321,6 +323,7 @@ public class CharSelectManager : MonoBehaviour
 
     private void SelectTeam(int playerNumber)
     {
+		// lock in a team
         switch (playerNumber)
         {
             case 1:
@@ -344,6 +347,8 @@ public class CharSelectManager : MonoBehaviour
                 GameData.playerTeams[3] = p4Team;
                 break;
         }
+		// make player load in in the next level
+		GameData.SetPlayerActive(playerNumber, true);
     }
     #endregion
 
@@ -386,6 +391,7 @@ public class CharSelectManager : MonoBehaviour
             }
 
         }
+
         if (readyCount < 2)
         {
             allReady = false;
@@ -529,6 +535,7 @@ public class CharSelectManager : MonoBehaviour
     private void UndoReady(int playerNumber)
     {
         StopAllCoroutines();
+		GameData.SetPlayerActive (playerNumber, false);
         timer = waitTime;
         timerText.text = "Waiting...";
         switch (playerNumber)
