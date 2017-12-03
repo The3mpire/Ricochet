@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
 
         Cursor.visible = false;
 
-        if(isGameScene)
+        if (isGameScene)
         {
             LoadMatchSettings();
             currentMatchTime = gameMatchTime;
@@ -468,5 +468,6 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    }
+}
+
 
