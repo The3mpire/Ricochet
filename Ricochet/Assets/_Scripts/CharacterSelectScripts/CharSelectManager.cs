@@ -166,7 +166,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void routeInputA(int playerNumber)
+    public void RouteInputA(int playerNumber)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -181,7 +181,7 @@ public class CharSelectManager : MonoBehaviour
                 break;
         }
     }
-    public void routeInputB(int playerNumber)
+    public void RouteInputB(int playerNumber)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -195,6 +195,11 @@ public class CharSelectManager : MonoBehaviour
                 UndoReady(playerNumber);
                 break;
         }
+    }
+
+    public void RouteInputBack()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
     #endregion
 
