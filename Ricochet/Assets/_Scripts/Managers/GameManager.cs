@@ -175,9 +175,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void EndMatch()
-    {
-        GameData.gameWinner = GetMatchWinner();
-        
+    {        
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
