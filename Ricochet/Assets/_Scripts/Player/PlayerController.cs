@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed while grounded")]
     [SerializeField]
     private float groundedMoveSpeed = 12.5f;
+    [Tooltip("How quickly the player can accelerate")]
+    [SerializeField] private float inertia = 1.5f;
 
     [Header("Fuel Settings")]
     [Tooltip("Time in seconds of jetback fuel")]
@@ -95,11 +97,14 @@ public class PlayerController : MonoBehaviour
     private float powerUpTimer;
     private float timeSinceDash;
     private Vector2 dashDirection;
+    private int inertiaTime;
+    private bool inertiaSwitch;
 
     private float leftStickHorz;
     private float leftStickVert;
     private float rightStickHorz;
     private float rightStickVert;
+    private float leftTriggerAxis;
     #endregion
 
     #region Monobehaviour
@@ -109,9 +114,12 @@ public class PlayerController : MonoBehaviour
         currentFuel = startFuel;
         maxFuel = startFuel;
         timeSinceDash = 0f;
+        inertiaTime = 2;
         rightStickHorz = 1;
         rightStickVert = 0;
         shield = GetComponent<Shield>();
+        //team = GameData.playerTeams[playerNumber-1];
+        //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
     private void Start()
@@ -125,7 +133,6 @@ public class PlayerController : MonoBehaviour
         // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
         jumpButtonHeld = false;
-        rigid.gravityScale = gravScale;
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         if (player.GetAxis("RightStickHorizontal") != 0)
@@ -163,14 +170,13 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Helpers
+
     private void MovementPreperation()
     {
-        if (player.GetButton("Jump") && (currentFuel > 0 || infiniteFuel))
+        if (leftTriggerAxis != 0 && currentFuel > 0)
         {
-            rigid.gravityScale = 0;
-            jumpButtonHeld = true;
             grounded = false;
-            currentFuel -= Time.deltaTime;
+            currentFuel -= Time.deltaTime * leftTriggerAxis;
         } // recharge fuel on ground
         else if (grounded && currentFuel < maxFuel)
         {
@@ -180,24 +186,29 @@ public class PlayerController : MonoBehaviour
         {
             currentFuel += airRechargeRate * Time.deltaTime;
         }
+        leftTriggerAxis = player.GetAxis("Jetpack");
+        InertiaFunction("logarithmic", leftTriggerAxis != 0);
     }
 
     private void Move()
     {
         Vector2 moveDirection;
-        if (jumpButtonHeld)
+        float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
+
+        if (leftTriggerAxis != 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
+            moveDirection *= fuelFactor;
 
             // If there is no directional input, just go up with upThrusterSpeed
             if (moveDirection == Vector2.zero)
             {
-                moveDirection = Vector2.up;
-                rigid.velocity = moveDirection * upThrusterSpeed;
+                moveDirection = Vector2.up * fuelFactor;
+                rigid.velocity = moveDirection * upThrusterSpeed * leftTriggerAxis;
             } // else go in the direction of input with thruster speed
             else
             {
-                rigid.velocity = moveDirection * thrusterSpeed;
+                rigid.velocity = moveDirection * thrusterSpeed * leftTriggerAxis;
             }
         }
         else
@@ -226,6 +237,7 @@ public class PlayerController : MonoBehaviour
             sprite.flipX = false;
         }
     }
+
 
     private void DashCheck()
     {
@@ -264,6 +276,46 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void InertiaFunction(string function, bool acc)
+    {
+        switch (function)
+        {
+            case "linear":
+                if (acc)
+                {
+                    rigid.gravityScale += (rigid.gravityScale > 0) ? -inertia : 0 - rigid.gravityScale;
+                }
+                else
+                {
+                    rigid.gravityScale += (rigid.gravityScale < gravScale) ? inertia : gravScale - rigid.gravityScale;
+                }
+                break;
+            case "logarithmic":
+                inertiaTime = (acc == inertiaSwitch) ? (inertiaTime + 1) : 1;
+                inertiaSwitch = acc;
+                if (acc)
+                {
+                    rigid.gravityScale = (rigid.gravityScale <= 0) ? 0 : rigid.gravityScale - Mathf.Log((inertiaTime / inertia) + 1);
+                }
+                else
+                {
+                    rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
+                }
+                break;
+            case "none":
+                if (acc)
+                {
+                    rigid.gravityScale = 0;
+                }
+                else
+                {
+                    rigid.gravityScale = 8;
+                }
+                break;
+        }
+
     }
     #endregion
 
@@ -367,6 +419,28 @@ public class PlayerController : MonoBehaviour
     internal Shield GetShield()
     {
         return shieldTransform.GetComponent<Shield>();
+    }
+
+    private Sprite GetCharacterSprite(Enumerables.ECharacter character)
+    {
+        Sprite charSprite = null;
+        
+        switch (character)
+        {
+            case ECharacter.CatManWT:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreview");
+                break;
+            case ECharacter.CatManP:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreviewAlt");
+                break;
+            case ECharacter.Computer:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Y2K_01");
+                break;
+            case ECharacter.MallCop:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Forward");
+                break;
+        }
+        return charSprite;
     }
     #endregion
 }

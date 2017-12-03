@@ -768,6 +768,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &400374299 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 400374298}
 --- !u!1001 &442307664
 Prefab:
   m_ObjectHideFlags: 0
@@ -1309,6 +1314,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &700363671 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 700363670}
 --- !u!1001 &704823773
 Prefab:
   m_ObjectHideFlags: 0
@@ -1827,6 +1837,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1011565231 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 1011565230}
 --- !u!1001 &1067397105
 Prefab:
   m_ObjectHideFlags: 0
@@ -1834,6 +1849,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114058116350840806, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: players.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4099460616994384, guid: 2307dc8ad33c11243bbcd064d233eff5, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1917,6 +1937,26 @@ Prefab:
       propertyPath: m_BackGroundColor.b
       value: 0.17084773
       objectReference: {fileID: 0}
+    - target: {fileID: 114058116350840806, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: players.Array.data[0]
+      value: 
+      objectReference: {fileID: 400374299}
+    - target: {fileID: 114058116350840806, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: players.Array.data[1]
+      value: 
+      objectReference: {fileID: 1011565231}
+    - target: {fileID: 114058116350840806, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: players.Array.data[2]
+      value: 
+      objectReference: {fileID: 1932621974}
+    - target: {fileID: 114058116350840806, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: players.Array.data[3]
+      value: 
+      objectReference: {fileID: 700363671}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2307dc8ad33c11243bbcd064d233eff5, type: 2}
   m_IsPrefabParent: 0
@@ -3602,6 +3642,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 020d32f49d242df459a2d7a80b279690, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1932621974 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1661296023868354, guid: 020d32f49d242df459a2d7a80b279690,
+    type: 2}
+  m_PrefabInternal: {fileID: 1932621973}
 --- !u!1 &1995256279
 GameObject:
   m_ObjectHideFlags: 0
