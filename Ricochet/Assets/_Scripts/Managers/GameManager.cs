@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
-        if(isGameScene)
+        if (isGameScene)
         {
             LoadMatchSettings();
             currentMatchTime = gameMatchTime;
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
                 gameTimerText.gameObject.SetActive(true);
             }
         }
-        
+
     }
 
     private void LoadMatchSettings()
@@ -475,6 +475,6 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    }
 }
-#endregion
+
+
