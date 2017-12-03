@@ -110,6 +110,11 @@ public class PlayerController : MonoBehaviour
     #region Monobehaviour
     private void Awake()
     {
+		if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+		{
+			gameManagerInstance.LoadPlayer(this, playerNumber);
+		}
+			
         killList = new List<PlayerController>();
         currentFuel = startFuel;
         maxFuel = startFuel;
