@@ -445,6 +445,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Helpers
+
     private ETeam GetMatchWinner()
     {
         var winner = ETeam.None;
@@ -463,6 +464,9 @@ public class GameManager : MonoBehaviour
             winner = ETeam.None;
         }
         return winner;
+    }
+    #endregion
     #region Private Helpers
+
     #endregion
 }
