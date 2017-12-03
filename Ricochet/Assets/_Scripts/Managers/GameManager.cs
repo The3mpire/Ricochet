@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
+
         if (isGameScene)
         {
             LoadMatchSettings();
@@ -113,7 +114,6 @@ public class GameManager : MonoBehaviour
                 gameTimerText.gameObject.SetActive(true);
             }
         }
-
     }
 
     private void LoadMatchSettings()
@@ -175,9 +175,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void EndMatch()
-    {
-        GameData.gameWinner = GetMatchWinner();
-
+    {        
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -272,6 +270,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+
+            GameData.gameWinner = GetOpposingTeam(team);
             EndMatch();
         }
     }
@@ -452,26 +452,19 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Helpers
-
-    private ETeam GetMatchWinner()
+    #region Private Helpers
+    private ETeam GetOpposingTeam(ETeam team)
     {
-        var winner = ETeam.None;
-        var bTeam = GameData.blueTeamScore;
-        var rTeam = GameData.redTeamScore;
-        if (bTeam > rTeam)
+        var opTeam = ETeam.None;
+        if(team == ETeam.BlueTeam)
         {
-            winner = ETeam.BlueTeam;
-        }
-        else if (rTeam > bTeam)
-        {
-            winner = ETeam.RedTeam;
+            opTeam = ETeam.RedTeam;
         }
         else
         {
-            winner = ETeam.None;
+            opTeam = ETeam.BlueTeam;
         }
-        return winner;
+        return opTeam;
     }
     #endregion
 
