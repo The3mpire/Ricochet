@@ -9,6 +9,10 @@ using System;
 public class GameManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Header("Scene Types")]
+    [Tooltip("Whether this scene is a game scene or a menu scene")]
+    [SerializeField]
+    private bool isGameScene = false;
     [Header("Reference Variables")]
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
@@ -100,12 +104,16 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
-        LoadMatchSettings();
-        currentMatchTime = gameMatchTime;
-        if (gameMatchTime > 0)
+        if(isGameScene)
         {
-            gameTimerText.gameObject.SetActive(true);
+            LoadMatchSettings();
+            currentMatchTime = gameMatchTime;
+            if (gameMatchTime > 0)
+            {
+                gameTimerText.gameObject.SetActive(true);
+            }
         }
+        
     }
 
     private void LoadMatchSettings()
@@ -169,7 +177,7 @@ public class GameManager : MonoBehaviour
     private void EndMatch()
     {
         GameData.gameWinner = GetMatchWinner();
-        
+
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -463,6 +471,6 @@ public class GameManager : MonoBehaviour
             winner = ETeam.None;
         }
         return winner;
-    #region Private Helpers
-    #endregion
+    }
 }
+#endregion

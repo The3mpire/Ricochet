@@ -22,7 +22,6 @@ public class CharSelect_Assign : MonoBehaviour
         {
             if (ReInput.controllers.IsJoystickAssigned(j))
             {
-                Debug.Log("Controller already assigned.");
                 continue;
             }
 
