@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -462,6 +463,6 @@ public class GameManager : MonoBehaviour
             winner = ETeam.None;
         }
         return winner;
-    }
+    #region Private Helpers
     #endregion
 }
