@@ -379,11 +379,14 @@ public class CharSelectManager : MonoBehaviour
             {
                 readyCount++;
             }
+
         }
        /* if (readyCount < 2)
         {
             allReady = false;
         }*/
+		GameData.playerCount = readyCount;
+		Debug.Log (readyCount);
         return allReady;
     }
 
