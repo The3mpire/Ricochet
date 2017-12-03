@@ -56,6 +56,14 @@ public class LevelSelectManager : MonoBehaviour
                 OnCancel();
             }
         }
+        foreach(Player p in players)
+        {
+            if (p.GetButtonDown("UIMenu"))
+            {
+                SceneManager.LoadScene("CharacterSelect");
+            }
+        }
+
     }
     #endregion
 
