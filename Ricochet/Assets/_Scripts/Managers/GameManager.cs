@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -257,7 +258,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameData.gameWinner = team;
+            GameData.gameWinner = GetOpposingTeam(team);
             EndMatch();
         }
     }
@@ -436,5 +437,21 @@ public class GameManager : MonoBehaviour
         return powerUpManager.GetPowerUpShieldColor(powerup);
     }
 
+    #endregion
+
+    #region Private Helpers
+    private ETeam GetOpposingTeam(ETeam team)
+    {
+        var opTeam = ETeam.None;
+        if(team == ETeam.BlueTeam)
+        {
+            opTeam = ETeam.RedTeam;
+        }
+        else
+        {
+            opTeam = ETeam.BlueTeam;
+        }
+        return opTeam;
+    }
     #endregion
 }
