@@ -390,7 +390,7 @@ public class CharSelectManager : MonoBehaviour
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("Art Showcase");
+        SceneManager.LoadSceneAsync("Level Select");
     }
 
     private void CountdownToLevelSelect()
@@ -461,7 +461,7 @@ public class CharSelectManager : MonoBehaviour
         }
         else
         {
-            activeToken = activeToken = tokens[currentIndex + direction];
+            activeToken = tokens[currentIndex + direction];
         }
         activeToken.SetActive(true);
         return activeToken;

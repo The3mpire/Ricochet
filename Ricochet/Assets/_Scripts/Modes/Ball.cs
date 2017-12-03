@@ -72,7 +72,6 @@ public class Ball : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(beenHit);
         if (beenHit)
         {
             // add the constant force

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
-using PlayerSelectData;
 
 public class GameManager : MonoBehaviour
 {
@@ -81,8 +80,6 @@ public class GameManager : MonoBehaviour
 
     private static GameManager instance = null;
 
-    private static Dictionary<int, PlayerData> playerSelectedData = null;
-
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
 
@@ -100,52 +97,30 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         currentMatchTime = gameMatchTime;
-        if (playerSelectedData != null)
-        {
-            for (int i = 0; i < players.Length; i++)
-            {
-                PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
-                currentPlayer.SetPlayerNumber(i + 1);
-                if (playerSelectedData[i + 1].ready)
-                {
-                    if (playerSelectedData[i + 1].team == 1)
-                    {
-                        currentPlayer.SetTeam(ETeam.RedTeam);
-                    }
-                    else
-                    {
-                        currentPlayer.SetTeam(ETeam.BlueTeam);
-                    }
-                    if (playerSelectedData[i + 1].character == "bean")
-                    {
-                        currentPlayer.SetBodyType(character1Sprite);
-                        currentPlayer.SetBodyScale(character1BodyScale);
-                    }
-                    else
-                    {
-                        currentPlayer.SetBodyType(character2Sprite);
-                        currentPlayer.SetBodyScale(character2BodyScale);
-                    }
-                    NoWaitRespawnPlayer(currentPlayer);
-                }
-                else
-                {
-                    players[i].SetActive(false);
-                }
-            }
-            playerSelectedData = null;
-        }
-
+        
         instance = this;
 
         Cursor.visible = false;
+        scoreLimit = GameData.matchScoreLimit == 0 ? SetDefaultScoreLimit() : GameData.matchScoreLimit;
+        gameMatchTime = GameData.matchTimeLimit == 0.0 ? SetDefaultTimeLimit() : GameData.matchTimeLimit;
+    }
+
+    private int SetDefaultScoreLimit()
+    {
+        scoreLimit = 2;
         GameData.matchScoreLimit = scoreLimit;
+        return scoreLimit;
+    }
+    private float SetDefaultTimeLimit()
+    {
+        gameMatchTime = 60;
         GameData.matchTimeLimit = gameMatchTime;
+        return gameMatchTime;
     }
 
     void Update()
     {
-        if (gameTimerText)
+        if(gameTimerText != null)
         {
             MatchTimer();
         }
@@ -176,9 +151,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
     }
 
-    public void StartGame(Dictionary<int, PlayerData> playerData)
+    public void StartGame()
     {
-        playerSelectedData = playerData;
         AsyncOperation async = SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
     }
 
@@ -187,14 +161,9 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    private void ChangeScene()
-    {
-        SceneManager.LoadSceneAsync(Random.Range(1, SceneManager.sceneCountInBuildSettings));
-    }
-
     private void EndMatch()
     {
-        if (nextLevel != null)
+        if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
         }
@@ -248,7 +217,9 @@ public class GameManager : MonoBehaviour
 
     public void BallSecondaryShieldCollision(GameObject secondaryShield, Ball ball)
     {
-        PlayerController playerController = secondaryShield.GetComponent<Shield>().GetPlayer();
+        //Secondary Shield used to use shield script to get player but things have changed with that
+        //so we are going to need to figure out how to do this if we don't want to use get parent
+        PlayerController playerController = secondaryShield.GetComponentInParent<PlayerController>();
         switch (playerController.GetCurrentPowerUp())
         {
             case EPowerUp.CircleShield:
@@ -368,7 +339,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnBallCoroutine(GameObject ball)
     {
         yield return new WaitForSeconds(ballRespawnTime);
-        ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
+        ball.transform.position = ballRespawns[UnityEngine.Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
         ball.GetComponent<Ball>().SetBeenHit(false);
@@ -383,12 +354,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -400,12 +371,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }

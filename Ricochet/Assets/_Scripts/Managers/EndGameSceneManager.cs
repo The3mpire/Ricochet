@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Rewired;
+using Enumerables;
 
 public class EndGameSceneManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class EndGameSceneManager : MonoBehaviour
     #region MonoBehaviour
     private void Start()
     {
-        EndGameText.text = "Congratulations " + GameData.gameWinner.ToString() + "!";
+        EndGameText.text = GameData.gameWinner == ETeam.None ? "Game Over" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
     }
 
     // Update is called once per frame
@@ -23,12 +24,12 @@ public class EndGameSceneManager : MonoBehaviour
     {
         foreach (var player in ReInput.players.AllPlayers)
         {
-            if (player.GetButtonDown("A Button"))
+            if (player.GetButtonDown("UISubmit"))
             {
                 GameData.ResetGameStatistics();
                 SceneManager.LoadSceneAsync("CharacterSelect");
             }
-            if (player.GetButtonDown("B Button"))
+            if (player.GetButtonDown("UICancel"))
             {
                 GameData.ResetGameStatistics();
                 SceneManager.LoadSceneAsync("MainMenu");
