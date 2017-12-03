@@ -150,7 +150,7 @@ public class CharSelectManager : MonoBehaviour
     #endregion
 
     #region InputRouting
-    public void routeInputAxis(int playerNumber, int direction)
+    public void RouteInputAxis(int playerNumber, int direction)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)

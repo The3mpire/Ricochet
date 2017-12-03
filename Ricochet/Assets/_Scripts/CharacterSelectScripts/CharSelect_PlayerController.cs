@@ -41,7 +41,7 @@ public class CharSelect_PlayerController : MonoBehaviour
         if (moveX != 0 && joystickAcceptingInput)
         {
             joystickAcceptingInput = false;
-            manager.routeInputAxis(playerNumber, moveX);
+            manager.RouteInputAxis(playerNumber, moveX);
             StartCoroutine(ReactivateAfterDelay());
         }
 
