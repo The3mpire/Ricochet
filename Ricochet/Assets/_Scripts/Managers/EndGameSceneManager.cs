@@ -29,6 +29,7 @@ public class EndGameSceneManager : MonoBehaviour {
             if (player.GetButtonDown("UICancel"))
             {
                 GameData.ResetGameStatistics();
+                GameData.ResetGameSetup();
                 SceneManager.LoadSceneAsync("MainMenu");
             }
         }
