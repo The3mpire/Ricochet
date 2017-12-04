@@ -27,6 +27,8 @@
         CatManWT = 0,
         Computer = 1,
         MallCop = 2,
-        CatManP = 3
+        CatManP = 3,
+        Cat = 4,
+        Sushi = 5
     }
 }
