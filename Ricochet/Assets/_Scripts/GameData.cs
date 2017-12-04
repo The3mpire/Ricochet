@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine;
 
 public static class GameData {
     #region Private
@@ -11,6 +12,7 @@ public static class GameData {
     private static int _playerCount;
     private static Enumerables.ECharacter[] _playerCharacters;
     private static Enumerables.ETeam[] _playerTeams;
+	private static bool[] playersActive = {true, true, false, false};
     #endregion
 
     #region Game Statistics
@@ -163,6 +165,26 @@ public static class GameData {
             _playerDeaths = value;
         }
     }
+	public static void SetPlayerActive(int playerNumber, bool value)
+	{
+		if (playerNumber > playersActive.Length) {
+			Debug.LogError ("Player " + playerNumber + " is not within playersActive (in GameData.cs)");
+			return;
+		}
+		playersActive [playerNumber - 1] = value;
+	}
+	public static bool PlayerIsActive(int playerNumber)
+	{
+		if (playerNumber > playersActive.Length) {
+			Debug.LogError ("Player " + playerNumber + " is not within playersActive (in GameData.cs)");
+			return false;
+		}
+		return playersActive [playerNumber - 1];
+	}
+	public static void ResetPlayerActive(int numberOfPlayers)
+	{
+		playersActive = new bool[numberOfPlayers];
+	}
     #endregion
 
     #region Functions
