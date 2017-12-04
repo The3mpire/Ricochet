@@ -107,7 +107,9 @@ public class CharSelectManager : MonoBehaviour
         SetDefaultTeams();
         timer = waitTime;
         GameData.playerCharacters = new ECharacter[4];
-        GameData.playerTeams = new ETeam[4];
+		GameData.playerTeams = new ETeam[4];
+
+		GameData.ResetPlayerActive (4);
     }
 
     void Update()
@@ -150,7 +152,7 @@ public class CharSelectManager : MonoBehaviour
     #endregion
 
     #region InputRouting
-    public void routeInputAxis(int playerNumber, int direction)
+    public void RouteInputAxis(int playerNumber, int direction)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -166,7 +168,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void routeInputA(int playerNumber)
+    public void RouteInputA(int playerNumber)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -181,7 +183,7 @@ public class CharSelectManager : MonoBehaviour
                 break;
         }
     }
-    public void routeInputB(int playerNumber)
+    public void RouteInputB(int playerNumber)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -195,6 +197,11 @@ public class CharSelectManager : MonoBehaviour
                 UndoReady(playerNumber);
                 break;
         }
+    }
+
+    public void RouteInputBack()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
     #endregion
 
@@ -316,6 +323,7 @@ public class CharSelectManager : MonoBehaviour
 
     private void SelectTeam(int playerNumber)
     {
+		// lock in a team
         switch (playerNumber)
         {
             case 1:
@@ -339,6 +347,8 @@ public class CharSelectManager : MonoBehaviour
                 GameData.playerTeams[3] = p4Team;
                 break;
         }
+		// make player load in in the next level
+		GameData.SetPlayerActive(playerNumber, true);
     }
     #endregion
 
@@ -379,18 +389,21 @@ public class CharSelectManager : MonoBehaviour
             {
                 readyCount++;
             }
+
         }
+
         if (readyCount < 2)
         {
             allReady = false;
         }
+		GameData.playerCount = readyCount;
         return allReady;
     }
 
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync("Level Select");
+        SceneManager.LoadSceneAsync(LevelIndex.LEVEL_SELECT);
     }
 
     private void CountdownToLevelSelect()
@@ -522,6 +535,7 @@ public class CharSelectManager : MonoBehaviour
     private void UndoReady(int playerNumber)
     {
         StopAllCoroutines();
+		GameData.SetPlayerActive (playerNumber, false);
         timer = waitTime;
         timerText.text = "Waiting...";
         switch (playerNumber)

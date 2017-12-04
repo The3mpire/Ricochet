@@ -125,6 +125,11 @@ public class Ball : MonoBehaviour
         gameObject.SetActive(false);
         lastTouchedBy.Clear();
     }
+
+    public void ReverseBall()
+    {
+        body.velocity = -1 * body.velocity.normalized * body.velocity.magnitude;
+    }
     #endregion
 
     #region Getters and Setters

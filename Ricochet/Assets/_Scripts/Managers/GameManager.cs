@@ -4,10 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Header("Scene Types")]
+    [Tooltip("Whether this scene is a game scene or a menu scene")]
+    [SerializeField]
+    private bool isGameScene = false;
     [Header("Reference Variables")]
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
@@ -96,31 +101,39 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        currentMatchTime = gameMatchTime;
-        
         instance = this;
 
         Cursor.visible = false;
-        scoreLimit = GameData.matchScoreLimit == 0 ? SetDefaultScoreLimit() : GameData.matchScoreLimit;
-        gameMatchTime = GameData.matchTimeLimit == 0.0 ? SetDefaultTimeLimit() : GameData.matchTimeLimit;
+
+        if (isGameScene)
+        {
+            LoadMatchSettings();
+            currentMatchTime = gameMatchTime;
+            if (gameMatchTime > 0)
+            {
+                gameTimerText.gameObject.SetActive(true);
+            }
+        }
     }
 
-    private int SetDefaultScoreLimit()
+    private void LoadMatchSettings()
     {
-        scoreLimit = 2;
-        GameData.matchScoreLimit = scoreLimit;
-        return scoreLimit;
-    }
-    private float SetDefaultTimeLimit()
-    {
-        gameMatchTime = 60;
-        GameData.matchTimeLimit = gameMatchTime;
-        return gameMatchTime;
+        //Both match limit settings are 0. Set inspector values for both.
+        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        {
+            GameData.matchScoreLimit = scoreLimit;
+            GameData.matchTimeLimit = gameMatchTime;
+        }
+        else
+        {
+            scoreLimit = GameData.matchScoreLimit;
+            gameMatchTime = GameData.matchTimeLimit;
+        }
     }
 
     void Update()
     {
-        if(gameTimerText != null)
+        if (gameTimerText != null && gameMatchTime > 0)
         {
             MatchTimer();
         }
@@ -162,7 +175,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void EndMatch()
-    {
+    {        
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -260,7 +273,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameData.gameWinner = team;
+
+            GameData.gameWinner = GetOpposingTeam(team);
             EndMatch();
         }
     }
@@ -313,7 +327,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Respawners
-
+	public void LoadPlayer(PlayerController playerController, int playerNumber)
+	{
+		if (GameData.PlayerIsActive (playerNumber)) {
+			NoWaitRespawnPlayer (playerController);
+		} else {
+			playerController.gameObject.SetActive (false);
+		}
+	}
     public void RespawnBall(GameObject ball)
     {
         if (!ball.GetComponent<Ball>().GetTempStatus())
@@ -381,7 +402,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void NoWaitRespawnAllPlayers()
+    public void NoWaitRespawnAllPlayers()
     {
         for (int i = 0; i < players.Length; i++)
         {
@@ -452,4 +473,23 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    #region Private Helpers
+    private ETeam GetOpposingTeam(ETeam team)
+    {
+        var opTeam = ETeam.None;
+        if(team == ETeam.BlueTeam)
+        {
+            opTeam = ETeam.RedTeam;
+        }
+        else
+        {
+            opTeam = ETeam.BlueTeam;
+        }
+        return opTeam;
+    }
+    #endregion
+
 }
+
+
