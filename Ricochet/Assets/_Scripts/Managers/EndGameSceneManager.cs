@@ -16,23 +16,5 @@ public class EndGameSceneManager : MonoBehaviour {
     {
         EndGameText.text = GameData.gameWinner == Enumerables.ETeam.None ? "Tie Game!" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
     }
-
-    // Update is called once per frame
-    void Update () {
-        foreach (var player in ReInput.players.AllPlayers)
-        {
-            if (player.GetButtonDown("UISubmit"))
-            {
-                GameData.ResetGameStatistics();
-                SceneManager.LoadSceneAsync("CharacterSelect");
-            }
-            if (player.GetButtonDown("UICancel"))
-            {
-                GameData.ResetGameStatistics();
-                GameData.ResetGameSetup();
-                SceneManager.LoadSceneAsync("MainMenu");
-            }
-        }
-    }
     #endregion
 }
