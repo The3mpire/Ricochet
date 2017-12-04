@@ -28,5 +28,7 @@
         Computer = 2,
         MallCop = 3,
         CatManP = 4
+        Cat = 5,
+        Sushi = 6
     }
 }
