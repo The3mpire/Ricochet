@@ -14,24 +14,7 @@ public class EndGameSceneManager : MonoBehaviour {
     #region MonoBehaviour
     private void Start()
     {
-        EndGameText.text = GameData.gameWinner == null ? "Game Over" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
-    }
-
-    // Update is called once per frame
-    void Update () {
-        foreach (var player in ReInput.players.AllPlayers)
-        {
-            if (player.GetButtonDown("UISubmit"))
-            {
-                GameData.ResetGameStatistics();
-                SceneManager.LoadSceneAsync("CharacterSelect");
-            }
-            if (player.GetButtonDown("UICancel"))
-            {
-                GameData.ResetGameStatistics();
-                SceneManager.LoadSceneAsync("MainMenu");
-            }
-        }
+        EndGameText.text = GameData.gameWinner == Enumerables.ETeam.None ? "Tie Game!" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
     }
     #endregion
 }
