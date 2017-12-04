@@ -64,7 +64,9 @@ public class PowerUp : MonoBehaviour
     {
         return instanceType;
     }
-
+    #endregion
+    
+    #region Private Fucntions
     private void UpdateSprite()
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
