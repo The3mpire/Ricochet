@@ -104,8 +104,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         Cursor.visible = false;
-
-        if (isGameScene)
+        if(isGameScene)
         {
             LoadMatchSettings();
             currentMatchTime = gameMatchTime;
@@ -113,6 +112,22 @@ public class GameManager : MonoBehaviour
             {
                 gameTimerText.gameObject.SetActive(true);
             }
+        }
+        
+    }
+
+    private void LoadMatchSettings()
+    {
+        //Both match limit settings are 0. Set inspector values for both.
+        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        {
+            GameData.matchScoreLimit = scoreLimit;
+            GameData.matchTimeLimit = gameMatchTime;
+        }
+        else
+        {
+            scoreLimit = GameData.matchScoreLimit;
+            gameMatchTime = GameData.matchTimeLimit;
         }
     }
 
@@ -141,14 +156,11 @@ public class GameManager : MonoBehaviour
     #region UI Controls
     public void ExitLevel()
     {
-        GameData.ResetGameSetup();
-        GameData.ResetGameStatistics();
         SceneManager.LoadSceneAsync(LevelIndex.MAIN_MENU);
     }
 
     public void CharacterSelect()
     {
-        GameData.ResetGameStatistics();
         SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
     }
 
@@ -163,7 +175,9 @@ public class GameManager : MonoBehaviour
     }
 
     private void EndMatch()
-    {        
+    {
+        GameData.gameWinner = GetMatchWinner();
+
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -258,8 +272,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
-            GameData.gameWinner = GetOpposingTeam(team);
             EndMatch();
         }
     }
@@ -312,14 +324,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Respawners
-	public void LoadPlayer(PlayerController playerController, int playerNumber)
-	{
-		if (GameData.PlayerIsActive (playerNumber)) {
-			NoWaitRespawnPlayer (playerController);
-		} else {
-			playerController.gameObject.SetActive (false);
-		}
-	}
+
     public void RespawnBall(GameObject ball)
     {
         if (!ball.GetComponent<Ball>().GetTempStatus())
@@ -447,38 +452,33 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Private Helpers
-    private ETeam GetOpposingTeam(ETeam team)
-    {
-        var opTeam = ETeam.None;
-        if(team == ETeam.BlueTeam)
-        {
-            opTeam = ETeam.RedTeam;
-        }
-        else
-        {
-            opTeam = ETeam.BlueTeam;
-        }
-        return opTeam;
-    }
-    #endregion
+    #region Helpers
 
-    #region Private Helpers
-    private void LoadMatchSettings()
+    private ETeam GetMatchWinner()
     {
-        //Both match limit settings are 0. Set inspector values for both.
-        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        var winner = ETeam.None;
+        var bTeam = GameData.blueTeamScore;
+        var rTeam = GameData.redTeamScore;
+        if (bTeam > rTeam)
         {
-            GameData.matchScoreLimit = scoreLimit;
-            GameData.matchTimeLimit = gameMatchTime;
+            winner = ETeam.BlueTeam;
+        }
+        else if (rTeam > bTeam)
+        {
+            winner = ETeam.RedTeam;
         }
         else
         {
-            scoreLimit = GameData.matchScoreLimit;
-            gameMatchTime = GameData.matchTimeLimit;
+            winner = ETeam.None;
         }
+        return winner;
     }
+<<<<<<< HEAD
+=======
     #endregion
+    #region Private Helpers
+
+    #endregion
+>>>>>>> 675fb186019f23d93e3d83b78b8b4cdcb7e40d07
 }
-
-
+#endregion

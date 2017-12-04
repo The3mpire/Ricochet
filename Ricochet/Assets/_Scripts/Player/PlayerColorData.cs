@@ -12,7 +12,7 @@ public class PlayerColorData : MonoBehaviour
 
     public static Color getColor(int playerNum, ETeam team)
     {
-        switch (team)
+       /* switch (team)
         {
             case ETeam.RedTeam:
                 return playerNum % 2 == 0 ? redTeamPlayer1 : redTeamPlayer2;
@@ -20,7 +20,8 @@ public class PlayerColorData : MonoBehaviour
                 return playerNum % 2 == 0 ? blueTeamPlayer1 : blueTeamPlayer2;
             default:
                 return Color.white;
-        }
+        }*/
+		return Color.white;
     }
         
 }
