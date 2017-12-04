@@ -106,11 +106,7 @@ public class Ball : MonoBehaviour
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             beenHit = true;
-            if (hitCollider.tag == "Player")
-            {
-                gameManagerInstance.BallPlayerCollision(hitCollider.gameObject, this);
-            }
-            else if (hitCollider.tag == "Shield")
+            if (hitCollider.tag == "Shield")
             {
                 gameManagerInstance.BallShieldCollision(hitCollider.gameObject, this);
             }
