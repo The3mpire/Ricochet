@@ -324,7 +324,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Respawners
-
+	public void LoadPlayer(PlayerController playerController, int playerNumber)
+	{
+		if (GameData.PlayerIsActive (playerNumber)) {
+			NoWaitRespawnPlayer (playerController);
+		} else {
+			playerController.gameObject.SetActive (false);
+		}
+	}
     public void RespawnBall(GameObject ball)
     {
         if (!ball.GetComponent<Ball>().GetTempStatus())
