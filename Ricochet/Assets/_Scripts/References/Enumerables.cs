@@ -23,10 +23,10 @@
 
     public enum ECharacter
     {
-        None = -1,
-        CatManWT = 0,
-        Computer = 1,
-        MallCop = 2,
-        CatManP = 3
+        None = 0,
+        CatManWT = 1,
+        Computer = 2,
+        MallCop = 3,
+        CatManP = 4
     }
 }

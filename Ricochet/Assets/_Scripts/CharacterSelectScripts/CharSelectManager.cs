@@ -103,11 +103,7 @@ public class CharSelectManager : MonoBehaviour
     #region MonoBehaviour
     void Start()
     {
-        SetActiveTokens();
-        SetDefaultTeams();
         timer = waitTime;
-        GameData.playerCharacters = new ECharacter[4];
-        GameData.playerTeams = new ETeam[4];
     }
 
     void Update()
@@ -127,23 +123,60 @@ public class CharSelectManager : MonoBehaviour
     /// <param name="playerNumber">Player ID to activate</param>
     public void ActivatePlayer(int playerNumber)
     {
+        var playerData = new PSettings();
         switch (playerNumber)
         {
             case 0:
                 p1DefaultToken.SetActive(true);
+                p1ActiveToken = p1DefaultToken;
                 playerPhase[0] = SelectionPhase.CharacterSelect;
+                playerData = LoadPlayerSettings(playerNumber);
+                if (playerData.Character == ECharacter.None)
+                {
+                    playerData.Character = p1DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                }
+                p1ActiveToken = MoveSelectionTokenTo(playerData.Character, p1ActiveToken, p1Tokens);
+                p1Team = playerData.Team;
+                p1TeamPanel.color = GetTeamColor(p1Team);
                 break;
             case 1:
                 p2DefaultToken.SetActive(true);
+                p2ActiveToken = p2DefaultToken;
                 playerPhase[1] = SelectionPhase.CharacterSelect;
+                playerData = LoadPlayerSettings(playerNumber);
+                if (playerData.Character == ECharacter.None)
+                {
+                    playerData.Character = p2DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                }
+                p2ActiveToken = MoveSelectionTokenTo(playerData.Character, p2ActiveToken, p2Tokens);
+                p2Team = playerData.Team;
+                p2TeamPanel.color = GetTeamColor(p2Team);
                 break;
             case 2:
                 p3DefaultToken.SetActive(true);
+                p3ActiveToken = p3DefaultToken;
                 playerPhase[2] = SelectionPhase.CharacterSelect;
+                playerData = LoadPlayerSettings(playerNumber);
+                if (playerData.Character == ECharacter.None)
+                {
+                    playerData.Character = p3DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                }
+                p3ActiveToken = MoveSelectionTokenTo(playerData.Character, p3ActiveToken, p3Tokens);
+                p3Team = playerData.Team;
+                p3TeamPanel.color = GetTeamColor(p3Team);
                 break;
             case 3:
                 p4DefaultToken.SetActive(true);
+                p4ActiveToken = p4DefaultToken;
                 playerPhase[3] = SelectionPhase.CharacterSelect;
+                playerData = LoadPlayerSettings(playerNumber);
+                if (playerData.Character == ECharacter.None)
+                {
+                    playerData.Character = p4DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                }
+                p4ActiveToken = MoveSelectionTokenTo(playerData.Character, p4ActiveToken, p4Tokens);
+                p4Team = playerData.Team;
+                p4TeamPanel.color = GetTeamColor(p4Team);
                 break;
         }
     }
@@ -199,6 +232,7 @@ public class CharSelectManager : MonoBehaviour
 
     public void RouteInputBack()
     {
+        GameData.ResetGameSetup();
         SceneManager.LoadScene("MainMenu");
     }
     #endregion
@@ -206,20 +240,19 @@ public class CharSelectManager : MonoBehaviour
     #region Selection Functions
     private void MoveSelectionToken(int playerNumber, int direction)
     {
-
         switch (playerNumber)
         {
             case 1:
-                p1ActiveToken = SwitchTokens(p1ActiveToken, p1Tokens, direction);
+                p1ActiveToken = SwitchTokensToNext(p1ActiveToken, p1Tokens, direction);
                 break;
             case 2:
-                p2ActiveToken = SwitchTokens(p2ActiveToken, p2Tokens, direction);
+                p2ActiveToken = SwitchTokensToNext(p2ActiveToken, p2Tokens, direction);
                 break;
             case 3:
-                p3ActiveToken = SwitchTokens(p3ActiveToken, p3Tokens, direction);
+                p3ActiveToken = SwitchTokensToNext(p3ActiveToken, p3Tokens, direction);
                 break;
             case 4:
-                p4ActiveToken = SwitchTokens(p4ActiveToken, p4Tokens, direction);
+                p4ActiveToken = SwitchTokensToNext(p4ActiveToken, p4Tokens, direction);
                 break;
         }
     }
@@ -348,27 +381,6 @@ public class CharSelectManager : MonoBehaviour
     #endregion
 
     #region Private Helpers
-    private void SetActiveTokens()
-    {
-        p1ActiveToken = p1DefaultToken;
-        p2ActiveToken = p2DefaultToken;
-        p3ActiveToken = p3DefaultToken;
-        p4ActiveToken = p4DefaultToken;
-    }
-
-    private void SetDefaultTeams()
-    {
-        p1Team = Enumerables.ETeam.BlueTeam;
-        p2Team = Enumerables.ETeam.BlueTeam;
-        p3Team = Enumerables.ETeam.RedTeam;
-        p4Team = Enumerables.ETeam.RedTeam;
-
-        p1TeamPanel.color = Color.blue;
-        p2TeamPanel.color = Color.blue;
-        p3TeamPanel.color = Color.red;
-        p3TeamPanel.color = Color.red;
-    }
-
     private bool CheckReady()
     {
         var allReady = true;
@@ -408,37 +420,79 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    private Enumerables.ETeam GetNextTeam(Enumerables.ETeam team)
+    private ETeam GetNextTeam(ETeam team)
     {
         switch (team)
         {
-            case Enumerables.ETeam.BlueTeam:
-                return Enumerables.ETeam.RedTeam;
-            case Enumerables.ETeam.RedTeam:
-                return Enumerables.ETeam.BlueTeam;
-            case Enumerables.ETeam.None:
-                return Enumerables.ETeam.BlueTeam;
+            case ETeam.BlueTeam:
+                return ETeam.RedTeam;
+            case ETeam.RedTeam:
+                return ETeam.BlueTeam;
+            case ETeam.None:
+                return ETeam.BlueTeam;
             default:
-                return Enumerables.ETeam.BlueTeam;
+                return ETeam.BlueTeam;
         }
     }
 
-    private Color GetTeamColor(Enumerables.ETeam team)
+    private Color GetTeamColor(ETeam team)
     {
         switch (team)
         {
-            case Enumerables.ETeam.BlueTeam:
+            case ETeam.BlueTeam:
                 return Color.blue;
-            case Enumerables.ETeam.RedTeam:
+            case ETeam.RedTeam:
                 return Color.red;
-            case Enumerables.ETeam.None:
+            case ETeam.None:
                 return Color.grey;
             default:
                 return Color.gray;
         }
     }
 
-    private GameObject SwitchTokens(GameObject activeToken, List<GameObject> tokens, int direction)
+    private PSettings LoadPlayerSettings(int playerNumber)
+    {
+        var character = ECharacter.None;
+        var team = ETeam.None;
+        if (GameData.playerCharacters != null)
+        {
+            character = GameData.playerCharacters[playerNumber];
+        }
+        else
+        {
+            GameData.playerCharacters = new ECharacter[4];
+        }
+        if (GameData.playerTeams != null)
+        {
+            team = GameData.playerTeams[playerNumber];
+
+        }
+        else
+        {
+            GameData.playerTeams = new ETeam[4];
+            team = GameData.playerTeams[playerNumber];
+        }
+        return new PSettings(character, team);
+    }
+
+    private GameObject MoveSelectionTokenTo(ECharacter character, GameObject active, IEnumerable<GameObject> tokens)
+    {
+        foreach (var token in tokens)
+        {
+            if (token.GetComponentInParent<CharacterInfo>().getCharacterId() != character) continue;
+            SwitchActiveToken(active, token);
+            return token;
+        }
+        return null;
+    }
+
+    private void SwitchActiveToken(GameObject fromToken, GameObject toToken)
+    {
+        fromToken.SetActive(false);
+        toToken.SetActive(true);
+    }
+
+    private GameObject SwitchTokensToNext(GameObject activeToken, List<GameObject> tokens, int direction)
     {
         activeToken.SetActive(false);
         var currentIndex = tokens.FindIndex(t => (t == activeToken));
@@ -466,7 +520,7 @@ public class CharSelectManager : MonoBehaviour
         }
         else
         {
-            activeToken = activeToken = tokens[currentIndex + direction];
+            activeToken = tokens[currentIndex + direction];
         }
         activeToken.SetActive(true);
         return activeToken;
