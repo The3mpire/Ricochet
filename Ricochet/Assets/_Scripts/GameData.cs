@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Enumerables;
 
 public static class GameData {
     #region Private
@@ -7,6 +8,7 @@ public static class GameData {
     private static int _matchScoreLimit;
     private static int _matchTimeLimit;
     private static int _playerCount;
+    private static EMode _gameMode;
     #endregion
 
     #region Game Statistics
@@ -82,6 +84,17 @@ public static class GameData {
             {
                 _playerCount = value;
             }
+        }
+    }
+    public static EMode gameMode
+    {
+        get
+        {
+            return _gameMode;
+        }
+        set
+        {
+            _gameMode = value;
         }
     }
     public static int blueTeamScore

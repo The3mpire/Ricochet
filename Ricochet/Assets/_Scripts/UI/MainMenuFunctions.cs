@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Enumerables;
 
 public class MainMenuFunctions : MonoBehaviour {
 
@@ -16,6 +17,9 @@ public class MainMenuFunctions : MonoBehaviour {
     [Tooltip("The first button to be selected in the scene")]
     [SerializeField]
     private GameObject defaultButton;
+    [Tooltip("The dropdown menu for game modes")]
+    [SerializeField]
+    private Dropdown gameModes;
     #endregion
 
     #region Hidden Variables
@@ -38,7 +42,20 @@ public class MainMenuFunctions : MonoBehaviour {
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-
+            EMode mode;
+            switch (gameModes.value)
+            {
+                case 0:
+                    mode = EMode.Soccer;
+                    break;
+                case 1:
+                    mode = EMode.Deathmatch;
+                    break;
+                default:
+                    mode = EMode.Soccer;
+                    break;
+            }
+            GameData.gameMode = mode;
         }
     }
 }

@@ -43,6 +43,25 @@ public class ScoreManager : ModeManager
         return false;
     }
 
+    public override bool AltUpdateScore(ETeam team, int value)
+    {
+        switch (team)
+        {
+            // it increments team's score
+            case ETeam.RedTeam:
+                redTeamScore += value;
+                GameData.redTeamScore += value;
+                RedTeamText.text = redTeamScore.ToString();
+                return CheckWin(GameData.redTeamScore);
+            case ETeam.BlueTeam:
+                blueTeamScore += value;
+                GameData.blueTeamScore += value;
+                BlueTeamText.text = blueTeamScore.ToString();
+                return CheckWin(GameData.blueTeamScore);
+        }
+        return false;
+    }
+
     public bool CheckWin(int score)
     {
         if (GameData.matchScoreLimit > 0)

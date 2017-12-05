@@ -11,7 +11,8 @@
     public enum EMode
     {
         None = -1,
-        Soccer = 0
+        Soccer = 0,
+        Deathmatch = 1
     }
 
     public enum ETeam

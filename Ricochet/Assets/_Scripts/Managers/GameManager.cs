@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     private PowerUpManager powerUpManager;
 
     [Header("Game Match Variables")]
+    [Tooltip("Set the match mode here")]
+    [SerializeField]
+    private EMode gameMode;
     [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
     [SerializeField]
     private Canvas gameMenuUI;
@@ -271,7 +274,25 @@ public class GameManager : MonoBehaviour
         if (lastTouchedBy != null)
         {
             lastTouchedBy.RegisterKill(playerController);
+
+            if (gameMode == EMode.Deathmatch)
+            {
+                if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
+                {
+                    GameData.gameWinner = lastTouchedBy.GetTeamNumber();
+                    EndMatch();
+                    ChangeScene();
+                }
+            }
         }
+        else
+        {
+            if (gameMode == EMode.Deathmatch)
+            {
+                modeManager.AltUpdateScore(playerController.GetTeamNumber(), -1);
+            }
+        }
+
 
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
@@ -279,17 +300,20 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        if (!modeManager.UpdateScore(team, points))
+        if (gameMode == EMode.Soccer)
         {
-            ball.GetComponent<Ball>().OnBallGoalCollision();
-            ball.SetActive(false);
-            RespawnBall(ball);
-        }
-        else
-        {
-            GameData.gameWinner = team;
-            EndMatch();
-            ChangeScene();
+            if (!modeManager.UpdateScore(team, points))
+            {
+                ball.GetComponent<Ball>().OnBallGoalCollision();
+                ball.SetActive(false);
+                RespawnBall(ball);
+            }
+            else
+            {
+                GameData.gameWinner = team;
+                EndMatch();
+                ChangeScene();
+            }
         }
     }
 
