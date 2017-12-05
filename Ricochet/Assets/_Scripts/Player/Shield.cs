@@ -29,7 +29,7 @@ public class Shield : MonoBehaviour
     private void Awake()
     {
         edgeCollider = GetComponent<EdgeCollider2D>();
-        lineRenderer = GetComponent<LineRenderer>();        
+        lineRenderer = GetComponent<LineRenderer>();
     }
     #endregion
 
@@ -109,9 +109,16 @@ public class Shield : MonoBehaviour
     #endregion
 
     #region Setters
+    public void SetColor(Color startColor, Color endColor)
+    {
+        lineRenderer.startColor = startColor;
+        lineRenderer.endColor = endColor;
+    }
+
     public void SetColor(Color color)
     {
-        lineRenderer.material.color = color;
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
     }
 
     public void SetMaterial(Material material)
