@@ -88,6 +88,8 @@ public class CharSelectManager : MonoBehaviour
 
     private SelectionPhase[] playerPhase = new SelectionPhase[4];
     private float timer;
+
+    private bool timerActive;
     #endregion
 
     #region Phase Enum
@@ -101,16 +103,22 @@ public class CharSelectManager : MonoBehaviour
     #endregion
 
     #region MonoBehaviour
+    private void Awake()
+    {
+        timerActive = false;
+    }
+
     void Start()
     {
         timer = waitTime;
-		    GameData.ResetPlayerActive (4);
+		GameData.ResetPlayerActive (4);
     }
 
     void Update()
     {
-        if (CheckReady())
+        if (CheckReady() && !timerActive)
         {
+            timerActive = true;
             StartCoroutine(LevelSelectTimer());
             CountdownToLevelSelect();
         }
@@ -414,7 +422,7 @@ public class CharSelectManager : MonoBehaviour
     private IEnumerator LevelSelectTimer()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadSceneAsync(LevelIndex.LEVEL_SELECT);
+        LevelSelect.LoadLevelSelect();
     }
 
     private void CountdownToLevelSelect()
