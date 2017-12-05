@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
         inertiaTime = 2;
         rightStickHorz = 1;
         rightStickVert = 0; 
-        shield = GetComponent<Shield>();
+        shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
         this.isFlipped = this.sprite.flipX;
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];

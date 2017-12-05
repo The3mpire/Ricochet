@@ -109,22 +109,16 @@ public class Shield : MonoBehaviour
     #endregion
 
     #region Setters
+    public void SetColor(Color startColor, Color endColor)
+    {
+        lineRenderer.startColor = startColor;
+        lineRenderer.endColor = endColor;
+    }
+
     public void SetColor(Color color)
     {
-        GradientColorKey[] gck = new GradientColorKey[2];
-        GradientAlphaKey[] gak = new GradientAlphaKey[2];
-
-        gck[0].color = color;
-        gck[0].time = 0.0F;
-        gck[1].color = color;
-        gck[1].time = 1.0F;
-
-        gak[0].alpha = 1.0F;
-        gak[0].time = 0.0F;
-        gak[1].alpha = 1.0F;
-        gak[1].time = 1.0F;
-
-        lineRenderer.colorGradient.SetKeys(gck, gak);
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
     }
 
     public void SetMaterial(Material material)
