@@ -116,21 +116,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void LoadMatchSettings()
-    {
-        //Both match limit settings are 0. Set inspector values for both.
-        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
-        {
-            GameData.matchScoreLimit = scoreLimit;
-            GameData.matchTimeLimit = gameMatchTime;
-        }
-        else
-        {
-            scoreLimit = GameData.matchScoreLimit;
-            gameMatchTime = GameData.matchTimeLimit;
-        }
-    }
-
     void Update()
     {
         if (gameTimerText != null && gameMatchTime > 0)
@@ -156,11 +141,14 @@ public class GameManager : MonoBehaviour
     #region UI Controls
     public void ExitLevel()
     {
+        GameData.ResetGameSetup();
+        GameData.ResetGameStatistics();
         SceneManager.LoadSceneAsync(LevelIndex.MAIN_MENU);
     }
 
     public void CharacterSelect()
     {
+        GameData.ResetGameStatistics();
         SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
     }
 
@@ -324,7 +312,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Respawners
-
+	public void LoadPlayer(PlayerController playerController, int playerNumber)
+	{
+		if (GameData.PlayerIsActive (playerNumber)) {
+			NoWaitRespawnPlayer (playerController);
+		} else {
+			playerController.gameObject.SetActive (false);
+		}
+	}
     public void RespawnBall(GameObject ball)
     {
         if (!ball.GetComponent<Ball>().GetTempStatus())
@@ -468,6 +463,22 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region Private Helpers
+    private void LoadMatchSettings()
+    {
+        //Both match limit settings are 0. Set inspector values for both.
+        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        {
+            GameData.matchScoreLimit = scoreLimit;
+            GameData.matchTimeLimit = gameMatchTime;
+        }
+        else
+        {
+            scoreLimit = GameData.matchScoreLimit;
+            gameMatchTime = GameData.matchTimeLimit;
+        }
+    }
+    #endregion
 }
 
 

@@ -82,6 +82,10 @@ public class PlayerController : MonoBehaviour
 
     private Ball ballHeld;
 
+    private Animator animator;
+    private bool isFlipped;
+
+
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
@@ -110,22 +114,30 @@ public class PlayerController : MonoBehaviour
     #region Monobehaviour
     private void Awake()
     {
+		if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+		{
+			gameManagerInstance.LoadPlayer(this, playerNumber);
+		}
+			
         killList = new List<PlayerController>();
         currentFuel = startFuel;
         maxFuel = startFuel;
         timeSinceDash = 0f;
         inertiaTime = 2;
         rightStickHorz = 1;
-        rightStickVert = 0;
+        rightStickVert = 0; 
         shield = GetComponent<Shield>();
+        animator = transform.GetComponentInChildren<Animator>();
+        this.isFlipped = this.sprite.flipX;
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
-        SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
+        //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
     private void Start()
     {
         player = ReInput.players.GetPlayer(playerNumber - 1);
         sprite.color = PlayerColorData.getColor(playerNumber, team);
+        transform.GetComponentInChildren<BasePlayerSetup>().SetupCharacter(ECharacter.MallCop, 0);
     }
 
     private void Update()
@@ -199,7 +211,7 @@ public class PlayerController : MonoBehaviour
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             moveDirection *= fuelFactor;
-
+            this.animator.SetBool("isJumping", true);
             // If there is no directional input, just go up with upThrusterSpeed
             if (moveDirection == Vector2.zero)
             {
@@ -214,8 +226,16 @@ public class PlayerController : MonoBehaviour
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
             moveDirection = new Vector2(leftStickHorz, 0).normalized;
+            if(moveDirection != Vector2.zero)
+            {
+                this.animator.SetBool("isWalking", true);
+            } else
+            {
+                this.animator.SetBool("isWalking", false);
+            }
             if (grounded)
             {
+                this.animator.SetBool("isJumping", false);
                 rigid.velocity = moveDirection * groundedMoveSpeed;
             }
             else
@@ -228,13 +248,13 @@ public class PlayerController : MonoBehaviour
 
     private void Flip()
     {
-        if (leftStickHorz < 0 && !sprite.flipX)
+        if (leftStickHorz < 0)
         {
-            sprite.flipX = true;
+            sprite.flipX = isFlipped;
         }
-        else if (leftStickHorz > 0 && sprite.flipX)
+        else if (leftStickHorz > 0)
         {
-            sprite.flipX = false;
+            sprite.flipX = !isFlipped;
         }
     }
 
@@ -243,6 +263,7 @@ public class PlayerController : MonoBehaviour
     {
         if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel))
         {
+            this.animator.SetTrigger("dash");
             currentFuel -= dashCost;
             dashDirection = new Vector2(rightStickHorz, rightStickVert).normalized;
             dashing = true;

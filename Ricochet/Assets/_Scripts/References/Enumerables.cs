@@ -3,9 +3,10 @@
     public enum EPowerUp
     {
         None = -1,
-        Multiball = 0,
-        CatchNThrow = 1,
-        CircleShield = 2
+        Random = 0,
+        Multiball = 1,
+        CatchNThrow = 2,
+        CircleShield = 3
     }
 
     public enum EMode
@@ -23,10 +24,12 @@
 
     public enum ECharacter
     {
-        None = -1,
-        CatManWT = 0,
-        Computer = 1,
-        MallCop = 2,
-        CatManP = 3
+        None = 0,
+        CatManWT = 1,
+        Computer = 2,
+        MallCop = 3,
+        CatManP = 4,
+        Cat = 5,
+        Sushi = 6
     }
 }
