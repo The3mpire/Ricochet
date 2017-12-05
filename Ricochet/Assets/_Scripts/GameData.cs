@@ -1,14 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine;
 using Enumerables;
 
 public static class GameData {
     #region Private
     #region Game Setup
     private static int _matchScoreLimit;
-    private static int _matchTimeLimit;
+    private static float _matchTimeLimit;
     private static int _playerCount;
     private static EMode _gameMode;
+    private static Enumerables.ECharacter[] _playerCharacters;
+    private static Enumerables.ETeam[] _playerTeams;
+	private static bool[] playersActive = {true, true, false, false};
     #endregion
 
     #region Game Statistics
@@ -42,7 +48,7 @@ public static class GameData {
             }
         }
     }
-    public static int matchTimeLimit
+    public static float matchTimeLimit
     {
         get
         {
@@ -96,6 +102,18 @@ public static class GameData {
         {
             _gameMode = value;
         }
+    }
+
+    public static Enumerables.ECharacter[] playerCharacters
+    {
+        get { return _playerCharacters; }
+        set { _playerCharacters = value; }
+    }
+
+    public static Enumerables.ETeam[] playerTeams
+    {
+        get { return _playerTeams; }
+        set { _playerTeams = value; }
     }
     public static int blueTeamScore
     {
@@ -160,6 +178,26 @@ public static class GameData {
             _playerDeaths = value;
         }
     }
+	public static void SetPlayerActive(int playerNumber, bool value)
+	{
+		if (playerNumber > playersActive.Length) {
+			Debug.LogError ("Player " + playerNumber + " is not within playersActive (in GameData.cs)");
+			return;
+		}
+		playersActive [playerNumber - 1] = value;
+	}
+	public static bool PlayerIsActive(int playerNumber)
+	{
+		if (playerNumber > playersActive.Length) {
+			Debug.LogError ("Player " + playerNumber + " is not within playersActive (in GameData.cs)");
+			return false;
+		}
+		return playersActive [playerNumber - 1];
+	}
+	public static void ResetPlayerActive(int numberOfPlayers)
+	{
+		playersActive = new bool[numberOfPlayers];
+	}
     #endregion
 
     #region Functions
@@ -168,6 +206,8 @@ public static class GameData {
         _matchScoreLimit = 0;
         _matchTimeLimit = 0;
         _playerCount = 0;
+        _playerTeams = null;
+        _playerCharacters = null;
     }
     /// <summary>
     /// Resets all variables in Game Statistics region

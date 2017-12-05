@@ -4,11 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using Enumerables;
 using UnityEngine.SceneManagement;
-using PlayerSelectData;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Header("Scene Types")]
+    [Tooltip("Whether this scene is a game scene or a menu scene")]
+    [SerializeField]
+    private bool isGameScene = false;
     [Header("Reference Variables")]
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
@@ -24,15 +28,14 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
     [SerializeField]
     private Canvas gameMenuUI;
+
     [Tooltip("How long the selected game lasts in seconds")]
     [SerializeField]
     private float gameMatchTime = 120f;
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private Text gameTimerText;
-    [Tooltip("Drag the winning team text here")]
-    [SerializeField]
-    private Text winningTeamText;
+
     [Tooltip("Time to wait for before switching back to game select menu (in seconds)")]
     [SerializeField]
     private int winScreenWaitTime = 3;
@@ -84,21 +87,19 @@ public class GameManager : MonoBehaviour
     [Tooltip("Score limit to win the match")]
     [SerializeField]
     private int scoreLimit;
-    [Tooltip("Time limit for the match")]
-    [SerializeField]
-    private int timeLimit;
     #endregion
 
     #region Hidden Variables
 
     private static GameManager instance = null;
 
-    private static Dictionary<int, PlayerData> playerSelectedData = null;
-
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
 
     private float currentMatchTime;
+    [SerializeField]
+    [Tooltip("Name of level to transition to")]
+    private string nextLevel;
     #endregion
 
     #region MonoBehaviour
@@ -108,53 +109,24 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        currentMatchTime = gameMatchTime;
-        if (playerSelectedData != null)
-        {
-            for (int i = 0; i < players.Length; i++)
-            {
-                PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
-                currentPlayer.SetPlayerNumber(i + 1);
-                if (playerSelectedData[i + 1].ready)
-                {
-                    if (playerSelectedData[i + 1].team == 1)
-                    {
-                        currentPlayer.SetTeam(ETeam.RedTeam);
-                    }
-                    else
-                    {
-                        currentPlayer.SetTeam(ETeam.BlueTeam);
-                    }
-                    if (playerSelectedData[i + 1].character == "bean")
-                    {
-                        currentPlayer.SetBodyType(character1Sprite);
-                        currentPlayer.SetBodyScale(character1BodyScale);
-                    }
-                    else
-                    {
-                        currentPlayer.SetBodyType(character2Sprite);
-                        currentPlayer.SetBodyScale(character2BodyScale);
-                    }
-                    NoWaitRespawnPlayer(currentPlayer);
-                }
-                else
-                {
-                    players[i].SetActive(false);
-                }
-            }
-            playerSelectedData = null;
-        }
-
         instance = this;
 
         Cursor.visible = false;
-        GameData.matchScoreLimit = scoreLimit;
-        GameData.matchTimeLimit = timeLimit;
+
+        if (isGameScene)
+        {
+            LoadMatchSettings();
+            currentMatchTime = gameMatchTime;
+            if (gameMatchTime > 0)
+            {
+                gameTimerText.gameObject.SetActive(true);
+            }
+        }
     }
 
     void Update()
     {
-        if (gameMenuUI != null)
+        if (gameTimerText != null && gameMatchTime > 0)
         {
             MatchTimer();
         }
@@ -177,17 +149,19 @@ public class GameManager : MonoBehaviour
     #region UI Controls
     public void ExitLevel()
     {
+        GameData.ResetGameSetup();
+        GameData.ResetGameStatistics();
         SceneManager.LoadSceneAsync(LevelIndex.MAIN_MENU);
     }
 
     public void CharacterSelect()
     {
+        GameData.ResetGameStatistics();
         SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
     }
 
-    public void StartGame(Dictionary<int, PlayerData> playerData)
+    public void StartGame()
     {
-        playerSelectedData = playerData;
         AsyncOperation async = SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
     }
 
@@ -196,14 +170,16 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    private void ChangeScene()
-    {
-        SceneManager.LoadSceneAsync(Random.Range(1, SceneManager.sceneCountInBuildSettings));
-    }
-
     private void EndMatch()
-    {
-        SceneManager.LoadSceneAsync("EndGame");
+    {        
+        if (nextLevel != "")
+        {
+            SceneManager.LoadSceneAsync(nextLevel);
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync("EndGame");
+        }
     }
     #endregion
 
@@ -281,7 +257,6 @@ public class GameManager : MonoBehaviour
                 {
                     GameData.gameWinner = lastTouchedBy.GetTeamNumber();
                     EndMatch();
-                    ChangeScene();
                 }
             }
         }
@@ -312,8 +287,15 @@ public class GameManager : MonoBehaviour
             {
                 GameData.gameWinner = team;
                 EndMatch();
-                ChangeScene();
             }
+            ball.GetComponent<Ball>().OnBallGoalCollision();
+            ball.SetActive(false);
+            RespawnBall(ball);
+        }
+        else
+        {
+            GameData.gameWinner = GetOpposingTeam(team);
+            EndMatch();
         }
     }
 
@@ -365,7 +347,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Respawners
-
+	public void LoadPlayer(PlayerController playerController, int playerNumber)
+	{
+		if (GameData.PlayerIsActive (playerNumber)) {
+			NoWaitRespawnPlayer (playerController);
+		} else {
+			playerController.gameObject.SetActive (false);
+		}
+	}
     public void RespawnBall(GameObject ball)
     {
         if (!ball.GetComponent<Ball>().GetTempStatus())
@@ -392,7 +381,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(ballRespawnTime);
 
-        ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
+        ball.transform.position = ballRespawns[UnityEngine.Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
     }
@@ -406,12 +395,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -423,12 +412,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -492,4 +481,39 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    #region Private Helpers
+    private ETeam GetOpposingTeam(ETeam team)
+    {
+        var opTeam = ETeam.None;
+        if(team == ETeam.BlueTeam)
+        {
+            opTeam = ETeam.RedTeam;
+        }
+        else
+        {
+            opTeam = ETeam.BlueTeam;
+        }
+        return opTeam;
+    }
+    #endregion
+
+    #region Private Helpers
+    private void LoadMatchSettings()
+    {
+        //Both match limit settings are 0. Set inspector values for both.
+        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        {
+            GameData.matchScoreLimit = scoreLimit;
+            GameData.matchTimeLimit = gameMatchTime;
+        }
+        else
+        {
+            scoreLimit = GameData.matchScoreLimit;
+            gameMatchTime = GameData.matchTimeLimit;
+        }
+    }
+    #endregion
 }
+
+

@@ -3,35 +3,57 @@ using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectManager : MonoBehaviour
 {
-
     #region Inspector Variables
     [SerializeField] private RectTransform levelSelectMenu;
     [SerializeField] private RectTransform settingsMenu;
 
-    [SerializeField] private GameObject defaultSelectedLevelButton;
-    [SerializeField] private GameObject defaultSelectedSettingsItem;
+    [SerializeField] private GameObject defaultOptionsGameObject;
 
     [SerializeField] private string loadLevelName;
+    [SerializeField] private Button[] levelButtons;
     #endregion
 
     #region Private Variables
-    private bool levelSelected;
+    private GameObject defaultSelectedLevelButton;
+    private bool optionsOpen;
     private IList<Player> players;
     #endregion
 
     #region Monobehaviours
     private void Awake()
     {
-        levelSelected = false;
+        optionsOpen = false;
     }
 
     private void Start()
     {
+        List<int> levels = LevelSelect.glitchBallClassicLevels;
+        // TODO: Switch statement here that looks at GameData for game type enum and sets the appropriate levels
+
+        bool defaultFound = false;
+
+        foreach (Button b in levelButtons)
+        {
+            UI_MenuButton script = b.GetComponent<UI_MenuButton>();
+            if (levels.Contains(script.GetValue()))
+            {
+                if (!defaultFound)
+                {
+                    defaultSelectedLevelButton = b.gameObject;
+                    defaultFound = true;
+                }
+                b.interactable = true;
+            }
+            else
+            {
+                b.interactable = false;
+            }
+        }
+
         EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
 
         players = ReInput.players.AllPlayers;
@@ -39,23 +61,32 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Update()
     {
-        if (levelSelected)
+        bool options = false;
+        bool cancel = false;
+        foreach (Player p in players)
         {
-            bool cancel = false;
-            foreach (Player p in players)
+            if (p.GetButtonDown("UICancel"))
             {
-                if (p.GetButton("UICancel"))
-                {
-                    cancel = true;
-                    break;
-                }
+                cancel = true;
+                break;
             }
-
-            if (cancel)
+            if (p.GetButtonDown("UIOptions"))
             {
-                OnCancel();
+                options = true;
+                break;
             }
         }
+
+        if (cancel)
+        {
+            OnCancel();
+        }
+
+        if (options)
+        {
+            OpenOptionsMenu();
+        }
+
     }
     #endregion
 
@@ -73,23 +104,33 @@ public class LevelSelectManager : MonoBehaviour
     public void SetLoadLevel(string levelName)
     {
         loadLevelName = levelName;
-        EventSystem.current.SetSelectedGameObject(defaultSelectedSettingsItem);
-        settingsMenu.DOLocalMove(Vector3.zero, .4f);
-        levelSelectMenu.DOLocalMove(Vector3.up * 400f, .4f);
-        levelSelected = true;
+        LevelSelect.LoadLevel(levelName);
+    }
+
+    public void OpenOptionsMenu()
+    {
+        optionsOpen = true;
+        settingsMenu.DOLocalMove(Vector3.left * 200, .4f);
+        EventSystem.current.SetSelectedGameObject(defaultOptionsGameObject);
     }
 
     public void OnCancel()
     {
-        EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
-        settingsMenu.DOLocalMove(Vector3.down * 400, .4f);
-        levelSelectMenu.DOLocalMove(Vector3.zero, .4f);
-        levelSelected = false;
+        if (optionsOpen)
+        {
+            optionsOpen = false;
+            settingsMenu.DOLocalMove(Vector3.right * 400, .4f);
+            EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
+        }
+        else
+        {
+            LevelSelect.LoadCharacterSelect();
+        }
     }
 
     public void LoadLevel()
     {
-        SceneManager.LoadSceneAsync(loadLevelName);
+        LevelSelect.LoadLevel(loadLevelName);
     }
     #endregion
 }
