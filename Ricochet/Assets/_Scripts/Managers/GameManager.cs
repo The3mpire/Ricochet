@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("Score limit to win the match")]
     [SerializeField]
-    private int scoreLimit;
+    private int scoreLimit = 5;
     #endregion
 
     #region Hidden Variables
@@ -218,7 +218,9 @@ public class GameManager : MonoBehaviour
 
     public void BallSecondaryShieldCollision(GameObject secondaryShield, Ball ball)
     {
-        PlayerController playerController = secondaryShield.GetComponent<Shield>().GetPlayer();
+        //Secondary Shield used to use shield script to get player but things have changed with that
+        //so we are going to need to figure out how to do this if we don't want to use get parent
+        PlayerController playerController = secondaryShield.GetComponentInParent<PlayerController>();
         switch (playerController.GetCurrentPowerUp())
         {
             case EPowerUp.CircleShield:
@@ -255,6 +257,7 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().OnBallGoalCollision();
             ball.SetActive(false);
             RespawnBall(ball);
+            NoWaitRespawnAllPlayers();
         }
         else
         {
@@ -345,10 +348,10 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnBallCoroutine(GameObject ball)
     {
         yield return new WaitForSeconds(ballRespawnTime);
-
         ball.transform.position = ballRespawns[UnityEngine.Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
+        ball.GetComponent<Ball>().SetBeenHit(false);
     }
 
     private IEnumerator RespawnPlayer(PlayerController playerController)
@@ -384,6 +387,18 @@ public class GameManager : MonoBehaviour
                 playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
                 playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
+        }
+    }
+
+    public void NoWaitRespawnAllPlayers()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
+            if (players[i].activeSelf)
+            {
+                NoWaitRespawnPlayer(currentPlayer);
+            }
         }
     }
 

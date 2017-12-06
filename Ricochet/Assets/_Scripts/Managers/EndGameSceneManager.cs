@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Rewired;
+using Enumerables;
 
-public class EndGameSceneManager : MonoBehaviour {
+public class EndGameSceneManager : MonoBehaviour
+{
     #region Private
     [Tooltip("Drag the UI's EndGameText here")]
     [SerializeField]
@@ -13,7 +15,7 @@ public class EndGameSceneManager : MonoBehaviour {
     #endregion
     #region MonoBehaviour
     private void Start()
-    {
+    {  
         EndGameText.text = GameData.gameWinner == Enumerables.ETeam.None ? "Tie Game!" : "Congratulations "+ GameData.gameWinner.ToString() + "!";    
     }
     #endregion
