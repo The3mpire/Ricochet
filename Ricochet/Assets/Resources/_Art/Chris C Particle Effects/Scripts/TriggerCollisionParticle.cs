@@ -3,13 +3,9 @@ using UnityEngine;
 
 namespace CCParticles
 {
-    public class TriggerCollisionParticle : MonoBehaviour
+    public class TriggerCollisionParticle : ParticleTrigger
     {
         #region Inspector Variables
-
-        [SerializeField]
-        [Tooltip("The particle system that will be played when a collision is detected")]
-        private ParticleSystem system;
 
         [SerializeField]
         [Tooltip("The layer that this can collide with to trigger the particle")]
@@ -27,14 +23,6 @@ namespace CCParticles
 
         #region Monobehaviour
 
-        private void OnEnable()
-        {
-            if (this.system)
-            {
-                this.system.gameObject.SetActive(false);
-            }
-        }
-
         private void OnCollisionEnter2D(Collision2D collision)
         {
             CheckAndPlay(collision.collider, this.enableStandardCollision);
@@ -51,26 +39,14 @@ namespace CCParticles
 
         private void CheckAndPlay(Collider2D collider, bool collisionTypeEnabled)
         {
-            if (this.system != null && collisionTypeEnabled && gameObject.activeSelf)
+            if (collisionTypeEnabled)
             {
                 if (((1 << collider.gameObject.layer) & this.collisionLayer) != 0)
                 {
-                    StartCoroutine(PlayParticleSystem(this.system));
+                    base.PlaySystem(true);
                 }
             }
         }
-
-        private IEnumerator PlayParticleSystem(ParticleSystem system)
-        {
-            system.gameObject.SetActive(true);
-            system.Play();
-            while (system.isPlaying)
-            {
-                yield return null;
-            }
-            system.gameObject.SetActive(false);
-        }
-
         #endregion
     }
 }
