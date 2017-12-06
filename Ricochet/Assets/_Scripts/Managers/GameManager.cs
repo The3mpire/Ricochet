@@ -264,7 +264,19 @@ public class GameManager : MonoBehaviour
         {
             if (gameMode == EMode.Deathmatch)
             {
-                modeManager.AltUpdateScore(playerController.GetTeamNumber(), -1);
+                if (modeManager.AltUpdateScore(playerController.GetTeamNumber(), -1))
+                {
+                    if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                    {
+                        GameData.gameWinner = ETeam.RedTeam;
+                        EndMatch();
+                    }
+                    else
+                    {
+                        GameData.gameWinner = ETeam.BlueTeam;
+                        EndMatch();
+                    }
+                }
             }
         }
 
@@ -285,17 +297,9 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                GameData.gameWinner = team;
+                GameData.gameWinner = GetOpposingTeam(team);
                 EndMatch();
             }
-            ball.GetComponent<Ball>().OnBallGoalCollision();
-            ball.SetActive(false);
-            RespawnBall(ball);
-        }
-        else
-        {
-            GameData.gameWinner = GetOpposingTeam(team);
-            EndMatch();
         }
     }
 
@@ -448,6 +452,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            GameData.gameWinner = modeManager.GetMaxScore();
             EndMatch();
         }
     }
@@ -509,6 +514,14 @@ public class GameManager : MonoBehaviour
         {
             scoreLimit = GameData.matchScoreLimit;
             gameMatchTime = GameData.matchTimeLimit;
+        }
+        gameMode = GameData.gameMode;
+        if (gameMode == EMode.Deathmatch)
+        {
+            int mSL = GameData.matchScoreLimit;
+            GameData.matchScoreLimit = 0;
+            modeManager.UpdateScore(ETeam.RedTeam, mSL);
+            modeManager.UpdateScore(ETeam.BlueTeam, mSL);
         }
     }
     #endregion

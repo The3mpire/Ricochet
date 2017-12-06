@@ -49,14 +49,30 @@ public class ScoreManager : ModeManager
                 redTeamScore += value;
                 GameData.redTeamScore += value;
                 RedTeamText.text = redTeamScore.ToString();
-                return CheckWin(GameData.redTeamScore);
+                return GameData.redTeamScore <= 0;
             case ETeam.BlueTeam:
                 blueTeamScore += value;
                 GameData.blueTeamScore += value;
                 BlueTeamText.text = blueTeamScore.ToString();
-                return CheckWin(GameData.blueTeamScore);
+                return GameData.blueTeamScore <= 0;
         }
         return false;
+    }
+
+    public override ETeam GetMaxScore()
+    {
+        if (redTeamScore > blueTeamScore)
+        {
+            return ETeam.RedTeam;
+        }
+        else if (blueTeamScore > redTeamScore)
+        {
+            return ETeam.BlueTeam;
+        }
+        else
+        {
+            return ETeam.None;
+        }
     }
 
     public bool CheckWin(int score)

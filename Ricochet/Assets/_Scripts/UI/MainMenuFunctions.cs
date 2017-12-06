@@ -26,6 +26,11 @@ public class MainMenuFunctions : MonoBehaviour {
     private GameManager gameManagerInstance;
     #endregion
 
+    void Awake()
+    {
+        SendGameMode();
+    }
+
     public void OpenGameOptions()
     {
         optionsPanel.SetActive(true);
