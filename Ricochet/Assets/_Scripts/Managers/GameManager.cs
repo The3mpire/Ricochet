@@ -476,9 +476,7 @@ public class GameManager : MonoBehaviour
         }
         return opTeam;
     }
-    #endregion
 
-    #region Private Helpers
     private void LoadMatchSettings()
     {
         //Both match limit settings are 0. Set inspector values for both.
