@@ -60,6 +60,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The Shield Transform")]
     [SerializeField]
     private Transform shieldTransform;
+    [Tooltip("The Shield")]
+    [SerializeField]
+    private GameObject shieldObject;
     [Tooltip("Drag the SpriteRenderer here")]
     [SerializeField]
     private SpriteRenderer sprite;
@@ -126,7 +129,7 @@ public class PlayerController : MonoBehaviour
         inertiaTime = 2;
         rightStickHorz = 1;
         rightStickVert = 0; 
-        shield = GetComponent<Shield>();
+        shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
         this.isFlipped = this.sprite.flipX;
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
@@ -179,6 +182,23 @@ public class PlayerController : MonoBehaviour
             rigid.velocity += dashDirection * dashSpeed;
         }
     }
+    #endregion
+
+    #region Collision Management
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
+        {
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                Ball ball = collision.gameObject.GetComponent<Ball>();
+                gameManagerInstance.BallPlayerCollision(this.gameObject, ball);
+                ball.ReverseBall();
+            }
+        }
+    }
+
     #endregion
 
     #region Helpers
@@ -301,40 +321,43 @@ public class PlayerController : MonoBehaviour
 
     private void InertiaFunction(string function, bool acc)
     {
-        switch (function)
+        if (!grounded)
         {
-            case "linear":
-                if (acc)
-                {
-                    rigid.gravityScale += (rigid.gravityScale > 0) ? -inertia : 0 - rigid.gravityScale;
-                }
-                else
-                {
-                    rigid.gravityScale += (rigid.gravityScale < gravScale) ? inertia : gravScale - rigid.gravityScale;
-                }
-                break;
-            case "logarithmic":
-                inertiaTime = (acc == inertiaSwitch) ? (inertiaTime + 1) : 1;
-                inertiaSwitch = acc;
-                if (acc)
-                {
-                    rigid.gravityScale = (rigid.gravityScale <= 0) ? 0 : rigid.gravityScale - Mathf.Log((inertiaTime / inertia) + 1);
-                }
-                else
-                {
-                    rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
-                }
-                break;
-            case "none":
-                if (acc)
-                {
-                    rigid.gravityScale = 0;
-                }
-                else
-                {
-                    rigid.gravityScale = 8;
-                }
-                break;
+            switch (function)
+            {
+                case "linear":
+                    if (acc)
+                    {
+                        rigid.gravityScale += (rigid.gravityScale > 0) ? -inertia : 0 - rigid.gravityScale;
+                    }
+                    else
+                    {
+                        rigid.gravityScale += (rigid.gravityScale < gravScale) ? inertia : gravScale - rigid.gravityScale;
+                    }
+                    break;
+                case "logarithmic":
+                    inertiaTime = (acc == inertiaSwitch) ? (inertiaTime + 1) : 1;
+                    inertiaSwitch = acc;
+                    if (acc)
+                    {
+                        rigid.gravityScale = (rigid.gravityScale <= 0) ? 0 : rigid.gravityScale - Mathf.Log((inertiaTime / inertia) + 1);
+                    }
+                    else
+                    {
+                        rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
+                    }
+                    break;
+                case "none":
+                    if (acc)
+                    {
+                        rigid.gravityScale = 0;
+                    }
+                    else
+                    {
+                        rigid.gravityScale = 8;
+                    }
+                    break;
+            }
         }
 
     }

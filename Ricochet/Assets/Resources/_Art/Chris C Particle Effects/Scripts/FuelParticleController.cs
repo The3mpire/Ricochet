@@ -19,12 +19,6 @@ namespace CCParticles
 
         #endregion
 
-        #region Hidden Variables
-
-
-
-        #endregion
-
         #region Monobehaviors
         void Update()
         {
