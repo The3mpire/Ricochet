@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using Enumerables;
 using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,13 @@ public class LevelSelectManager : MonoBehaviour
     #region Inspector Variables
     [SerializeField] private RectTransform levelSelectMenu;
     [SerializeField] private RectTransform settingsMenu;
+    [SerializeField] private RectTransform confirmationMenu;
 
     [SerializeField] private GameObject defaultOptionsGameObject;
+    [SerializeField] private GameObject defaultConfirmationGameObject;
 
-    [SerializeField] private string loadLevelName;
-    [SerializeField] private Button[] levelButtons;
+    [SerializeField] private BuildIndex loadLevelBuildIndex;
+    [SerializeField] private Button[] levelButtons;    
     #endregion
 
     #region Private Variables
@@ -31,15 +34,16 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Start()
     {
-        List<int> levels = LevelSelect.glitchBallClassicLevels;
+        List<BuildIndex> levels = LevelSelect.glitchBallClassicLevels;
         // TODO: Switch statement here that looks at GameData for game type enum and sets the appropriate levels
 
         bool defaultFound = false;
 
         foreach (Button b in levelButtons)
         {
-            UI_MenuButton script = b.GetComponent<UI_MenuButton>();
-            if (levels.Contains(script.GetValue()))
+            UI_LevelButton script = b.GetComponent<UI_LevelButton>();
+            script.SetManager(this);
+            if (levels.Contains(script.GetBuildIndex()))
             {
                 if (!defaultFound)
                 {
@@ -101,12 +105,12 @@ public class LevelSelectManager : MonoBehaviour
         GameData.matchTimeLimit = (int)slider.value;
     }
 
-    public void SetLoadLevel(string levelName)
+    public void SetLoadLevel(BuildIndex levelInt)
     {
-        loadLevelName = levelName;
-        LevelSelect.LoadLevel(levelName);
+        loadLevelBuildIndex = levelInt;
+        OpenConfirmationMenu();
     }
-
+           
     public void OpenOptionsMenu()
     {
         optionsOpen = true;
@@ -114,23 +118,36 @@ public class LevelSelectManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(defaultOptionsGameObject);
     }
 
+    public void CloseConfirmationMenu()
+    {
+        confirmationMenu.gameObject.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
+    }
+
     public void OnCancel()
     {
         if (optionsOpen)
         {
             optionsOpen = false;
-            settingsMenu.DOLocalMove(Vector3.right * 400, .4f);
+            settingsMenu.DOLocalMove(Vector3.right * 500, .4f);
             EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
         }
         else
         {
-            LevelSelect.LoadCharacterSelect();
+            loadLevelBuildIndex = BuildIndex.CHARACTER_SELECT;
+            OpenConfirmationMenu();
         }
     }
 
     public void LoadLevel()
     {
-        LevelSelect.LoadLevel(loadLevelName);
+        LevelSelect.LoadLevel(loadLevelBuildIndex);
+    }
+
+    private void OpenConfirmationMenu()
+    {
+        confirmationMenu.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(defaultConfirmationGameObject);
     }
     #endregion
 }
