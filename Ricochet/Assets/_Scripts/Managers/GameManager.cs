@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Name of level to transition to")]
     private string nextLevel;
+	Color defaultShieldColor;
     #endregion
 
     #region MonoBehaviour
@@ -122,6 +123,11 @@ public class GameManager : MonoBehaviour
                 gameTimerText.gameObject.SetActive(true);
             }
         }
+		if (powerUpManager) {
+			defaultShieldColor = powerUpManager.GetPowerUpShieldColor (EPowerUp.None);
+		} else {
+			defaultShieldColor = Color.white;
+		}
     }
 
     void Update()
@@ -207,11 +213,11 @@ public class GameManager : MonoBehaviour
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-                    playerController.RemovePowerUp();
+					playerController.RemovePowerUp(defaultShieldColor);
                     SpawnMultipleBalls(ball);
                     break;
                 case EPowerUp.CatchNThrow:
-                    playerController.RemovePowerUp();
+					playerController.RemovePowerUp(defaultShieldColor);
                     playerController.SetBallHeld(ball);
                     ball.SetHeld(true);
                     ball.transform.SetParent(playerController.GetShieldTransform());
@@ -233,7 +239,7 @@ public class GameManager : MonoBehaviour
         {
             case EPowerUp.CircleShield:
                 playerController.EnableSecondaryShield(false);
-                playerController.RemovePowerUp();
+				playerController.RemovePowerUp(defaultShieldColor);
                 break;
         }
     }
@@ -318,7 +324,7 @@ public class GameManager : MonoBehaviour
         }
         if (playerController.GetCurrentPowerUp() != EPowerUp.None)
         {
-            playerController.RemovePowerUp();
+			playerController.RemovePowerUp(defaultShieldColor);
         }
         EPowerUp powerUpType = powerUp.GetPowerUpType();
         Color powerUpShieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
@@ -396,7 +402,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
         yield return new WaitForSeconds(playerRespawnTime);
-        playerController.RemovePowerUp();
+		playerController.RemovePowerUp(defaultShieldColor);
         playerController.gameObject.SetActive(true);
 
         switch (playerController.GetTeamNumber())

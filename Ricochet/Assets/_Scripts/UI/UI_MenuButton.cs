@@ -23,7 +23,7 @@ public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
 
     public void OnSelect(BaseEventData eventData)
     {
-        image.color = Color.red;
+        image.color = Color.magenta;
     }
 
 }
