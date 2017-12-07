@@ -31,6 +31,7 @@ public class Shield : MonoBehaviour
     {
         edgeCollider = GetComponent<EdgeCollider2D>();
         lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.sortingLayerName = "Character";
     }
     #endregion
 

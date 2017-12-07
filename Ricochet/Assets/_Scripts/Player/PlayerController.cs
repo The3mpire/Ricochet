@@ -134,6 +134,7 @@ public class PlayerController : MonoBehaviour
         this.isFlipped = this.sprite.flipX;
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
         shield.SetTeamColor(team);
+        gameManagerInstance.NoWaitRespawnAllPlayers();
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
@@ -369,7 +370,7 @@ public class PlayerController : MonoBehaviour
     {
         hasPowerUp = true;
         currPowerUp = powerUp;
-        //TDOD set particle effect color
+        //TODO set particle effect color
         //Might want this latter when we have different sprites to represent team colors
         //shield.SetColor(shieldColor);
     }
@@ -379,7 +380,8 @@ public class PlayerController : MonoBehaviour
         hasPowerUp = false;
         EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
-		shield.SetColor (sheildColor);
+        //Add this back in at a later point
+		//shield.SetColor (sheildColor);
     }
 
     public void RegisterKill(PlayerController otherPlayer)
