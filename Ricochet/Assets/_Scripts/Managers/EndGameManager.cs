@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class UI_GameOverMenu : MonoBehaviour
+public class EndGameManager : MonoBehaviour
 {
+    [Tooltip("Drag the UI's EndGameText here")]
+    [SerializeField] private Text EndGameText;
     [SerializeField] private GameObject defaultSelectedButton;
 
     #region MonoBehaviours
     private void Start()
     {
         ShowGameOverMenu();
+        EndGameText.text = GameData.gameWinner == Enumerables.ETeam.None ? "Tie Game!" : "Congratulations " + GameData.gameWinner.ToString() + "!";
     }
     #endregion
 
@@ -20,7 +24,7 @@ public class UI_GameOverMenu : MonoBehaviour
     public void PlayAgain()
     {
         GameData.ResetGameStatistics();
-        // TODO: Once GameData stores the level being played, then we can load that level again here.
+        LevelSelect.LoadLevel(GameData.GameLevel);
     }
 
     public void PlayRandomLevel()
