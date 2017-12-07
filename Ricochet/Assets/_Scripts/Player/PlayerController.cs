@@ -374,11 +374,12 @@ public class PlayerController : MonoBehaviour
         //shield.SetColor(shieldColor);
     }
 
-    public void RemovePowerUp()
+	public void RemovePowerUp(Color sheildColor)
     {
         hasPowerUp = false;
         EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
+		shield.SetColor (sheildColor);
     }
 
     public void RegisterKill(PlayerController otherPlayer)

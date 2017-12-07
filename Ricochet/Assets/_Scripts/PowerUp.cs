@@ -53,7 +53,6 @@ public class PowerUp : MonoBehaviour
         if (powerUpType == EPowerUp.Random)
         {
             instanceType = powerups[rng.Next(powerups.Count)];
-            Debug.Log("POWER UP SPAWNED: " + instanceType);
             UpdateSprite();
         }
     }
