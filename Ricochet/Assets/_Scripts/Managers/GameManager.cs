@@ -443,6 +443,7 @@ public class GameManager : MonoBehaviour
             if (players[i].activeSelf)
             {
                 NoWaitRespawnPlayer(currentPlayer);
+                currentPlayer.RemovePowerUp(defaultShieldColor);
             }
         }
     }
