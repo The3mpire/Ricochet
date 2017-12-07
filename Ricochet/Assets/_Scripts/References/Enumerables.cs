@@ -1,5 +1,17 @@
 ﻿namespace Enumerables
 {
+    public enum BuildIndex
+    {
+        MAIN_MENU,
+        CHARACTER_SELECT,
+        LEVEL_SELECT,
+        DIAGONAL_ALLEY,
+        ELEVATOR,
+        UP_N_OVER,
+        END_GAME,
+        MOVE
+    }
+
     public enum EPowerUp
     {
         None = -1,
