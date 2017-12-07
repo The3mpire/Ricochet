@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine;
+using Enumerables;
 
 public static class GameData {
     #region Private
@@ -10,6 +11,7 @@ public static class GameData {
     private static int _matchScoreLimit;
     private static float _matchTimeLimit;
     private static int _playerCount;
+    private static EMode _gameMode;
     private static Enumerables.ECharacter[] _playerCharacters;
     private static Enumerables.ETeam[] _playerTeams;
 	private static bool[] playersActive = {true, true, false, false};
@@ -88,6 +90,17 @@ public static class GameData {
             {
                 _playerCount = value;
             }
+        }
+    }
+    public static EMode gameMode
+    {
+        get
+        {
+            return _gameMode;
+        }
+        set
+        {
+            _gameMode = value;
         }
     }
 

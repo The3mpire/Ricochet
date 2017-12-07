@@ -40,6 +40,41 @@ public class ScoreManager : ModeManager
         return false;
     }
 
+    public override bool AltUpdateScore(ETeam team, int value)
+    {
+        switch (team)
+        {
+            // it increments team's score
+            case ETeam.RedTeam:
+                redTeamScore += value;
+                GameData.redTeamScore += value;
+                RedTeamText.text = redTeamScore.ToString();
+                return GameData.redTeamScore <= 0;
+            case ETeam.BlueTeam:
+                blueTeamScore += value;
+                GameData.blueTeamScore += value;
+                BlueTeamText.text = blueTeamScore.ToString();
+                return GameData.blueTeamScore <= 0;
+        }
+        return false;
+    }
+
+    public override ETeam GetMaxScore()
+    {
+        if (redTeamScore > blueTeamScore)
+        {
+            return ETeam.RedTeam;
+        }
+        else if (blueTeamScore > redTeamScore)
+        {
+            return ETeam.BlueTeam;
+        }
+        else
+        {
+            return ETeam.None;
+        }
+    }
+
     public bool CheckWin(int score)
     {
         if (GameData.matchScoreLimit > 0)

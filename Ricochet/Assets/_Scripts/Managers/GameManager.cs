@@ -21,6 +21,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PowerUpManager powerUpManager;
 
+    [Header("Game Match Variables")]
+    [Tooltip("Set the match mode here")]
+    [SerializeField]
+    private EMode gameMode;
+    [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
+    [SerializeField]
+    private Canvas gameMenuUI;
+
     [Tooltip("How long the selected game lasts in seconds")]
     [SerializeField]
     private float gameMatchTime = 120f;
@@ -244,7 +252,36 @@ public class GameManager : MonoBehaviour
         if (lastTouchedBy != null)
         {
             lastTouchedBy.RegisterKill(playerController);
+
+            if (gameMode == EMode.Deathmatch)
+            {
+                if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
+                {
+                    GameData.gameWinner = lastTouchedBy.GetTeamNumber();
+                    EndMatch();
+                }
+            }
         }
+        else
+        {
+            if (gameMode == EMode.Deathmatch)
+            {
+                if (modeManager.AltUpdateScore(playerController.GetTeamNumber(), -1))
+                {
+                    if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                    {
+                        GameData.gameWinner = ETeam.RedTeam;
+                        EndMatch();
+                    }
+                    else
+                    {
+                        GameData.gameWinner = ETeam.BlueTeam;
+                        EndMatch();
+                    }
+                }
+            }
+        }
+
 
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
@@ -252,18 +289,20 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        if (!modeManager.UpdateScore(team, points))
+        if (gameMode == EMode.Soccer)
         {
-            ball.GetComponent<Ball>().OnBallGoalCollision();
-            ball.SetActive(false);
-            RespawnBall(ball);
-            NoWaitRespawnAllPlayers();
-        }
-        else
-        {
-
-            GameData.gameWinner = GetOpposingTeam(team);
-            EndMatch();
+            if (!modeManager.UpdateScore(team, points))
+            {
+                ball.GetComponent<Ball>().OnBallGoalCollision();
+                ball.SetActive(false);
+                RespawnBall(ball);
+                NoWaitRespawnAllPlayers();
+            }
+            else
+            {
+                GameData.gameWinner = GetOpposingTeam(team);
+                EndMatch();
+            }
         }
     }
 
@@ -428,6 +467,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            GameData.gameWinner = modeManager.GetMaxScore();
             EndMatch();
         }
     }
@@ -489,6 +529,14 @@ public class GameManager : MonoBehaviour
         {
             scoreLimit = GameData.matchScoreLimit;
             gameMatchTime = GameData.matchTimeLimit;
+        }
+        gameMode = GameData.gameMode;
+        if (gameMode == EMode.Deathmatch)
+        {
+            int mSL = GameData.matchScoreLimit;
+            GameData.matchScoreLimit = 0;
+            modeManager.UpdateScore(ETeam.RedTeam, mSL);
+            modeManager.UpdateScore(ETeam.BlueTeam, mSL);
         }
     }
     #endregion
