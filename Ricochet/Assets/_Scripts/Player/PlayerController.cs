@@ -66,6 +66,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the SpriteRenderer here")]
     [SerializeField]
     private SpriteRenderer sprite;
+    [Tooltip("Drag the powerup particle here")]
+    [SerializeField]
+    private ParticleSystem powerupParticle;
     [Tooltip("Drag the player's rigidbody here")]
     [SerializeField]
     private Rigidbody2D rigid;
@@ -121,6 +124,8 @@ public class PlayerController : MonoBehaviour
 		{
 			gameManagerInstance.LoadPlayer(this, playerNumber);
 		}
+
+        powerupParticle.Stop();
 			
         killList = new List<PlayerController>();
         currentFuel = startFuel;
@@ -366,6 +371,10 @@ public class PlayerController : MonoBehaviour
     #region External Functions
     public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
     {
+        if (powerupParticle.isStopped)
+        {
+            powerupParticle.Play();
+        }
         hasPowerUp = true;
         currPowerUp = powerUp;
         shield.SetColor(shieldColor);
@@ -373,6 +382,10 @@ public class PlayerController : MonoBehaviour
 
     public void RemovePowerUp()
     {
+        if (powerupParticle.isPlaying)
+        {
+            powerupParticle.Stop();
+        }
         hasPowerUp = false;
         EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
