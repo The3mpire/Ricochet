@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 120864174213652354}
   m_Layer: 10
   m_Name: Shield
-  m_TagString: Untagged
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -314,7 +314,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158271850568408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.75, y: -2.74, z: 0}
+  m_LocalPosition: {x: -18, y: -11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224606253502872790}
@@ -377,22 +377,22 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0.2
   m_Points:
-  - {x: 0.75, y: 0.8}
-  - {x: 0.7966667, y: 0.7149038}
+  - {x: 0.75, y: 0.8000002}
+  - {x: 0.7966667, y: 0.71490383}
   - {x: 0.8366667, y: 0.62056303}
-  - {x: 0.87, y: 0.5184001}
+  - {x: 0.87, y: 0.5184}
   - {x: 0.89666677, y: 0.40983704}
-  - {x: 0.91666657, y: 0.29629624}
-  - {x: 0.93000007, y: 0.1792}
+  - {x: 0.91666657, y: 0.2962962}
+  - {x: 0.93000007, y: 0.17919998}
   - {x: 0.93666667, y: 0.059970327}
   - {x: 0.93666667, y: -0.059970424}
-  - {x: 0.92999995, y: -0.17920002}
-  - {x: 0.9166666, y: -0.29629636}
+  - {x: 0.92999995, y: -0.1792}
+  - {x: 0.9166666, y: -0.2962963}
   - {x: 0.89666665, y: -0.40983704}
   - {x: 0.87, y: -0.5184}
   - {x: 0.8366667, y: -0.62056303}
-  - {x: 0.7966667, y: -0.7149037}
-  - {x: 0.75, y: -0.8}
+  - {x: 0.7966667, y: -0.7149038}
+  - {x: 0.75, y: -0.8000002}
 --- !u!70 &70214067932584476
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
@@ -453,10 +453,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 114787925907891002}
   numberOfPoints: 16
-  startPoint: {x: 0.75, y: 0.8}
-  endPoint: {x: 0.75, y: -0.8}
-  startPointHandler: {x: 1, y: 0.4}
-  endPointHandler: {x: 1, y: -0.4}
+  startPoint: {x: 0.75, y: 0.8000002}
+  endPoint: {x: 0.75, y: -0.8000002}
+  startPointHandler: {x: 1, y: 0.39999962}
+  endPointHandler: {x: 1, y: -0.39999962}
   lineRendererWidth: 0.2
   lineRendererColor:
     serializedVersion: 2
@@ -709,22 +709,22 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.75, y: 0.8, z: 0}
-  - {x: 0.7966667, y: 0.7149038, z: 0}
+  - {x: 0.75, y: 0.8000002, z: 0}
+  - {x: 0.7966667, y: 0.71490383, z: 0}
   - {x: 0.8366667, y: 0.62056303, z: 0}
-  - {x: 0.87, y: 0.5184001, z: 0}
+  - {x: 0.87, y: 0.5184, z: 0}
   - {x: 0.89666677, y: 0.40983704, z: 0}
-  - {x: 0.91666657, y: 0.29629624, z: 0}
-  - {x: 0.93000007, y: 0.1792, z: 0}
+  - {x: 0.91666657, y: 0.2962962, z: 0}
+  - {x: 0.93000007, y: 0.17919998, z: 0}
   - {x: 0.93666667, y: 0.059970327, z: 0}
   - {x: 0.93666667, y: -0.059970424, z: 0}
-  - {x: 0.92999995, y: -0.17920002, z: 0}
-  - {x: 0.9166666, y: -0.29629636, z: 0}
+  - {x: 0.92999995, y: -0.1792, z: 0}
+  - {x: 0.9166666, y: -0.2962963, z: 0}
   - {x: 0.89666665, y: -0.40983704, z: 0}
   - {x: 0.87, y: -0.5184, z: 0}
   - {x: 0.8366667, y: -0.62056303, z: 0}
-  - {x: 0.7966667, y: -0.7149037, z: 0}
-  - {x: 0.75, y: -0.8, z: 0}
+  - {x: 0.7966667, y: -0.7149038, z: 0}
+  - {x: 0.75, y: -0.8000002, z: 0}
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 0.2
