@@ -6,11 +6,14 @@ public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
 {
     private Image image;
 
-    [SerializeField] private int value;
-
     public void Awake()
     {
         image = GetComponent<Image>();   
+    }
+
+    private void OnDisable()
+    {
+        image.color = Color.white;
     }
 
     public void OnDeselect(BaseEventData eventData)
@@ -23,8 +26,4 @@ public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
         image.color = Color.magenta;
     }
 
-    public int GetValue()
-    {
-        return value;
-    }
 }
