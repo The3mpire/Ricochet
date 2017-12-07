@@ -107,6 +107,7 @@ public class LevelSelectManager : MonoBehaviour
 
     public void SetLoadLevel(BuildIndex levelInt)
     {
+        GameData.GameLevel = levelInt;
         loadLevelBuildIndex = levelInt;
         OpenConfirmationMenu();
     }
