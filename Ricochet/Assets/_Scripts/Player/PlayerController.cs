@@ -133,6 +133,7 @@ public class PlayerController : MonoBehaviour
         animator = transform.GetComponentInChildren<Animator>();
         this.isFlipped = this.sprite.flipX;
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
+        shield.SetTeamColor(team);
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
@@ -368,7 +369,9 @@ public class PlayerController : MonoBehaviour
     {
         hasPowerUp = true;
         currPowerUp = powerUp;
-        shield.SetColor(shieldColor);
+        //TDOD set particle effect color
+        //Might want this latter when we have different sprites to represent team colors
+        //shield.SetColor(shieldColor);
     }
 
     public void RemovePowerUp()

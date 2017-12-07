@@ -7,17 +7,20 @@ public static class LevelSelect
     public const int MAIN_MENU = 0;
     public const int CHARACTER_SELECT = 1;
     public const int LEVEL_SELECT = 2;
-    public const int ART_SHOWCASE = 3;
+    public const int DIAGONAL_ALLEY = 3;
     public const int ELEVATOR = 4;
-    public const int TRAP = 5;
-    public const int DIAGONAL_ALLEY = 6;
-    public const int UP_N_OVER = 9;
+    public const int UP_N_OVER = 5;
 
     public static List<int> glitchBallClassicLevels = new List<int>() {
             ELEVATOR,
             UP_N_OVER,
             DIAGONAL_ALLEY
         };
+
+    public static void ReplayLevel()
+    {
+
+    }
 
     public static void LoadRandomLevel(List<int> levelSelection)
     {

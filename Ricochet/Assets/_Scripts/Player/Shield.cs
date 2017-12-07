@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Enumerables;
 
 [RequireComponent(typeof(EdgeCollider2D), typeof(LineRenderer))]
 public class Shield : MonoBehaviour
@@ -119,6 +120,20 @@ public class Shield : MonoBehaviour
     {
         lineRenderer.startColor = color;
         lineRenderer.endColor = color;
+    }
+
+    public void SetTeamColor(ETeam team)
+    {
+        if (team == ETeam.RedTeam)
+        {
+            lineRenderer.startColor = Color.red;
+            lineRenderer.endColor = Color.red;
+        }
+        else if (team == ETeam.BlueTeam)
+        {
+            lineRenderer.startColor = Color.blue;
+            lineRenderer.endColor = Color.blue;
+        }
     }
 
     public void SetMaterial(Material material)
