@@ -26,6 +26,8 @@ public static class GameData {
     #endregion
 
     #region Getters and Setters
+    public static BuildIndex GameLevel { get; set; }
+
     public static int matchScoreLimit
     {
         get
