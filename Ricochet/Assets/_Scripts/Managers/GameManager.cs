@@ -178,7 +178,6 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        Debug.Log("end match");
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);

@@ -116,12 +116,16 @@ public class CharSelectManager : MonoBehaviour
 
     void Update()
     {
-        if (CheckReady() && !timerActive)
+        if (CheckReady())
         {
-            timerActive = true;
-            StartCoroutine(LevelSelectTimer());
+            if (!timerActive)
+            {
+                timerActive = true;
+                StartCoroutine(LevelSelectTimer());
+            }
             CountdownToLevelSelect();
         }
+        
     }
     #endregion
 
