@@ -665,6 +665,7 @@ MonoBehaviour:
   groundedMoveSpeed: 12.5
   inertia: 1.5
   startFuel: 8
+  fuelPercentNeeded: 0.25
   groundRechargeRate: 5
   airRechargeRate: 1.5
   dashSpeed: 45
@@ -711,7 +712,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lowFuelParticle: {fileID: 198826147038616612}
   playerController: {fileID: 114787925907891002}
-  threshold: 0.25
 --- !u!114 &114930844356215334
 MonoBehaviour:
   m_ObjectHideFlags: 1

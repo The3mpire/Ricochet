@@ -14,14 +14,19 @@ namespace CCParticles
         [SerializeField]
         private PlayerController playerController;
 
-        [SerializeField]
+        #endregion
+
+        #region Hidden Variables
+
         private float threshold;
 
         #endregion
 
         #region Monobehaviors
+
         void Update()
         {
+            threshold = this.playerController.GetFuelPercentNeeded();
             float percentage = this.playerController.GetCurrentFuel() / this.playerController.GetMaxFuel();
             if (percentage <= threshold)
             {
