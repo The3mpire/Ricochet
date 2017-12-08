@@ -332,7 +332,7 @@ public class CharSelectManager : MonoBehaviour
                         GameData.playerCharacters[3] = selected.getCharacterId();
                         p4TeamImage.sprite = selected.getCharacterImage();
                         color.a = 1;
-                        p3TeamImage.color = color;
+                        p4TeamImage.color = color;
                         token.GetComponent<Shadow>().enabled = false;
                         token.GetComponent<ParticleSystem>().Play();
                         playerPhase[3] = SelectionPhase.TeamSelect;
