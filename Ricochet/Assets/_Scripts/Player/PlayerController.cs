@@ -3,6 +3,7 @@ using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -73,6 +74,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the powerup particle here")]
     [SerializeField]
     private ParticleSystem powerupParticle;
+    [Tooltip("Drag the Tag canvas's tag object here")]
+    [SerializeField]
+    private Text playerNumberTag;
     [Tooltip("Drag the player's rigidbody here")]
     [SerializeField]
     private Rigidbody2D rigid;
@@ -124,6 +128,11 @@ public class PlayerController : MonoBehaviour
     #region Monobehaviour
     private void Awake()
     {
+        if (playerNumberTag)
+        {
+            playerNumberTag.text = playerNumber.ToString();
+        }
+
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             gameManagerInstance.LoadPlayer(this, playerNumber);
