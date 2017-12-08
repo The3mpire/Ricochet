@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
     private bool isFlipped;
+    private ParticleSystem jetpackParticle;
 
     private ECharacter chosenCharacter;
     private EPowerUp currPowerUp = EPowerUp.None;
@@ -156,7 +157,7 @@ public class PlayerController : MonoBehaviour
         this.isFlipped = this.sprite.flipX;
         team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
         shield.SetTeamColor(team);
-        gameManagerInstance.NoWaitRespawnAllPlayers();
+        //gameManagerInstance.NoWaitRespawnAllPlayers();
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
@@ -264,6 +265,10 @@ public class PlayerController : MonoBehaviour
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             moveDirection *= fuelFactor;
             this.animator.SetBool("isJumping", true);
+            if(this.jetpackParticle && !this.jetpackParticle.isPlaying)
+            {
+                this.jetpackParticle.Play();
+            }
             // If there is no directional input, just go up with upThrusterSpeed
             if (moveDirection == Vector2.zero)
             {
@@ -278,6 +283,10 @@ public class PlayerController : MonoBehaviour
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
             moveDirection = new Vector2(leftStickHorz, 0).normalized;
+            if (this.jetpackParticle)
+            {
+                this.jetpackParticle.Stop();
+            }
             if (moveDirection != Vector2.zero)
             {
                 this.animator.SetBool("isWalking", true);
@@ -502,6 +511,11 @@ public class PlayerController : MonoBehaviour
     public void SetTeam(ETeam teamValue)
     {
         team = teamValue;
+    }
+
+    public void SetJetpackParticle(ParticleSystem system)
+    {
+        this.jetpackParticle = system;
     }
 
     internal float GetMaxFuel()
