@@ -83,6 +83,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
+    [Tooltip("Drag the player's audio source here")]
+    [SerializeField]
+    private AudioSource audioSource;
 
     [Header("Secondary Items")]
     [Tooltip("Drag the player's power up circle shield here")]
@@ -99,7 +102,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool isFlipped;
 
-
+    private ECharacter chosenCharacter;
     private EPowerUp currPowerUp = EPowerUp.None;
     private Player player;
     private List<PlayerController> killList;
@@ -161,7 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         player = ReInput.players.GetPlayer(playerNumber - 1);
         sprite.color = PlayerColorData.getColor(playerNumber, team);
-        ECharacter chosenCharacter = GameData.playerCharacters != null ? GameData.playerCharacters[playerNumber - 1] : ECharacter.MallCop;
+        chosenCharacter = GameData.playerCharacters != null ? GameData.playerCharacters[playerNumber - 1] : ECharacter.MallCop;
         transform.GetComponentInChildren<BasePlayerSetup>().SetupCharacter(chosenCharacter, 0);
     }
 
@@ -308,11 +311,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private void DashCheck()
     {
         if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel) && !jetpackBurnedOut)
         {
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Dash));
+            }
             this.animator.SetTrigger("dash");
             currentFuel -= dashCost;
             dashDirection = new Vector2(rightStickHorz, rightStickVert).normalized;
@@ -429,6 +435,10 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerDead()
     {
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Death));
+        }
         currentFuel = startFuel;
         maxFuel = startFuel;
         dashing = false;
