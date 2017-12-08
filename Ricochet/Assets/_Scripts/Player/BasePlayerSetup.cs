@@ -7,6 +7,10 @@ public class BasePlayerSetup : MonoBehaviour {
     #region Inspector Variables
 
     [SerializeField]
+    [Tooltip("The player controller")]
+    private PlayerController playerController;
+
+    [SerializeField]
     [Tooltip("The sprite animator for the player.")]
     private Animator spriteAnimator;
 
@@ -50,6 +54,7 @@ public class BasePlayerSetup : MonoBehaviour {
         RuntimeAnimatorController[] controllers = setup.controllers;
         Sprite[] sprites = setup.placeholderSprites;
         this.spriteRenderer.flipX = setup.flipSpriteX;
+        this.playerController.SetJetpackParticle(setup.jetpackParticle);
         if(version < 0 || version >= controllers.Length)
         {
             Debug.LogError(string.Format("Sprite Animator version: {0} is out of range for {1}", version, gameObject.name));
@@ -99,13 +104,13 @@ public class BasePlayerSetup : MonoBehaviour {
     [Serializable]
     private struct CharacterSetup
     {
-        [SerializeField]
         public RuntimeAnimatorController[] controllers;
 
-        [SerializeField]
         public Sprite[] placeholderSprites;
 
         public bool flipSpriteX;
+
+        public ParticleSystem jetpackParticle;
     }
 
     #endregion
