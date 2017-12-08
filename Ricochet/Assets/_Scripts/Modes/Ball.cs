@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-
     #region Inspector Variables
     [Tooltip("The ball travel direction on spawn")]
     [SerializeField]
@@ -47,6 +46,9 @@ public class Ball : MonoBehaviour
     [Tooltip("Drag the ball here")]
     [SerializeField]
     private Rigidbody2D body;
+    [Tooltip("Drag the audio source here")]
+    [SerializeField]
+    private AudioSource audioSource;
     #endregion
 
     #region Hidden Variables
@@ -105,6 +107,7 @@ public class Ball : MonoBehaviour
         Collider2D hitCollider = col.collider;
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
+            audioSource.PlayOneShot(gameManagerInstance.GetBallSound());
             beenHit = true;
             if (hitCollider.tag == "Shield")
             {

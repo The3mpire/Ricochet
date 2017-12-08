@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Goal : MonoBehaviour
 {
-
+    #region Inspector Variables
     [Tooltip("Drag Score Manager here")]
     [SerializeField]
     private static ScoreManager scoreManager = null;
@@ -15,9 +15,14 @@ public class Goal : MonoBehaviour
     [Tooltip("How many points the team gets for scoring")]
     [SerializeField]
     private int points = 1;
+    [Tooltip("Drag the audio source here")]
+    [SerializeField]
+    private AudioSource audioSource;
+    #endregion
 
+    #region Hidden Variables
     private GameManager gameManagerInstance = null;
-
+    #endregion
     #region MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -27,6 +32,7 @@ public class Goal : MonoBehaviour
             if (collider.tag == "Ball" && collider.GetComponent<Ball>().GetCanScore())
             {
                 Ball ball = collider.GetComponent<Ball>();
+                audioSource.PlayOneShot(gameManagerInstance.GetScoringSound());
                 gameManagerInstance.BallGoalCollision(collider.gameObject, team, points);
             }
         }
