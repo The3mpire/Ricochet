@@ -20,6 +20,12 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the powerup manager here")]
     [SerializeField]
     private PowerUpManager powerUpManager;
+    [Tooltip("Drag the sound storage here")]
+    [SerializeField]
+    private SoundStorage soundStorage;
+    [Tooltip("Drag the music manager here")]
+    [SerializeField]
+    private MusicManager musicManager;
 
     [Header("Game Match Variables")]
     [Tooltip("Set the match mode here")]
@@ -508,6 +514,47 @@ public class GameManager : MonoBehaviour
         return powerUpManager.GetPowerUpShieldColor(powerup);
     }
 
+    #endregion
+
+    #region Sound
+    public void SetMusicVolume(float vol = .8f)
+    {
+        musicManager.SetMusicVolume(vol);
+    }
+
+    public float GetMusicVolume()
+    {
+        return musicManager.GetMusicVolume();
+    }
+
+    /// <param name="volume"> scales the SFX volume (NOT the overall volume)</param>
+    public AudioClip GetCharacterSFX(ECharacter character, ECharacterAction movement)
+    {
+        switch (movement)
+        {
+            case ECharacterAction.Dash:
+                return soundStorage.GetPlayerDashSound(character);
+            case ECharacterAction.Death:
+                return soundStorage.GetPlayerDeathSound(character);
+            default: //ECharacterMovement.Jetpack:
+                return soundStorage.GetPlayerJetpackSound(character);
+        }
+    }
+
+    public AudioClip GetScoringSound()
+    {
+        return soundStorage.GetScoringSound();
+    }
+
+    public AudioClip GetBallSound()
+    {
+        return soundStorage.GetBallSound();
+    }
+
+    public AudioClip GetMenuClickSound()
+    {
+        return soundStorage.GetMenuClickSound();
+    }
     #endregion
 
     #region Private Helpers

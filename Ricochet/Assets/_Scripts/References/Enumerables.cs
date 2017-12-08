@@ -45,4 +45,12 @@
         Cat = 5,
         Sushi = 6
     }
+
+    public enum ECharacterAction
+    {
+        None = -1,
+        Jetpack = 0,
+        Dash = 1,
+        Death = 3
+    }
 }
