@@ -52,7 +52,10 @@ public class CharSelect_PlayerController : MonoBehaviour
         if (player.GetButtonDown("UICancel"))
         {
             manager.RouteInputB(playerNumber);
-
+        }
+        if (player.GetButton("UICancel"))
+        {
+            manager.RouteInputAltB(playerNumber);
         }
         if (player.GetButtonDown("UIMenu"))
         {

@@ -27,7 +27,14 @@ public class PowerUp : MonoBehaviour
         {
             rng = new System.Random();
             powerups = Enum.GetValues(typeof(EPowerUp)).Cast<EPowerUp>().ToList();
-            powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None)).ToList();
+            if (GameData.gameMode == EMode.Deathmatch)
+            {
+                powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None)).ToList();
+            }
+            else
+            {
+                powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None) && (p != EPowerUp.Multiball)).ToList();
+            }
         }
         else
         {
@@ -71,7 +78,7 @@ public class PowerUp : MonoBehaviour
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            switch (powerUpType)
+            switch (instanceType)
             {
                 case EPowerUp.Multiball:
                     powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/multiballiconplaceholder");

@@ -49,12 +49,12 @@ public class ScoreManager : ModeManager
                 redTeamScore += value;
                 GameData.redTeamScore += value;
                 RedTeamText.text = redTeamScore.ToString();
-                return GameData.redTeamScore <= 0;
+                return CheckWin(GameData.redTeamScore);
             case ETeam.BlueTeam:
                 blueTeamScore += value;
                 GameData.blueTeamScore += value;
                 BlueTeamText.text = blueTeamScore.ToString();
-                return GameData.blueTeamScore <= 0;
+                return CheckWin(GameData.blueTeamScore);
         }
         return false;
     }
@@ -77,7 +77,7 @@ public class ScoreManager : ModeManager
 
     public bool CheckWin(int score)
     {
-        if (GameData.matchScoreLimit > 0)
+        if (GameData.matchScoreLimit > 0 && score > 0)
         {
             return score % GameData.matchScoreLimit == 0;
         }
