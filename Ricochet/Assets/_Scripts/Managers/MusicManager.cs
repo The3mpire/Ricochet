@@ -109,6 +109,13 @@ public class MusicManager : MonoBehaviour
     }
     #endregion
 
+    #region SFX
+    public void PlayMenuClickSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetScoringSound());
+    }
+    #endregion
+
     #region Helpers
     #endregion
 }
