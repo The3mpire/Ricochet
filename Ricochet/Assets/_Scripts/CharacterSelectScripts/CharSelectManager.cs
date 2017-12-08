@@ -78,18 +78,23 @@ public class CharSelectManager : MonoBehaviour
     private Image p4TeamPanel;
     private Enumerables.ETeam p4Team;
 
-    [Header("Ready Text Objects")]
+    [Header("Misc UI Objects")]
     [SerializeField]
     [Tooltip("Drag all ready text objects for each player in order")]
     private GameObject[] readyTags;
     [SerializeField]
     [Tooltip("Drag timer text object here")]
     private Text timerText;
+    [SerializeField]
+    [Tooltip("Drag back timer here")]
+    private Slider backSlider;
 
     private SelectionPhase[] playerPhase = new SelectionPhase[4];
     private float timer;
 
     private bool timerActive;
+
+    private bool bHeld;
     #endregion
 
     #region Phase Enum
@@ -106,6 +111,7 @@ public class CharSelectManager : MonoBehaviour
     private void Awake()
     {
         timerActive = false;
+        bHeld = false;
     }
 
     void Start()
@@ -116,6 +122,19 @@ public class CharSelectManager : MonoBehaviour
 
     void Update()
     {
+        if (bHeld)
+        {
+            backSlider.value += Time.deltaTime;
+            if (backSlider.value >= backSlider.maxValue)
+            {
+                RouteInputBack();
+            }
+        }
+        else
+        {
+            backSlider.value -= Time.deltaTime * 2;
+        }
+        bHeld = false;
         if (CheckReady())
         {
             if (!timerActive)
@@ -240,6 +259,13 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.Ready:
                 UndoReady(playerNumber);
                 break;
+        }
+    }
+    public void RouteInputAltB(int playerNumber)
+    {
+        if (playerPhase[playerNumber - 1] == SelectionPhase.CharacterSelect)
+        {
+            bHeld = true;
         }
     }
 
