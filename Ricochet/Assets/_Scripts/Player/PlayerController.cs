@@ -3,6 +3,7 @@ using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,12 +33,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float groundedMoveSpeed = 12.5f;
     [Tooltip("How quickly the player can accelerate")]
-    [SerializeField] private float inertia = 1.5f;
+    [SerializeField]
+    private float inertia = 1.5f;
 
     [Header("Fuel Settings")]
     [Tooltip("Time in seconds of jetback fuel")]
     [SerializeField]
     private float startFuel = 7f;
+    [Tooltip("Percent of fuel needed to reset jetpack burnout (ex 20% = .2)")]
+    [SerializeField]
+    private float fuelPercentNeeded = .2f;
     [Tooltip("Fuel/second recharge when grounded")]
     [SerializeField]
     private float groundRechargeRate = 3.5f;
@@ -69,6 +74,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the powerup particle here")]
     [SerializeField]
     private ParticleSystem powerupParticle;
+    [Tooltip("Drag the Tag canvas's tag object here")]
+    [SerializeField]
+    private Text playerNumberTag;
     [Tooltip("Drag the player's rigidbody here")]
     [SerializeField]
     private Rigidbody2D rigid;
@@ -100,7 +108,7 @@ public class PlayerController : MonoBehaviour
     private bool hasPowerUp;
     private bool dashing;
     private bool grounded;
-    private bool jumpButtonHeld;
+    private bool jetpackBurnedOut;
 
     private float currentFuel;
     private float maxFuel;
@@ -120,20 +128,26 @@ public class PlayerController : MonoBehaviour
     #region Monobehaviour
     private void Awake()
     {
-		if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-		{
-			gameManagerInstance.LoadPlayer(this, playerNumber);
-		}
+        if (playerNumberTag)
+        {
+            playerNumberTag.text = playerNumber.ToString();
+        }
+
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            gameManagerInstance.LoadPlayer(this, playerNumber);
+        }
 
         powerupParticle.Stop();
-			
+        jetpackBurnedOut = false;
+
         killList = new List<PlayerController>();
         currentFuel = startFuel;
         maxFuel = startFuel;
         timeSinceDash = 0f;
         inertiaTime = 2;
         rightStickHorz = 1;
-        rightStickVert = 0; 
+        rightStickVert = 0;
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
         this.isFlipped = this.sprite.flipX;
@@ -155,7 +169,6 @@ public class PlayerController : MonoBehaviour
     {
         // Update vars
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-        jumpButtonHeld = false;
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         if (player.GetAxis("RightStickHorizontal") != 0)
@@ -196,7 +209,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
         {
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
@@ -213,7 +226,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovementPreperation()
     {
-        if (leftTriggerAxis != 0 && currentFuel > 0)
+        if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
         {
             grounded = false;
             currentFuel -= Time.deltaTime * leftTriggerAxis;
@@ -226,6 +239,14 @@ public class PlayerController : MonoBehaviour
         {
             currentFuel += airRechargeRate * Time.deltaTime;
         }
+        if (currentFuel <= 0)
+        {
+            jetpackBurnedOut = true;
+        }
+        else if (currentFuel >= (fuelPercentNeeded * startFuel) && jetpackBurnedOut)
+        {
+            jetpackBurnedOut = false;
+        }
         leftTriggerAxis = player.GetAxis("Jetpack");
         InertiaFunction("logarithmic", leftTriggerAxis != 0);
     }
@@ -235,7 +256,7 @@ public class PlayerController : MonoBehaviour
         Vector2 moveDirection;
         float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
 
-        if (leftTriggerAxis != 0)
+        if (leftTriggerAxis != 0 && !jetpackBurnedOut)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             moveDirection *= fuelFactor;
@@ -254,10 +275,11 @@ public class PlayerController : MonoBehaviour
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
             moveDirection = new Vector2(leftStickHorz, 0).normalized;
-            if(moveDirection != Vector2.zero)
+            if (moveDirection != Vector2.zero)
             {
                 this.animator.SetBool("isWalking", true);
-            } else
+            }
+            else
             {
                 this.animator.SetBool("isWalking", false);
             }
@@ -289,7 +311,7 @@ public class PlayerController : MonoBehaviour
 
     private void DashCheck()
     {
-        if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel))
+        if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel) && !jetpackBurnedOut)
         {
             this.animator.SetTrigger("dash");
             currentFuel -= dashCost;
@@ -329,7 +351,7 @@ public class PlayerController : MonoBehaviour
 
     private void InertiaFunction(string function, bool acc)
     {
-        if (!grounded)
+        if (!grounded && !jetpackBurnedOut)
         {
             switch (function)
             {
@@ -362,30 +384,34 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        rigid.gravityScale = 8;
+                        rigid.gravityScale = gravScale;
                     }
                     break;
             }
         }
-
+        else if (jetpackBurnedOut)
+        {
+            rigid.gravityScale = gravScale;
+        }
     }
     #endregion
 
     #region External Functions
-    public void ReceivePowerUp(EPowerUp powerUp, Color shieldColor)
+    public void ReceivePowerUp(EPowerUp powerUp, Color powerUpColor)
     {
+        ParticleSystem.MainModule sparks = powerupParticle.main;
+        ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
+        sparks.startColor = powerUpColor;
+        orb.startColor = powerUpColor;
         if (powerupParticle.isStopped)
         {
             powerupParticle.Play();
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
-        //TODO set particle effect color
-        //Might want this latter when we have different sprites to represent team colors
-        //shield.SetColor(shieldColor);
     }
 
-	public void RemovePowerUp(Color sheildColor)
+    public void RemovePowerUp()
     {
         if (powerupParticle.isPlaying)
         {
@@ -394,8 +420,6 @@ public class PlayerController : MonoBehaviour
         hasPowerUp = false;
         EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
-        //Add this back in at a later point
-		//shield.SetColor (sheildColor);
     }
 
     public void RegisterKill(PlayerController otherPlayer)
@@ -480,6 +504,11 @@ public class PlayerController : MonoBehaviour
         return currentFuel;
     }
 
+    internal float GetFuelPercentNeeded()
+    {
+        return fuelPercentNeeded;
+    }
+
     internal Shield GetShield()
     {
         return shieldTransform.GetComponent<Shield>();
@@ -487,9 +516,8 @@ public class PlayerController : MonoBehaviour
 
     private Sprite GetCharacterSprite(Enumerables.ECharacter character)
     {
-		Debug.Log (character);
         Sprite charSprite = null;
-        
+
         switch (character)
         {
             case ECharacter.CatManWT:
@@ -498,8 +526,8 @@ public class PlayerController : MonoBehaviour
             case ECharacter.CatManP:
                 charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreviewAlt");
                 break;
-		case ECharacter.Computer:
-				charSprite = Resources.Load<Sprite> ("_Art/2D Sprites/Characters/Y2K_01");
+            case ECharacter.Computer:
+                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Y2K_01");
                 break;
             case ECharacter.MallCop:
                 charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Forward");

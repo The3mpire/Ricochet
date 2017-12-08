@@ -8,8 +8,9 @@ public class PowerUp : MonoBehaviour
 {
     #region Inspector Variables
     [Tooltip("Which type of powerup this is")]
-    [SerializeField]
-    private EPowerUp powerUpType;
+    [SerializeField] private EPowerUp powerUpType;
+    [Tooltip("The sprite of the powerup")]
+    [SerializeField] private SpriteRenderer powerupSprite;
     #endregion
 
     #region Hidden Variables
@@ -70,7 +71,20 @@ public class PowerUp : MonoBehaviour
     {
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            gameObject.GetComponent<SpriteRenderer>().color = gameManagerInstance.GetPowerUpColor(instanceType);
+            switch (powerUpType)
+            {
+                case EPowerUp.Multiball:
+                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/multiballiconplaceholder");
+                    break;
+                case EPowerUp.CatchNThrow:
+                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/catchstickyiconplaceholder");
+                    break;
+                case EPowerUp.CircleShield:
+                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/fullshieldiconplaceholder");
+                    break;
+                default:
+                    break;
+            }
         }
     }
     #endregion
