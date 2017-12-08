@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 114450103866478952}
   - component: {fileID: 114837096486908798}
   m_Layer: 9
-  m_Name: Base Player With Particles
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -311,7 +311,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1936325338366724}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4972783988959882}
@@ -569,8 +569,8 @@ MonoBehaviour:
     controllers:
     - {fileID: 9100000, guid: d91fec212cb6b4840bca1cd161692e93, type: 2}
     placeholderSprites:
-    - {fileID: 0}
-    flipSpriteX: 1
+    - {fileID: 21300000, guid: 004e5a591fa3db145a65764a663cb772, type: 3}
+    flipSpriteX: 0
   cat:
     controllers:
     - {fileID: 22100000, guid: 8059bd0ae7442304b99ddb1e8fe770bd, type: 2}
@@ -663,13 +663,14 @@ MonoBehaviour:
   groundedMoveSpeed: 12.5
   inertia: 1.5
   startFuel: 8
+  fuelPercentNeeded: 0.25
   groundRechargeRate: 5
   airRechargeRate: 1.5
   dashSpeed: 45
   dashTime: 0.15
   dashCost: 2
   shieldTransform: {fileID: 4414966702740056}
-  shieldObject: {fileID: 0}
+  shieldObject: {fileID: 1936325338366724}
   sprite: {fileID: 212644095525073304}
   powerupParticle: {fileID: 198799229440254356}
   rigid: {fileID: 50315715655940900}
@@ -709,7 +710,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lowFuelParticle: {fileID: 198826147038616612}
   playerController: {fileID: 114787925907891002}
-  threshold: 0.25
 --- !u!114 &114930844356215334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -851,7 +851,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4168,7 +4168,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -10824,7 +10824,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1024582385
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -11027,11 +11027,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1783731295
+  m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300004, guid: e7d3a1e0e2fac4bd48b6734c2daf4fe1, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 004e5a591fa3db145a65764a663cb772, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

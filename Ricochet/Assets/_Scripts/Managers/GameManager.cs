@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void EndMatch()
-    {        
+    {
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -213,11 +213,11 @@ public class GameManager : MonoBehaviour
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-					playerController.RemovePowerUp(defaultShieldColor);
+					playerController.RemovePowerUp();
                     SpawnMultipleBalls(ball);
                     break;
                 case EPowerUp.CatchNThrow:
-					playerController.RemovePowerUp(defaultShieldColor);
+					playerController.RemovePowerUp();
                     playerController.SetBallHeld(ball);
                     ball.SetHeld(true);
                     ball.transform.SetParent(playerController.GetShieldTransform());
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
         {
             case EPowerUp.CircleShield:
                 playerController.EnableSecondaryShield(false);
-				playerController.RemovePowerUp(defaultShieldColor);
+				playerController.RemovePowerUp();
                 break;
         }
     }
@@ -324,7 +324,7 @@ public class GameManager : MonoBehaviour
         }
         if (playerController.GetCurrentPowerUp() != EPowerUp.None)
         {
-			playerController.RemovePowerUp(defaultShieldColor);
+			playerController.RemovePowerUp();
         }
         EPowerUp powerUpType = powerUp.GetPowerUpType();
         Color powerUpShieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
@@ -402,7 +402,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
         yield return new WaitForSeconds(playerRespawnTime);
-		playerController.RemovePowerUp(defaultShieldColor);
+		playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
 
         switch (playerController.GetTeamNumber())
@@ -443,7 +443,7 @@ public class GameManager : MonoBehaviour
             if (players[i].activeSelf)
             {
                 NoWaitRespawnPlayer(currentPlayer);
-                currentPlayer.RemovePowerUp(defaultShieldColor);
+                currentPlayer.RemovePowerUp();
             }
         }
     }
@@ -475,6 +475,7 @@ public class GameManager : MonoBehaviour
         else
         {
             GameData.gameWinner = modeManager.GetMaxScore();
+            gameMatchTime = 0.0f;
             EndMatch();
         }
     }

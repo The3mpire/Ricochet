@@ -119,6 +119,16 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114450103866478952, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: sushi.controllers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114450103866478952, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: sushi.placeholderSprites.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4972783988959882, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
       propertyPath: m_LocalPosition.x
       value: -1.11
@@ -176,6 +186,18 @@ Prefab:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114450103866478952, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: sushi.controllers.Array.data[0]
+      value: 
+      objectReference: {fileID: 22100000, guid: 131521069824fd547b184ee368fdfd8f,
+        type: 2}
+    - target: {fileID: 114450103866478952, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: sushi.placeholderSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 4ab5908133d511f40b481892d476eabf,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
   m_IsPrefabParent: 0
