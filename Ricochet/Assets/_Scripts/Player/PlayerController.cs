@@ -228,7 +228,6 @@ public class PlayerController : MonoBehaviour
         } // recharge fuel in air
         else if (currentFuel < maxFuel)
         {
-            Debug.Log("air fueling");
             currentFuel += airRechargeRate * Time.deltaTime;
         }
         if (currentFuel <= 0)
@@ -401,8 +400,6 @@ public class PlayerController : MonoBehaviour
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
-        //Might want this latter when we have different sprites to represent team colors
-        //shield.SetColor(shieldColor);
     }
 
     public void RemovePowerUp()
@@ -414,8 +411,6 @@ public class PlayerController : MonoBehaviour
         hasPowerUp = false;
         EnableSecondaryShield(false);
         currPowerUp = EPowerUp.None;
-        //Add this back in at a later point
-        //shield.SetColor (sheildColor);
     }
 
     public void RegisterKill(PlayerController otherPlayer)
@@ -512,7 +507,6 @@ public class PlayerController : MonoBehaviour
 
     private Sprite GetCharacterSprite(Enumerables.ECharacter character)
     {
-        Debug.Log(character);
         Sprite charSprite = null;
 
         switch (character)
