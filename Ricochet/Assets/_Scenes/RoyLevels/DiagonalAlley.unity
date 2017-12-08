@@ -891,6 +891,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c74b601544e41844bb46698d9d26c676, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &354707098 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1312433926936380, guid: aeac01b428861a14fa7fca39858210b9,
+    type: 2}
+  m_PrefabInternal: {fileID: 1023588760}
 --- !u!1001 &384286583
 Prefab:
   m_ObjectHideFlags: 0
@@ -2850,12 +2855,12 @@ Prefab:
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 534
+      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 300.5
+      value: 208
       objectReference: {fileID: 0}
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
@@ -3580,6 +3585,21 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 20137911287507510, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: m_BackGroundColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20137911287507510, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: m_BackGroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20137911287507510, guid: 2307dc8ad33c11243bbcd064d233eff5,
+        type: 2}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2307dc8ad33c11243bbcd064d233eff5, type: 2}
   m_IsPrefabParent: 0
@@ -4045,8 +4065,8 @@ SpriteRenderer:
   m_SortingLayerID: 1535931219
   m_SortingLayer: 2
   m_SortingOrder: -4
-  m_Sprite: {fileID: 21300000, guid: 0467315ef7241504aae7678d0cbdba0f, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.353}
+  m_Sprite: {fileID: 21300000, guid: e63282ccf7e506a43b353d1b2e13cc2b, type: 3}
+  m_Color: {r: 0.959, g: 1, b: 1, a: 0.909}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -4662,12 +4682,12 @@ Prefab:
     - target: {fileID: 224253942275254630, guid: 0520336bb7ce00740a81c526a9600622,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 534
+      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 224253942275254630, guid: 0520336bb7ce00740a81c526a9600622,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 300.5
+      value: 208
       objectReference: {fileID: 0}
     - target: {fileID: 224253942275254630, guid: 0520336bb7ce00740a81c526a9600622,
         type: 2}
@@ -5030,6 +5050,11 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!1 &1603830077 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1830305419734296, guid: aeac01b428861a14fa7fca39858210b9,
+    type: 2}
+  m_PrefabInternal: {fileID: 1023588760}
 --- !u!4 &1643277039 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4793843494698854, guid: 6124da9d7022a8744810056bb10d2c97,
@@ -5432,6 +5457,31 @@ Prefab:
       propertyPath: players.Array.data[3]
       value: 
       objectReference: {fileID: 851467720}
+    - target: {fileID: 20160887593022960, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: m_BackGroundColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20160887593022960, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: m_BackGroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20160887593022960, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114347462270385642, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: pausePanel
+      value: 
+      objectReference: {fileID: 1603830077}
+    - target: {fileID: 114347462270385642, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: defaultSelectedButton
+      value: 
+      objectReference: {fileID: 354707098}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
