@@ -261,10 +261,17 @@ public class GameManager : MonoBehaviour
 
             if (gameMode == EMode.Deathmatch)
             {
-                if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
+                if (lastTouchedBy.GetTeamNumber() == playerController.GetTeamNumber())
                 {
-                    GameData.gameWinner = lastTouchedBy.GetTeamNumber();
-                    EndMatch();
+                    modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), -1);
+                }
+                else
+                {
+                    if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
+                    {
+                        GameData.gameWinner = lastTouchedBy.GetTeamNumber();
+                        EndMatch();
+                    }
                 }
             }
         }
@@ -284,6 +291,10 @@ public class GameManager : MonoBehaviour
                         GameData.gameWinner = ETeam.BlueTeam;
                         EndMatch();
                     }
+                    ball.GetComponent<Ball>().OnBallGoalCollision();
+                    ball.gameObject.SetActive(false);
+                    RespawnBall(ball.gameObject);
+                    NoWaitRespawnAllPlayers();
                 }
             }
         }
@@ -539,13 +550,13 @@ public class GameManager : MonoBehaviour
             gameMatchTime = GameData.matchTimeLimit;
         }
         gameMode = GameData.gameMode;
-        if (gameMode == EMode.Deathmatch)
-        {
-            int mSL = GameData.matchScoreLimit;
-            GameData.matchScoreLimit = 0;
-            modeManager.UpdateScore(ETeam.RedTeam, mSL);
-            modeManager.UpdateScore(ETeam.BlueTeam, mSL);
-        }
+        //if (gameMode == EMode.Deathmatch)
+        //{
+        //    int mSL = GameData.matchScoreLimit;
+        //    GameData.matchScoreLimit = 0;
+        //    modeManager.UpdateScore(ETeam.RedTeam, mSL);
+        //    modeManager.UpdateScore(ETeam.BlueTeam, mSL);
+        //}
     }
     #endregion
 }
