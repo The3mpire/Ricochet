@@ -36,6 +36,17 @@ public class BasePlayerSetup : MonoBehaviour {
 
     private void SetupCharacter(CharacterSetup setup, int version)
     {
+        //if the setup has unimplimented sprites, use cop instead
+        if (setup.controllers.Length == 0)
+        {
+            Debug.LogError("Could not find animation controller for player, defaulting to cop", gameObject);
+            setup = this.cop;
+        }
+        else if (setup.placeholderSprites.Length == 0)
+        {
+            Debug.LogError("Could not find default sprite(s) for player, defaulting to cop", gameObject);
+            setup = this.cop;
+        }
         RuntimeAnimatorController[] controllers = setup.controllers;
         Sprite[] sprites = setup.placeholderSprites;
         this.spriteRenderer.flipX = setup.flipSpriteX;

@@ -152,7 +152,8 @@ public class PlayerController : MonoBehaviour
     {
         player = ReInput.players.GetPlayer(playerNumber - 1);
         sprite.color = PlayerColorData.getColor(playerNumber, team);
-        transform.GetComponentInChildren<BasePlayerSetup>().SetupCharacter(ECharacter.MallCop, 0);
+        ECharacter chosenCharacter = GameData.playerCharacters != null ? GameData.playerCharacters[playerNumber - 1] : ECharacter.MallCop;
+        transform.GetComponentInChildren<BasePlayerSetup>().SetupCharacter(chosenCharacter, 0);
     }
 
     private void Update()
