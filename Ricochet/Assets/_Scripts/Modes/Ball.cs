@@ -131,7 +131,7 @@ public class Ball : MonoBehaviour
 
     public void ReverseBall()
     {
-        body.velocity = -1 * body.velocity.normalized * body.velocity.magnitude;
+        body.velocity = body.velocity.normalized * minimumSpeed;
     }
     #endregion
 
