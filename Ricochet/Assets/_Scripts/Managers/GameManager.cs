@@ -597,13 +597,6 @@ public class GameManager : MonoBehaviour
             gameMatchTime = GameData.matchTimeLimit;
         }
         gameMode = GameData.gameMode;
-        //if (gameMode == EMode.Deathmatch)
-        //{
-        //    int mSL = GameData.matchScoreLimit;
-        //    GameData.matchScoreLimit = 0;
-        //    modeManager.UpdateScore(ETeam.RedTeam, mSL);
-        //    modeManager.UpdateScore(ETeam.BlueTeam, mSL);
-        //}
     }
     #endregion
 }
