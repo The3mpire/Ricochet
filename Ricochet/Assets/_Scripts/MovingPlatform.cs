@@ -33,14 +33,6 @@ public class MovingPlatform : MonoBehaviour
     {
         StartCoroutine(WaitHelper());
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (gameManager != null || GameManager.TryGetInstance(out gameManager))
-        {
-            gameManager.KillZoneCollision(collision.gameObject);
-        }
-    }
     #endregion
 
     #region Public Methods
