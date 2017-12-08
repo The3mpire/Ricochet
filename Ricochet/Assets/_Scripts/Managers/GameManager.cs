@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void EndMatch()
-    {        
+    {
         if (nextLevel != "")
         {
             SceneManager.LoadSceneAsync(nextLevel);
@@ -475,6 +475,7 @@ public class GameManager : MonoBehaviour
         else
         {
             GameData.gameWinner = modeManager.GetMaxScore();
+            gameMatchTime = 0.0f;
             EndMatch();
         }
     }

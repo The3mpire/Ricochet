@@ -376,7 +376,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158271850568408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.15, y: 8.42, z: 0}
+  m_LocalPosition: {x: -18, y: -11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224606253502872790}
@@ -569,8 +569,8 @@ MonoBehaviour:
     controllers:
     - {fileID: 9100000, guid: d91fec212cb6b4840bca1cd161692e93, type: 2}
     placeholderSprites:
-    - {fileID: 0}
-    flipSpriteX: 1
+    - {fileID: 21300000, guid: 004e5a591fa3db145a65764a663cb772, type: 3}
+    flipSpriteX: 0
   cat:
     controllers:
     - {fileID: 22100000, guid: 8059bd0ae7442304b99ddb1e8fe770bd, type: 2}
@@ -669,7 +669,7 @@ MonoBehaviour:
   dashTime: 0.15
   dashCost: 2
   shieldTransform: {fileID: 4414966702740056}
-  shieldObject: {fileID: 0}
+  shieldObject: {fileID: 1936325338366724}
   sprite: {fileID: 212644095525073304}
   powerupParticle: {fileID: 198799229440254356}
   rigid: {fileID: 50315715655940900}
@@ -10824,7 +10824,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1024582385
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -11027,8 +11027,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1783731295
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 004e5a591fa3db145a65764a663cb772, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
