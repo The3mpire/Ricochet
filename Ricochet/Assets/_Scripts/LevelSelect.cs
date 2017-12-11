@@ -43,6 +43,6 @@ public static class LevelSelect
 
     public static void LoadMainMenu()
     {
-        SceneManager.LoadSceneAsync((int)BuildIndex.LEVEL_SELECT);
+        SceneManager.LoadSceneAsync((int)BuildIndex.MAIN_MENU);
     }
 }
