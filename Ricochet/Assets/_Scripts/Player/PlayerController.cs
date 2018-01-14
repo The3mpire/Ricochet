@@ -20,7 +20,16 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Gravity scale on player")]
     [SerializeField]
     private float gravScale = 8f;
-    [Tooltip("Move speed while using jetpack w/ no directional input")]
+    [Tooltip("Acceleration constant while moving laterally")]
+    [SerializeField]
+    private float lateralAcceleration;
+    [Tooltip("Max lateral speed when falling")]
+    [SerializeField]
+    private float fallingLateralSpeed = 1f;
+    [Tooltip("Acceleration/deceleartion constant while using jetpack")]
+    [SerializeField]
+    private float thrusterAcceleration = 0.05f;
+    [Tooltip("Max speed while using jetpack w/ no directional input")]
     [SerializeField]
     private float upThrusterSpeed = 5f;
     [Tooltip("Move speed while using jetpack w/ directional input")]
@@ -159,6 +168,12 @@ public class PlayerController : MonoBehaviour
         shield.SetTeamColor(team);
         //gameManagerInstance.NoWaitRespawnAllPlayers();
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
+
+        thrusterAcceleration = 1.1f;
+        lateralAcceleration = 0.2f;
+        fallingLateralSpeed = 5f;
+        thrusterSpeed = 27f;
+        dashSpeed = 15f;
     }
 
     private void Start()
@@ -231,16 +246,16 @@ public class PlayerController : MonoBehaviour
     private void MovementPreperation()
     {
         if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
-        {
+        {  // Jetpacking with fuel
             grounded = false;
             currentFuel -= Time.deltaTime * leftTriggerAxis;
-        } // recharge fuel on ground
+        } 
         else if (grounded && currentFuel < maxFuel)
-        {
+        { // recharge fuel on ground
             currentFuel += groundRechargeRate * Time.deltaTime;
-        } // recharge fuel in air
+        } 
         else if (currentFuel < maxFuel)
-        {
+        { // recharge fuel in air
             currentFuel += airRechargeRate * Time.deltaTime;
         }
         if (currentFuel <= 0)
@@ -252,7 +267,7 @@ public class PlayerController : MonoBehaviour
             jetpackBurnedOut = false;
         }
         leftTriggerAxis = player.GetAxis("Jetpack");
-        InertiaFunction("logarithmic", leftTriggerAxis != 0);
+        InertiaFunction("none", leftTriggerAxis != 0);
     }
 
     private void Move()
@@ -273,11 +288,28 @@ public class PlayerController : MonoBehaviour
             if (moveDirection == Vector2.zero)
             {
                 moveDirection = Vector2.up * fuelFactor;
-                rigid.velocity = moveDirection * upThrusterSpeed * leftTriggerAxis;
+                float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
+                //float y = rigid.velocity.y < upThrusterSpeed ? rigid.velocity.y + thrusterAcceleration : upThrusterSpeed;
+                float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0.5f - rigid.velocity.y;
+                rigid.velocity = new Vector2(x, y);
+                //rigid.velocity = moveDirection * upThrusterSpeed * leftTriggerAxis;
+
             } // else go in the direction of input with thruster speed
             else
             {
-                rigid.velocity = moveDirection * thrusterSpeed * leftTriggerAxis;
+                float x, y;
+                if (moveDirection.x > 0)
+                    x = Mathf.Min(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed);
+                else
+                    x = Mathf.Max(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+
+                if (moveDirection.y >= 0)
+                    y = Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed);
+                else
+                    y = Mathf.Max(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+
+                rigid.velocity = new Vector2(x, y);
+                //rigid.velocity = moveDirection * thrusterSpeed * leftTriggerAxis;
             }
         }
         else
@@ -302,7 +334,22 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                rigid.velocity = moveDirection * airMoveSpeed;
+                float x = 0, y = 0;
+                if (rigid.velocity.x > fallingLateralSpeed)
+                    x = rigid.velocity.x - (lateralAcceleration * 4f);
+                else if (rigid.velocity.x < -fallingLateralSpeed)
+                    x = rigid.velocity.x + (lateralAcceleration * 4f);
+                else
+                {
+                    if (moveDirection.x > 0)
+                        x = Mathf.Min(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), fallingLateralSpeed);
+                    else if (moveDirection.x < 0)
+                        x = Mathf.Max(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), -fallingLateralSpeed);
+                }
+
+                y = Mathf.Max(rigid.velocity.y - 0.5f, -airMoveSpeed);
+
+                rigid.velocity = new Vector2(x, y);
             }
         }
 
@@ -393,14 +440,7 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case "none":
-                    if (acc)
-                    {
-                        rigid.gravityScale = 0;
-                    }
-                    else
-                    {
-                        rigid.gravityScale = gravScale;
-                    }
+                    rigid.gravityScale = 0;
                     break;
             }
         }
