@@ -26,8 +26,7 @@ public class UI_UpdateSliderLabel : MonoBehaviour, ISelectHandler, IDeselectHand
 
     private void Start()
     {
-        GameData.matchScoreLimit = (int)slider.value;
-        GameData.matchTimeLimit = (int)slider.value;
+        slider.onValueChanged.Invoke(slider.value);
     }
     #endregion
 

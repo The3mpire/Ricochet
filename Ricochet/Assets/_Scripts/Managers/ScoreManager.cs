@@ -7,9 +7,13 @@ using Enumerables;
 public class ScoreManager : ModeManager
 {
     #region Inspector Variables
+    [SerializeField]
+    private GameDataSO gameData;
+
     [Tooltip("Drag the Score UI's Red Team's Text here")]
     [SerializeField]
     private Text RedTeamText;
+
     [Tooltip("Drag the Score UI's Team One Text here")]
     [SerializeField]
     private Text BlueTeamText;
@@ -28,14 +32,14 @@ public class ScoreManager : ModeManager
             // and all the reverse logic is done in the code)
             case ETeam.RedTeam:
                 blueTeamScore += value;
-                GameData.blueTeamScore += value;
+                gameData.SetBlueScore(blueTeamScore);
                 BlueTeamText.text = blueTeamScore.ToString();
-                return CheckWin(GameData.blueTeamScore);
+                return CheckWin(blueTeamScore);
             case ETeam.BlueTeam:
                 redTeamScore += value;
-                GameData.redTeamScore += value;
+                gameData.SetRedScore(redTeamScore);
                 RedTeamText.text = redTeamScore.ToString();
-                return CheckWin(GameData.redTeamScore);
+                return CheckWin(redTeamScore);
         }
         return false;
     }
@@ -47,14 +51,14 @@ public class ScoreManager : ModeManager
             // it increments team's score
             case ETeam.RedTeam:
                 redTeamScore += value;
-                GameData.redTeamScore += value;
+                gameData.SetRedScore(redTeamScore);
                 RedTeamText.text = redTeamScore.ToString();
-                return CheckWin(GameData.redTeamScore);
+                return CheckWin(redTeamScore);
             case ETeam.BlueTeam:
                 blueTeamScore += value;
-                GameData.blueTeamScore += value;
+                gameData.SetBlueScore(blueTeamScore);
                 BlueTeamText.text = blueTeamScore.ToString();
-                return CheckWin(GameData.blueTeamScore);
+                return CheckWin(blueTeamScore);
         }
         return false;
     }
@@ -77,9 +81,9 @@ public class ScoreManager : ModeManager
 
     public bool CheckWin(int score)
     {
-        if (GameData.matchScoreLimit > 0 && score > 0)
+        if (gameData.GetScoreLimit() > 0 && score > 0)
         {
-            return score % GameData.matchScoreLimit == 0;
+            return score % gameData.GetScoreLimit() == 0;
         }
         else
         {
