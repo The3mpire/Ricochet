@@ -17,7 +17,9 @@ public class LevelSelectManager : MonoBehaviour
     [SerializeField] private GameObject defaultConfirmationGameObject;
 
     [SerializeField] private BuildIndex loadLevelBuildIndex;
-    [SerializeField] private Button[] levelButtons;    
+    [SerializeField] private Button[] levelButtons;
+
+    [SerializeField] private GameDataSO gameData;
     #endregion
 
     #region Private Variables
@@ -97,17 +99,17 @@ public class LevelSelectManager : MonoBehaviour
     #region Public Functions
     public void SetMatchScoreLimit(Slider slider)
     {
-        GameData.matchScoreLimit = (int)slider.value;
+        gameData.SetScoreLimit((int)slider.value);
     }
 
     public void SetMatchTimeLimit(Slider slider)
     {
-        GameData.matchTimeLimit = (int)slider.value;
+        gameData.SetTimeLimit((int)slider.value);
     }
 
     public void SetLoadLevel(BuildIndex levelInt)
     {
-        GameData.GameLevel = levelInt;
+        gameData.SetGameLevel(levelInt);
         loadLevelBuildIndex = levelInt;
         OpenConfirmationMenu();
     }

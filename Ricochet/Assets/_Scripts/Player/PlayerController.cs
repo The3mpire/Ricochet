@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     #region Instance Variables
+    [SerializeField]
+    private GameDataSO gameData;
+
     [Header("Player Settings")]
     [Tooltip("Which player this is")]
     [SerializeField]
@@ -155,17 +158,15 @@ public class PlayerController : MonoBehaviour
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
         this.isFlipped = this.sprite.flipX;
-        team = GameData.playerTeams == null ? ETeam.BlueTeam : GameData.playerTeams[playerNumber - 1];
+        team = gameData.GetPlayerTeam(playerNumber-1);
+        chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
-        //gameManagerInstance.NoWaitRespawnAllPlayers();
-        //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
     }
 
     private void Start()
     {
         player = ReInput.players.GetPlayer(playerNumber - 1);
         sprite.color = PlayerColorData.getColor(playerNumber, team);
-        chosenCharacter = GameData.playerCharacters != null ? GameData.playerCharacters[playerNumber - 1] : ECharacter.MallCop;
         transform.GetComponentInChildren<BasePlayerSetup>().SetupCharacter(chosenCharacter, 0);
     }
 
