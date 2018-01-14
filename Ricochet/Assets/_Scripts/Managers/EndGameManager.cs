@@ -13,7 +13,7 @@ public class EndGameManager : MonoBehaviour
     private void Start()
     {
         ShowGameOverMenu();
-        EndGameText.text = (gameData.GetGameWinner() == Enumerables.ETeam.None) ? "Tie Game!" : "Congratulation " + gameData.GetGameWinner().ToString() + "!"; 
+        EndGameText.text = (gameData.GetGameWinner() == Enumerables.ETeam.None) ? "Tie Game!" : "Congratulations " + gameData.GetGameWinner().ToString() + "!"; 
     }
     #endregion
 
