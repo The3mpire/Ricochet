@@ -307,7 +307,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ball.RedirectBall();
+        ball.RedirectBall(collision.relativeVelocity);
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
     }
