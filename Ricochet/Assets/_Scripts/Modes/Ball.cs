@@ -135,7 +135,6 @@ public class Ball : MonoBehaviour
      */
     public void RedirectBall(Vector2 relativeVelocity)
     {
-        Debug.Log("RV: " + relativeVelocity);
         body.velocity = body.velocity.normalized * relativeVelocity.magnitude;
     }
     #endregion
