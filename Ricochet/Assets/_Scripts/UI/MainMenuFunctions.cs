@@ -5,62 +5,56 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Enumerables;
 
-public class MainMenuFunctions : MonoBehaviour {
-
+public class MainMenuFunctions : MonoBehaviour
+{
     #region Reference Variables
+    [SerializeField]
+    private GameObject mainMenuPanel;
+
+    [Tooltip("The first button to be selected in the scene")]
+    [SerializeField]
+    private GameObject mainMenuButton;
+
     [Tooltip("The panel to be enabled when start is pressed")]
     [SerializeField]
     private GameObject optionsPanel;
+
     [Tooltip("The first button to be selected when the panel is on")]
     [SerializeField]
     private GameObject optionsButton;
-    [Tooltip("The first button to be selected in the scene")]
+
     [SerializeField]
-    private GameObject defaultButton;
-    [Tooltip("The dropdown menu for game modes")]
-    [SerializeField]
-    private Dropdown gameModes;
+    private GameDataSO gameData;
     #endregion
 
-    #region Hidden Variables
-    private GameManager gameManagerInstance;
-    #endregion
-
-    void Awake()
-    {
-        SendGameMode();
-    }
-
+    #region Public Functions
     public void OpenGameOptions()
     {
+        mainMenuPanel.SetActive(false);
         optionsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(optionsButton);
+
     }
 
     public void CloseGameOptions()
     {
+        mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(defaultButton);
+        EventSystem.current.SetSelectedGameObject(mainMenuButton);
     }
 
-    public void SendGameMode()
+    public void LaunchClassicMode()
     {
-        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-        {
-            EMode mode;
-            switch (gameModes.value)
-            {
-                case 0:
-                    mode = EMode.Soccer;
-                    break;
-                case 1:
-                    mode = EMode.Deathmatch;
-                    break;
-                default:
-                    mode = EMode.Soccer;
-                    break;
-            }
-            GameData.gameMode = mode;
-        }
+        gameData.SetGameMode(EMode.Soccer);
+        gameData.SetGameLevel(BuildIndex.LEVEL_SELECT);
+        LevelSelect.LoadCharacterSelect();
     }
+
+    public void LaunchDeathmatchMode()
+    {
+        gameData.SetGameMode(EMode.Deathmatch);
+        gameData.SetGameLevel(BuildIndex.LEVEL_SELECT);
+        LevelSelect.LoadCharacterSelect();
+    }
+    #endregion
 }
