@@ -145,6 +145,13 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region Getters
+    public GameObject[] GetPlayerObjects()
+    {
+        return players;
+    }
+    #endregion
+
     public static bool TryGetInstance(out GameManager gm)
     {
         gm = instance;
