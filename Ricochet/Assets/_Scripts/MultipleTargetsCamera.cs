@@ -8,6 +8,8 @@ public class MultipleTargetsCamera : MonoBehaviour
     [SerializeField] private List<Transform> targets;
     [SerializeField] private Vector3 offset;
     [SerializeField] private float smoothTime = .5f;
+    [SerializeField] private Vector2 minPos;
+    [SerializeField] private Vector2 maxPos;
 
     private GameManager manager;
     private Vector3 velocity;
@@ -26,11 +28,17 @@ public class MultipleTargetsCamera : MonoBehaviour
         if (!GameManager.TryGetInstance(out manager))
         {
             Debug.LogError("Camera unable to find GameManager", gameObject);
+            return;
         }
-
+        
         GameObject[] players = manager.GetPlayerObjects();
+        List<GameObject> balls = manager.GetBallObjects();
 
         foreach (GameObject go in players)
+        {
+            targets.Add(go.transform);
+        }
+        foreach (GameObject go in balls)
         {
             targets.Add(go.transform);
         }
@@ -44,7 +52,12 @@ public class MultipleTargetsCamera : MonoBehaviour
         }
 
         Vector3 centerPoint = GetCenterPoint();
-        Vector3 targetPoint = centerPoint + offset;
+
+        float x = Mathf.Clamp(centerPoint.x, minPos.x, maxPos.x);
+        float y = Mathf.Clamp(centerPoint.y, minPos.y, maxPos.y);
+
+        Vector3 targetPoint = new Vector3(x, y) + offset;
+        
         transform.position = Vector3.SmoothDamp(transform.position, targetPoint, ref velocity, smoothTime);
     }
     #endregion

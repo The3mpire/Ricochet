@@ -2,7 +2,6 @@
 using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -140,11 +139,6 @@ public class PlayerController : MonoBehaviour
             playerNumberTag.text = playerNumber.ToString();
         }
 
-        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-        {
-            gameManagerInstance.LoadPlayer(this, playerNumber);
-        }
-
         powerupParticle.Stop();
         jetpackBurnedOut = false;
 
@@ -158,9 +152,14 @@ public class PlayerController : MonoBehaviour
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
         this.isFlipped = this.sprite.flipX;
-        team = gameData.GetPlayerTeam(playerNumber-1);
+        team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
+
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            gameManagerInstance.LoadPlayer(this, playerNumber);
+        }
     }
 
     private void Start()
@@ -266,7 +265,7 @@ public class PlayerController : MonoBehaviour
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             moveDirection *= fuelFactor;
             this.animator.SetBool("isJumping", true);
-            if(this.jetpackParticle && !this.jetpackParticle.isPlaying)
+            if (this.jetpackParticle && !this.jetpackParticle.isPlaying)
             {
                 this.jetpackParticle.Play();
             }

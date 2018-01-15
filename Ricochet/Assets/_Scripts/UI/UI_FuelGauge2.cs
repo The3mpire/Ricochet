@@ -20,7 +20,7 @@ public class UI_FuelGauge2 : MonoBehaviour
     private bool pulsing = false;
     private bool growing = false;
 
-    private void Start()
+    public void Start()
     {
         if (!player.gameObject.activeSelf)
         {
@@ -80,7 +80,6 @@ public class UI_FuelGauge2 : MonoBehaviour
         }
 
         fill.rectTransform.localScale = new Vector3(fillPerc, 1, 1);
-
-        
+ 
     }
 }
