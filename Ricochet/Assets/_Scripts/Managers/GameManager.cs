@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void BallPlayerCollision(GameObject player, Ball ball)
+    public void BallPlayerCollision(GameObject player, Collision2D collision)
     {
         PlayerController playerController;
         if (!playerDictionary.TryGetValue(player, out playerController))
@@ -240,6 +240,8 @@ public class GameManager : MonoBehaviour
             playerController = player.GetComponent<PlayerController>();
             playerDictionary.Add(player, playerController);
         }
+
+        Ball ball = collision.gameObject.GetComponent<Ball>();
 
         // Check if the ball has been touched by anyone
         PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
@@ -287,7 +289,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
+        ball.RedirectBall(collision.relativeVelocity);
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
     }
