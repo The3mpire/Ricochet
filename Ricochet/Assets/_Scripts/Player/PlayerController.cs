@@ -212,15 +212,13 @@ public class PlayerController : MonoBehaviour
 
     #region Collision Management
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
         {
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
-                Ball ball = collision.gameObject.GetComponent<Ball>();
-                gameManagerInstance.BallPlayerCollision(this.gameObject, ball);
-                ball.ReverseBall();
+                gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
             }
         }
     }
