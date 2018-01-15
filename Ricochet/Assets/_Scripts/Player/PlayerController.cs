@@ -168,12 +168,6 @@ public class PlayerController : MonoBehaviour
         shield.SetTeamColor(team);
         //gameManagerInstance.NoWaitRespawnAllPlayers();
         //SetBodyType(GetCharacterSprite(GameData.playerCharacters[playerNumber-1]));
-
-        thrusterAcceleration = 1.1f;
-        lateralAcceleration = 0.2f;
-        fallingLateralSpeed = 5f;
-        thrusterSpeed = 27f;
-        dashSpeed = 15f;
     }
 
     private void Start()
@@ -284,32 +278,24 @@ public class PlayerController : MonoBehaviour
             {
                 this.jetpackParticle.Play();
             }
-            // If there is no directional input, just go up with upThrusterSpeed
+            // If there is no directional input, decelerate movement to a still hover
             if (moveDirection == Vector2.zero)
             {
                 moveDirection = Vector2.up * fuelFactor;
                 float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
-                //float y = rigid.velocity.y < upThrusterSpeed ? rigid.velocity.y + thrusterAcceleration : upThrusterSpeed;
-                float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0.5f - rigid.velocity.y;
+                float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
                 rigid.velocity = new Vector2(x, y);
-                //rigid.velocity = moveDirection * upThrusterSpeed * leftTriggerAxis;
-
             } // else go in the direction of input with thruster speed
             else
             {
                 float x, y;
-                if (moveDirection.x > 0)
-                    x = Mathf.Min(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed);
-                else
-                    x = Mathf.Max(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                x = moveDirection.x > 0 ? Mathf.Min(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
+                    Mathf.Max(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
-                if (moveDirection.y >= 0)
-                    y = Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed);
-                else
-                    y = Mathf.Max(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                y = moveDirection.y >= 0 ? Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed):
+                    Mathf.Max(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
                 rigid.velocity = new Vector2(x, y);
-                //rigid.velocity = moveDirection * thrusterSpeed * leftTriggerAxis;
             }
         }
         else
@@ -336,19 +322,25 @@ public class PlayerController : MonoBehaviour
             {
                 float x = 0, y = 0;
                 if (rigid.velocity.x > fallingLateralSpeed)
+                {
                     x = rigid.velocity.x - (lateralAcceleration * 4f);
+                }
                 else if (rigid.velocity.x < -fallingLateralSpeed)
+                {
                     x = rigid.velocity.x + (lateralAcceleration * 4f);
+                }
                 else
                 {
                     if (moveDirection.x > 0)
+                    {
                         x = Mathf.Min(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), fallingLateralSpeed);
+                    }
                     else if (moveDirection.x < 0)
+                    {
                         x = Mathf.Max(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), -fallingLateralSpeed);
+                    }
                 }
-
                 y = Mathf.Max(rigid.velocity.y - 0.5f, -airMoveSpeed);
-
                 rigid.velocity = new Vector2(x, y);
             }
         }
