@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
+    [SerializeField]
+    private GameDataSO gameData;
 
     [Header("Game Match Variables")]
     [Tooltip("Set the match mode here")]
@@ -161,15 +163,14 @@ public class GameManager : MonoBehaviour
     #region UI Controls
     public void ExitLevel()
     {
-        GameData.ResetGameSetup();
-        GameData.ResetGameStatistics();
-        SceneManager.LoadSceneAsync(LevelIndex.MAIN_MENU);
+        gameData.ResetGameStatistics();
+        LevelSelect.LoadMainMenu();
     }
 
     public void CharacterSelect()
     {
-        GameData.ResetGameStatistics();
-        SceneManager.LoadSceneAsync(LevelIndex.CHARACTER_SELECT);
+        gameData.ResetGameStatistics();
+        LevelSelect.LoadCharacterSelect();
     }
 
     public void StartGame()
@@ -250,7 +251,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void BallPlayerCollision(GameObject player, Ball ball)
+    public void BallPlayerCollision(GameObject player, Collision2D collision)
     {
         PlayerController playerController;
         if (!playerDictionary.TryGetValue(player, out playerController))
@@ -258,6 +259,8 @@ public class GameManager : MonoBehaviour
             playerController = player.GetComponent<PlayerController>();
             playerDictionary.Add(player, playerController);
         }
+
+        Ball ball = collision.gameObject.GetComponent<Ball>();
 
         // Check if the ball has been touched by anyone
         PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
@@ -275,7 +278,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
                     {
-                        GameData.gameWinner = lastTouchedBy.GetTeamNumber();
+                        gameData.SetGameWinner(lastTouchedBy.GetTeamNumber());
                         EndMatch();
                     }
                 }
@@ -289,12 +292,12 @@ public class GameManager : MonoBehaviour
                 {
                     if (playerController.GetTeamNumber() == ETeam.BlueTeam)
                     {
-                        GameData.gameWinner = ETeam.RedTeam;
+                        gameData.SetGameWinner(ETeam.RedTeam);
                         EndMatch();
                     }
                     else
                     {
-                        GameData.gameWinner = ETeam.BlueTeam;
+                        gameData.SetGameWinner(ETeam.BlueTeam);
                         EndMatch();
                     }
                     ball.GetComponent<Ball>().OnBallGoalCollision();
@@ -305,7 +308,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
+        ball.RedirectBall(collision.relativeVelocity);
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
     }
@@ -323,7 +326,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                GameData.gameWinner = GetOpposingTeam(team);
+                gameData.SetGameWinner(GetOpposingTeam(team));
                 EndMatch();
             }
         }
@@ -379,7 +382,7 @@ public class GameManager : MonoBehaviour
     #region Respawners
 	public void LoadPlayer(PlayerController playerController, int playerNumber)
 	{
-		if (GameData.PlayerIsActive (playerNumber)) {
+		if (playerNumber <= gameData.GetPlayerCount()){
 			NoWaitRespawnPlayer (playerController);
 		} else {
 			playerController.gameObject.SetActive (false);
@@ -491,7 +494,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameData.gameWinner = modeManager.GetMaxScore();
+            gameData.SetGameWinner(modeManager.GetMaxScore());
             gameMatchTime = 0.0f;
             EndMatch();
         }
@@ -586,17 +589,17 @@ public class GameManager : MonoBehaviour
     private void LoadMatchSettings()
     {
         //Both match limit settings are 0. Set inspector values for both.
-        if (GameData.matchScoreLimit == 0 && GameData.matchTimeLimit == 0)
+        if (gameData.GetScoreLimit() == 0 && gameData.GetTimeLimit() == 0)
         {
-            GameData.matchScoreLimit = scoreLimit;
-            GameData.matchTimeLimit = gameMatchTime;
+            gameData.SetScoreLimit(scoreLimit);
+            gameData.SetTimeLimit((int)gameMatchTime);
         }
         else
         {
-            scoreLimit = GameData.matchScoreLimit;
-            gameMatchTime = GameData.matchTimeLimit;
+            scoreLimit = gameData.GetScoreLimit();
+            gameMatchTime = gameData.GetTimeLimit();
         }
-        gameMode = GameData.gameMode;
+        gameMode = gameData.GetGameMode();
     }
     #endregion
 }

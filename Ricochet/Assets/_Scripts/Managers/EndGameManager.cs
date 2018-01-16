@@ -7,12 +7,13 @@ public class EndGameManager : MonoBehaviour
     [Tooltip("Drag the UI's EndGameText here")]
     [SerializeField] private Text EndGameText;
     [SerializeField] private GameObject defaultSelectedButton;
+    [SerializeField] private GameDataSO gameData;
 
     #region MonoBehaviours
     private void Start()
     {
         ShowGameOverMenu();
-        EndGameText.text = GameData.gameWinner == Enumerables.ETeam.None ? "Tie Game!" : "Congratulations " + GameData.gameWinner.ToString() + "!";
+        EndGameText.text = (gameData.GetGameWinner() == Enumerables.ETeam.None) ? "Tie Game!" : "Congratulations " + gameData.GetGameWinner().ToString() + "!"; 
     }
     #endregion
 
@@ -23,33 +24,32 @@ public class EndGameManager : MonoBehaviour
 
     public void PlayAgain()
     {
-        GameData.ResetGameStatistics();
-        LevelSelect.LoadLevel(GameData.GameLevel);
+        gameData.ResetGameStatistics();
+        LevelSelect.LoadLevel(gameData.GetGameLevel());
     }
 
     public void PlayRandomLevel()
     {
-        GameData.ResetGameStatistics();
+        gameData.ResetGameStatistics();
         // TODO: Switch here on GameData game type to load from correct playlist
         LevelSelect.LoadRandomLevel(LevelSelect.glitchBallClassicLevels);
     }
 
     public void LoadLevelSelect()
     {
-        GameData.ResetGameStatistics();
+        gameData.ResetGameStatistics();
         LevelSelect.LoadLevelSelect();
     }
 
     public void LoadCharacterSelect()
     {
-        GameData.ResetGameStatistics();
+        gameData.ResetGameStatistics();
         LevelSelect.LoadCharacterSelect();
     }
 
     public void LoadMainMenu()
     {
-        GameData.ResetGameStatistics();
-        GameData.ResetGameSetup();
+        gameData.ResetGameStatistics();
         LevelSelect.LoadMainMenu();
     }
 }
