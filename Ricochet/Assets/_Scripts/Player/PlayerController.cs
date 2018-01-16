@@ -182,7 +182,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Update vars
-        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+        Vector2 playerPosition = transform.position;
+        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
+        grounded = Physics2D.Linecast(playerPosition, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         if (player.GetAxis("RightStickHorizontal") != 0)
@@ -241,7 +243,8 @@ public class PlayerController : MonoBehaviour
         if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
         {  // Jetpacking with fuel
             grounded = false;
-            currentFuel -= Time.deltaTime * leftTriggerAxis;
+            Vector2 md = new Vector2(leftStickHorz, leftStickVert);
+            currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
         } 
         else if (grounded && currentFuel < maxFuel)
         { // recharge fuel on ground
