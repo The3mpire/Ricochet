@@ -1071,8 +1071,11 @@ MonoBehaviour:
   playerNumber: 1
   team: 1
   gravScale: 12
+  lateralAcceleration: 0.2
+  fallingLateralSpeed: 5
+  thrusterAcceleration: 1.1
   upThrusterSpeed: 12
-  thrusterSpeed: 22
+  thrusterSpeed: 27
   airMoveSpeed: 8
   groundedMoveSpeed: 35
   inertia: 1.5
@@ -1080,7 +1083,7 @@ MonoBehaviour:
   fuelPercentNeeded: 0.2
   groundRechargeRate: 5
   airRechargeRate: 1.5
-  dashSpeed: 65
+  dashSpeed: 15
   dashTime: 0.125
   dashCost: 1
   shieldTransform: {fileID: 4414966702740056}

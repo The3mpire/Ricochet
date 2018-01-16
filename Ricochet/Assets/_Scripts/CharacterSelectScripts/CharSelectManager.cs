@@ -126,7 +126,7 @@ public class CharSelectManager : MonoBehaviour
     {
         if (bHeld)
         {
-            backSlider.value += Time.deltaTime;
+            backSlider.value += (Time.deltaTime * 1.75f);
             if (backSlider.value >= backSlider.maxValue)
             {
                 RouteInputBack();
@@ -440,7 +440,7 @@ public class CharSelectManager : MonoBehaviour
 
         }
 
-        if (readyCount < 2)
+        if (readyCount < 1)
         {
             allReady = false;
         }
