@@ -69,9 +69,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4942153240570494}
   - component: {fileID: 20160887593022960}
-  - component: {fileID: 92846435387118090}
   - component: {fileID: 124825466531352990}
   - component: {fileID: 81598116533774018}
+  - component: {fileID: 114731083047901876}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -115,7 +115,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1349470231281830}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.46857607, y: 0.18211566, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4935417453643964}
@@ -128,7 +128,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047315934321546}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4533791810839964}
@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1550601391691784}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4935417453643964}
@@ -158,7 +158,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1873172643427662}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.8405269, y: -0.192309, z: 9.930385}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4935417453643964}
@@ -173,7 +173,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.5195174, g: 0.33780277, b: 0.52205884, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -184,7 +184,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 13.1
+  orthographic size: 13
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -366,13 +366,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!92 &92846435387118090
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1550601391691784}
-  m_Enabled: 1
 --- !u!114 &114083169620717160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -384,15 +377,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efa3ed3b93be61419d5481b6f65e33e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGameScene: 1
   modeManager: {fileID: 0}
   powerUpManager: {fileID: 0}
   soundStorage: {fileID: 11400000, guid: f3742bc292919044ca874d1cefbe6f0f, type: 2}
   musicManager: {fileID: 114876842522859312}
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
-  gameMode: 0
-  gameMenuUI: {fileID: 0}
-  gameMatchTime: 120
   gameTimerText: {fileID: 0}
   winScreenWaitTime: 3
   powerUpRespawnTime: 10
@@ -410,12 +399,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  character1Sprite: {fileID: 0}
-  character1BodyScale: 0
-  character2Sprite: {fileID: 0}
-  character2BodyScale: 0
-  scoreLimit: 5
-  nextLevel: 
 --- !u!114 &114347462270385642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -430,6 +413,22 @@ MonoBehaviour:
   hasPausePanel: 1
   pausePanel: {fileID: 0}
   defaultSelectedButton: {fileID: 0}
+--- !u!114 &114731083047901876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75e6fff776dea74fac556db22129e46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets: []
+  offset: {x: 0, y: 1.5, z: -10}
+  smoothTime: 0.75
+  minPos: {x: -6, y: -4.5}
+  maxPos: {x: 6, y: 4.5}
 --- !u!114 &114876842522859312
 MonoBehaviour:
   m_ObjectHideFlags: 1

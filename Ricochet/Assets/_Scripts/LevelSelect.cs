@@ -16,6 +16,11 @@ public static class LevelSelect
         SceneManager.LoadSceneAsync((int)levelSelection[Random.Range(0, levelSelection.Count)]);
     }
 
+    public static void LoadEndGameScene()
+    {
+        SceneManager.LoadSceneAsync((int)BuildIndex.END_GAME);
+    }
+
     public static void LoadLevel(string sceneName)
     {
         SceneManager.LoadSceneAsync(sceneName);
