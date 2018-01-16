@@ -64,12 +64,36 @@ public class Ball : MonoBehaviour
     {
         lastTouchedBy = new LinkedList<PlayerController>();
         beenHit = false;
+
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            if (!gameManagerInstance.GetBallObjects().Contains(gameObject))
+            {
+                gameManagerInstance.AddBallObject(gameObject);
+            }
+        }
     }
 
     private void OnEnable()
     {
         body.velocity = new Vector2(0.0f, 0.0f);
         curveTimer = slowRate;
+
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            if (!gameManagerInstance.GetBallObjects().Contains(gameObject))
+            {
+                gameManagerInstance.AddBallObject(gameObject);
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            gameManagerInstance.RemoveBallObject(gameObject);
+        }
     }
 
     private void FixedUpdate()

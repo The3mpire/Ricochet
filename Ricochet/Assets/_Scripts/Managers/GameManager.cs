@@ -1,18 +1,13 @@
-﻿using System.Collections;
+﻿using Enumerables;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Enumerables;
 using UnityEngine.SceneManagement;
-using System;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     #region Inspector Variables
-    [Header("Scene Types")]
-    [Tooltip("Whether this scene is a game scene or a menu scene")]
-    [SerializeField]
-    private bool isGameScene = false;
     [Header("Reference Variables")]
     [Tooltip("Drag the mode manager here")]
     [SerializeField]
@@ -30,16 +25,6 @@ public class GameManager : MonoBehaviour
     private GameDataSO gameData;
 
     [Header("Game Match Variables")]
-    [Tooltip("Set the match mode here")]
-    [SerializeField]
-    private EMode gameMode;
-    [Tooltip("Drag the Game Menu UI here(Can be null if there is no timer)")]
-    [SerializeField]
-    private Canvas gameMenuUI;
-
-    [Tooltip("How long the selected game lasts in seconds")]
-    [SerializeField]
-    private float gameMatchTime = 120f;
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private Text gameTimerText;
@@ -77,38 +62,22 @@ public class GameManager : MonoBehaviour
     [Tooltip("The gameobject players in the match")]
     [SerializeField]
     private GameObject[] players;
-
-    [Header("Character Variables")]
-    [Tooltip("Image of first playable character")]
-    [SerializeField]
-    private Sprite character1Sprite;
-    [Tooltip("Scale of the character 1 so the body image fits correctly")]
-    [SerializeField]
-    private float character1BodyScale;
-    [Tooltip("Image of second playable character")]
-    [SerializeField]
-    private Sprite character2Sprite;
-    [Tooltip("Scale of the character 2 so the body image fits correctly")]
-    [SerializeField]
-    private float character2BodyScale;
-
-    [Tooltip("Score limit to win the match")]
-    [SerializeField]
-    private int scoreLimit = 5;
     #endregion
 
     #region Hidden Variables
-
+    private List<GameObject> balls = new List<GameObject>();
     private static GameManager instance = null;
+
+    private EMode gameMode;
+    private float timeLimit;
+    private int scoreLimit = 5;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
 
     private float currentMatchTime;
-    [SerializeField]
-    [Tooltip("Name of level to transition to")]
-    private string nextLevel;
-	Color defaultShieldColor;
+
+    private Color defaultShieldColor;
     #endregion
 
     #region MonoBehaviour
@@ -122,30 +91,54 @@ public class GameManager : MonoBehaviour
 
         Cursor.visible = false;
 
-        if (isGameScene)
+        LoadMatchSettings();
+
+        currentMatchTime = timeLimit;
+        if (timeLimit > 0)
         {
-            LoadMatchSettings();
-            currentMatchTime = gameMatchTime;
-            if (gameMatchTime > 0)
-            {
-                gameTimerText.gameObject.SetActive(true);
-            }
+            gameTimerText.gameObject.SetActive(true);
         }
-		if (powerUpManager) {
-			defaultShieldColor = powerUpManager.GetPowerUpShieldColor (EPowerUp.None);
-		} else {
-			defaultShieldColor = Color.white;
-		}
+
+        if (powerUpManager)
+        {
+            defaultShieldColor = powerUpManager.GetPowerUpShieldColor(EPowerUp.None);
+        }
+        else
+        {
+            defaultShieldColor = Color.white;
+        }
     }
 
     void Update()
     {
-        if (gameTimerText != null && gameMatchTime > 0)
+        if (gameTimerText != null && timeLimit > 0)
         {
             MatchTimer();
         }
     }
     #endregion
+
+    #region Getters
+    public List<GameObject> GetBallObjects()
+    {
+        return balls;
+    }
+
+    public GameObject[] GetPlayerObjects()
+    {
+        return players;
+    }
+    #endregion
+
+    public void AddBallObject(GameObject ball)
+    {
+        balls.Add(ball);
+    }
+
+    public void RemoveBallObject(GameObject ball)
+    {
+        balls.Remove(ball);
+    }
 
     public static bool TryGetInstance(out GameManager gm)
     {
@@ -173,11 +166,6 @@ public class GameManager : MonoBehaviour
         LevelSelect.LoadCharacterSelect();
     }
 
-    public void StartGame()
-    {
-        AsyncOperation async = SceneManager.LoadSceneAsync(LevelIndex.UP_N_OVER);
-    }
-
     public void ExitGame()
     {
         Application.Quit();
@@ -185,14 +173,7 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        if (nextLevel != "")
-        {
-            SceneManager.LoadSceneAsync(nextLevel);
-        }
-        else
-        {
-            SceneManager.LoadSceneAsync("EndGame");
-        }
+        LevelSelect.LoadEndGameScene();
     }
     #endregion
 
@@ -220,11 +201,11 @@ public class GameManager : MonoBehaviour
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-					playerController.RemovePowerUp();
+                    playerController.RemovePowerUp();
                     SpawnMultipleBalls(ball);
                     break;
                 case EPowerUp.CatchNThrow:
-					playerController.RemovePowerUp();
+                    playerController.RemovePowerUp();
                     playerController.SetBallHeld(ball);
                     ball.SetHeld(true);
                     ball.transform.SetParent(playerController.GetShieldTransform());
@@ -246,7 +227,7 @@ public class GameManager : MonoBehaviour
         {
             case EPowerUp.CircleShield:
                 playerController.EnableSecondaryShield(false);
-				playerController.RemovePowerUp();
+                playerController.RemovePowerUp();
                 break;
         }
     }
@@ -344,7 +325,7 @@ public class GameManager : MonoBehaviour
         }
         if (playerController.GetCurrentPowerUp() != EPowerUp.None)
         {
-			playerController.RemovePowerUp();
+            playerController.RemovePowerUp();
         }
         EPowerUp powerUpType = powerUp.GetPowerUpType();
         Color powerUpShieldColor = powerUpManager.GetPowerUpShieldColor(powerUpType);
@@ -380,14 +361,17 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Respawners
-	public void LoadPlayer(PlayerController playerController, int playerNumber)
-	{
-		if (playerNumber <= gameData.GetPlayerCount()){
-			NoWaitRespawnPlayer (playerController);
-		} else {
-			playerController.gameObject.SetActive (false);
-		}
-	}
+    public void LoadPlayer(PlayerController playerController, int playerNumber)
+    {
+        if (playerNumber <= gameData.GetPlayerCount())
+        {
+            NoWaitRespawnPlayer(playerController);
+        }
+        else
+        {
+            playerController.gameObject.SetActive(false);
+        }
+    }
     public void RespawnBall(GameObject ball)
     {
         if (!ball.GetComponent<Ball>().GetTempStatus())
@@ -413,7 +397,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnBallCoroutine(GameObject ball)
     {
         yield return new WaitForSeconds(ballRespawnTime);
-        ball.transform.position = ballRespawns[UnityEngine.Random.Range(0, ballRespawns.Length)].position;
+        ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
 
         ball.SetActive(true);
         ball.GetComponent<Ball>().SetBeenHit(false);
@@ -422,24 +406,13 @@ public class GameManager : MonoBehaviour
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
         yield return new WaitForSeconds(playerRespawnTime);
-		playerController.RemovePowerUp();
-        playerController.gameObject.SetActive(true);
 
-        switch (playerController.GetTeamNumber())
-        {
-            case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
-                break;
-            case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
-                break;
-        }
+        NoWaitRespawnPlayer(playerController);
     }
 
     private void NoWaitRespawnPlayer(PlayerController playerController)
     {
+        playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
 
         switch (playerController.GetTeamNumber())
@@ -495,7 +468,7 @@ public class GameManager : MonoBehaviour
         else
         {
             gameData.SetGameWinner(modeManager.GetMaxScore());
-            gameMatchTime = 0.0f;
+            timeLimit = 0.0f;
             EndMatch();
         }
     }
@@ -575,7 +548,7 @@ public class GameManager : MonoBehaviour
     private ETeam GetOpposingTeam(ETeam team)
     {
         var opTeam = ETeam.None;
-        if(team == ETeam.BlueTeam)
+        if (team == ETeam.BlueTeam)
         {
             opTeam = ETeam.RedTeam;
         }
@@ -588,17 +561,9 @@ public class GameManager : MonoBehaviour
 
     private void LoadMatchSettings()
     {
-        //Both match limit settings are 0. Set inspector values for both.
-        if (gameData.GetScoreLimit() == 0 && gameData.GetTimeLimit() == 0)
-        {
-            gameData.SetScoreLimit(scoreLimit);
-            gameData.SetTimeLimit((int)gameMatchTime);
-        }
-        else
-        {
-            scoreLimit = gameData.GetScoreLimit();
-            gameMatchTime = gameData.GetTimeLimit();
-        }
+        gameData.SetGameLevel((BuildIndex)SceneManager.GetActiveScene().buildIndex);
+        scoreLimit = gameData.GetScoreLimit();
+        timeLimit = gameData.GetTimeLimit();
         gameMode = gameData.GetGameMode();
     }
     #endregion
