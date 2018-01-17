@@ -56,6 +56,7 @@ public class MenuManager : MonoBehaviour
     }
     #endregion
 
+
     #region Button Functions
     public void ResumeGame()
     {
