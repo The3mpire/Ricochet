@@ -324,11 +324,11 @@ public class PlayerController : MonoBehaviour
                 float x = 0, y = 0;
                 if (rigid.velocity.x > fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x - (lateralAcceleration * 4f);
+                    x = rigid.velocity.x - (lateralAcceleration * 2f);
                 }
                 else if (rigid.velocity.x < -fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x + (lateralAcceleration * 4f);
+                    x = rigid.velocity.x + (lateralAcceleration * 2f);
                 }
                 else
                 {
