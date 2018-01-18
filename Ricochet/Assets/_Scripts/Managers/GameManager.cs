@@ -195,6 +195,8 @@ public class GameManager : MonoBehaviour
             playerDictionary.Add(shield, playerController);
         }
 
+        playerController.Rumble();
+
         EPowerUp currentPowerUp = playerController.GetCurrentPowerUp();
         if (currentPowerUp != EPowerUp.None)
         {

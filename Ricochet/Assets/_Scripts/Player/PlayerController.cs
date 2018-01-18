@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+
+    
     #region Instance Variables
     [SerializeField]
     private GameDataSO gameData;
@@ -71,6 +73,20 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much fuel in seconds to spend on dash")]
     [SerializeField]
     private float dashCost = 2f;
+
+    [Header("Controller Settings")]
+    [Tooltip("The motor to be used (default is 0)")]
+    [SerializeField]
+    private int motorIndex = 0;
+    [Tooltip("Rumble intensity")]
+    [SerializeField]
+    private float motorLevel = .5f;
+    [Tooltip("How long the rumble should last")]
+    [SerializeField]
+    private float rumbleDuration = .1f;
+    [Tooltip("How much the above values should be multiplied by on death")]
+    [SerializeField]
+    private float rumbleMultiplier = 2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
@@ -229,6 +245,7 @@ public class PlayerController : MonoBehaviour
                 gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
             }
         }
+
     }
 
     #endregion
@@ -442,6 +459,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
+    public void Rumble(float multiplier = 1f)
+    {
+        player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
+    }
+
     public void ReceivePowerUp(EPowerUp powerUp, Color powerUpColor)
     {
         ParticleSystem.MainModule sparks = powerupParticle.main;
@@ -478,6 +500,9 @@ public class PlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Death));
         }
+
+        Rumble(rumbleMultiplier);
+
         currentFuel = startFuel;
         maxFuel = startFuel;
         dashing = false;
