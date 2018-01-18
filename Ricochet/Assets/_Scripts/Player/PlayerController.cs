@@ -242,17 +242,17 @@ public class PlayerController : MonoBehaviour
         if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
         {  // Jetpacking with fuel
             grounded = false;
-            Vector2 md = new Vector2(leftStickHorz, leftStickVert);
-            currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
+            //Vector2 md = new Vector2(leftStickHorz, leftStickVert);
+            //currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
         } 
-        else if (grounded && currentFuel < maxFuel)
+        if (grounded && currentFuel < maxFuel)
         { // recharge fuel on ground
             currentFuel += groundRechargeRate * Time.deltaTime;
         } 
-        else if (currentFuel < maxFuel)
-        { // recharge fuel in air
-            currentFuel += airRechargeRate * Time.deltaTime;
-        }
+        //else if (currentFuel < maxFuel)
+        //{ // recharge fuel in air
+        //    currentFuel += airRechargeRate * Time.deltaTime;
+        //}
         if (currentFuel <= 0)
         {
             jetpackBurnedOut = true;
@@ -268,12 +268,12 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 moveDirection;
-        float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
+        //float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
 
-        if (leftTriggerAxis != 0 && !jetpackBurnedOut)
+        if (leftTriggerAxis != 0)// && !jetpackBurnedOut)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
-            moveDirection *= fuelFactor;
+            //moveDirection *= fuelFactor;
             this.animator.SetBool("isJumping", true);
             if (this.jetpackParticle && !this.jetpackParticle.isPlaying)
             {
@@ -282,7 +282,8 @@ public class PlayerController : MonoBehaviour
             // If there is no directional input, decelerate movement to a still hover
             if (moveDirection == Vector2.zero)
             {
-                moveDirection = Vector2.up * fuelFactor;
+                //Debug.Log("hovering");
+                moveDirection = Vector2.up;
                 float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
                 float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
                 rigid.velocity = new Vector2(x, y);
