@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 124825466531352990}
   - component: {fileID: 81598116533774018}
   - component: {fileID: 114731083047901876}
-  - component: {fileID: 114490070625468800}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -129,7 +128,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047315934321546}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4533791810839964}
@@ -382,7 +381,7 @@ MonoBehaviour:
   powerUpManager: {fileID: 0}
   soundStorage: {fileID: 11400000, guid: f3742bc292919044ca874d1cefbe6f0f, type: 2}
   musicManager: {fileID: 114876842522859312}
-  camShake: {fileID: 114490070625468800}
+  camShake: {fileID: 0}
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
   gameTimerText: {fileID: 0}
   winScreenWaitTime: 3
@@ -415,21 +414,6 @@ MonoBehaviour:
   hasPausePanel: 1
   pausePanel: {fileID: 0}
   defaultSelectedButton: {fileID: 0}
---- !u!114 &114490070625468800
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1550601391691784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 105c96c58b732421582dbef92a79d0d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camTransform: {fileID: 4942153240570494}
-  shakeDuration: 3
-  shakeAmount: 0.3
-  decreaseFactor: 1
 --- !u!114 &114731083047901876
 MonoBehaviour:
   m_ObjectHideFlags: 1
