@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
+    [Tooltip("Object containing the Camera Shake Script")]
+    [SerializeField]
+    private CameraShake camShake;
     [SerializeField]
     private GameDataSO gameData;
 
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour
 
     private EMode gameMode;
     private float timeLimit;
+    private bool timerOn = true;
     private int scoreLimit = 5;
 
     // dictionary of players cached based off the GameObject
@@ -114,6 +118,11 @@ public class GameManager : MonoBehaviour
         if (gameTimerText != null && timeLimit > 0)
         {
             MatchTimer();
+        }
+
+        if(!timerOn)
+        {
+            camShake.Shake();
         }
     }
     #endregion
@@ -302,6 +311,8 @@ public class GameManager : MonoBehaviour
             {
                 ball.GetComponent<Ball>().OnBallGoalCollision();
                 ball.SetActive(false);
+                camShake.Shake();
+                timerOn = false;
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
             }
@@ -312,7 +323,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     public void PlayerPowerUpCollision(GameObject player, PowerUp powerUp)
     {
         PlayerController playerController;
@@ -396,9 +406,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SpawnBallCoroutine(GameObject ball)
     {
+        ballRespawnTime = camShake.GetComponent<CameraShake>().shakeDuration;
         yield return new WaitForSeconds(ballRespawnTime);
         ball.transform.position = ballRespawns[Random.Range(0, ballRespawns.Length)].position;
-
+        timerOn = true;
         ball.SetActive(true);
         ball.GetComponent<Ball>().SetBeenHit(false);
     }
@@ -451,19 +462,23 @@ public class GameManager : MonoBehaviour
     {
         if (currentMatchTime > 0)
         {
-            currentMatchTime -= Time.deltaTime;
-            string minutes = ((int)(currentMatchTime / 60)).ToString();
-            int seconds_num = (int)(currentMatchTime % 60);
-            string seconds;
-            if (seconds_num < 10)
+            if (timerOn)
             {
-                seconds = '0' + seconds_num.ToString();
+                currentMatchTime -= Time.deltaTime;
+                string minutes = ((int)(currentMatchTime / 60)).ToString();
+                int seconds_num = (int)(currentMatchTime % 60);
+                string seconds;
+                if (seconds_num < 10)
+                {
+                    seconds = '0' + seconds_num.ToString();
+                }
+
+                else
+                {
+                    seconds = seconds_num.ToString();
+                }
+                gameTimerText.text = minutes + ':' + seconds;
             }
-            else
-            {
-                seconds = seconds_num.ToString();
-            }
-            gameTimerText.text = minutes + ':' + seconds;
         }
         else
         {
