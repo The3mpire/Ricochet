@@ -4060,11 +4060,6 @@ Prefab:
       propertyPath: camTransform
       value: 
       objectReference: {fileID: 430636273}
-    - target: {fileID: 114524356914567936, guid: 847b10c1e93994512b8890812081c950,
-        type: 2}
-      propertyPath: shakeAmount
-      value: 0.1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 847b10c1e93994512b8890812081c950, type: 2}
   m_IsPrefabParent: 0
@@ -5171,6 +5166,11 @@ Prefab:
       objectReference: {fileID: 1287038269}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
+      propertyPath: camShake
+      value: 
+      objectReference: {fileID: 1377434635}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
       propertyPath: gameTimerText
       value: 
       objectReference: {fileID: 1542531962}
@@ -5209,36 +5209,6 @@ Prefab:
       propertyPath: players.Array.data[3]
       value: 
       objectReference: {fileID: 851467720}
-    - target: {fileID: 114490070625468800, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: shakeAmount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114490070625468800, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: shakeDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 20160887593022960, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: m_AllowMSAA
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114490070625468800, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: camShake
-      value: 
-      objectReference: {fileID: 1377434635}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: ballRespawnTime
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0

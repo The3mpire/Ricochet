@@ -6,7 +6,7 @@ public class CameraShake : MonoBehaviour
     #region Inspector Variables
     [Tooltip("Amount of time the screen will shake for")]
     [SerializeField]
-    public float shakeDuration = 0f;
+    public float shakeDuration = 2f;
     [Tooltip("Intensity of shake")]
     [SerializeField]
     private float shakeAmount = 0.7f;
@@ -20,6 +20,7 @@ public class CameraShake : MonoBehaviour
 
     #region Hidden Variables
     private Vector3 originalPos;
+    private float duration;
     #endregion
 
     #region MonoBehavior
@@ -40,15 +41,17 @@ public class CameraShake : MonoBehaviour
     #region Public Methods
     public void Shake()
     {
-        if (shakeDuration > 0)
+        duration = shakeDuration;
+        
+        if (duration > 0)
         {
             camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
 
-            shakeDuration -= Time.deltaTime * decreaseFactor;
+            duration -= Time.deltaTime * decreaseFactor;
         }
         else
         {
-            shakeDuration = 0f;
+            duration = 0f;
             camTransform.localPosition = originalPos;
         }
     }
