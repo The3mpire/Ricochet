@@ -144,7 +144,7 @@ public class LevelSelectManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        LevelSelect.LoadLevel(loadLevelBuildIndex);
+        LevelSelect.LoadLevel(BuildIndex.CONTROLLER_MAP);
     }
 
     private void OpenConfirmationMenu()
