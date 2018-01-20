@@ -13,7 +13,7 @@ public class CameraShake : MonoBehaviour
     [Tooltip("How fast the shake reduces to its normal state")]
     [SerializeField]
     private float decreaseFactor = 1.0f;
-    [Tooltip("The position of the camera(drag the main camera here")]
+    [Tooltip("Drag the main camera here")]
     [SerializeField]
     private Transform camTransform;
     #endregion
@@ -35,8 +35,10 @@ public class CameraShake : MonoBehaviour
     {
         originalPos = camTransform.localPosition;
     }
+    #endregion
 
-    private void Update()
+    #region Public Methods
+    public void Shake()
     {
         if (shakeDuration > 0)
         {

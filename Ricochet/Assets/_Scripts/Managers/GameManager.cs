@@ -21,9 +21,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
-    [Tooltip("Drag the Main Camera here to enable shaking on goal score")]
+    [Tooltip("Object containing the Camera Shake Script")]
     [SerializeField]
-    private GameObject camShake;
+    private CameraShake camShake;
     [SerializeField]
     private GameDataSO gameData;
 
@@ -118,6 +118,11 @@ public class GameManager : MonoBehaviour
         if (gameTimerText != null && timeLimit > 0)
         {
             MatchTimer();
+        }
+
+        if(!timerOn)
+        {
+            camShake.Shake();
         }
     }
     #endregion
@@ -306,7 +311,7 @@ public class GameManager : MonoBehaviour
             {
                 ball.GetComponent<Ball>().OnBallGoalCollision();
                 ball.SetActive(false);
-                camShake.SetActive(true);
+                camShake.Shake();
                 timerOn = false;
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();

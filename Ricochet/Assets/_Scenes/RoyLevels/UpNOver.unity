@@ -920,11 +920,12 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!1 &415989366 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1459579581979182, guid: 847b10c1e93994512b8890812081c950,
+--- !u!114 &415989367 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114524356914567936, guid: 847b10c1e93994512b8890812081c950,
     type: 2}
   m_PrefabInternal: {fileID: 891180850}
+  m_Script: {fileID: 11500000, guid: 105c96c58b732421582dbef92a79d0d7, type: 3}
 --- !u!1001 &442307664
 Prefab:
   m_ObjectHideFlags: 0
@@ -1601,7 +1602,7 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 19.999996
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -1900,10 +1901,6 @@ Prefab:
       propertyPath: camTransform
       value: 
       objectReference: {fileID: 1067397106}
-    - target: {fileID: 1459579581979182, guid: 847b10c1e93994512b8890812081c950, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 847b10c1e93994512b8890812081c950, type: 2}
   m_IsPrefabParent: 0
@@ -2324,7 +2321,7 @@ Prefab:
         type: 2}
       propertyPath: camShake
       value: 
-      objectReference: {fileID: 415989366}
+      objectReference: {fileID: 415989367}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: gameTimerText

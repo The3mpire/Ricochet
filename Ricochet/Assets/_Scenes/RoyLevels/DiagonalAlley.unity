@@ -2777,7 +2777,7 @@ Prefab:
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 252
+      value: 252.5
       objectReference: {fileID: 0}
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
@@ -4060,9 +4060,20 @@ Prefab:
       propertyPath: camTransform
       value: 
       objectReference: {fileID: 430636273}
+    - target: {fileID: 114524356914567936, guid: 847b10c1e93994512b8890812081c950,
+        type: 2}
+      propertyPath: shakeAmount
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 847b10c1e93994512b8890812081c950, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1377434635 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114524356914567936, guid: 847b10c1e93994512b8890812081c950,
+    type: 2}
+  m_PrefabInternal: {fileID: 1377434634}
+  m_Script: {fileID: 11500000, guid: 105c96c58b732421582dbef92a79d0d7, type: 3}
 --- !u!1 &1433483823
 GameObject:
   m_ObjectHideFlags: 0
@@ -4782,7 +4793,7 @@ Prefab:
     - target: {fileID: 224505041152916758, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -219.01785
+      value: -218.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224505041152916758, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4792,7 +4803,7 @@ Prefab:
     - target: {fileID: 224166583676019778, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -219.01785
+      value: -218.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224166583676019778, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4802,7 +4813,7 @@ Prefab:
     - target: {fileID: 224844361363565378, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -219.01785
+      value: -218.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224844361363565378, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4812,7 +4823,7 @@ Prefab:
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -219.01785
+      value: -218.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4822,22 +4833,22 @@ Prefab:
     - target: {fileID: 224487110484190612, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 672.0536
+      value: 670.71533
       objectReference: {fileID: 0}
     - target: {fileID: 224032630910202338, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 224.01782
+      value: 223.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224888264052330192, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -224.01782
+      value: -223.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -672.0536
+      value: -670.71533
       objectReference: {fileID: 0}
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4872,11 +4883,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39c81f79d261ce04fbb9bb81fba1b72f, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1733734321 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1459579581979182, guid: 847b10c1e93994512b8890812081c950,
-    type: 2}
-  m_PrefabInternal: {fileID: 1377434634}
 --- !u!1 &1740308242
 GameObject:
   m_ObjectHideFlags: 0
@@ -5227,7 +5233,7 @@ Prefab:
         type: 2}
       propertyPath: camShake
       value: 
-      objectReference: {fileID: 1733734321}
+      objectReference: {fileID: 1377434635}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: ballRespawnTime
