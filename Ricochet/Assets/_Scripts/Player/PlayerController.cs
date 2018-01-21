@@ -71,9 +71,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much fuel in seconds to spend on dash")]
     [SerializeField]
     private float dashCost = 2f;
-    [Tooltip("Ball moves in sheild direction on dash collision")]
-    [SerializeField]
-    private bool dashRedirect = false;
 
     [Header("Controller Settings")]
     [Tooltip("The motor to be used (default is 0)")]
@@ -546,16 +543,6 @@ public class PlayerController : MonoBehaviour
     public void SetInfiniteFuel(bool active)
     {
         infiniteFuel = active;
-    }
-
-    public bool GetDashRedirect()
-    {
-        return dashRedirect && dashing;
-    }
-
-    public Vector2 GetSheildDirection()
-    {
-        return (transform.position + shieldTransform.position).normalized;
     }
 
     public Transform GetShieldTransform()

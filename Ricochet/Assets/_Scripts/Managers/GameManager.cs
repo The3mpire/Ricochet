@@ -211,11 +211,6 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
-        if (playerController.GetDashRedirect())
-        {
-            Vector2 directionVector = playerController.GetSheildDirection();
-            ball.RedirectBall(directionVector);
-        }
 
         // The last player to touch the ball 
         ball.SetLastTouchedBy(playerController);
