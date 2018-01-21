@@ -85,22 +85,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region MonoBehaviour
-
-    IEnumerator DisablePlayerComponents()
-    {
-        timerOn = true;
-        for (int i = 0; i < players.Length; i++)
-        {
-            players[i].GetComponent<PlayerController>().movementDisabled = true;
-        }
-        yield return new WaitForSeconds(arrowManager.duration);
-        timerOn = false;
-        for (int i = 0; i < players.Length; i++)
-        {
-            players[i].GetComponent<PlayerController>().movementDisabled = false;
-        }
-
-    }
     void Awake()
     {
         if (instance != null && instance != this)
@@ -469,6 +453,22 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
+    }
+
+    private IEnumerator DisablePlayerComponents()
+    {
+        timerOn = true;
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PlayerController>().movementDisabled = true;
+        }
+        yield return new WaitForSeconds(arrowManager.duration);
+        timerOn = false;
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PlayerController>().movementDisabled = false;
+        }
+
     }
 
     private void MatchTimer()
