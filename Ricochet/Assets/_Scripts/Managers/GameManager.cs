@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
+    [Tooltip("Drag the PointingArrows script here")]
+    [SerializeField]
+    private PointingArrows arrowManager;
     [SerializeField]
     private GameDataSO gameData;
 
@@ -71,6 +74,7 @@ public class GameManager : MonoBehaviour
     private EMode gameMode;
     private float timeLimit;
     private int scoreLimit = 5;
+    private bool timerOn = false;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -81,6 +85,22 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region MonoBehaviour
+
+    IEnumerator DisablePlayerComponents()
+    {
+        timerOn = true;
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PlayerController>().enabled = false;
+        }
+        yield return new WaitForSeconds(arrowManager.duration);
+        timerOn = false;
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PlayerController>().enabled = true;
+        }
+
+    }
     void Awake()
     {
         if (instance != null && instance != this)
@@ -94,6 +114,7 @@ public class GameManager : MonoBehaviour
         LoadMatchSettings();
 
         currentMatchTime = timeLimit;
+
         if (timeLimit > 0)
         {
             gameTimerText.gameObject.SetActive(true);
@@ -107,6 +128,9 @@ public class GameManager : MonoBehaviour
         {
             defaultShieldColor = Color.white;
         }
+
+        StartCoroutine(DisablePlayerComponents());
+
     }
 
     void Update()
@@ -451,19 +475,22 @@ public class GameManager : MonoBehaviour
     {
         if (currentMatchTime > 0)
         {
-            currentMatchTime -= Time.deltaTime;
-            string minutes = ((int)(currentMatchTime / 60)).ToString();
-            int seconds_num = (int)(currentMatchTime % 60);
-            string seconds;
-            if (seconds_num < 10)
+            if (!timerOn)
             {
-                seconds = '0' + seconds_num.ToString();
+                currentMatchTime -= Time.deltaTime;
+                string minutes = ((int)(currentMatchTime / 60)).ToString();
+                int seconds_num = (int)(currentMatchTime % 60);
+                string seconds;
+                if (seconds_num < 10)
+                {
+                    seconds = '0' + seconds_num.ToString();
+                }
+                else
+                {
+                    seconds = seconds_num.ToString();
+                }
+                gameTimerText.text = minutes + ':' + seconds;
             }
-            else
-            {
-                seconds = seconds_num.ToString();
-            }
-            gameTimerText.text = minutes + ':' + seconds;
         }
         else
         {
