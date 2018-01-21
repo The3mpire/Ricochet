@@ -9,31 +9,30 @@ using UnityEngine.UI;
 public class LevelSelectManager : MonoBehaviour
 {
     #region Inspector Variables
-    [SerializeField] private RectTransform levelSelectMenu;
-    [SerializeField] private RectTransform settingsMenu;
     [SerializeField] private RectTransform confirmationMenu;
-
-    [SerializeField] private GameObject defaultOptionsGameObject;
+    
     [SerializeField] private GameObject defaultConfirmationGameObject;
+    
+    [SerializeField] private Button[] levelButtons;
 
-    [SerializeField] private BuildIndex loadLevelBuildIndex;
-    [SerializeField] private Button[] levelButtons;    
+    [SerializeField] private Slider timeSlider;
+    [SerializeField] private Slider scoreSlider;
+
+    [SerializeField] private GameDataSO gameData;
     #endregion
 
     #region Private Variables
+    private BuildIndex loadLevelBuildIndex;
     private GameObject defaultSelectedLevelButton;
-    private bool optionsOpen;
     private IList<Player> players;
     #endregion
 
     #region Monobehaviours
-    private void Awake()
-    {
-        optionsOpen = false;
-    }
-
     private void Start()
     {
+        timeSlider.value = gameData.GetTimeLimit();
+        scoreSlider.value = gameData.GetScoreLimit();
+
         List<BuildIndex> levels = LevelSelect.glitchBallClassicLevels;
         // TODO: Switch statement here that looks at GameData for game type enum and sets the appropriate levels
 
@@ -65,7 +64,6 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Update()
     {
-        bool options = false;
         bool cancel = false;
         foreach (Player p in players)
         {
@@ -74,49 +72,31 @@ public class LevelSelectManager : MonoBehaviour
                 cancel = true;
                 break;
             }
-            if (p.GetButtonDown("UIOptions"))
-            {
-                options = true;
-                break;
-            }
         }
 
         if (cancel)
         {
             OnCancel();
         }
-
-        if (options)
-        {
-            OpenOptionsMenu();
-        }
-
     }
     #endregion
 
     #region Public Functions
     public void SetMatchScoreLimit(Slider slider)
     {
-        GameData.matchScoreLimit = (int)slider.value;
+        gameData.SetScoreLimit((int)slider.value);
     }
 
     public void SetMatchTimeLimit(Slider slider)
     {
-        GameData.matchTimeLimit = (int)slider.value;
+        gameData.SetTimeLimit((int)slider.value);
     }
 
     public void SetLoadLevel(BuildIndex levelInt)
     {
-        GameData.GameLevel = levelInt;
+        gameData.SetGameLevel(levelInt);
         loadLevelBuildIndex = levelInt;
         OpenConfirmationMenu();
-    }
-           
-    public void OpenOptionsMenu()
-    {
-        optionsOpen = true;
-        settingsMenu.DOLocalMove(Vector3.left * 200, .4f);
-        EventSystem.current.SetSelectedGameObject(defaultOptionsGameObject);
     }
 
     public void CloseConfirmationMenu()
@@ -127,22 +107,13 @@ public class LevelSelectManager : MonoBehaviour
 
     public void OnCancel()
     {
-        if (optionsOpen)
-        {
-            optionsOpen = false;
-            settingsMenu.DOLocalMove(Vector3.right * 500, .4f);
-            EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
-        }
-        else
-        {
-            loadLevelBuildIndex = BuildIndex.CHARACTER_SELECT;
-            OpenConfirmationMenu();
-        }
+        loadLevelBuildIndex = BuildIndex.CHARACTER_SELECT;
+        OpenConfirmationMenu();
     }
 
     public void LoadLevel()
     {
-        LevelSelect.LoadLevel(loadLevelBuildIndex);
+        LevelSelect.LoadLevel(BuildIndex.CONTROLLER_MAP);
     }
 
     private void OpenConfirmationMenu()

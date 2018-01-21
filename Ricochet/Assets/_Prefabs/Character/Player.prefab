@@ -159,9 +159,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4593119543224318}
   - component: {fileID: 70280518227097726}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BallDetection
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -627,7 +627,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158271850568408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: -11, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224102686627786838}
@@ -733,7 +733,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.12}
@@ -1067,14 +1067,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18dd8cae98bd43f419a253d9ff7cd8f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
   playerNumber: 1
   team: 1
   gravScale: 12
-  lateralAcceleration: 0
-  fallingLateralSpeed: 1
-  thrusterAcceleration: 0.05
+  lateralAcceleration: 0.2
+  fallingLateralSpeed: 5
+  thrusterAcceleration: 1.1
   upThrusterSpeed: 12
-  thrusterSpeed: 22
+  thrusterSpeed: 27
   airMoveSpeed: 8
   groundedMoveSpeed: 35
   inertia: 1.5
@@ -1082,7 +1083,7 @@ MonoBehaviour:
   fuelPercentNeeded: 0.2
   groundRechargeRate: 5
   airRechargeRate: 1.5
-  dashSpeed: 65
+  dashSpeed: 15
   dashTime: 0.125
   dashCost: 1
   shieldTransform: {fileID: 4414966702740056}
@@ -31667,7 +31668,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 149272721
+  m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!223 &223643899638925116

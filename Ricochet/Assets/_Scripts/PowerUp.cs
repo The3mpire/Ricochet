@@ -7,6 +7,8 @@ using System.Collections.Generic;
 public class PowerUp : MonoBehaviour
 {
     #region Inspector Variables
+    [SerializeField]
+    private GameDataSO gameData;
     [Tooltip("Which type of powerup this is")]
     [SerializeField] private EPowerUp powerUpType;
     [Tooltip("The sprite of the powerup")]
@@ -27,7 +29,7 @@ public class PowerUp : MonoBehaviour
         {
             rng = new System.Random();
             powerups = Enum.GetValues(typeof(EPowerUp)).Cast<EPowerUp>().ToList();
-            if (GameData.gameMode == EMode.Deathmatch)
+            if (gameData.GetGameMode() == EMode.Deathmatch)
             {
                 powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None)).ToList();
             }
