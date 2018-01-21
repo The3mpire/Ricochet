@@ -256,6 +256,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
                     body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                    Rumble(1.25f);
                 }
             }
         }
