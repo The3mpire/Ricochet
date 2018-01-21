@@ -91,13 +91,13 @@ public class GameManager : MonoBehaviour
         timerOn = true;
         for (int i = 0; i < players.Length; i++)
         {
-            players[i].GetComponent<PlayerController>().enabled = false;
+            players[i].GetComponent<PlayerController>().movementDisabled = true;
         }
         yield return new WaitForSeconds(arrowManager.duration);
         timerOn = false;
         for (int i = 0; i < players.Length; i++)
         {
-            players[i].GetComponent<PlayerController>().enabled = true;
+            players[i].GetComponent<PlayerController>().movementDisabled = false;
         }
 
     }

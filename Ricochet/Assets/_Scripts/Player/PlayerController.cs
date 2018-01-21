@@ -138,6 +138,8 @@ public class PlayerController : MonoBehaviour
     private float rightStickHorz;
     private float rightStickVert;
     private float leftTriggerAxis;
+
+    public bool movementDisabled = false;
     #endregion
 
     #region Monobehaviour
@@ -200,20 +202,26 @@ public class PlayerController : MonoBehaviour
             dashing = false;
         }
 
-        MovementPreperation();
-        DashCheck();
-        RotateShield();
-        Flip();
+        if (!movementDisabled)
+        {
+            MovementPreperation();
+            DashCheck();
+            RotateShield();
+            Flip();
+        }
     }
 
     private void FixedUpdate()
     {
-        Move();
-
-        // Add dash velocity to movement
-        if (dashing)
+        if (!movementDisabled)
         {
-            rigid.velocity += dashDirection * dashSpeed;
+            Move();
+
+            // Add dash velocity to movement
+            if (dashing)
+            {
+                rigid.velocity += dashDirection * dashSpeed;
+            }
         }
     }
     #endregion
