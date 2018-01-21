@@ -5,6 +5,7 @@
         MAIN_MENU,
         CHARACTER_SELECT,
         LEVEL_SELECT,
+        CONTROLLER_MAP,
         DIAGONAL_ALLEY,
         ELEVATOR,
         UP_N_OVER,
