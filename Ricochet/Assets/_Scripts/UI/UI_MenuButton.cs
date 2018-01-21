@@ -4,26 +4,26 @@ using UnityEngine.UI;
 
 public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
 {
-    private Image image;
+    private Text text;
 
     public void Awake()
     {
-        image = GetComponent<Image>();   
+        text = GetComponentInChildren<Text>();   
     }
 
     private void OnDisable()
     {
-        image.color = Color.white;
+        text.color = Color.white;
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        image.color = Color.white;
+        text.color = Color.white;
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        image.color = Color.magenta;
+        text.color = Color.yellow;
     }
 
 }
