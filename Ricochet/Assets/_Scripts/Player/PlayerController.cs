@@ -156,6 +156,8 @@ public class PlayerController : MonoBehaviour
     private float rightStickHorz;
     private float rightStickVert;
     private float leftTriggerAxis;
+
+    public bool movementDisabled = false;
     #endregion
 
     #region Monobehaviour
@@ -199,7 +201,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Update vars
-        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+        Vector2 playerPosition = transform.position;
+        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
+        grounded = Physics2D.Linecast(playerPosition, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         if (player.GetAxis("RightStickHorizontal") != 0)
@@ -218,20 +222,27 @@ public class PlayerController : MonoBehaviour
             dashing = false;
         }
 
-        MovementPreperation();
-        DashCheck();
-        RotateShield();
-        Flip();
+        if (!movementDisabled)
+        {
+            MovementPreperation();
+            DashCheck();
+            RotateShield();
+            Flip();
+        }
     }
 
     private void FixedUpdate()
     {
-        Move();
         previousVelocity = rigid.velocity;
-        // Add dash velocity to movement
-        if (dashing)
+        if (!movementDisabled)
         {
-            rigid.velocity += dashDirection * dashSpeed;
+            Move();
+
+            // Add dash velocity to movement
+            if (dashing)
+            {
+                rigid.velocity += dashDirection * dashSpeed;
+            }
         }
     }
     #endregion
@@ -270,7 +281,8 @@ public class PlayerController : MonoBehaviour
         if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
         {  // Jetpacking with fuel
             grounded = false;
-            currentFuel -= Time.deltaTime * leftTriggerAxis;
+            Vector2 md = new Vector2(leftStickHorz, leftStickVert);
+            currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
         }
         else if (grounded && currentFuel < maxFuel)
         { // recharge fuel on ground
@@ -351,11 +363,11 @@ public class PlayerController : MonoBehaviour
                 float x = 0, y = 0;
                 if (rigid.velocity.x > fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x - (lateralAcceleration * 4f);
+                    x = rigid.velocity.x - (lateralAcceleration * 2f);
                 }
                 else if (rigid.velocity.x < -fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x + (lateralAcceleration * 4f);
+                    x = rigid.velocity.x + (lateralAcceleration * 2f);
                 }
                 else
                 {

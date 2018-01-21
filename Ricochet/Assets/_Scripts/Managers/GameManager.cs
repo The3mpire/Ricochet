@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the sound storage here")]
     [SerializeField]
     private SoundStorage soundStorage;
+    [Tooltip("Drag the Pointing Arrows Script here")]
+    [SerializeField]
+    private PointingArrows arrowDisable;
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
@@ -71,6 +74,7 @@ public class GameManager : MonoBehaviour
     private EMode gameMode;
     private float timeLimit;
     private int scoreLimit = 5;
+    private bool timerOn = false;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -107,6 +111,8 @@ public class GameManager : MonoBehaviour
         {
             defaultShieldColor = Color.white;
         }
+
+        StartCoroutine(DisablePlayerComponents());
     }
 
     void Update()
@@ -443,19 +449,22 @@ public class GameManager : MonoBehaviour
     {
         if (currentMatchTime > 0)
         {
-            currentMatchTime -= Time.deltaTime;
-            string minutes = ((int)(currentMatchTime / 60)).ToString();
-            int seconds_num = (int)(currentMatchTime % 60);
-            string seconds;
-            if (seconds_num < 10)
+            if (!timerOn)
             {
-                seconds = '0' + seconds_num.ToString();
+                currentMatchTime -= Time.deltaTime;
+                string minutes = ((int)(currentMatchTime / 60)).ToString();
+                int seconds_num = (int)(currentMatchTime % 60);
+                string seconds;
+                if (seconds_num < 10)
+                {
+                    seconds = '0' + seconds_num.ToString();
+                }
+                else
+                {
+                    seconds = seconds_num.ToString();
+                }
+                gameTimerText.text = minutes + ':' + seconds;
             }
-            else
-            {
-                seconds = seconds_num.ToString();
-            }
-            gameTimerText.text = minutes + ':' + seconds;
         }
         else
         {
@@ -469,6 +478,21 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(winScreenWaitTime);
         CharacterSelect();
+    }
+
+    IEnumerator DisablePlayerComponents()
+    {
+        timerOn = true;
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PlayerController>().movementDisabled = true;
+        }
+        yield return new WaitForSeconds(arrowDisable.duration);
+        timerOn = false;
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<PlayerController>().movementDisabled = false;
+        }
     }
 
     private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)
