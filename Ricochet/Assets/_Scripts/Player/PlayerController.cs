@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How quickly the player can accelerate")]
     [SerializeField]
     private float inertia = 1.5f;
+    [Tooltip("How much bounce off two opposite players will have as a percentage")]
+    [SerializeField]
+    private float boingFactor = 1.0f;
 
     [Header("Fuel Settings")]
     [Tooltip("Time in seconds of jetback fuel")]
@@ -144,6 +147,7 @@ public class PlayerController : MonoBehaviour
     private float powerUpTimer;
     private float timeSinceDash;
     private Vector2 dashDirection;
+    private Vector2 previousVelocity;
     private int inertiaTime;
     private bool inertiaSwitch;
 
@@ -229,6 +233,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        previousVelocity = rigid.velocity;
         if (!movementDisabled)
         {
             Move();
@@ -253,7 +258,19 @@ public class PlayerController : MonoBehaviour
                 gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
             }
         }
-
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
+                if (team != otherPlayer.team)
+                {
+                    Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
+                    body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                    Rumble(1.25f);
+                }
+            }
+        }
     }
 
     #endregion
@@ -564,6 +581,11 @@ public class PlayerController : MonoBehaviour
     public void SetBodyScale(float scaleSize)
     {
         sprite.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
+    }
+
+    public Vector2 GetPreviousVelocity()
+    {
+        return previousVelocity;
     }
 
     public void SetPlayerNumber(int num)
