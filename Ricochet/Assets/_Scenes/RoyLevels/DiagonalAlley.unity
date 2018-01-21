@@ -1831,11 +1831,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4484955903095098, guid: c74b601544e41844bb46698d9d26c676,
     type: 2}
   m_PrefabInternal: {fileID: 726858648}
---- !u!1 &770496376 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1613020018066776, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1720537016}
 --- !u!1001 &773711858
 Prefab:
   m_ObjectHideFlags: 0
@@ -3839,11 +3834,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4484955903095098, guid: c74b601544e41844bb46698d9d26c676,
     type: 2}
   m_PrefabInternal: {fileID: 1344944956}
---- !u!1 &1371124289 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1326751132413998, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1720537016}
 --- !u!1 &1433483823
 GameObject:
   m_ObjectHideFlags: 0
@@ -4563,22 +4553,22 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -715.8132
+      value: -670.71533
       objectReference: {fileID: 0}
     - target: {fileID: 224888264052330192, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -238.60435
+      value: -223.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224032630910202338, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 238.60443
+      value: 223.57178
       objectReference: {fileID: 0}
     - target: {fileID: 224487110484190612, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 715.8132
+      value: 670.71533
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4613,7 +4603,7 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4880,6 +4870,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4435871586318864, guid: 3b3eb84814b78b6428548e4f880a0647,
     type: 2}
   m_PrefabInternal: {fileID: 1835906710}
+--- !u!114 &1835906712 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114910854089284014, guid: 3b3eb84814b78b6428548e4f880a0647,
+    type: 2}
+  m_PrefabInternal: {fileID: 1835906710}
+  m_Script: {fileID: 11500000, guid: 8fc129ead373d47709afcce1e7e92121, type: 3}
 --- !u!1001 &1850887157
 Prefab:
   m_ObjectHideFlags: 0
@@ -4931,6 +4927,11 @@ Prefab:
       objectReference: {fileID: 1287038269}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
+      propertyPath: arrowDisable
+      value: 
+      objectReference: {fileID: 1835906712}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
       propertyPath: gameTimerText
       value: 
       objectReference: {fileID: 1542531962}
@@ -4969,21 +4970,6 @@ Prefab:
       propertyPath: players.Array.data[3]
       value: 
       objectReference: {fileID: 851467720}
-    - target: {fileID: 114347462270385642, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: pausePanel
-      value: 
-      objectReference: {fileID: 770496376}
-    - target: {fileID: 114347462270385642, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: defaultSelectedButton
-      value: 
-      objectReference: {fileID: 1371124289}
-    - target: {fileID: 20160887593022960, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: orthographic size
-      value: 15
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
