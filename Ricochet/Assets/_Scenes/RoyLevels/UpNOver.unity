@@ -1518,7 +1518,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 808626800}
         m_MethodName: CharacterSelect
         m_Mode: 1
         m_Arguments:
@@ -2024,7 +2024,7 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: 14.999996
       objectReference: {fileID: 0}
     - target: {fileID: 224888264052330192, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -2128,6 +2128,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39c81f79d261ce04fbb9bb81fba1b72f, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &808626800 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114611824755712808, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+    type: 2}
+  m_PrefabInternal: {fileID: 808626799}
+  m_Script: {fileID: 11500000, guid: 959b88b3f10d983468d6d62627fe8182, type: 3}
 --- !u!1 &824195930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2706,7 +2712,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 808626800}
         m_MethodName: LoadLevelSelect
         m_Mode: 1
         m_Arguments:
@@ -3539,7 +3545,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 808626800}
         m_MethodName: ResumeGame
         m_Mode: 1
         m_Arguments:
@@ -5485,7 +5491,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 808626800}
         m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
