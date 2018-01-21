@@ -23,11 +23,7 @@ public class UI_UpdateSliderLabel : MonoBehaviour, ISelectHandler, IDeselectHand
     {
         lastValue = (int)slider.value;
     }
-
-    private void Start()
-    {
-        slider.onValueChanged.Invoke(slider.value);
-    }
+    
     #endregion
 
     #region Public Functions
@@ -40,13 +36,13 @@ public class UI_UpdateSliderLabel : MonoBehaviour, ISelectHandler, IDeselectHand
     {
         if (slider.value > lastValue)
         {
-            lastValue += 5;
-            slider.value = lastValue;
+            lastValue = (int)slider.value;
+            slider.value = Mathf.Ceil(lastValue / 5.0f) * 5;
         }
         else if (slider.value < lastValue)
         {
-            lastValue -= 5;
-            slider.value = lastValue;
+            lastValue = (int)slider.value;
+            slider.value = Mathf.Floor(lastValue / 5.0f) * 5;
         }
         string minSec = string.Format("{0}:{1:00}", (int)slider.value / 60, (int)slider.value % 60);
         label.text = minSec;
