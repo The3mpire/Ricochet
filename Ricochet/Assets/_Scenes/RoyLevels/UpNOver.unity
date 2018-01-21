@@ -122,12 +122,12 @@ Prefab:
     - target: {fileID: 224253942275254630, guid: 0520336bb7ce00740a81c526a9600622,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 385.5
+      value: 568
       objectReference: {fileID: 0}
     - target: {fileID: 224253942275254630, guid: 0520336bb7ce00740a81c526a9600622,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 217
+      value: 300.5
       objectReference: {fileID: 0}
     - target: {fileID: 224253942275254630, guid: 0520336bb7ce00740a81c526a9600622,
         type: 2}
@@ -1215,6 +1215,11 @@ Prefab:
       propertyPath: team
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114787925907891002, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: boingFactor
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
   m_IsPrefabParent: 0
@@ -1469,6 +1474,11 @@ Prefab:
     - target: {fileID: 1158271850568408, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
       propertyPath: m_Name
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114787925907891002, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: boingFactor
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
@@ -2217,6 +2227,11 @@ Prefab:
       propertyPath: team
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114787925907891002, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: boingFactor
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
   m_IsPrefabParent: 0
@@ -2363,7 +2378,7 @@ Prefab:
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: gameMatchTime
-      value: 60
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
@@ -3356,12 +3371,12 @@ Prefab:
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 385.5
+      value: 568
       objectReference: {fileID: 0}
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 217
+      value: 300.5
       objectReference: {fileID: 0}
     - target: {fileID: 224695813481007602, guid: aeac01b428861a14fa7fca39858210b9,
         type: 2}
@@ -4902,6 +4917,11 @@ Prefab:
         type: 2}
       propertyPath: playerNumber
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114787925907891002, guid: eaeea0ca4739e0744a0b8603a2a413f9,
+        type: 2}
+      propertyPath: boingFactor
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
