@@ -154,21 +154,11 @@ public class GameManager : MonoBehaviour
     }
 
     #region UI Controls
-    public void ExitLevel()
-    {
-        gameData.ResetGameStatistics();
-        LevelSelect.LoadMainMenu();
-    }
 
     public void CharacterSelect()
     {
         gameData.ResetGameStatistics();
         LevelSelect.LoadCharacterSelect();
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 
     private void EndMatch()
