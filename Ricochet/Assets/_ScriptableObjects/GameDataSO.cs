@@ -21,14 +21,30 @@ public class GameDataSO : ScriptableObject
     [Range(1, 100)]
     [SerializeField]
     private int scoreLimit;
+    [Tooltip("Default value when game boots up")]
+    [Range(1, 100)]
+    [SerializeField]
+    private int defaultScoreLimit;
     [Range(30, 600)]
     [SerializeField]
     private int timeLimit;
+    [Tooltip("Default value when game boots up")]
+    [Range(30, 600)]
+    [SerializeField]
+    private int defaultTimeLimit;
 
     private int blueTeamScore, redTeamScore;
     private ETeam gameWinner;
     private Dictionary<string, List<string>> playerKills;
     private Dictionary<string, int> playerDeaths;
+
+    #region Scriptable Object Methods
+    public void OnEnable()
+    {
+        timeLimit = defaultTimeLimit;
+        scoreLimit = defaultScoreLimit;
+    }
+    #endregion
 
     #region Getters and Setters
 
@@ -56,6 +72,7 @@ public class GameDataSO : ScriptableObject
     }
     #endregion
 
+    #region Player Count
     public int GetPlayerCount()
     {
         return playerCount;
@@ -65,6 +82,7 @@ public class GameDataSO : ScriptableObject
     {
         playerCount = Mathf.Clamp(value, 1, 4);
     }
+    #endregion
 
     public BuildIndex GetGameLevel()
     {

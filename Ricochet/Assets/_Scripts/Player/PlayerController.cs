@@ -72,6 +72,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float dashCost = 2f;
 
+    [Header("Controller Settings")]
+    [Tooltip("The motor to be used (default is 0)")]
+    [SerializeField]
+    private int motorIndex = 0;
+    [Tooltip("Rumble intensity")]
+    [SerializeField]
+    private float motorLevel = .5f;
+    [Tooltip("How long the rumble should last")]
+    [SerializeField]
+    private float rumbleDuration = .1f;
+    [Tooltip("How much the above values should be multiplied by on death")]
+    [SerializeField]
+    private float rumbleMultiplier = 2f;
+
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
     [SerializeField]
@@ -231,12 +245,12 @@ public class PlayerController : MonoBehaviour
                 gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
             }
         }
+
     }
 
     #endregion
 
     #region Helpers
-
     private void MovementPreperation()
     {
         if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
@@ -244,11 +258,11 @@ public class PlayerController : MonoBehaviour
             grounded = false;
             Vector2 md = new Vector2(leftStickHorz, leftStickVert);
             currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
-        } 
+        }
         else if (grounded && currentFuel < maxFuel)
         { // recharge fuel on ground
             currentFuel += groundRechargeRate * Time.deltaTime;
-        } 
+        }
         else if (currentFuel < maxFuel)
         { // recharge fuel in air
             currentFuel += airRechargeRate * Time.deltaTime;
@@ -293,7 +307,7 @@ public class PlayerController : MonoBehaviour
                 x = moveDirection.x > 0 ? Mathf.Min(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
                     Mathf.Max(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
-                y = moveDirection.y >= 0 ? Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed):
+                y = moveDirection.y >= 0 ? Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
                     Mathf.Max(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
                 rigid.velocity = new Vector2(x, y);
@@ -445,6 +459,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
+    public void Rumble(float multiplier = 1f)
+    {
+        player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
+    }
+
     public void ReceivePowerUp(EPowerUp powerUp, Color powerUpColor)
     {
         ParticleSystem.MainModule sparks = powerupParticle.main;
@@ -481,6 +500,9 @@ public class PlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Death));
         }
+
+        Rumble(rumbleMultiplier);
+
         currentFuel = startFuel;
         maxFuel = startFuel;
         dashing = false;
