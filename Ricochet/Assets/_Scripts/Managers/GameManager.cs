@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameDataSO gameData;
 
+    [Header("Events")]
+    [SerializeField]
+    private GameEvent onGoal;
+
     [Header("Game Match Variables")]
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
@@ -296,6 +300,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameMode == EMode.Soccer)
         {
+            onGoal.Raise();
             if (!modeManager.UpdateScore(team, points))
             {
                 ball.GetComponent<Ball>().OnBallGoalCollision();
