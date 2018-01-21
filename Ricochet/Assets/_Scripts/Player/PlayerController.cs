@@ -71,6 +71,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much fuel in seconds to spend on dash")]
     [SerializeField]
     private float dashCost = 2f;
+    [Tooltip("Ball moves in sheild direction on dash collision")]
+    [SerializeField]
+    private bool dashRedirect = false;
 
     [Header("Controller Settings")]
     [Tooltip("The motor to be used (default is 0)")]
@@ -216,6 +219,11 @@ public class PlayerController : MonoBehaviour
         if (timeSinceDash >= dashTime)
         {
             dashing = false;
+            // cap movespeed (prevents dash from throwing the player)
+            if (rigid.velocity.magnitude > thrusterSpeed)
+            {
+                rigid.velocity = rigid.velocity.normalized * thrusterSpeed;
+            }
         }
 
         if (!movementDisabled)
@@ -384,7 +392,11 @@ public class PlayerController : MonoBehaviour
 
     private void DashCheck()
     {
-        if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel) && !jetpackBurnedOut)
+        if (player.GetButtonDown("Dash")
+            && leftTriggerAxis != 0
+            && !dashing
+            && (currentFuel >= dashCost || infiniteFuel)
+            && !jetpackBurnedOut)
         {
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
@@ -534,6 +546,16 @@ public class PlayerController : MonoBehaviour
     public void SetInfiniteFuel(bool active)
     {
         infiniteFuel = active;
+    }
+
+    public bool GetDashRedirect()
+    {
+        return dashRedirect && dashing;
+    }
+
+    public Vector2 GetSheildDirection()
+    {
+        return (transform.position + shieldTransform.position).normalized;
     }
 
     public Transform GetShieldTransform()

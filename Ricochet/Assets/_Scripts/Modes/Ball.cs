@@ -101,6 +101,7 @@ public class Ball : MonoBehaviour
         if (beenHit)
         {
             // add the constant force
+            Debug.Log("hit");
             if (body.velocity.magnitude < minimumSpeed)
             {
                 body.velocity = body.velocity.normalized * minimumSpeed;
@@ -156,10 +157,12 @@ public class Ball : MonoBehaviour
     /*
      * Called once the ball kills a player
      * Could be used to adjust post-kill velocity or direction
+     * Also used to redirect the ball on dash collision (if enabled)
      */
     public void RedirectBall(Vector2 relativeVelocity)
     {
         body.velocity = body.velocity.normalized * relativeVelocity.magnitude;
+        Debug.Log("dash redirect");
     }
     #endregion
 
