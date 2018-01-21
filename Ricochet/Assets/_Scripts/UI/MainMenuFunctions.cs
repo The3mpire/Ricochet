@@ -33,7 +33,6 @@ public class MainMenuFunctions : MonoBehaviour
         mainMenuPanel.SetActive(false);
         optionsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(optionsButton);
-
     }
 
     public void CloseGameOptions()
@@ -41,6 +40,7 @@ public class MainMenuFunctions : MonoBehaviour
         mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(mainMenuButton);
+        Application.Quit();
     }
 
     public void LaunchClassicMode()
