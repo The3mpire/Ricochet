@@ -437,7 +437,6 @@ public class CharSelectManager : MonoBehaviour
             {
                 readyCount++;
             }
-
         }
 
         if (readyCount < 1)
@@ -460,7 +459,7 @@ public class CharSelectManager : MonoBehaviour
         int seconds = (int)(timer % 60);
         if (seconds >= 0)
         {
-            timerText.text = "Level Select in: " + seconds;
+            timerText.text = "Level Select in: " + (seconds + 1);
         }
     }
 
@@ -611,6 +610,7 @@ public class CharSelectManager : MonoBehaviour
     private void UndoReady(int playerNumber)
     {
         StopAllCoroutines();
+        timerActive = false;
         timer = waitTime;
         timerText.text = "Waiting...";
         switch (playerNumber)
