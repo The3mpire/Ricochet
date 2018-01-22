@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private GameDataSO gameData;
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
-    private Text gameTimerText;
+    private UI_MatchTimer gameTimerText;
 
     [Header("Events")]
     [SerializeField]
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     private EMode gameMode;
     private float timeLimit;
     private int scoreLimit = 5;
-    private bool gameTimerActive = false;
+    private bool gameTimerActive = true;
     private int timeLeftTillStart;
 
     // dictionary of players cached based off the GameObject
@@ -104,6 +104,8 @@ public class GameManager : MonoBehaviour
         if (timeLimit > 0)
         {
             gameTimerText.gameObject.SetActive(true);
+            gameTimerText.UpdateText(currentMatchTime);
+            MatchTimer();
         }
 
         if (powerUpManager)
@@ -132,7 +134,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
         if (gameTimerText != null && timeLimit > 0)
         {
             MatchTimer();
@@ -470,21 +471,10 @@ public class GameManager : MonoBehaviour
     {
         if (currentMatchTime > 0)
         {
-            if (!gameTimerActive)
+            if (gameTimerActive)
             {
                 currentMatchTime -= Time.deltaTime;
-                string minutes = ((int)(currentMatchTime / 60)).ToString();
-                int seconds_num = (int)(currentMatchTime % 60);
-                string seconds;
-                if (seconds_num < 10)
-                {
-                    seconds = '0' + seconds_num.ToString();
-                }
-                else
-                {
-                    seconds = seconds_num.ToString();
-                }
-                gameTimerText.text = minutes + ':' + seconds;
+                gameTimerText.UpdateText(currentMatchTime);
             }
         }
         else
