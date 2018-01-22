@@ -355,9 +355,11 @@ MonoBehaviour:
   arrowDisable: {fileID: 0}
   musicManager: {fileID: 114876842522859312}
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
-  onGoal: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f, type: 2}
   gameTimerText: {fileID: 0}
-  winScreenWaitTime: 3
+  onGoal: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f, type: 2}
+  onTimerChanged: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49, type: 2}
+  matchStartTime: 3
+  timeAfterGameEnd: 3
   powerUpRespawnTime: 10
   playerRespawnTime: 2
   ballRespawnTime: 2
@@ -367,11 +369,6 @@ MonoBehaviour:
   blueTeamRespawns:
   - {fileID: 0}
   ballRespawns:
-  - {fileID: 0}
-  players:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
 --- !u!114 &114620649267565144
 MonoBehaviour:
