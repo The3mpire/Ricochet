@@ -114,19 +114,15 @@ public class GameManager : MonoBehaviour
         {
             defaultShieldColor = Color.white;
         }
-
-        int counter = 0;
+        
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
         {
             PlayerController p = go.GetComponent<PlayerController>();
             if (p != null)
             {
-                Debug.Log("me" + counter++);
                 playerControllers.Add(p);
             }
         }
-
-        
     }
 
     public void Start()
@@ -509,11 +505,9 @@ public class GameManager : MonoBehaviour
     {
         timeLeftTillStart = matchStartTime;
         gameTimerActive = false;
-
-        int count = 0;
+        
         foreach (PlayerController p in playerControllers)
         {
-            Debug.Log(count++);
             p.DisableMovement(true);
         }
 
