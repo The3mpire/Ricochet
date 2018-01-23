@@ -223,10 +223,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialDirection: {x: 0, y: -1}
   minimumSpeed: 10
-  maximumSpeed: 30
-  curveSlow: 0
-  slowRate: 6
-  curveModifier: 10
+  maximumSpeed: 200
+  curveSlow: 1
+  slowRate: 1.2
+  curveModifier: 0.5
   isTempBall: 0
   canScore: 1
   lastTouchedByCount: 2

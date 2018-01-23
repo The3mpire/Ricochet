@@ -220,6 +220,11 @@ public class PlayerController : MonoBehaviour
         if (timeSinceDash >= dashTime)
         {
             dashing = false;
+            // cap movespeed (prevents dash from throwing the player)
+            if (rigid.velocity.magnitude > thrusterSpeed)
+            {
+                rigid.velocity = rigid.velocity.normalized * thrusterSpeed;
+            }
         }
 
         if (!movementDisabled)
@@ -401,7 +406,11 @@ public class PlayerController : MonoBehaviour
 
     private void DashCheck()
     {
-        if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel) && !jetpackBurnedOut)
+        if (player.GetButtonDown("Dash")
+            && leftTriggerAxis != 0
+            && !dashing
+            && (currentFuel >= dashCost || infiniteFuel)
+            && !jetpackBurnedOut)
         {
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
