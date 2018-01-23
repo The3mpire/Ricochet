@@ -401,22 +401,22 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -797.7831
+      value: -716.25006
       objectReference: {fileID: 0}
     - target: {fileID: 224888264052330192, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -265.92776
+      value: -238.74998
       objectReference: {fileID: 0}
     - target: {fileID: 224032630910202338, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 265.92773
+      value: 238.75006
       objectReference: {fileID: 0}
     - target: {fileID: 224487110484190612, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 797.7831
+      value: 716.25006
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -498,6 +498,12 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 98141850}
   m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+--- !u!114 &98141853 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114147063383255164, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+    type: 2}
+  m_PrefabInternal: {fileID: 98141850}
+  m_Script: {fileID: 11500000, guid: 18c8b9c09d625b043a2ae20c95bb67b9, type: 3}
 --- !u!1 &100126257
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,12 +805,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &129542359 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114612231511193708, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
-    type: 2}
-  m_PrefabInternal: {fileID: 98141850}
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!4 &133140628 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4959578173942762, guid: 50a1ba6435392ee4d8e4c602da85ea82,
@@ -7233,7 +7233,7 @@ Prefab:
         type: 2}
       propertyPath: gameTimerText
       value: 
-      objectReference: {fileID: 129542359}
+      objectReference: {fileID: 98141853}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: redTeamRespawns.Array.data[0]
