@@ -74,6 +74,9 @@ GameObject:
   - component: {fileID: 114731083047901876}
   - component: {fileID: 114620649267565144}
   - component: {fileID: 114720606445144248}
+  - component: {fileID: 114186423841661416}
+  - component: {fileID: 114639088394438882}
+  - component: {fileID: 114395794307671150}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -370,6 +373,39 @@ MonoBehaviour:
   - {fileID: 0}
   ballRespawns:
   - {fileID: 0}
+--- !u!114 &114186423841661416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1532fdd6503411d4d911ed370ddf1a2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectShader: {fileID: 4800000, guid: 49615a28c3f18584fb365bf77ce61fcc, type: 3}
+  intensity: 0.025
+  frequency: 10
+  travelRate: 0
+  maskFrequency: 10
+  maskTravelRate: 2
+  simulationSpeed: 1
+--- !u!114 &114395794307671150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec91570b25a2164bac9b6d27c0ec9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectShader: {fileID: 4800000, guid: 7824d8451ed5fac4da33b68071fcdad0, type: 3}
+  bleedColor: {r: 0, g: 0, b: 0, a: 0}
+  inverseBleedIntensity: 15
+  vhsClip: {fileID: 15200000, guid: 71a434cc23aa93f42b8940d17dc990e7, type: 3}
 --- !u!114 &114620649267565144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -385,6 +421,21 @@ MonoBehaviour:
   shakeStrength: 1
   shakeVibrato: 10
   shakeRandomness: 90
+--- !u!114 &114639088394438882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 665fea11bf33b4a4ca7394c56617f890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectShader: {fileID: 4800000, guid: cc66c8d302151504c8a61c8ed2a6a63f, type: 3}
+  intensityMultiplier: 0.025
+  frequency: 3
+  speed: 5.5
 --- !u!114 &114720606445144248
 MonoBehaviour:
   m_ObjectHideFlags: 1
