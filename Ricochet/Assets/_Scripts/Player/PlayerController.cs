@@ -608,6 +608,11 @@ public class PlayerController : MonoBehaviour
         this.jetpackParticle = system;
     }
 
+    public void SetJetpackFuel()
+    {
+        currentFuel = startFuel;
+    }
+
     internal float GetMaxFuel()
     {
         return maxFuel;
