@@ -11,6 +11,13 @@ public class CharacterInfo : MonoBehaviour {
     [Tooltip("Image for this character")]
     private Sprite characterImage;
 
+    private bool isSelectable;
+
+    private void Awake()
+    {
+        isSelectable = true;
+    }
+
     public Enumerables.ECharacter getCharacterId()
     {
         return characterId;
@@ -19,5 +26,15 @@ public class CharacterInfo : MonoBehaviour {
     public Sprite getCharacterImage()
     {
         return characterImage;
+    }
+
+    public bool GetIsSelectable()
+    {
+        return isSelectable;
+    }
+
+    public void SetIsSelectable(bool value)
+    {
+        isSelectable = value;
     }
 }
