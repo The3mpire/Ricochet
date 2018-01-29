@@ -224,9 +224,12 @@ public class GameManager : MonoBehaviour
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-                    playerController.RemovePowerUp();
-                    SpawnMultipleBalls(ball);
-                    multiBallInPlay = false;
+                    if (!ball.GetTempStatus() && balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount())
+                    {
+                        playerController.RemovePowerUp();
+                        SpawnMultipleBalls(ball);
+                        multiBallInPlay = false;
+                    }
                     break;
                 case EPowerUp.CatchNThrow:
                     playerController.RemovePowerUp();
@@ -421,17 +424,13 @@ public class GameManager : MonoBehaviour
     }
 
     private void SpawnMultipleBalls(Ball origBall)
-    {
-        if (balls.Count <= 1)
+    { 
+        Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
+        for (int i = 0; i < powerUpManager.GetBallSpawnCount(); i++)
         {
-            Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
-            Ball ball1 = Instantiate(origBall);
-            ball1.transform.localScale = tempBallScale;
-            Ball ball2 = Instantiate(origBall);
-            ball2.transform.localScale = tempBallScale;
-
-            ball1.SetTempStatus(true);
-            ball2.SetTempStatus(true);
+            Ball ball = Instantiate(origBall);
+            ball.transform.localScale = tempBallScale;
+            ball.SetTempStatus(true);
         }
     }
 
@@ -464,12 +463,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -490,7 +489,7 @@ public class GameManager : MonoBehaviour
     {
         if (powerUp.GetComponent<PowerUp>().GetPowerUpType() == EPowerUp.Multiball)
         {
-            yield return new WaitUntil(() => balls.Count == 1 && balls.TrueForAll(b => b.GetComponent<Ball>().GetTempStatus() == false) && !multiBallInPlay);
+            yield return new WaitUntil(() => balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount() && !multiBallInPlay);
         }
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
@@ -580,7 +579,6 @@ public class GameManager : MonoBehaviour
         return musicManager.GetMusicVolume();
     }
 
-    /// <param name="volume"> scales the SFX volume (NOT the overall volume)</param>
     public AudioClip GetCharacterSFX(ECharacter character, ECharacterAction movement)
     {
         switch (movement)
@@ -613,7 +611,7 @@ public class GameManager : MonoBehaviour
     #region Private Helpers
     private ETeam GetOpposingTeam(ETeam team)
     {
-        var opTeam = ETeam.None;
+        ETeam opTeam;
         if (team == ETeam.BlueTeam)
         {
             opTeam = ETeam.RedTeam;
