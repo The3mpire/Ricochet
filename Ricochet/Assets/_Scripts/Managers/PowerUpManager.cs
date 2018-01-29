@@ -12,6 +12,11 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField]
     private Color multiBallShieldColor = Color.red;
 
+    [Tooltip("The scale of the temporary balls in relation to the original")]
+    [Range(0,2)]
+    [SerializeField]
+    private float tempBallScale = 0.8f;
+
     [Header("Catch N Throw")]
     [Tooltip("The color of catch n throw powerup objects")]
     [SerializeField]
@@ -58,6 +63,11 @@ public class PowerUpManager : MonoBehaviour
             default:
                 return Color.white;
         }
+    }
+
+    public float GetTempBallScale()
+    {
+        return tempBallScale;
     }
     #endregion
 }

@@ -1,9 +1,11 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -78,6 +80,7 @@ public class GameManager : MonoBehaviour
     private int scoreLimit = 5;
     private bool gameTimerActive = true;
     private int timeLeftTillStart;
+    private bool multiBallInPlay = false;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -223,6 +226,7 @@ public class GameManager : MonoBehaviour
                 case EPowerUp.Multiball:
                     playerController.RemovePowerUp();
                     SpawnMultipleBalls(ball);
+                    multiBallInPlay = false;
                     break;
                 case EPowerUp.CatchNThrow:
                     playerController.RemovePowerUp();
@@ -321,7 +325,8 @@ public class GameManager : MonoBehaviour
             onGoal.Raise();
             if (!modeManager.UpdateScore(team, points))
             {
-                ball.GetComponent<Ball>().OnBallGoalCollision();
+                Ball ballScpt = ball.GetComponent<Ball>();
+                ballScpt.OnBallGoalCollision();
                 ball.SetActive(false);
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
@@ -354,6 +359,11 @@ public class GameManager : MonoBehaviour
         if (powerUpType == EPowerUp.CircleShield) //need to have a list of powerups that reference a secondary shield
         {
             playerController.EnableSecondaryShield(true);
+        }
+
+        if (powerUpType == EPowerUp.Multiball)
+        {
+            multiBallInPlay = true;
         }
     }
 
@@ -399,6 +409,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(SpawnBallCoroutine(ball));
         }
+        else
+        {
+            Destroy(ball);
+        }
     }
 
     public void RespawnPowerUp(GameObject powerUp)
@@ -408,11 +422,17 @@ public class GameManager : MonoBehaviour
 
     private void SpawnMultipleBalls(Ball origBall)
     {
-        Ball ball1 = Instantiate(origBall);
-        Ball ball2 = Instantiate(origBall);
+        if (balls.Count <= 1)
+        {
+            Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
+            Ball ball1 = Instantiate(origBall);
+            ball1.transform.localScale = tempBallScale;
+            Ball ball2 = Instantiate(origBall);
+            ball2.transform.localScale = tempBallScale;
 
-        ball1.SetTempStatus(true);
-        ball2.SetTempStatus(true);
+            ball1.SetTempStatus(true);
+            ball2.SetTempStatus(true);
+        }
     }
 
     private IEnumerator SpawnBallCoroutine(GameObject ball)
@@ -433,6 +453,10 @@ public class GameManager : MonoBehaviour
 
     private void NoWaitRespawnPlayer(PlayerController playerController)
     {
+        if (playerController.GetCurrentPowerUp() == EPowerUp.Multiball)
+        {
+            multiBallInPlay = false;
+        }
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
         playerController.SetJetpackFuel();
@@ -464,6 +488,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RespawnPowerUpRoutine(GameObject powerUp)
     {
+        if (powerUp.GetComponent<PowerUp>().GetPowerUpType() == EPowerUp.Multiball)
+        {
+            yield return new WaitUntil(() => balls.Count == 1 && balls.TrueForAll(b => b.GetComponent<Ball>().GetTempStatus() == false) && !multiBallInPlay);
+        }
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
     }

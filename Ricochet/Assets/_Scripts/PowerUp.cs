@@ -52,8 +52,8 @@ public class PowerUp : MonoBehaviour
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
                 gameManagerInstance.PlayerPowerUpCollision(collider.gameObject, this);
-                gameManagerInstance.RespawnPowerUp(gameObject);
                 gameObject.SetActive(false);
+                gameManagerInstance.RespawnPowerUp(gameObject);
             }
         }
     }
