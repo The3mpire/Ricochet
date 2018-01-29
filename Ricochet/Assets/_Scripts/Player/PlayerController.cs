@@ -63,6 +63,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Fuel/second recharge when falling")]
     [SerializeField]
     private float airRechargeRate = 1.5f;
+    [Tooltip("Drag the fuel aura sprite")]
+    [SerializeField]
+    private SpriteRenderer fuelAura;
 
     [Header("Dash Settings")]
     [Tooltip("How fast the player moves during dash")]
@@ -174,6 +177,7 @@ public class PlayerController : MonoBehaviour
         killList = new List<PlayerController>();
         currentFuel = startFuel;
         maxFuel = startFuel;
+        fuelAura.color = (fuelAura.color.r, fuelAura.color.g, fuelAura.color.b, (currentFuel / maxFuel) * 255);
         timeSinceDash = 0f;
         inertiaTime = 2;
         rightStickHorz = 1;
