@@ -18,6 +18,9 @@ public class CharSelectManager : MonoBehaviour
     private float waitTime;
 
     [Header("Player 1")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private Image p1JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 1 character tokens")]
     private List<GameObject> p1Tokens;
@@ -34,6 +37,9 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p1Team;
 
     [Header("Player 2")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private Image p2JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 2 character tokens")]
     private List<GameObject> p2Tokens;
@@ -50,6 +56,9 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p2Team;
 
     [Header("Player 3")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private Image p3JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 3 character tokens")]
     private List<GameObject> p3Tokens;
@@ -66,6 +75,9 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p3Team;
 
     [Header("Player 4")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private Image p4JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 4 character tokens")]
     private List<GameObject> p4Tokens;
@@ -92,7 +104,13 @@ public class CharSelectManager : MonoBehaviour
     [Tooltip("Drag back timer here")]
     private Slider backSlider;
 
-    private SelectionPhase[] playerPhase = new SelectionPhase[4];
+    private SelectionPhase[] playerPhase = new SelectionPhase[4] 
+    {
+        SelectionPhase.None,
+        SelectionPhase.None,
+        SelectionPhase.None,
+        SelectionPhase.None
+    };
     private float timer;
 
     private bool timerActive;
@@ -163,7 +181,7 @@ public class CharSelectManager : MonoBehaviour
             case 0:
                 p1DefaultToken.SetActive(true);
                 p1ActiveToken = p1DefaultToken;
-                playerPhase[0] = SelectionPhase.CharacterSelect;
+                playerPhase[0] = SelectionPhase.None;
                 playerData = LoadPlayerSettings(playerNumber);
                 if (playerData.Character == ECharacter.None)
                 {
@@ -176,7 +194,7 @@ public class CharSelectManager : MonoBehaviour
             case 1:
                 p2DefaultToken.SetActive(true);
                 p2ActiveToken = p2DefaultToken;
-                playerPhase[1] = SelectionPhase.CharacterSelect;
+                playerPhase[1] = SelectionPhase.None;
                 playerData = LoadPlayerSettings(playerNumber);
                 if (playerData.Character == ECharacter.None)
                 {
@@ -189,7 +207,7 @@ public class CharSelectManager : MonoBehaviour
             case 2:
                 p3DefaultToken.SetActive(true);
                 p3ActiveToken = p3DefaultToken;
-                playerPhase[2] = SelectionPhase.CharacterSelect;
+                playerPhase[2] = SelectionPhase.None;
                 playerData = LoadPlayerSettings(playerNumber);
                 if (playerData.Character == ECharacter.None)
                 {
@@ -202,7 +220,7 @@ public class CharSelectManager : MonoBehaviour
             case 3:
                 p4DefaultToken.SetActive(true);
                 p4ActiveToken = p4DefaultToken;
-                playerPhase[3] = SelectionPhase.CharacterSelect;
+                playerPhase[3] = SelectionPhase.None;
                 playerData = LoadPlayerSettings(playerNumber);
                 if (playerData.Character == ECharacter.None)
                 {
@@ -238,6 +256,9 @@ public class CharSelectManager : MonoBehaviour
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
         {
+            case SelectionPhase.None:
+                PlayerJoin(playerNumber);
+                break;
             case SelectionPhase.CharacterSelect:
                 SelectCharacter(playerNumber);
                 break;
@@ -419,6 +440,31 @@ public class CharSelectManager : MonoBehaviour
                 break;
         }
     }
+
+    private void PlayerJoin(int playerNumber)
+    {
+        // lock in a team
+        switch (playerNumber)
+        {
+            case 1:
+                playerPhase[0] = SelectionPhase.CharacterSelect;
+                p1JoinIcon.enabled = false;
+                break;
+            case 2:
+                playerPhase[1] = SelectionPhase.CharacterSelect;
+                p2JoinIcon.enabled = false;
+                break;
+            case 3:
+                playerPhase[2] = SelectionPhase.CharacterSelect;
+                p3JoinIcon.enabled = false;
+                break;
+            case 4:
+                playerPhase[3] = SelectionPhase.CharacterSelect;
+                p4JoinIcon.enabled = false;
+                break;
+        }
+    }
+
     #endregion
 
     #region Private Helpers
@@ -443,6 +489,7 @@ public class CharSelectManager : MonoBehaviour
         {
             allReady = false;
         }
+
         gameData.SetPlayerCount(readyCount);
         return allReady;
     }
