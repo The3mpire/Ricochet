@@ -26,17 +26,23 @@ public class GameManager : MonoBehaviour
     private MusicManager musicManager;
     [SerializeField]
     private GameDataSO gameData;
-
-    [Header("Game Match Variables")]
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
-    private Text gameTimerText;
+    private UI_MatchTimer gameTimerText;
 
-    [Tooltip("Time to wait for before switching back to game select menu (in seconds)")]
+    [Header("Events")]
     [SerializeField]
-    private int winScreenWaitTime = 3;
+    private GameEvent onGoal;
+    [SerializeField]
+    private GameEvent onTimerChanged;
 
-    [Header("Respawn Timers")]
+    [Header("Timers")]
+    [Tooltip("Time before game start")]
+    [SerializeField]
+    private int matchStartTime = 3;
+    [Tooltip("Time after game is over until next scene is loaded")]
+    [SerializeField]
+    private int timeAfterGameEnd = 3;
     [Tooltip("How long the power up takes to respawn in seconds")]
     [SerializeField]
     private float powerUpRespawnTime = 10f;
@@ -60,21 +66,18 @@ public class GameManager : MonoBehaviour
     [Tooltip("Locations where the ball can spawn")]
     [SerializeField]
     private Transform[] ballRespawns;
-
-    [Header("Players in match")]
-    [Tooltip("The gameobject players in the match")]
-    [SerializeField]
-    private GameObject[] players;
     #endregion
 
     #region Hidden Variables
+    private List<PlayerController> playerControllers = new List<PlayerController>();
     private List<GameObject> balls = new List<GameObject>();
     private static GameManager instance = null;
 
     private EMode gameMode;
     private float timeLimit;
     private int scoreLimit = 5;
-    private bool timerOn = false;
+    private bool gameTimerActive = true;
+    private int timeLeftTillStart;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -101,6 +104,8 @@ public class GameManager : MonoBehaviour
         if (timeLimit > 0)
         {
             gameTimerText.gameObject.SetActive(true);
+            gameTimerText.UpdateText(currentMatchTime);
+            MatchTimer();
         }
 
         if (powerUpManager)
@@ -111,8 +116,20 @@ public class GameManager : MonoBehaviour
         {
             defaultShieldColor = Color.white;
         }
+        
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            PlayerController p = go.GetComponent<PlayerController>();
+            if (p != null)
+            {
+                playerControllers.Add(p);
+            }
+        }
+    }
 
-        StartCoroutine(DisablePlayerComponents());
+    public void Start()
+    {
+        StartCoroutine(BeginMatchStartTimer());
     }
 
     void Update()
@@ -130,9 +147,14 @@ public class GameManager : MonoBehaviour
         return balls;
     }
 
-    public GameObject[] GetPlayerObjects()
+    public List<PlayerController> GetPlayers()
     {
-        return players;
+        return playerControllers;
+    }
+
+    public int GetTimeTillMatchStart()
+    {
+        return timeLeftTillStart;
     }
     #endregion
 
@@ -296,6 +318,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameMode == EMode.Soccer)
         {
+            onGoal.Raise();
             if (!modeManager.UpdateScore(team, points))
             {
                 ball.GetComponent<Ball>().OnBallGoalCollision();
@@ -412,6 +435,7 @@ public class GameManager : MonoBehaviour
     {
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
+        playerController.SetJetpackFuel();
 
         switch (playerController.GetTeamNumber())
         {
@@ -428,13 +452,12 @@ public class GameManager : MonoBehaviour
 
     public void NoWaitRespawnAllPlayers()
     {
-        for (int i = 0; i < players.Length; i++)
+        foreach(PlayerController p in playerControllers)
         {
-            PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
-            if (players[i].activeSelf)
+            if (p.gameObject.activeSelf)
             {
-                NoWaitRespawnPlayer(currentPlayer);
-                currentPlayer.RemovePowerUp();
+                NoWaitRespawnPlayer(p);
+                p.RemovePowerUp();
             }
         }
     }
@@ -449,21 +472,10 @@ public class GameManager : MonoBehaviour
     {
         if (currentMatchTime > 0)
         {
-            if (!timerOn)
+            if (gameTimerActive)
             {
                 currentMatchTime -= Time.deltaTime;
-                string minutes = ((int)(currentMatchTime / 60)).ToString();
-                int seconds_num = (int)(currentMatchTime % 60);
-                string seconds;
-                if (seconds_num < 10)
-                {
-                    seconds = '0' + seconds_num.ToString();
-                }
-                else
-                {
-                    seconds = seconds_num.ToString();
-                }
-                gameTimerText.text = minutes + ':' + seconds;
+                gameTimerText.UpdateText(currentMatchTime);
             }
         }
         else
@@ -476,22 +488,32 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DelayedWinScreen()
     {
-        yield return new WaitForSeconds(winScreenWaitTime);
+        yield return new WaitForSeconds(timeAfterGameEnd);
         CharacterSelect();
     }
 
-    IEnumerator DisablePlayerComponents()
+    private IEnumerator BeginMatchStartTimer()
     {
-        timerOn = true;
-        for (int i = 0; i < players.Length; i++)
+        timeLeftTillStart = matchStartTime;
+        gameTimerActive = false;
+        
+        foreach (PlayerController p in playerControllers)
         {
-            players[i].GetComponent<PlayerController>().movementDisabled = true;
+            p.DisableMovement(true);
         }
-        yield return new WaitForSeconds(arrowDisable.duration);
-        timerOn = false;
-        for (int i = 0; i < players.Length; i++)
+
+        while (timeLeftTillStart > 0)
         {
-            players[i].GetComponent<PlayerController>().movementDisabled = false;
+            onTimerChanged.Raise();
+            timeLeftTillStart--;
+            yield return new WaitForSeconds(1);
+        }
+        
+        gameTimerActive = true;
+
+        foreach (PlayerController p in playerControllers)
+        {
+            p.DisableMovement(false);
         }
     }
 

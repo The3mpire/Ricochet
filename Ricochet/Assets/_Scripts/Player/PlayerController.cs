@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
     private float rightStickVert;
     private float leftTriggerAxis;
 
-    public bool movementDisabled = false;
+    private bool movementDisabled = false;
     #endregion
 
     #region Monobehaviour
@@ -548,6 +548,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Getters and Setters
+    public void DisableMovement(bool movementDisabled)
+    {
+        this.movementDisabled = movementDisabled;
+    }
+
     public void SetInfiniteFuel(bool active)
     {
         infiniteFuel = active;
@@ -601,6 +606,11 @@ public class PlayerController : MonoBehaviour
     public void SetJetpackParticle(ParticleSystem system)
     {
         this.jetpackParticle = system;
+    }
+
+    public void SetJetpackFuel()
+    {
+        currentFuel = startFuel;
     }
 
     internal float GetMaxFuel()

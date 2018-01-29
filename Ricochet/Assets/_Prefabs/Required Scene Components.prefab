@@ -72,6 +72,8 @@ GameObject:
   - component: {fileID: 124825466531352990}
   - component: {fileID: 81598116533774018}
   - component: {fileID: 114731083047901876}
+  - component: {fileID: 114620649267565144}
+  - component: {fileID: 114720606445144248}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -354,7 +356,10 @@ MonoBehaviour:
   musicManager: {fileID: 114876842522859312}
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
   gameTimerText: {fileID: 0}
-  winScreenWaitTime: 3
+  onGoal: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f, type: 2}
+  onTimerChanged: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49, type: 2}
+  matchStartTime: 3
+  timeAfterGameEnd: 3
   powerUpRespawnTime: 10
   playerRespawnTime: 2
   ballRespawnTime: 2
@@ -365,11 +370,49 @@ MonoBehaviour:
   - {fileID: 0}
   ballRespawns:
   - {fileID: 0}
-  players:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+--- !u!114 &114620649267565144
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34ac18c39bcba02408aa940422aa92f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 1
+  shakeStrength: 1
+  shakeVibrato: 10
+  shakeRandomness: 90
+--- !u!114 &114720606445144248
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee430f3068524d24a9fe1568f64e9202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114620649267565144}
+        m_MethodName: Shake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114731083047901876
 MonoBehaviour:
   m_ObjectHideFlags: 1

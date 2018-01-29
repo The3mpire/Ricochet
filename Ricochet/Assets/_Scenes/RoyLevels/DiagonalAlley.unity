@@ -4273,12 +4273,6 @@ Transform:
   m_Father: {fileID: 832949260}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1542531962 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114612231511193708, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1720537016}
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &1544845901
 GameObject:
   m_ObjectHideFlags: 0
@@ -4553,22 +4547,22 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -670.71533
+      value: -716.25
       objectReference: {fileID: 0}
     - target: {fileID: 224888264052330192, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -223.57178
+      value: -238.75
       objectReference: {fileID: 0}
     - target: {fileID: 224032630910202338, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 223.57178
+      value: 238.75
       objectReference: {fileID: 0}
     - target: {fileID: 224487110484190612, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 670.71533
+      value: 716.25
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4603,7 +4597,7 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: 14.999996
       objectReference: {fileID: 0}
     - target: {fileID: 224710608865607566, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
@@ -4643,6 +4637,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39c81f79d261ce04fbb9bb81fba1b72f, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1720537017 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114147063383255164, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1720537016}
+  m_Script: {fileID: 11500000, guid: 18c8b9c09d625b043a2ae20c95bb67b9, type: 3}
 --- !u!1 &1740308242
 GameObject:
   m_ObjectHideFlags: 0
@@ -4934,7 +4934,7 @@ Prefab:
         type: 2}
       propertyPath: gameTimerText
       value: 
-      objectReference: {fileID: 1542531962}
+      objectReference: {fileID: 1720537017}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: redTeamRespawns.Array.data[0]
@@ -4970,6 +4970,18 @@ Prefab:
       propertyPath: players.Array.data[3]
       value: 
       objectReference: {fileID: 851467720}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: onGoal
+      value: 
+      objectReference: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f,
+        type: 2}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: onTimerChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0

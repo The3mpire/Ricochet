@@ -31,12 +31,11 @@ public class MultipleTargetsCamera : MonoBehaviour
             return;
         }
         
-        GameObject[] players = manager.GetPlayerObjects();
         List<GameObject> balls = manager.GetBallObjects();
 
-        foreach (GameObject go in players)
+        foreach (PlayerController p in manager.GetPlayers())
         {
-            targets.Add(go.transform);
+            targets.Add(p.transform);
         }
         foreach (GameObject go in balls)
         {
