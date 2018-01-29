@@ -8,24 +8,33 @@ using System;
 
 public class CharSelect_PlayerController : MonoBehaviour
 {
-    #region Private
-    private Player player;
+    #region Inspector Variables
 
-    [SerializeField]
     [Tooltip("Set the player number")]
-    private int playerNumber;
-
     [SerializeField]
+    private int playerNumber;
     [Tooltip("Drag CharSelectManager here")]
+    [SerializeField]
     private GameObject managerPanel;
-    private CharSelectManager manager;
-    private bool joystickAcceptingInput = true;
+    [Tooltip("Color of player icon")]
+    [SerializeField]
+    private Color playerColor;
+
     [Header("Input settings")]
     [Tooltip("Delay before a joystick inputs")]
     [SerializeField]
     private float inputDelay = 1.25f;
 
     #endregion
+
+    #region Private Variables
+
+    private Player player;
+    private CharSelectManager manager;
+    private bool joystickAcceptingInput = true;
+
+    #endregion
+
     #region MonoBehaviour
     // Use this for initialization
     void Awake()
@@ -47,7 +56,7 @@ public class CharSelect_PlayerController : MonoBehaviour
 
         if (player.GetButtonDown("UISubmit"))
         {
-            manager.RouteInputA(playerNumber);
+            manager.RouteInputA(playerNumber, playerColor);
         }
         if (player.GetButtonDown("UICancel"))
         {
@@ -70,6 +79,15 @@ public class CharSelect_PlayerController : MonoBehaviour
         yield return new WaitForSeconds(inputDelay);
         joystickAcceptingInput = true;
     }
+    #endregion
+
+    #region Getters and Setters
+
+    public Color GetPlayerColor()
+    {
+        return playerColor;
+    }
+
     #endregion
 
 }

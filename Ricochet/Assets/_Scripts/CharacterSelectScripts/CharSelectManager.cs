@@ -104,13 +104,24 @@ public class CharSelectManager : MonoBehaviour
     [Tooltip("Drag back timer here")]
     private Slider backSlider;
 
-    private SelectionPhase[] playerPhase = new SelectionPhase[4] 
-    {
-        SelectionPhase.None,
-        SelectionPhase.None,
-        SelectionPhase.None,
-        SelectionPhase.None
-    };
+    [Header("Character UI Images")]
+    [Tooltip("Character 1 Image (Cat)")]
+    [SerializeField]
+    private Image char1Image;
+    [Tooltip("Character 2 Image (Computer)")]
+    [SerializeField]
+    private Image char2Image;
+    [Tooltip("Character 3 Image (Mall Cop)")]
+    [SerializeField]
+    private Image char3Image;
+    [Tooltip("Character 4 Image (Sushi)")]
+    [SerializeField]
+    private Image char4Image;
+    [Tooltip("Default color")]
+    [SerializeField]
+    private Color defaultColor;
+
+    private SelectionPhase[] playerPhase = new SelectionPhase[4];
     private float timer;
 
     private bool timerActive;
@@ -251,7 +262,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void RouteInputA(int playerNumber)
+    public void RouteInputA(int playerNumber, Color playerColor)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
@@ -260,7 +271,7 @@ public class CharSelectManager : MonoBehaviour
                 PlayerJoin(playerNumber);
                 break;
             case SelectionPhase.CharacterSelect:
-                SelectCharacter(playerNumber);
+                SelectCharacter(playerNumber, playerColor);
                 break;
             case SelectionPhase.TeamSelect:
                 SelectTeam(playerNumber);
@@ -277,6 +288,7 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.CharacterSelect:
                 break;
             case SelectionPhase.TeamSelect:
+                ClearImages(playerNumber);
                 ClearSelection(playerNumber);
                 break;
             case SelectionPhase.Ready:
@@ -318,9 +330,10 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    private void SelectCharacter(int playerNumber)
+    private void SelectCharacter(int playerNumber, Color playerColor)
     {
         var color = Color.white;
+        var selectedChar = Enumerables.ECharacter.None;
         switch (playerNumber)
         {
             case 1:
@@ -329,13 +342,18 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(0, selected.getCharacterId());
-                        p1TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p1TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[0] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(0, selected.getCharacterId());
+                            p1TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p1TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[0] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
                 break;
@@ -345,13 +363,18 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(1, selected.getCharacterId());
-                        p2TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p2TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[1] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(1, selected.getCharacterId());
+                            p2TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p2TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[1] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
                 break;
@@ -361,13 +384,18 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(2, selected.getCharacterId());
-                        p3TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p3TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[2] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(2, selected.getCharacterId());
+                            p3TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p3TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[2] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
                 break;
@@ -377,15 +405,38 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(3, selected.getCharacterId());
-                        p4TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p4TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[3] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(3, selected.getCharacterId());
+                            p4TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p4TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[3] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
+                break;
+        }
+        
+        switch (selectedChar)
+        {
+            case Enumerables.ECharacter.Cat:
+                char1Image.color = playerColor;
+                break;
+            case Enumerables.ECharacter.Computer:
+                char2Image.color = playerColor;
+                break;
+            case Enumerables.ECharacter.MallCop:
+                char3Image.color = playerColor;
+                break;
+            case Enumerables.ECharacter.Sushi:
+                char4Image.color = playerColor;
+                break;
+            default:
                 break;
         }
     }
@@ -600,6 +651,52 @@ public class CharSelectManager : MonoBehaviour
         }
         activeToken.SetActive(true);
         return activeToken;
+    }
+
+    private void ClearImages(int playerNumber)
+    {
+        var selectedChar = Enumerables.ECharacter.None;
+        switch (playerNumber)
+        {
+            case 1:
+                var selectedImage1 = p1ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage1.SetIsSelectable(true);
+                selectedChar = selectedImage1.getCharacterId();
+                break;
+            case 2:
+                var selectedImage2 = p2ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage2.SetIsSelectable(true);
+                selectedChar = selectedImage2.getCharacterId();
+                break;
+            case 3:
+                var selectedImage3 = p3ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage3.SetIsSelectable(true);
+                selectedChar = selectedImage3.getCharacterId();
+                break;
+            case 4:
+                var selectedImage4 = p4ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage4.SetIsSelectable(true);
+                selectedChar = selectedImage4.getCharacterId();
+                break;
+        }
+
+        switch (selectedChar)
+        {
+            case Enumerables.ECharacter.Cat:
+                char1Image.color = defaultColor;
+                break;
+            case Enumerables.ECharacter.Computer:
+                char2Image.color = defaultColor;
+                break;
+            case Enumerables.ECharacter.MallCop:
+                char3Image.color = defaultColor;
+                break;
+            case Enumerables.ECharacter.Sushi:
+                char4Image.color = defaultColor;
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>
