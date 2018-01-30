@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
     private bool dashing;
     private bool grounded;
     private bool jetpackBurnedOut;
+    private bool isInvincible;
 
     private float currentFuel;
     private float maxFuel;
@@ -255,23 +256,27 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
+        if (!isInvincible)
         {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
             {
-                gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
-            }
-        }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-            {
-                PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
-                if (team != otherPlayer.team)
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                 {
-                    Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
-                    body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
-                    Rumble(1.25f);
+                    gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
+                }
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
+                    if (team != otherPlayer.team)
+                    {
+                        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
+                        body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                        Rumble(1.25f);
+                    }
                 }
             }
         }
@@ -543,12 +548,12 @@ public class PlayerController : MonoBehaviour
     IEnumerator KillPlayer()
     {
         this.animator.SetBool("isDead", true);
-        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+        isInvincible = true;
         movementDisabled = true;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         yield return new WaitForSeconds(gameData.playerRespawnTime);
         this.animator.SetBool("isDead", false);
-        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         movementDisabled = false;
     }
