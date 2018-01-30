@@ -50,9 +50,6 @@ public class GameManager : MonoBehaviour
     private float powerUpRespawnTime = 10f;
     [Tooltip("How long the players take to respawn in seconds")]
     [SerializeField]
-    private float playerRespawnTime = 2f;
-    [Tooltip("How long the ball takes to respawn in seconds")]
-    [SerializeField]
     private float ballRespawnTime = 2f;
     [Tooltip("How long a player can hold a ball with CatchNThrow")]
     [SerializeField]
@@ -445,7 +442,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
-        yield return new WaitForSeconds(playerRespawnTime);
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
 
         NoWaitRespawnPlayer(playerController);
     }

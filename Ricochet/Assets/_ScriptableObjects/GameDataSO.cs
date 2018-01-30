@@ -5,6 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Game Data")]
 public class GameDataSO : ScriptableObject
 {
+
+    [SerializeField]
+    public float playerRespawnTime = 2f;
+    [Tooltip("How long the ball takes to respawn in seconds")]
+
     [SerializeField]
     private EMode gameMode;
 

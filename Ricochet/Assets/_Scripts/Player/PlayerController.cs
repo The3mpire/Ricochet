@@ -3,6 +3,8 @@ using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Which team the player is on")]
     [SerializeField]
     private ETeam team;
-
     [Header("Movement Settings")]
     [Tooltip("Gravity scale on player")]
     [SerializeField]
@@ -88,6 +89,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much the above values should be multiplied by on death")]
     [SerializeField]
     private float rumbleMultiplier = 2f;
+    [Tooltip("How frequently the player sprite should blink on death")]
+    [SerializeField]
+    private float blinkMultiplier = 0.2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
@@ -525,7 +529,6 @@ public class PlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Death));
         }
-
         Rumble(rumbleMultiplier);
 
         currentFuel = startFuel;
@@ -533,9 +536,18 @@ public class PlayerController : MonoBehaviour
         dashing = false;
         timeSinceDash = 0f;
         rigid.velocity = Vector3.zero;
-        gameObject.SetActive(false);
+        StartCoroutine(Blink(gameData.playerRespawnTime));
+        StartCoroutine(KillPlayer());
     }
 
+    IEnumerator KillPlayer()
+    {
+        this.animator.SetBool("isDead", true);
+        movementDisabled = true;
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
+        this.animator.SetBool("isDead", false);
+        movementDisabled = false;
+    }
     public void EnableSecondaryShield(bool status)
     {
         switch (currPowerUp)
@@ -543,6 +555,18 @@ public class PlayerController : MonoBehaviour
             case EPowerUp.CircleShield:
                 circleShield.SetActive(status);
                 break;
+        }
+    }
+
+    IEnumerator Blink(float waitTime)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(blinkMultiplier);
         }
     }
     #endregion
