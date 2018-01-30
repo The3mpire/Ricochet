@@ -76,7 +76,6 @@ GameObject:
   - component: {fileID: 114720606445144248}
   - component: {fileID: 114186423841661416}
   - component: {fileID: 114639088394438882}
-  - component: {fileID: 114395794307671150}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -391,21 +390,6 @@ MonoBehaviour:
   maskFrequency: 10
   maskTravelRate: 2
   simulationSpeed: 1
---- !u!114 &114395794307671150
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1550601391691784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ec91570b25a2164bac9b6d27c0ec9e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effectShader: {fileID: 4800000, guid: 7824d8451ed5fac4da33b68071fcdad0, type: 3}
-  bleedColor: {r: 0, g: 0, b: 0, a: 0}
-  inverseBleedIntensity: 15
-  vhsClip: {fileID: 15200000, guid: 71a434cc23aa93f42b8940d17dc990e7, type: 3}
 --- !u!114 &114620649267565144
 MonoBehaviour:
   m_ObjectHideFlags: 1
