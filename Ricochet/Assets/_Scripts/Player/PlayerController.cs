@@ -64,6 +64,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Fuel/second recharge when falling")]
     [SerializeField]
     private float airRechargeRate = 1.5f;
+    [Tooltip("Drag the fuel aura sprite")]
+    [SerializeField]
+    private SpriteRenderer fuelAura;
 
     [Header("Dash Settings")]
     [Tooltip("How fast the player moves during dash")]
@@ -209,6 +212,8 @@ public class PlayerController : MonoBehaviour
         Vector2 playerPosition = transform.position;
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
         grounded = Physics2D.Linecast(playerPosition, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
+        fuelAura.color = new Color(fuelAura.color.r, fuelAura.color.g, fuelAura.color.b, (currentFuel / maxFuel));
+
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         if (player.GetAxis("RightStickHorizontal") != 0)
