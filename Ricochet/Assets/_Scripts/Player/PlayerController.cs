@@ -543,9 +543,13 @@ public class PlayerController : MonoBehaviour
     IEnumerator KillPlayer()
     {
         this.animator.SetBool("isDead", true);
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         movementDisabled = true;
         yield return new WaitForSeconds(gameData.playerRespawnTime);
         this.animator.SetBool("isDead", false);
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         movementDisabled = false;
     }
     public void EnableSecondaryShield(bool status)
