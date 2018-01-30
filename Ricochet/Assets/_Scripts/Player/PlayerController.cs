@@ -177,7 +177,6 @@ public class PlayerController : MonoBehaviour
         killList = new List<PlayerController>();
         currentFuel = startFuel;
         maxFuel = startFuel;
-        fuelAura.color = new Color(fuelAura.color.r, fuelAura.color.g, fuelAura.color.b, (currentFuel / maxFuel));
         timeSinceDash = 0f;
         inertiaTime = 2;
         rightStickHorz = 1;
