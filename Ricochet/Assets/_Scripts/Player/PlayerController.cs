@@ -3,6 +3,8 @@ using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Which team the player is on")]
     [SerializeField]
     private ETeam team;
-
     [Header("Movement Settings")]
     [Tooltip("Gravity scale on player")]
     [SerializeField]
@@ -88,6 +89,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much the above values should be multiplied by on death")]
     [SerializeField]
     private float rumbleMultiplier = 2f;
+    [Tooltip("How frequently the player sprite should blink on death")]
+    [SerializeField]
+    private float blinkMultiplier = 0.2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
@@ -141,6 +145,7 @@ public class PlayerController : MonoBehaviour
     private bool dashing;
     private bool grounded;
     private bool jetpackBurnedOut;
+    private bool isInvincible;
 
     private float currentFuel;
     private float maxFuel;
@@ -248,26 +253,28 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Collision Management
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
+        if (!isInvincible)
         {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
             {
-                gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
-            }
-        }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-            {
-                PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
-                if (team != otherPlayer.team)
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                 {
-                    Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
-                    body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
-                    Rumble(1.25f);
+                    gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
+                }
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
+                    if (team != otherPlayer.team)
+                    {
+                        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
+                        body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                        Rumble(1.25f);
+                    }
                 }
             }
         }
@@ -525,7 +532,6 @@ public class PlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Death));
         }
-
         Rumble(rumbleMultiplier);
 
         currentFuel = startFuel;
@@ -533,9 +539,22 @@ public class PlayerController : MonoBehaviour
         dashing = false;
         timeSinceDash = 0f;
         rigid.velocity = Vector3.zero;
-        gameObject.SetActive(false);
+        StartCoroutine(Blink(gameData.playerRespawnTime));
+        StartCoroutine(KillPlayer());
     }
 
+    private IEnumerator KillPlayer()
+    {
+        this.animator.SetBool("isDead", true);
+        isInvincible = true;
+        movementDisabled = true;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
+        this.animator.SetBool("isDead", false);
+        isInvincible = false;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        movementDisabled = false;
+    }
     public void EnableSecondaryShield(bool status)
     {
         switch (currPowerUp)
@@ -543,6 +562,18 @@ public class PlayerController : MonoBehaviour
             case EPowerUp.CircleShield:
                 circleShield.SetActive(status);
                 break;
+        }
+    }
+
+    private IEnumerator Blink(float waitTime)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(blinkMultiplier);
         }
     }
     #endregion
