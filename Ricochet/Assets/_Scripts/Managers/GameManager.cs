@@ -1,9 +1,11 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -78,6 +80,7 @@ public class GameManager : MonoBehaviour
     private int scoreLimit = 5;
     private bool gameTimerActive = true;
     private int timeLeftTillStart;
+    private bool multiBallInPlay = false;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -221,8 +224,12 @@ public class GameManager : MonoBehaviour
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-                    playerController.RemovePowerUp();
-                    SpawnMultipleBalls(ball);
+                    if (!ball.GetTempStatus() && balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount())
+                    {
+                        playerController.RemovePowerUp();
+                        SpawnMultipleBalls(ball);
+                        multiBallInPlay = false;
+                    }
                     break;
                 case EPowerUp.CatchNThrow:
                     playerController.RemovePowerUp();
@@ -321,7 +328,8 @@ public class GameManager : MonoBehaviour
             onGoal.Raise();
             if (!modeManager.UpdateScore(team, points))
             {
-                ball.GetComponent<Ball>().OnBallGoalCollision();
+                Ball ballScpt = ball.GetComponent<Ball>();
+                ballScpt.OnBallGoalCollision();
                 ball.SetActive(false);
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
@@ -354,6 +362,11 @@ public class GameManager : MonoBehaviour
         if (powerUpType == EPowerUp.CircleShield) //need to have a list of powerups that reference a secondary shield
         {
             playerController.EnableSecondaryShield(true);
+        }
+
+        if (powerUpType == EPowerUp.Multiball)
+        {
+            multiBallInPlay = true;
         }
     }
 
@@ -399,6 +412,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(SpawnBallCoroutine(ball));
         }
+        else
+        {
+            Destroy(ball);
+        }
     }
 
     public void RespawnPowerUp(GameObject powerUp)
@@ -407,12 +424,14 @@ public class GameManager : MonoBehaviour
     }
 
     private void SpawnMultipleBalls(Ball origBall)
-    {
-        Ball ball1 = Instantiate(origBall);
-        Ball ball2 = Instantiate(origBall);
-
-        ball1.SetTempStatus(true);
-        ball2.SetTempStatus(true);
+    { 
+        Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
+        for (int i = 0; i < powerUpManager.GetBallSpawnCount(); i++)
+        {
+            Ball ball = Instantiate(origBall);
+            ball.transform.localScale = tempBallScale;
+            ball.SetTempStatus(true);
+        }
     }
 
     private IEnumerator SpawnBallCoroutine(GameObject ball)
@@ -433,6 +452,10 @@ public class GameManager : MonoBehaviour
 
     private void NoWaitRespawnPlayer(PlayerController playerController)
     {
+        if (playerController.GetCurrentPowerUp() == EPowerUp.Multiball)
+        {
+            multiBallInPlay = false;
+        }
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
         playerController.SetJetpackFuel();
@@ -440,12 +463,12 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -464,6 +487,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RespawnPowerUpRoutine(GameObject powerUp)
     {
+        if (powerUp.GetComponent<PowerUp>().GetPowerUpType() == EPowerUp.Multiball)
+        {
+            yield return new WaitUntil(() => balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount() && !multiBallInPlay);
+        }
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
     }
@@ -552,7 +579,6 @@ public class GameManager : MonoBehaviour
         return musicManager.GetMusicVolume();
     }
 
-    /// <param name="volume"> scales the SFX volume (NOT the overall volume)</param>
     public AudioClip GetCharacterSFX(ECharacter character, ECharacterAction movement)
     {
         switch (movement)
@@ -585,7 +611,7 @@ public class GameManager : MonoBehaviour
     #region Private Helpers
     private ETeam GetOpposingTeam(ETeam team)
     {
-        var opTeam = ETeam.None;
+        ETeam opTeam;
         if (team == ETeam.BlueTeam)
         {
             opTeam = ETeam.RedTeam;
