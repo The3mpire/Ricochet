@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
         killList = new List<PlayerController>();
         currentFuel = startFuel;
         maxFuel = startFuel;
-        fuelAura.color = new Color(fuelAura.color.r, fuelAura.color.g, fuelAura.color.b, (currentFuel / maxFuel) * 255);
+        fuelAura.color = new Color(fuelAura.color.r, fuelAura.color.g, fuelAura.color.b, (currentFuel / maxFuel));
         timeSinceDash = 0f;
         inertiaTime = 2;
         rightStickHorz = 1;
@@ -208,6 +208,8 @@ public class PlayerController : MonoBehaviour
         Vector2 playerPosition = transform.position;
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
         grounded = Physics2D.Linecast(playerPosition, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
+        fuelAura.color = new Color(fuelAura.color.r, fuelAura.color.g, fuelAura.color.b, (currentFuel / maxFuel));
+
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         if (player.GetAxis("RightStickHorizontal") != 0)
