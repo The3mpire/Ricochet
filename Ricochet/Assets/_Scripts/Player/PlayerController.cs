@@ -545,7 +545,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(KillPlayer());
     }
 
-    IEnumerator KillPlayer()
+    private IEnumerator KillPlayer()
     {
         this.animator.SetBool("isDead", true);
         isInvincible = true;
@@ -567,7 +567,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator Blink(float waitTime)
+    private IEnumerator Blink(float waitTime)
     {
         float endTime = Time.time + waitTime;
         while (Time.time < endTime)
