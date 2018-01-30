@@ -253,12 +253,10 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Collision Management
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!isInvincible)
         {
-
             if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
             {
                 if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
