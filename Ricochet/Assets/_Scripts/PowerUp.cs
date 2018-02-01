@@ -7,18 +7,34 @@ using System.Collections.Generic;
 public class PowerUp : MonoBehaviour
 {
     #region Inspector Variables
+    [Header("other")]
     [SerializeField]
     private GameDataSO gameData;
     [Tooltip("Which type of powerup this is")]
     [SerializeField] private EPowerUp powerUpType;
     [Tooltip("The sprite of the powerup")]
     [SerializeField] private SpriteRenderer powerupSprite;
+    
+    [Serializable]
+    private struct weight
+    {
+        public EPowerUp type;
+        [Tooltip("Weighted against other probabilities (not a float)")]
+        public uint probability;
+    }
+    [Header("Powerup spawning weights")]
+    [Tooltip("When enabled runs a 1000 trials and prints expirimental probabilities for each powerup")]
+    [SerializeField]
+    private bool runTrials = false;
+    [SerializeField]
+    [Tooltip("Only used when type is random")]
+    private weight[] weights;
     #endregion
 
     #region Hidden Variables
     private GameManager gameManagerInstance;
     private System.Random rng;
-    private List<EPowerUp> powerups;
+    private EPowerUp[] powerups;
     private EPowerUp instanceType;
     #endregion
 
@@ -27,15 +43,34 @@ public class PowerUp : MonoBehaviour
     {
         if (powerUpType == EPowerUp.Random)
         {
+            uint len = 0;
             rng = new System.Random();
-            powerups = Enum.GetValues(typeof(EPowerUp)).Cast<EPowerUp>().ToList();
-            if (gameData.GetGameMode() == EMode.Deathmatch)
+            foreach (weight w in weights)
             {
-                powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None)).ToList();
+                if (w.type == EPowerUp.Random || w.type == EPowerUp.None)
+                {
+                    Debug.LogError("Powerup weight type of " + w.type.ToString(), gameObject);
+                    continue;
+                }
+
+                len += w.probability;
             }
-            else
+            powerups = new EPowerUp[len];
+            foreach (weight w in weights)
             {
-                powerups = powerups.Where(p => (p != EPowerUp.Random) && (p != EPowerUp.None) && (p != EPowerUp.Multiball)).ToList();
+                if (w.type == EPowerUp.Random || w.type == EPowerUp.None)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < w.probability; i++)
+                {
+                    powerups[--len] = w.type;
+                }
+            }
+            if (runTrials)
+            {
+                trial();
             }
         }
         else
@@ -62,8 +97,34 @@ public class PowerUp : MonoBehaviour
     {
         if (powerUpType == EPowerUp.Random)
         {
-            instanceType = powerups[rng.Next(powerups.Count)];
+            instanceType = powerups[rng.Next(0,powerups.Length)];
             UpdateSprite();
+        }
+    }
+
+    // helps give exp
+    private void trial()
+    {
+        Dictionary<EPowerUp, float> results = new Dictionary<EPowerUp, float>();
+        float trials = 1000;
+        foreach (weight w in weights)
+        {
+            if (results.ContainsKey(w.type))
+            {
+                Debug.LogError("Duplicate powerup type entries in weights", gameObject);
+                continue;
+            }
+            results.Add(w.type, 0);
+        }
+        for (float i = 0; i < trials; i++)
+        {
+            int index = rng.Next(0, powerups.Length);
+            results[powerups[index]] = results[powerups[index]] + 1;
+        }
+
+        foreach (weight w in weights)
+        {
+            Debug.Log(w.type.ToString() + ": " + (results[w.type] / trials * 100).ToString() + '%');
         }
     }
     #endregion
