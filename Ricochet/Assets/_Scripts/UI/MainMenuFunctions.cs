@@ -33,7 +33,6 @@ public class MainMenuFunctions : MonoBehaviour
         mainMenuPanel.SetActive(false);
         optionsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(optionsButton);
-
     }
 
     public void CloseGameOptions()
@@ -55,6 +54,11 @@ public class MainMenuFunctions : MonoBehaviour
         gameData.SetGameMode(EMode.Deathmatch);
         gameData.SetGameLevel(BuildIndex.LEVEL_SELECT);
         LevelSelect.LoadCharacterSelect();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
     #endregion
 }

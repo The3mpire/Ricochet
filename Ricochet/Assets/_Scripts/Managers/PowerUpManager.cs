@@ -11,6 +11,17 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("The color of shields with a multiball powerup")]
     [SerializeField]
     private Color multiBallShieldColor = Color.red;
+    [Tooltip("The scale of the temporary balls in relation to the original")]
+    [Range(0,2)]
+    [SerializeField]
+    private float tempBallScale = 0.8f;
+    [Tooltip("Maximum number of balls allowed")]
+    [SerializeField]
+    private int maxActiveBalls = 3;
+    [Tooltip("Number of balls spawned")]
+    [SerializeField]
+    private int numBallsSpawned = 2;
+
 
     [Header("Catch N Throw")]
     [Tooltip("The color of catch n throw powerup objects")]
@@ -58,6 +69,21 @@ public class PowerUpManager : MonoBehaviour
             default:
                 return Color.white;
         }
+    }
+
+    public float GetTempBallScale()
+    {
+        return tempBallScale;
+    }
+
+    public int GetMaxBalls()
+    {
+        return maxActiveBalls;
+    }
+
+    public int GetBallSpawnCount()
+    {
+        return numBallsSpawned;
     }
     #endregion
 }

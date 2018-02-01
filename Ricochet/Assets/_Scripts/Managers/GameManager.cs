@@ -1,9 +1,11 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,29 +20,35 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the sound storage here")]
     [SerializeField]
     private SoundStorage soundStorage;
+    [Tooltip("Drag the Pointing Arrows Script here")]
+    [SerializeField]
+    private PointingArrows arrowDisable;
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
     [SerializeField]
     private GameDataSO gameData;
-
-    [Header("Game Match Variables")]
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
-    private Text gameTimerText;
+    private UI_MatchTimer gameTimerText;
 
-    [Tooltip("Time to wait for before switching back to game select menu (in seconds)")]
+    [Header("Events")]
     [SerializeField]
-    private int winScreenWaitTime = 3;
+    private GameEvent onGoal;
+    [SerializeField]
+    private GameEvent onTimerChanged;
 
-    [Header("Respawn Timers")]
+    [Header("Timers")]
+    [Tooltip("Time before game start")]
+    [SerializeField]
+    private int matchStartTime = 3;
+    [Tooltip("Time after game is over until next scene is loaded")]
+    [SerializeField]
+    private int timeAfterGameEnd = 3;
     [Tooltip("How long the power up takes to respawn in seconds")]
     [SerializeField]
     private float powerUpRespawnTime = 10f;
     [Tooltip("How long the players take to respawn in seconds")]
-    [SerializeField]
-    private float playerRespawnTime = 2f;
-    [Tooltip("How long the ball takes to respawn in seconds")]
     [SerializeField]
     private float ballRespawnTime = 2f;
     [Tooltip("How long a player can hold a ball with CatchNThrow")]
@@ -57,20 +65,19 @@ public class GameManager : MonoBehaviour
     [Tooltip("Locations where the ball can spawn")]
     [SerializeField]
     private Transform[] ballRespawns;
-
-    [Header("Players in match")]
-    [Tooltip("The gameobject players in the match")]
-    [SerializeField]
-    private GameObject[] players;
     #endregion
 
     #region Hidden Variables
+    private List<PlayerController> playerControllers = new List<PlayerController>();
     private List<GameObject> balls = new List<GameObject>();
     private static GameManager instance = null;
 
     private EMode gameMode;
     private float timeLimit;
     private int scoreLimit = 5;
+    private bool gameTimerActive = true;
+    private int timeLeftTillStart;
+    private bool multiBallInPlay = false;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -97,6 +104,8 @@ public class GameManager : MonoBehaviour
         if (timeLimit > 0)
         {
             gameTimerText.gameObject.SetActive(true);
+            gameTimerText.UpdateText(currentMatchTime);
+            MatchTimer();
         }
 
         if (powerUpManager)
@@ -107,6 +116,20 @@ public class GameManager : MonoBehaviour
         {
             defaultShieldColor = Color.white;
         }
+        
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            PlayerController p = go.GetComponent<PlayerController>();
+            if (p != null)
+            {
+                playerControllers.Add(p);
+            }
+        }
+    }
+
+    public void Start()
+    {
+        StartCoroutine(BeginMatchStartTimer());
     }
 
     void Update()
@@ -124,9 +147,14 @@ public class GameManager : MonoBehaviour
         return balls;
     }
 
-    public GameObject[] GetPlayerObjects()
+    public List<PlayerController> GetPlayers()
     {
-        return players;
+        return playerControllers;
+    }
+
+    public int GetTimeTillMatchStart()
+    {
+        return timeLeftTillStart;
     }
     #endregion
 
@@ -154,21 +182,11 @@ public class GameManager : MonoBehaviour
     }
 
     #region UI Controls
-    public void ExitLevel()
-    {
-        gameData.ResetGameStatistics();
-        LevelSelect.LoadMainMenu();
-    }
 
     public void CharacterSelect()
     {
         gameData.ResetGameStatistics();
         LevelSelect.LoadCharacterSelect();
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 
     private void EndMatch()
@@ -195,14 +213,20 @@ public class GameManager : MonoBehaviour
             playerDictionary.Add(shield, playerController);
         }
 
+        playerController.Rumble();
+
         EPowerUp currentPowerUp = playerController.GetCurrentPowerUp();
         if (currentPowerUp != EPowerUp.None)
         {
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-                    playerController.RemovePowerUp();
-                    SpawnMultipleBalls(ball);
+                    if (!ball.GetTempStatus() && balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount())
+                    {
+                        playerController.RemovePowerUp();
+                        SpawnMultipleBalls(ball);
+                        multiBallInPlay = false;
+                    }
                     break;
                 case EPowerUp.CatchNThrow:
                     playerController.RemovePowerUp();
@@ -298,9 +322,11 @@ public class GameManager : MonoBehaviour
     {
         if (gameMode == EMode.Soccer)
         {
+            onGoal.Raise();
             if (!modeManager.UpdateScore(team, points))
             {
-                ball.GetComponent<Ball>().OnBallGoalCollision();
+                Ball ballScpt = ball.GetComponent<Ball>();
+                ballScpt.OnBallGoalCollision();
                 ball.SetActive(false);
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
@@ -333,6 +359,11 @@ public class GameManager : MonoBehaviour
         if (powerUpType == EPowerUp.CircleShield) //need to have a list of powerups that reference a secondary shield
         {
             playerController.EnableSecondaryShield(true);
+        }
+
+        if (powerUpType == EPowerUp.Multiball)
+        {
+            multiBallInPlay = true;
         }
     }
 
@@ -378,6 +409,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(SpawnBallCoroutine(ball));
         }
+        else
+        {
+            Destroy(ball);
+        }
     }
 
     public void RespawnPowerUp(GameObject powerUp)
@@ -386,12 +421,14 @@ public class GameManager : MonoBehaviour
     }
 
     private void SpawnMultipleBalls(Ball origBall)
-    {
-        Ball ball1 = Instantiate(origBall);
-        Ball ball2 = Instantiate(origBall);
-
-        ball1.SetTempStatus(true);
-        ball2.SetTempStatus(true);
+    { 
+        Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
+        for (int i = 0; i < powerUpManager.GetBallSpawnCount(); i++)
+        {
+            Ball ball = Instantiate(origBall);
+            ball.transform.localScale = tempBallScale;
+            ball.SetTempStatus(true);
+        }
     }
 
     private IEnumerator SpawnBallCoroutine(GameObject ball)
@@ -405,44 +442,52 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
-        yield return new WaitForSeconds(playerRespawnTime);
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
 
         NoWaitRespawnPlayer(playerController);
     }
 
     private void NoWaitRespawnPlayer(PlayerController playerController)
     {
+        if (playerController.GetCurrentPowerUp() == EPowerUp.Multiball)
+        {
+            multiBallInPlay = false;
+        }
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
+        playerController.SetJetpackFuel();
 
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
 
     public void NoWaitRespawnAllPlayers()
     {
-        for (int i = 0; i < players.Length; i++)
+        foreach(PlayerController p in playerControllers)
         {
-            PlayerController currentPlayer = players[i].GetComponent<PlayerController>();
-            if (players[i].activeSelf)
+            if (p.gameObject.activeSelf)
             {
-                NoWaitRespawnPlayer(currentPlayer);
-                currentPlayer.RemovePowerUp();
+                NoWaitRespawnPlayer(p);
+                p.RemovePowerUp();
             }
         }
     }
 
     private IEnumerator RespawnPowerUpRoutine(GameObject powerUp)
     {
+        if (powerUp.GetComponent<PowerUp>().GetPowerUpType() == EPowerUp.Multiball)
+        {
+            yield return new WaitUntil(() => balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount() && !multiBallInPlay);
+        }
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
     }
@@ -451,19 +496,11 @@ public class GameManager : MonoBehaviour
     {
         if (currentMatchTime > 0)
         {
-            currentMatchTime -= Time.deltaTime;
-            string minutes = ((int)(currentMatchTime / 60)).ToString();
-            int seconds_num = (int)(currentMatchTime % 60);
-            string seconds;
-            if (seconds_num < 10)
+            if (gameTimerActive)
             {
-                seconds = '0' + seconds_num.ToString();
+                currentMatchTime -= Time.deltaTime;
+                gameTimerText.UpdateText(currentMatchTime);
             }
-            else
-            {
-                seconds = seconds_num.ToString();
-            }
-            gameTimerText.text = minutes + ':' + seconds;
         }
         else
         {
@@ -475,8 +512,33 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DelayedWinScreen()
     {
-        yield return new WaitForSeconds(winScreenWaitTime);
+        yield return new WaitForSeconds(timeAfterGameEnd);
         CharacterSelect();
+    }
+
+    private IEnumerator BeginMatchStartTimer()
+    {
+        timeLeftTillStart = matchStartTime;
+        gameTimerActive = false;
+        
+        foreach (PlayerController p in playerControllers)
+        {
+            p.DisableMovement(true);
+        }
+
+        while (timeLeftTillStart > 0)
+        {
+            onTimerChanged.Raise();
+            timeLeftTillStart--;
+            yield return new WaitForSeconds(1);
+        }
+        
+        gameTimerActive = true;
+
+        foreach (PlayerController p in playerControllers)
+        {
+            p.DisableMovement(false);
+        }
     }
 
     private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)
@@ -514,7 +576,6 @@ public class GameManager : MonoBehaviour
         return musicManager.GetMusicVolume();
     }
 
-    /// <param name="volume"> scales the SFX volume (NOT the overall volume)</param>
     public AudioClip GetCharacterSFX(ECharacter character, ECharacterAction movement)
     {
         switch (movement)
@@ -547,7 +608,7 @@ public class GameManager : MonoBehaviour
     #region Private Helpers
     private ETeam GetOpposingTeam(ETeam team)
     {
-        var opTeam = ETeam.None;
+        ETeam opTeam;
         if (team == ETeam.BlueTeam)
         {
             opTeam = ETeam.RedTeam;
