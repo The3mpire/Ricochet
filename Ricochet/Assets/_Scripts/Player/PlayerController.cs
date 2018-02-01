@@ -312,7 +312,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 moveDirection;
 
-        if (leftTriggerAxis != 0))
+        if (leftTriggerAxis != 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             this.animator.SetBool("isJumping", true);
