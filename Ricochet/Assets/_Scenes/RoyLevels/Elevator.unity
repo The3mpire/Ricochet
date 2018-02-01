@@ -247,7 +247,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8aa010b3c989c1d46ac9efc49aa82ca3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1553,7 +1553,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 623a0bec497dfbb48bd217809124b389, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2424,7 +2424,7 @@ GameObject:
   - component: {fileID: 1063857543}
   - component: {fileID: 1063857544}
   m_Layer: 0
-  m_Name: ElevatorSprite
+  m_Name: ElevatorFrontSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2475,8 +2475,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
-  m_SortingOrder: -1
+  m_SortingLayer: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 623a0bec497dfbb48bd217809124b389, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2986,7 +2986,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 8a86cf81139b62c4fa738e5dc2ab18aa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3959,7 +3959,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b17b7605909caec4eb1ef876c42a5505, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4379,7 +4379,7 @@ Prefab:
     - target: {fileID: 212970583491513482, guid: 277e6da74091602438d27df2b6f325c3,
         type: 2}
       propertyPath: m_SortingLayerID
-      value: 1535931219
+      value: 769254391
       objectReference: {fileID: 0}
     - target: {fileID: 212970583491513482, guid: 277e6da74091602438d27df2b6f325c3,
         type: 2}
@@ -4931,7 +4931,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f87787657849d584589aa4a3687f8413, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5014,7 +5014,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 3a2d733c97bb8b94ba818a4263472d41, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5064,6 +5064,16 @@ Prefab:
     - target: {fileID: 4435871586318864, guid: 3b3eb84814b78b6428548e4f880a0647, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212970583491513482, guid: 3b3eb84814b78b6428548e4f880a0647,
+        type: 2}
+      propertyPath: m_SortingLayerID
+      value: 769254391
+      objectReference: {fileID: 0}
+    - target: {fileID: 212970583491513482, guid: 3b3eb84814b78b6428548e4f880a0647,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3b3eb84814b78b6428548e4f880a0647, type: 2}
@@ -5196,7 +5206,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 8a86cf81139b62c4fa738e5dc2ab18aa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5269,7 +5279,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: fa8fcfd3a7f457a4db38319b2e5cabd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5753,7 +5763,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0b9a1dc76c7685f43897854c3fc73817, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6206,7 +6216,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 3a2d733c97bb8b94ba818a4263472d41, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6661,7 +6671,7 @@ GameObject:
   - component: {fileID: 1959640118}
   - component: {fileID: 1959640119}
   m_Layer: 0
-  m_Name: GlassSprite
+  m_Name: ElevatorBackSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6712,8 +6722,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 769254391
-  m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingLayer: 2
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: fa8fcfd3a7f457a4db38319b2e5cabd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
