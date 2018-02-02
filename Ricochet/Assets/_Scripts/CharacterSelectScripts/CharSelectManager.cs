@@ -122,6 +122,7 @@ public class CharSelectManager : MonoBehaviour
     private Color defaultColor;
 
     private SelectionPhase[] playerPhase = new SelectionPhase[4];
+    private PSettings[] playerSettings = new PSettings[4];
     private float timer;
 
     private bool timerActive;
@@ -186,59 +187,45 @@ public class CharSelectManager : MonoBehaviour
     /// <param name="playerNumber">Player ID to activate</param>
     public void ActivatePlayer(int playerNumber)
     {
-        var playerData = new PSettings();
         switch (playerNumber)
         {
             case 0:
-                p1DefaultToken.SetActive(true);
-                p1ActiveToken = p1DefaultToken;
                 playerPhase[0] = SelectionPhase.None;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerSettings[0] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[0].Character == ECharacter.None)
                 {
-                    playerData.Character = p1DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[0].Character = p1DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p1ActiveToken = MoveSelectionTokenTo(playerData.Character, p1ActiveToken, p1Tokens);
-                p1Team = playerData.Team;
-                p1TeamPanel.color = GetTeamColor(p1Team);
+                p1Team = playerSettings[0].Team;
                 break;
             case 1:
-                p2DefaultToken.SetActive(true);
-                p2ActiveToken = p2DefaultToken;
                 playerPhase[1] = SelectionPhase.None;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerSettings[1] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[1].Character == ECharacter.None)
                 {
-                    playerData.Character = p2DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[1].Character = p2DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p2ActiveToken = MoveSelectionTokenTo(playerData.Character, p2ActiveToken, p2Tokens);
-                p2Team = playerData.Team;
+                p2Team = playerSettings[1].Team;
                 p2TeamPanel.color = GetTeamColor(p2Team);
                 break;
             case 2:
-                p3DefaultToken.SetActive(true);
-                p3ActiveToken = p3DefaultToken;
                 playerPhase[2] = SelectionPhase.None;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerSettings[2] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[2].Character == ECharacter.None)
                 {
-                    playerData.Character = p3DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[2].Character = p3DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p3ActiveToken = MoveSelectionTokenTo(playerData.Character, p3ActiveToken, p3Tokens);
-                p3Team = playerData.Team;
+                p3Team = playerSettings[2].Team;
                 p3TeamPanel.color = GetTeamColor(p3Team);
                 break;
             case 3:
-                p4DefaultToken.SetActive(true);
-                p4ActiveToken = p4DefaultToken;
                 playerPhase[3] = SelectionPhase.None;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerSettings[3] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[3].Character == ECharacter.None)
                 {
-                    playerData.Character = p4DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[3].Character = p4DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p4ActiveToken = MoveSelectionTokenTo(playerData.Character, p4ActiveToken, p4Tokens);
-                p4Team = playerData.Team;
+                p4Team = playerSettings[3].Team;
                 p4TeamPanel.color = GetTeamColor(p4Team);
                 break;
         }
@@ -333,7 +320,7 @@ public class CharSelectManager : MonoBehaviour
     private void SelectCharacter(int playerNumber, Color playerColor)
     {
         var color = Color.white;
-        var selectedChar = Enumerables.ECharacter.None;
+        var selectedChar = ECharacter.None;
         switch (playerNumber)
         {
             case 1:
@@ -356,6 +343,7 @@ public class CharSelectManager : MonoBehaviour
                         }
                     }
                 }
+                p1TeamPanel.color = GetTeamColor(p1Team);
                 break;
             case 2:
                 foreach (var token in p2Tokens)
@@ -377,6 +365,7 @@ public class CharSelectManager : MonoBehaviour
                         }
                     }
                 }
+                p2TeamPanel.color = GetTeamColor(p2Team);
                 break;
             case 3:
                 foreach (var token in p3Tokens)
@@ -398,6 +387,7 @@ public class CharSelectManager : MonoBehaviour
                         }
                     }
                 }
+                p3TeamPanel.color = GetTeamColor(p3Team);
                 break;
             case 4:
                 foreach (var token in p4Tokens)
@@ -419,6 +409,7 @@ public class CharSelectManager : MonoBehaviour
                         }
                     }
                 }
+                p4TeamPanel.color = GetTeamColor(p4Team);
                 break;
         }
         
@@ -500,18 +491,30 @@ public class CharSelectManager : MonoBehaviour
             case 1:
                 playerPhase[0] = SelectionPhase.CharacterSelect;
                 p1JoinIcon.SetActive(false);
+                p1DefaultToken.SetActive(true);
+                p1ActiveToken = p1DefaultToken;
+                p1ActiveToken = MoveSelectionTokenTo(playerSettings[0].Character, p1ActiveToken, p1Tokens);
                 break;
             case 2:
                 playerPhase[1] = SelectionPhase.CharacterSelect;
                 p2JoinIcon.SetActive(false);
+                p2DefaultToken.SetActive(true);
+                p2ActiveToken = p2DefaultToken;
+                p2ActiveToken = MoveSelectionTokenTo(playerSettings[1].Character, p2ActiveToken, p2Tokens);
                 break;
             case 3:
                 playerPhase[2] = SelectionPhase.CharacterSelect;
                 p3JoinIcon.SetActive(false);
+                p3DefaultToken.SetActive(true);
+                p3ActiveToken = p3DefaultToken;
+                p3ActiveToken = MoveSelectionTokenTo(playerSettings[2].Character, p3ActiveToken, p3Tokens);
                 break;
             case 4:
                 playerPhase[3] = SelectionPhase.CharacterSelect;
                 p4JoinIcon.SetActive(false);
+                p4DefaultToken.SetActive(true);
+                p4ActiveToken = p4DefaultToken;
+                p4ActiveToken = MoveSelectionTokenTo(playerSettings[3].Character, p4ActiveToken, p4Tokens);
                 break;
         }
     }
@@ -585,7 +588,7 @@ public class CharSelectManager : MonoBehaviour
             case ETeam.RedTeam:
                 return new Color32(237, 109, 121,255);
             case ETeam.None:
-                return Color.grey;
+                return new Color32(187, 150, 255, 255);
             default:
                 return Color.grey;
         }
@@ -717,6 +720,7 @@ public class CharSelectManager : MonoBehaviour
                 p1ActiveToken.GetComponent<Shadow>().enabled = true;
                 p1ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[0] = SelectionPhase.CharacterSelect;
+                p1TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
             case 2:
                 gameData.SetPlayerCharacter(1, ECharacter.None);
@@ -727,6 +731,7 @@ public class CharSelectManager : MonoBehaviour
                 p2ActiveToken.GetComponent<Shadow>().enabled = true;
                 p2ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[1] = SelectionPhase.CharacterSelect;
+                p2TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
             case 3:
                 gameData.SetPlayerCharacter(2, ECharacter.None);
@@ -737,6 +742,7 @@ public class CharSelectManager : MonoBehaviour
                 p3ActiveToken.GetComponent<Shadow>().enabled = true;
                 p3ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[2] = SelectionPhase.CharacterSelect;
+                p3TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
             case 4:
                 gameData.SetPlayerCharacter(3, ECharacter.None);
@@ -747,6 +753,7 @@ public class CharSelectManager : MonoBehaviour
                 p4ActiveToken.GetComponent<Shadow>().enabled = true;
                 p4ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[3] = SelectionPhase.CharacterSelect;
+                p4TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
         }
     }
