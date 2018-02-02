@@ -20,7 +20,7 @@ public class CharSelectManager : MonoBehaviour
     [Header("Player 1")]
     [Tooltip("Press A to Join Icon")]
     [SerializeField]
-    private Image p1JoinIcon;
+    private GameObject p1JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 1 character tokens")]
     private List<GameObject> p1Tokens;
@@ -39,7 +39,7 @@ public class CharSelectManager : MonoBehaviour
     [Header("Player 2")]
     [Tooltip("Press A to Join Icon")]
     [SerializeField]
-    private Image p2JoinIcon;
+    private GameObject p2JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 2 character tokens")]
     private List<GameObject> p2Tokens;
@@ -58,7 +58,7 @@ public class CharSelectManager : MonoBehaviour
     [Header("Player 3")]
     [Tooltip("Press A to Join Icon")]
     [SerializeField]
-    private Image p3JoinIcon;
+    private GameObject p3JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 3 character tokens")]
     private List<GameObject> p3Tokens;
@@ -77,7 +77,7 @@ public class CharSelectManager : MonoBehaviour
     [Header("Player 4")]
     [Tooltip("Press A to Join Icon")]
     [SerializeField]
-    private Image p4JoinIcon;
+    private GameObject p4JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 4 character tokens")]
     private List<GameObject> p4Tokens;
@@ -499,19 +499,19 @@ public class CharSelectManager : MonoBehaviour
         {
             case 1:
                 playerPhase[0] = SelectionPhase.CharacterSelect;
-                p1JoinIcon.enabled = false;
+                p1JoinIcon.SetActive(false);
                 break;
             case 2:
                 playerPhase[1] = SelectionPhase.CharacterSelect;
-                p2JoinIcon.enabled = false;
+                p2JoinIcon.SetActive(false);
                 break;
             case 3:
                 playerPhase[2] = SelectionPhase.CharacterSelect;
-                p3JoinIcon.enabled = false;
+                p3JoinIcon.SetActive(false);
                 break;
             case 4:
                 playerPhase[3] = SelectionPhase.CharacterSelect;
-                p4JoinIcon.enabled = false;
+                p4JoinIcon.SetActive(false);
                 break;
         }
     }
@@ -581,13 +581,13 @@ public class CharSelectManager : MonoBehaviour
         switch (team)
         {
             case ETeam.BlueTeam:
-                return Color.blue;
+                return new Color32(102, 141, 229,255);
             case ETeam.RedTeam:
-                return Color.red;
+                return new Color32(237, 109, 121,255);
             case ETeam.None:
                 return Color.grey;
             default:
-                return Color.gray;
+                return Color.grey;
         }
     }
 
