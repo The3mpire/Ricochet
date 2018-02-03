@@ -66,10 +66,6 @@ public class CharSelect_PlayerController : MonoBehaviour
         {
             manager.RouteInputAltB(playerNumber);
         }
-        if (player.GetButtonDown("UIMenu"))
-        {
-            manager.RouteInputBack();
-        }
     }
     #endregion
 
