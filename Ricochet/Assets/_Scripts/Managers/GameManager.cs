@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ball.RedirectBall(collision.relativeVelocity);
+        ball.RedirectBall(collision.relativeVelocity, Vector2.zero);
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
     }
@@ -547,6 +547,7 @@ public class GameManager : MonoBehaviour
         player.SetBallHeld(null);
         ball.SetHeld(false);
         ball.transform.SetParent(null, true);
+        ball.RedirectBall(new Vector2(10f, 10f), player.GetRightStick());
     }
     #endregion
 
