@@ -4,6 +4,14 @@ using UnityEngine;
 public class PowerUpManager : MonoBehaviour
 {
     #region Inspector Variables
+    [Header("Powerup Settings")]
+    [Tooltip("Shrinks enemy team to this scale")]
+    [SerializeField]
+    private float shrinkScale = 0.5f;
+    [Tooltip("Shrink powerup duration in seconds")]
+    [SerializeField]
+    private float shrinkDuration = 5f;
+
     [Header("Multi Ball")]
     [Tooltip("The color of multiball powerup objects")]
     [SerializeField]
@@ -41,6 +49,15 @@ public class PowerUpManager : MonoBehaviour
     #endregion
 
     #region External Functions
+    public float GetShrinkScale()
+    {
+        return shrinkScale;
+    }
+    public float GetShrinkDuration()
+    {
+        return shrinkDuration;
+    }
+
     public Color GetPowerUpColor(EPowerUp ePowerUp)
     {
         switch (ePowerUp)
