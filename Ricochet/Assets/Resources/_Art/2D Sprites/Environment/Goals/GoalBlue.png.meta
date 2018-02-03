@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 4b22dc21db050034dadba9d0a0bad5ed
-timeCreated: 1517519783
+guid: f75e8a4cde1fbd04aa88d1e43bd32d39
+timeCreated: 1517680607
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Blue Goal_0
-    21300002: Blue Goal_1
+    21300000: GoalBlue_0
+    21300002: GoalBlue_1
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -1
     wrapU: 1
@@ -48,7 +48,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 21.3333
+  spritePixelsToUnits: 100
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -76,43 +76,71 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Blue Goal_0
+      name: GoalBlue_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 92
+        x: 120
+        y: 12
+        width: 144
+        height: 744
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -16, y: 46}
-        - {x: -16, y: -46}
-        - {x: 16, y: -46}
-        - {x: 16, y: 46}
+      outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Blue Goal_1
+      name: GoalBlue_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 92
+        x: 504
+        y: 12
+        width: 144
+        height: 744
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -16, y: 46}
-        - {x: -16, y: -46}
-        - {x: 16, y: -46}
-        - {x: 16, y: 46}
+      outline: []
       physicsShape: []
       tessellationDetail: 0
     outline: []
