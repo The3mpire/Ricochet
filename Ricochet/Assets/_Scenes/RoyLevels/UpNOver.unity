@@ -349,11 +349,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4889930954892590, guid: 53333940c2ad3d04b8bc919a7670e1ac,
     type: 2}
   m_PrefabInternal: {fileID: 1341383040}
---- !u!198 &342800110 stripped
-ParticleSystem:
-  m_PrefabParentObject: {fileID: 198142829948849512, guid: 268c9032cf81e114ea588f3ee710b0b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1168866587}
 --- !u!1 &356357914
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,7 +709,7 @@ Prefab:
         type: 2}
       propertyPath: system
       value: 
-      objectReference: {fileID: 342800110}
+      objectReference: {fileID: 447775543}
     - target: {fileID: 1998894205038724, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4, type: 2}
       propertyPath: m_Name
       value: Goal Red
@@ -727,6 +722,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4, type: 2}
   m_IsPrefabParent: 0
+--- !u!198 &447775543 stripped
+ParticleSystem:
+  m_PrefabParentObject: {fileID: 198625390007139806, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+    type: 2}
+  m_PrefabInternal: {fileID: 447775542}
 --- !u!1001 &496995994
 Prefab:
   m_ObjectHideFlags: 0
@@ -1314,7 +1314,7 @@ Prefab:
     - target: {fileID: 224138940491294296, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 14.999996
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 114059777816224926, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
         type: 2}
