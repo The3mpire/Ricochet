@@ -152,6 +152,9 @@ public class PowerUp : MonoBehaviour
                 case EPowerUp.CircleShield:
                     powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/fullshieldiconplaceholder");
                     break;
+                case EPowerUp.Shrink:
+                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/shrinkiconplaceholder");
+                    break;
                 default:
                     break;
             }
