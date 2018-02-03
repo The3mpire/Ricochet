@@ -242,10 +242,12 @@ public class PlayerController : MonoBehaviour
 
         if (remainingFreezeTime > 0)
         {
+            rigid.velocity = new Vector3(0, 0, 0);
             remainingFreezeTime -= Time.deltaTime;
             if (remainingFreezeTime <= 0)
             {
                 isFrozen = false;
+                sprite.color = Color.white;
             }
         }
 
@@ -261,7 +263,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         previousVelocity = rigid.velocity;
-        if (!movementDisabled)
+        if (!movementDisabled && !isFrozen)
         {
             Move();
 
@@ -298,9 +300,14 @@ public class PlayerController : MonoBehaviour
                         {
                             isFrozen = true;
                             rigid.gravityScale = 0.0f;
+                            rigid.velocity = new Vector3(0, 0, 0);
                             sprite.color = freezeColor;
                             otherPlayer.RemovePowerUp();
                             gameManagerInstance.FreezePlayer(this);
+                            if(remainingFreezeTime <= 0)
+                            {
+                                isFrozen = false;
+                            }
                         }
                         Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
                         body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
@@ -344,7 +351,7 @@ public class PlayerController : MonoBehaviour
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             this.animator.SetBool("isJumping", true);
-            if (this.jetpackParticle && !this.jetpackParticle.isPlaying)
+            if (this.jetpackParticle && !this.jetpackParticle.isPlaying && !isFrozen)
             {
                 this.jetpackParticle.Play();
             }
