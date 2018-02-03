@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 114730810869184084}
   - component: {fileID: 82964063460667214}
   - component: {fileID: 95192884461263192}
+  - component: {fileID: 60965541931248682}
   m_Layer: 0
   m_Name: GoalArea
   m_TagString: Untagged
@@ -351,6 +352,38 @@ Transform:
   m_Father: {fileID: 4246824588373926}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &60965541931248682
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1178196255008724}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.44, y: 7.44}
+    newSize: {x: 1.5000024, y: 4.3125067}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.78554666, y: -2.3572273}
+      - {x: 0.79356056, y: 2.3709602}
+      - {x: -0.47803164, y: 3.630268}
+      - {x: -0.087895155, y: 2.818675}
+      - {x: 0.39167333, y: 2.3086748}
+      - {x: 0.37986815, y: -2.2972927}
+      - {x: -0.10091019, y: -2.791213}
+      - {x: -0.4847145, y: -3.7015018}
 --- !u!68 &68129106941807010
 EdgeCollider2D:
   m_ObjectHideFlags: 1
