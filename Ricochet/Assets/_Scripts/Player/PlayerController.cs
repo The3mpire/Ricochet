@@ -50,6 +50,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much bounce off two opposite players will have as a percentage")]
     [SerializeField]
     private float boingFactor = 1.0f;
+    [Tooltip("gravity scale for the rigid body so when the player unfreezes we can reset the gravity scale")]
+    [SerializeField]
+    private float gravityScale = 1.0f;
 
     [Header("Fuel Settings")]
     [Tooltip("Time in seconds of jetback fuel")]
@@ -121,6 +124,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's audio source here")]
     [SerializeField]
     private AudioSource audioSource;
+    [Tooltip("Freeze Color")]
+    [SerializeField]
+    private Color freezeColor;
+
 
     [Header("Secondary Items")]
     [Tooltip("Drag the player's power up circle shield here")]
@@ -149,6 +156,8 @@ public class PlayerController : MonoBehaviour
     private bool grounded;
     private bool jetpackBurnedOut;
     private bool isInvincible;
+    private bool isFrozen;
+    private float remainingFreezeTime;
 
     private float currentFuel;
     private float maxFuel;
@@ -176,6 +185,7 @@ public class PlayerController : MonoBehaviour
 
         powerupParticle.Stop();
         jetpackBurnedOut = false;
+        isFrozen = false;
 
         killList = new List<PlayerController>();
         currentFuel = startFuel;
@@ -230,7 +240,16 @@ public class PlayerController : MonoBehaviour
             dashing = false;
         }
 
-        if (!movementDisabled)
+        if (remainingFreezeTime > 0)
+        {
+            remainingFreezeTime -= Time.deltaTime;
+            if (remainingFreezeTime <= 0)
+            {
+                isFrozen = false;
+            }
+        }
+
+        if (!movementDisabled && !isFrozen)
         {
             MovementPreperation();
             DashCheck();
@@ -274,6 +293,15 @@ public class PlayerController : MonoBehaviour
                     PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
                     if (team != otherPlayer.team)
                     {
+                        EPowerUp otherPlayerPowUp = otherPlayer.GetCurrentPowerUp();
+                        if(otherPlayerPowUp == EPowerUp.Freeze)
+                        {
+                            isFrozen = true;
+                            rigid.gravityScale = 0.0f;
+                            sprite.color = freezeColor;
+                            otherPlayer.RemovePowerUp();
+                            gameManagerInstance.FreezePlayer(this);
+                        }
                         Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
                         body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
                         Rumble(1.25f);
@@ -607,6 +635,11 @@ public class PlayerController : MonoBehaviour
     public void SetJetpackFuel()
     {
         currentFuel = startFuel;
+    }
+
+    public void SetFreezeTime(float value)
+    {
+        remainingFreezeTime = value;
     }
 
     internal float GetMaxFuel()

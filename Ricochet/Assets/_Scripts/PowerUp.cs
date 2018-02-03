@@ -25,6 +25,7 @@ public class PowerUp : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
+        powerupSprite = this.GetComponent<SpriteRenderer>();
         if (powerUpType == EPowerUp.Random)
         {
             rng = new System.Random();
@@ -90,6 +91,9 @@ public class PowerUp : MonoBehaviour
                     break;
                 case EPowerUp.CircleShield:
                     powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/fullshieldiconplaceholder");
+                    break;
+                case EPowerUp.Freeze:
+                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/FreezieWiiU");
                     break;
                 default:
                     break;
