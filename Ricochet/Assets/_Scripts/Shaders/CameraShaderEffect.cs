@@ -20,6 +20,12 @@ namespace CCShaders
 
         #endregion
 
+        #region Properties
+
+        public Material EffectMaterial { get { return this.effectMaterial; } }
+
+        #endregion
+
         #region Monobehaviors
 
         private void OnEnable()

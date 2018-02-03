@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace CCShaders
 {
     [DisallowMultipleComponent]
     public sealed class ChromaticAberrationEffect : CameraShaderEffect
     {
-
         #region Inspector Variables
 
         [SerializeField]
@@ -14,29 +14,41 @@ namespace CCShaders
         private float intensity = .025f;
 
         [SerializeField]
-        [Range(0, 100)]
-        [Tooltip("Frequency of the aberration effect")]
-        private float frequency = 10f;
+        [Range(1, 10)]
+        [Tooltip("How many times to cycle through the effect")]
+        private int cycles = 1;
 
         [SerializeField]
-        [Range(-5, 5)]
-        [Tooltip("Evolution speed of the effect")]
-        private float travelRate = 0f;
+        [Range(0, 1)]
+        [Tooltip("Progress through the entire effect")]
+        private float progress = 0f;
 
-        [SerializeField]
-        [Range(1, 100)]
-        [Tooltip("Frequency of the masking wave for the effect")]
-        private float maskFrequency = 10f;
+        #endregion
 
-        [SerializeField]
-        [Range(-5, 5)]
-        [Tooltip("Evolution speed of the masking frequency")]
-        private float maskTravelRate = 2f;
+        #region Properties
 
-        [SerializeField]
-        [Range(1, 20)]
-        [Tooltip("How quickly the effect should simulate")]
-        private float simulationSpeed = 1f;
+        public int Cycles { get { return this.cycles; } set { this.cycles = value; } }
+
+        public float Progress { get { return this.progress; } set { this.progress = value; } }
+
+        #endregion
+
+        #region Coroutines
+
+        public IEnumerator PlayEffect(float duration)
+        {
+            Material mat = this.EffectMaterial;
+            float currentTime = Time.time;
+            float endTime = Time.time + duration;
+            while (currentTime <= endTime)
+            {
+                float progress = currentTime / endTime;
+                mat.SetFloat("_Progress", progress);
+                currentTime = Time.time;
+                yield return new WaitForEndOfFrame();
+            }
+            mat.SetFloat("_Progress", 0);
+        }
 
         #endregion
 
@@ -47,11 +59,8 @@ namespace CCShaders
             if (effectMaterial)
             {
                 effectMaterial.SetFloat("_Intensity", this.intensity);
-                effectMaterial.SetFloat("_Frequency", this.frequency);
-                effectMaterial.SetFloat("_TravelRate", this.travelRate);
-                effectMaterial.SetFloat("_MaskFrequency", this.maskFrequency);
-                effectMaterial.SetFloat("_MaskTravelMultiplier", this.maskTravelRate);
-                effectMaterial.SetFloat("_SimulationSpeed", this.simulationSpeed);
+                effectMaterial.SetFloat("_Cycles", this.cycles);
+                effectMaterial.SetFloat("_Progress", this.progress);
             }
         }
 

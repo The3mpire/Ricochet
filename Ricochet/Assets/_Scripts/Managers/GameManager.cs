@@ -312,6 +312,7 @@ public class GameManager : MonoBehaviour
         ball.RedirectBall(collision.relativeVelocity);
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
+        StartCoroutine(Camera.main.GetComponent<CCShaders.ChromaticAberrationEffect>().PlayEffect(1));
     }
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
