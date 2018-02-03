@@ -587,6 +587,11 @@ public class PlayerController : MonoBehaviour
         return shieldTransform;
     }
 
+    public Vector2 GetRightStick()
+    {
+        return new Vector2(rightStickHorz, rightStickVert);
+    }
+
     public void SetBallHeld(Ball ball)
     {
         ballHeld = ball;
