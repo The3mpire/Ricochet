@@ -44,9 +44,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed while grounded")]
     [SerializeField]
     private float groundedMoveSpeed = 12.5f;
-    [Tooltip("How quickly the player can accelerate")]
+    [Tooltip("How quickly the player can change direction. 0 = instantaneously, 1 = normally")]
     [SerializeField]
-    private float inertia = 1.5f;
+    private float directionSwitchRatio = 1f;
     [Tooltip("How much bounce off two opposite players will have as a percentage")]
     [SerializeField]
     private float boingFactor = 1.0f;
@@ -156,8 +156,6 @@ public class PlayerController : MonoBehaviour
     private float timeSinceDash;
     private Vector2 dashDirection;
     private Vector2 previousVelocity;
-    private int inertiaTime;
-    private bool inertiaSwitch;
 
     private float leftStickHorz;
     private float leftStickVert;
@@ -183,7 +181,7 @@ public class PlayerController : MonoBehaviour
         currentFuel = startFuel;
         maxFuel = startFuel;
         timeSinceDash = 0f;
-        inertiaTime = 2;
+        rigid.gravityScale = 0;
         rightStickHorz = 1;
         rightStickVert = 0;
         shield = GetComponentInChildren<Shield>();
@@ -290,20 +288,16 @@ public class PlayerController : MonoBehaviour
     #region Helpers
     private void MovementPreperation()
     {
+        leftTriggerAxis = player.GetAxis("Jetpack");
         if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
         {  // Jetpacking with fuel
             grounded = false;
-            Vector2 md = new Vector2(leftStickHorz, leftStickVert);
-            currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
-        }
-        else if (grounded && currentFuel < maxFuel)
+        } 
+        if (grounded && currentFuel < maxFuel)
         { // recharge fuel on ground
             currentFuel += groundRechargeRate * Time.deltaTime;
-        }
-        else if (currentFuel < maxFuel)
-        { // recharge fuel in air
-            currentFuel += airRechargeRate * Time.deltaTime;
-        }
+        } 
+
         if (currentFuel <= 0)
         {
             jetpackBurnedOut = true;
@@ -312,19 +306,15 @@ public class PlayerController : MonoBehaviour
         {
             jetpackBurnedOut = false;
         }
-        leftTriggerAxis = player.GetAxis("Jetpack");
-        InertiaFunction("none", leftTriggerAxis != 0);
     }
 
     private void Move()
     {
         Vector2 moveDirection;
-        float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
 
-        if (leftTriggerAxis != 0 && !jetpackBurnedOut)
+        if (leftTriggerAxis != 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
-            moveDirection *= fuelFactor;
             this.animator.SetBool("isJumping", true);
             if (this.jetpackParticle && !this.jetpackParticle.isPlaying)
             {
@@ -333,7 +323,7 @@ public class PlayerController : MonoBehaviour
             // If there is no directional input, decelerate movement to a still hover
             if (moveDirection == Vector2.zero)
             {
-                moveDirection = Vector2.up * fuelFactor;
+                moveDirection = Vector2.up;
                 float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
                 float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
                 rigid.velocity = new Vector2(x, y);
@@ -341,11 +331,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 float x, y;
-                x = moveDirection.x > 0 ? Mathf.Min(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x,rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.x,rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
-                y = moveDirection.y >= 0 ? Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y,rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
                 rigid.velocity = new Vector2(x, y);
             }
@@ -413,7 +403,7 @@ public class PlayerController : MonoBehaviour
 
     private void DashCheck()
     {
-        if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel) && !jetpackBurnedOut)
+        if (player.GetButtonDown("Dash") && leftTriggerAxis != 0 && !dashing && currentFuel >= dashCost && !jetpackBurnedOut)
         {
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
@@ -452,45 +442,6 @@ public class PlayerController : MonoBehaviour
                     ballHeld.transform.localRotation = Quaternion.Euler(new Vector3(ballHeld.transform.localRotation.eulerAngles.x, ballHeld.transform.localRotation.eulerAngles.y, Vector2.Angle(new Vector2(rightStickHorz, -rightStickVert), Vector2.down) + 90));
                 }
             }
-        }
-    }
-
-    private void InertiaFunction(string function, bool acc)
-    {
-        if (!grounded && !jetpackBurnedOut)
-        {
-            switch (function)
-            {
-                case "linear":
-                    if (acc)
-                    {
-                        rigid.gravityScale += (rigid.gravityScale > 0) ? -inertia : 0 - rigid.gravityScale;
-                    }
-                    else
-                    {
-                        rigid.gravityScale += (rigid.gravityScale < gravScale) ? inertia : gravScale - rigid.gravityScale;
-                    }
-                    break;
-                case "logarithmic":
-                    inertiaTime = (acc == inertiaSwitch) ? (inertiaTime + 1) : 1;
-                    inertiaSwitch = acc;
-                    if (acc)
-                    {
-                        rigid.gravityScale = (rigid.gravityScale <= 0) ? 0 : rigid.gravityScale - Mathf.Log((inertiaTime / inertia) + 1);
-                    }
-                    else
-                    {
-                        rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
-                    }
-                    break;
-                case "none":
-                    rigid.gravityScale = 0;
-                    break;
-            }
-        }
-        else if (jetpackBurnedOut)
-        {
-            rigid.gravityScale = gravScale;
         }
     }
     #endregion
