@@ -400,6 +400,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1922290771938338
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4946829312660478}
+  - component: {fileID: 58414894761478052}
+  - component: {fileID: 114143203187232886}
+  m_Layer: 0
+  m_Name: BurstCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1936325338366724
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,6 +651,19 @@ Transform:
   m_Father: {fileID: 4359348136633662}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4946829312660478
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1922290771938338}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4972783988959882}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4957386366035578
 Transform:
   m_ObjectHideFlags: 1
@@ -668,6 +698,7 @@ Transform:
   - {fileID: 4646405033720326}
   - {fileID: 4593119543224318}
   - {fileID: 4237879048203292}
+  - {fileID: 4946829312660478}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -706,6 +737,21 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.25
+--- !u!58 &58414894761478052
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1922290771938338}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 8
 --- !u!68 &68093811809357706
 EdgeCollider2D:
   m_ObjectHideFlags: 1
@@ -916,6 +962,19 @@ MonoBehaviour:
   lineRendererMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   colliderEdgeRadius: 0.2
   colliderMaterial: {fileID: 0}
+--- !u!114 &114143203187232886
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1922290771938338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a3b6cbf8e5adf49afecd257de7000a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0
+  burstForce: 0.1
 --- !u!114 &114450103866478952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1098,8 +1157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
-  playerNumber: 1
-  team: 1
+  playerNumber: 2
+  team: 0
   gravScale: 12
   lateralAcceleration: 0.5
   fallingLateralSpeed: 5
@@ -1108,7 +1167,7 @@ MonoBehaviour:
   thrusterSpeed: 25
   airMoveSpeed: 8
   groundedMoveSpeed: 10
-  directionSwitchRatio: 0.5
+  directionSwitchRatio: 1
   boingFactor: 1
   startFuel: 15
   fuelPercentNeeded: 0.2
@@ -1130,6 +1189,7 @@ MonoBehaviour:
   playerNumberTag: {fileID: 114705934164213716}
   rigid: {fileID: 50315715655940900}
   groundCheck: {fileID: 4777106846590376}
+  burstCollider: {fileID: 1922290771938338}
   audioSource: {fileID: 82779157815398102}
   circleShield: {fileID: 1433570636284172}
 --- !u!114 &114829729378149454

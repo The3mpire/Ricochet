@@ -118,6 +118,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
+    [Tooltip("Drag the player's \"BurstCollider\" here")]
+    [SerializeField]
+    private GameObject burstCollider;
     [Tooltip("Drag the player's audio source here")]
     [SerializeField]
     private AudioSource audioSource;
@@ -447,6 +450,13 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
+    public void Push(Vector3 direction, float force)
+    {
+        Debug.Log("pushed");
+
+        Vector3 result = direction * force;
+        rigid.AddForce(result);
+    }
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);

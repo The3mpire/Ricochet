@@ -250,6 +250,7 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetCurrentPowerUp())
         {
             case EPowerUp.CircleShield:
+                SheildBurst(playerController);
                 playerController.EnableSecondaryShield(false);
                 playerController.RemovePowerUp();
                 break;
@@ -607,6 +608,40 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private Helpers
+    private void SheildBurst(PlayerController center)
+    {
+        Debug.Log("trace1");
+        float radius = powerUpManager.GetBurstRadius();
+        float force = powerUpManager.GetBurstForce();
+        Vector3 direction;
+        Vector2 pushForce;
+
+        foreach (PlayerController player in playerControllers)
+        {
+            if (player.GetPlayerNumber() == center.GetPlayerNumber())
+                continue;
+            direction = center.transform.position - player.transform.position;
+            if (direction.magnitude < radius)
+            {
+                Debug.Log("trace2");
+                pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
+                pushForce *= force;
+                player.GetComponent<Rigidbody2D>().AddForce(pushForce);
+            }
+        }
+        foreach (GameObject ball in balls)
+        {
+            direction = center.transform.position - ball.transform.position;
+            if (direction.magnitude < radius)
+            {
+                Debug.Log("trace3");
+                pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
+                pushForce *= force;
+                ball.GetComponent<Rigidbody2D>().AddForce(pushForce);
+            }
+        }
+    }
+
     private ETeam GetOpposingTeam(ETeam team)
     {
         ETeam opTeam;
