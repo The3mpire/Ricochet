@@ -455,7 +455,6 @@ public class GameManager : MonoBehaviour
         }
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
-        playerController.SetJetpackFuel();
 
         switch (playerController.GetTeamNumber())
         {
