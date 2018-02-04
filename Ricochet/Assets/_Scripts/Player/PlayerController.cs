@@ -50,6 +50,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much bounce off two opposite players will have as a percentage")]
     [SerializeField]
     private float boingFactor = 1.0f;
+    [Tooltip("gravity scale for the rigid body so when the player unfreezes we can reset the gravity scale")]
+    [SerializeField]
+    private float gravityScale = 1.0f;
 
     [Header("Controller Settings")]
     [Tooltip("The motor to be used (default is 0)")]
@@ -90,9 +93,16 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
+    [Tooltip("Drag the player's \"BurstCollider\" here")]
+    [SerializeField]
+    private GameObject burstCollider;
     [Tooltip("Drag the player's audio source here")]
     [SerializeField]
     private AudioSource audioSource;
+    [Tooltip("Freeze Color")]
+    [SerializeField]
+    private Color freezeColor;
+
 
     [Header("Secondary Items")]
     [Tooltip("Drag the player's power up circle shield here")]
@@ -119,6 +129,8 @@ public class PlayerController : MonoBehaviour
     private bool hasPowerUp;
     private bool jetpackBurnedOut;
     private bool isInvincible;
+    private bool isFrozen;
+    private float remainingFreezeTime;
     
     private float powerUpTimer;
     private Vector2 previousVelocity;
@@ -142,6 +154,7 @@ public class PlayerController : MonoBehaviour
 
         powerupParticle.Stop();
         jetpackBurnedOut = false;
+        isFrozen = false;
 
         killList = new List<PlayerController>();
         rigid.gravityScale = 0;
@@ -186,7 +199,18 @@ public class PlayerController : MonoBehaviour
             rightStickVert = player.GetAxis("RightStickVertical");
         }
         
-        if (!movementDisabled)
+        if (remainingFreezeTime > 0)
+        {
+            rigid.velocity = new Vector3(0, 0, 0);
+            remainingFreezeTime -= Time.deltaTime;
+            if (remainingFreezeTime <= 0)
+            {
+                isFrozen = false;
+                sprite.color = Color.white;
+            }
+        }
+
+        if (!movementDisabled && !isFrozen)
         {
             RotateShield();
             Flip();
@@ -196,7 +220,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         previousVelocity = rigid.velocity;
-        if (!movementDisabled)
+        if (!movementDisabled && !isFrozen)
         {
             Move();
         }
@@ -222,6 +246,20 @@ public class PlayerController : MonoBehaviour
                     PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
                     if (team != otherPlayer.team)
                     {
+                        EPowerUp otherPlayerPowUp = otherPlayer.GetCurrentPowerUp();
+                        if(otherPlayerPowUp == EPowerUp.Freeze)
+                        {
+                            isFrozen = true;
+                            rigid.gravityScale = 0.0f;
+                            rigid.velocity = new Vector3(0, 0, 0);
+                            sprite.color = freezeColor;
+                            otherPlayer.RemovePowerUp();
+                            gameManagerInstance.FreezePlayer(this);
+                            if(remainingFreezeTime <= 0)
+                            {
+                                isFrozen = false;
+                            }
+                        }
                         Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
                         body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
                         Rumble(1.25f);
@@ -242,7 +280,7 @@ public class PlayerController : MonoBehaviour
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             this.animator.SetBool("isJumping", true);
-            if (this.jetpackParticle && !this.jetpackParticle.isPlaying)
+            if (this.jetpackParticle && !this.jetpackParticle.isPlaying && !isFrozen)
             {
                 this.jetpackParticle.Play();
             }
@@ -366,6 +404,13 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
+    public void Push(Vector3 direction, float force)
+    {
+        Debug.Log("pushed");
+
+        Vector3 result = direction * force;
+        rigid.AddForce(result);
+    }
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
@@ -532,6 +577,11 @@ public class PlayerController : MonoBehaviour
         return previousVelocity;
     }
 
+    public int GetPlayerNumber()
+    {
+        return playerNumber;
+    }
+
     public void SetPlayerNumber(int num)
     {
         playerNumber = num;
@@ -545,6 +595,11 @@ public class PlayerController : MonoBehaviour
     public void SetJetpackParticle(ParticleSystem system)
     {
         this.jetpackParticle = system;
+    }
+
+    public void SetFreezeTime(float value)
+    {
+        remainingFreezeTime = value;
     }
 
     internal Shield GetShield()
