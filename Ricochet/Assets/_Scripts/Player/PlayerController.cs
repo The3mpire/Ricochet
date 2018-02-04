@@ -224,6 +224,8 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
+
+        HandleAnimator();
     }
     #endregion
 
@@ -272,6 +274,33 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Helpers
+
+    private void HandleAnimator()
+    {
+        if (leftTriggerAxis != 0)
+        {
+            this.animator.SetBool("isJumping", true);
+        }
+        else if (IsGrounded())
+        {
+            this.animator.SetBool("isJumping", false);
+
+            if (rigid.velocity != Vector2.zero)
+            {
+                this.animator.SetBool("isWalking", true);
+            }
+            else
+            {
+                this.animator.SetBool("isWalking", false);
+            }
+        }
+
+        if (rigid.velocity.magnitude > thrusterSpeed)
+        {
+            this.animator.SetTrigger("dash");
+        }
+    }
+
     private void Move()
     {
         Vector2 moveDirection;
@@ -279,7 +308,7 @@ public class PlayerController : MonoBehaviour
         if (leftTriggerAxis != 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
-            this.animator.SetBool("isJumping", true);
+            
             if (this.jetpackParticle && !this.jetpackParticle.isPlaying && !isFrozen)
             {
                 this.jetpackParticle.Play();
@@ -303,8 +332,6 @@ public class PlayerController : MonoBehaviour
 
                 rigid.velocity = new Vector2(x, y);
             }
-
-            
         }
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
@@ -313,17 +340,9 @@ public class PlayerController : MonoBehaviour
             {
                 this.jetpackParticle.Stop();
             }
-            if (moveDirection != Vector2.zero)
-            {
-                this.animator.SetBool("isWalking", true);
-            }
-            else
-            {
-                this.animator.SetBool("isWalking", false);
-            }
+            
             if (IsGrounded())
             {
-                this.animator.SetBool("isJumping", false);
                 rigid.velocity = moveDirection * groundedMoveSpeed;
             }
             else
@@ -351,14 +370,6 @@ public class PlayerController : MonoBehaviour
                 y = Mathf.Max(rigid.velocity.y - 0.5f, -airMoveSpeed);
                 rigid.velocity = new Vector2(x, y);
             }
-
-            
-
-        }
-
-        if (rigid.velocity.magnitude > 15f)
-        {
-            this.animator.SetTrigger("dash");
         }
     }
 
