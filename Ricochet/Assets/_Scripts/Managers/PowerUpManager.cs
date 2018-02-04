@@ -10,7 +10,7 @@ public class PowerUpManager : MonoBehaviour
     private Color multiBallPowerUpColor;
     [Tooltip("The color of shields with a multiball powerup")]
     [SerializeField]
-    private Color multiBallShieldColor = Color.red;
+    private Color multiBallShieldColor;
     [Tooltip("The scale of the temporary balls in relation to the original")]
     [Range(0,2)]
     [SerializeField]
@@ -29,18 +29,47 @@ public class PowerUpManager : MonoBehaviour
     private Color catchNThrowPowerUpColor;
     [Tooltip("The color of shields with a catch n throw powerup")]
     [SerializeField]
-    private Color catchNThrowShieldColor = Color.red;
+    private Color catchNThrowShieldColor;
 
     [Header("Circle Shield")]
     [Tooltip("The color of circle shield powerup objects")]
     [SerializeField]
     private Color circleShieldColor;
-    [Tooltip("The color of shields with a catch n throw powerup")]
+    [Tooltip("The color of the full shield")]
     [SerializeField]
     private Color circleShieldShieldColor = Color.blue;
+    [Tooltip("Burst force when shield ends")]
+    [SerializeField]
+    private float burstForce = 100f;
+    [Tooltip("Radius of the burst when shield ends")]
+    [SerializeField]
+    private float burstRadius = 8f;
+
+    [Header("Freeze")]
+    [Tooltip("The color of freeze powerup objects")]
+    [SerializeField]
+    private Color freezeColor;
+    [Tooltip("The color of shield with freeze power up")]
+    [SerializeField]
+    private Color freezeShieldColor;
+    [Tooltip("The amount of time a character stays frozen")]
+    [SerializeField]
+    private float freezeTime;
+
+    
     #endregion
 
     #region External Functions
+    public float GetBurstRadius()
+    {
+        return burstRadius;
+    }
+
+    public float GetBurstForce()
+    {
+        return burstForce;
+    }
+
     public Color GetPowerUpColor(EPowerUp ePowerUp)
     {
         switch (ePowerUp)
@@ -51,6 +80,8 @@ public class PowerUpManager : MonoBehaviour
                 return catchNThrowPowerUpColor;
             case EPowerUp.CircleShield:
                 return circleShieldColor;
+            case EPowerUp.Freeze:
+                return freezeColor;
             default:
                 return Color.white;
         }
@@ -66,9 +97,16 @@ public class PowerUpManager : MonoBehaviour
                 return catchNThrowShieldColor;
             case EPowerUp.CircleShield:
                 return circleShieldShieldColor;
+            case EPowerUp.Freeze:
+                return freezeShieldColor;
             default:
                 return Color.white;
         }
+    }
+
+    public float GetFreezeTime()
+    {
+        return freezeTime;
     }
 
     public float GetTempBallScale()
