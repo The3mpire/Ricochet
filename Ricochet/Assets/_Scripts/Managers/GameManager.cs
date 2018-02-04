@@ -361,8 +361,7 @@ public class GameManager : MonoBehaviour
         {
             playerController.EnableSecondaryShield(true);
         }
-
-        if (powerUpType == EPowerUp.Multiball)
+        else if (powerUpType == EPowerUp.Multiball)
         {
             multiBallInPlay = true;
         }
@@ -563,6 +562,15 @@ public class GameManager : MonoBehaviour
     public Color GetPowerUpShieldColor(EPowerUp powerup)
     {
         return powerUpManager.GetPowerUpShieldColor(powerup);
+    }
+
+    #endregion
+
+    #region Public Helpers
+
+    public void FreezePlayer(PlayerController player)
+    {
+        player.SetFreezeTime(powerUpManager.GetFreezeTime());
     }
 
     #endregion
