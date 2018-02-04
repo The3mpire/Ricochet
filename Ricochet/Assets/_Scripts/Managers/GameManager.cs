@@ -610,31 +610,32 @@ public class GameManager : MonoBehaviour
     #region Private Helpers
     private void SheildBurst(PlayerController center)
     {
-        Debug.Log("trace1");
         float radius = powerUpManager.GetBurstRadius();
         float force = powerUpManager.GetBurstForce();
         Vector3 direction;
         Vector2 pushForce;
+        int pnum, cnum = center.GetPlayerNumber();
 
         foreach (PlayerController player in playerControllers)
         {
-            if (player.GetPlayerNumber() == center.GetPlayerNumber())
+            pnum = player.GetPlayerNumber();
+            if (pnum == cnum || !player.isActiveAndEnabled)
                 continue;
-            direction = center.transform.position - player.transform.position;
+
+            direction = player.transform.position - center.transform.position;
             if (direction.magnitude < radius)
             {
-                Debug.Log("trace2");
                 pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
                 pushForce *= force;
+                Debug.Log(pushForce.ToString());
                 player.GetComponent<Rigidbody2D>().AddForce(pushForce);
             }
         }
         foreach (GameObject ball in balls)
         {
-            direction = center.transform.position - ball.transform.position;
+            direction = ball.transform.position - center.transform.position;
             if (direction.magnitude < radius)
             {
-                Debug.Log("trace3");
                 pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
                 pushForce *= force;
                 ball.GetComponent<Rigidbody2D>().AddForce(pushForce);

@@ -597,6 +597,11 @@ public class PlayerController : MonoBehaviour
         return previousVelocity;
     }
 
+    public int GetPlayerNumber()
+    {
+        return playerNumber;
+    }
+
     public void SetPlayerNumber(int num)
     {
         playerNumber = num;
