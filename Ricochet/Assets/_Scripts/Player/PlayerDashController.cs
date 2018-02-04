@@ -68,10 +68,17 @@ public class PlayerDashController : MonoBehaviour
         delayTimer = 0;
         dashCount = maxDashCount;
     }
-    
+    #endregion
+
+    #region Getters
     public int GetDashCount()
     {
         return dashCount;
+    }
+
+    public int GetMaxDashCount()
+    {
+        return maxDashCount;
     }
     #endregion
 

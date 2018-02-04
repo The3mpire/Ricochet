@@ -51,30 +51,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float boingFactor = 1.0f;
 
-    #region Dash Settings
-    [Header("Fuel Settings")]
-
-    [Tooltip("Max number of dashes")]
-    [SerializeField]
-    private int dashCount = 7;
-
-    [Tooltip("Dash recharge when grounded")]
-    [SerializeField]
-    private float groundRechargeRate = 3.5f;
-
-    [Tooltip("Dash recharge when not grounded")]
-    [SerializeField]
-    private float airRechargeRate = 1.5f;
-    
-    [Tooltip("How fast the player moves during dash")]
-    [SerializeField]
-    private float dashSpeed = 35f;
-
-    [Tooltip("How long the dash lasts")]
-    [SerializeField]
-    private float dashTime = .2f;
-    #endregion
-
     [Header("Controller Settings")]
     [Tooltip("The motor to be used (default is 0)")]
     [SerializeField]
