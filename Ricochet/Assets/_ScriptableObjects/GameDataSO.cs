@@ -1,6 +1,7 @@
 ﻿using Enumerables;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 [CreateAssetMenu(menuName = "Game Data")]
 public class GameDataSO : ScriptableObject
@@ -182,5 +183,17 @@ public class GameDataSO : ScriptableObject
         blueTeamScore = 0;
         redTeamScore = 0;
         gameWinner = ETeam.None;
+    }
+
+    public IEnumerator Blink(float waitTime, SpriteRenderer sprite)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(blinkMultiplier);
+        }
     }
 }

@@ -468,7 +468,7 @@ public class PlayerController : MonoBehaviour
         Rumble(rumbleMultiplier);
         
         rigid.velocity = Vector3.zero;
-        StartCoroutine(Blink(gameData.playerRespawnTime));
+        StartCoroutine(gameData.Blink(gameData.playerRespawnTime,sprite));
         StartCoroutine(KillPlayer());
     }
 
@@ -493,18 +493,6 @@ public class PlayerController : MonoBehaviour
             case EPowerUp.CircleShield:
                 circleShield.SetActive(status);
                 break;
-        }
-    }
-
-    private IEnumerator Blink(float waitTime)
-    {
-        float endTime = Time.time + waitTime;
-        while (Time.time < endTime)
-        {
-            sprite.enabled = false;
-            yield return new WaitForSeconds(gameData.blinkMultiplier);
-            sprite.enabled = true;
-            yield return new WaitForSeconds(gameData.blinkMultiplier);
         }
     }
     #endregion

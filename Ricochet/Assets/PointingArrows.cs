@@ -31,7 +31,8 @@ public class PointingArrows : MonoBehaviour
 	void Start ()
 	{
 		startTime = Time.time;
-        StartCoroutine(Blink(duration));
+        StartCoroutine(gameData.Blink(duration, sprite));
+
 	}
 
 	void LateUpdate () 
@@ -52,16 +53,5 @@ public class PointingArrows : MonoBehaviour
 		yield return null;
 	}
 
-    private IEnumerator Blink(float waitTime)
-    {
-        float endTime = Time.time + waitTime;
-        while (Time.time < endTime)
-        {
-            sprite.enabled = false;
-            yield return new WaitForSeconds(gameData.blinkMultiplier);
-            sprite.enabled = true;
-            yield return new WaitForSeconds(gameData.blinkMultiplier);
-        }
-    }
 	#endregion
 }
