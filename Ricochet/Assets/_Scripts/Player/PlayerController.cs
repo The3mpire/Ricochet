@@ -324,11 +324,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 float x, y;
-                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed + (rigid.velocity.x - thrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed + (rigid.velocity.x + thrusterSpeed) * 0.85f);
 
-                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed + (rigid.velocity.y + thrusterSpeed) * 0.85f);
 
                 rigid.velocity = new Vector2(x, y);
             }
@@ -350,11 +350,11 @@ public class PlayerController : MonoBehaviour
                 float x = 0, y = 0;
                 if (rigid.velocity.x > fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x - (lateralAcceleration * 2f);
+                    x = rigid.velocity.x - (rigid.velocity.x - fallingLateralSpeed) * 0.85f;
                 }
                 else if (rigid.velocity.x < -fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x + (lateralAcceleration * 2f);
+                    x = rigid.velocity.x - ((rigid.velocity.x + fallingLateralSpeed) * 0.85f);
                 }
                 else
                 {
