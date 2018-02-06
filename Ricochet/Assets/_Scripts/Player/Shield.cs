@@ -127,13 +127,15 @@ public class Shield : MonoBehaviour
     {
         if (team == ETeam.RedTeam)
         {
-            lineRenderer.startColor = Color.red;
-            lineRenderer.endColor = Color.red;
+            var red = new Color32(255, 0, 0, 255);
+            lineRenderer.startColor = red;
+            lineRenderer.endColor = red;
         }
         else if (team == ETeam.BlueTeam)
         {
-            lineRenderer.startColor = Color.blue;
-            lineRenderer.endColor = Color.blue;
+            var blue = new Color32(0, 0, 255, 255);
+            lineRenderer.startColor = blue;
+            lineRenderer.endColor = blue;
         }
     }
 

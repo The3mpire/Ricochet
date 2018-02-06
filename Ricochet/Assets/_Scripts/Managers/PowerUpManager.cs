@@ -37,7 +37,7 @@ public class PowerUpManager : MonoBehaviour
     private Color circleShieldColor;
     [Tooltip("The color of the full shield")]
     [SerializeField]
-    private Color circleShieldShieldColor = Color.blue;
+    private Color circleShieldShieldColor = new Color32(0, 0, 255, 255);
     [Tooltip("Burst force when shield ends")]
     [SerializeField]
     private float burstForce = 100f;
