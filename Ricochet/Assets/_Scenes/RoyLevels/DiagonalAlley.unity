@@ -1203,11 +1203,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!1 &786664996 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1158271850568408, guid: eaeea0ca4739e0744a0b8603a2a413f9,
-    type: 2}
-  m_PrefabInternal: {fileID: 384286583}
 --- !u!4 &786664997 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4972783988959882, guid: eaeea0ca4739e0744a0b8603a2a413f9,
@@ -1256,11 +1251,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &851467720 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1158271850568408, guid: eaeea0ca4739e0744a0b8603a2a413f9,
-    type: 2}
-  m_PrefabInternal: {fileID: 1108896916}
 --- !u!4 &851467721 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4972783988959882, guid: eaeea0ca4739e0744a0b8603a2a413f9,
@@ -2389,11 +2379,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1192451273 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1158271850568408, guid: eaeea0ca4739e0744a0b8603a2a413f9,
-    type: 2}
-  m_PrefabInternal: {fileID: 454002788}
 --- !u!4 &1192451274 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4972783988959882, guid: eaeea0ca4739e0744a0b8603a2a413f9,
@@ -3480,43 +3465,6 @@ Prefab:
       propertyPath: ballRespawns.Array.data[0]
       value: 
       objectReference: {fileID: 1964811896}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: players.Array.data[0]
-      value: 
-      objectReference: {fileID: 1192451273}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: players.Array.data[1]
-      value: 
-      objectReference: {fileID: 786664996}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: players.Array.data[2]
-      value: 
-      objectReference: {fileID: 1959099544}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: players.Array.data[3]
-      value: 
-      objectReference: {fileID: 851467720}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: onGoal
-      value: 
-      objectReference: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f,
-        type: 2}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: onTimerChanged
-      value: 
-      objectReference: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49,
-        type: 2}
-    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
-        type: 2}
-      propertyPath: powerUpRespawnTime
-      value: 20
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
@@ -3776,11 +3724,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4889930954892590, guid: 53333940c2ad3d04b8bc919a7670e1ac,
     type: 2}
   m_PrefabInternal: {fileID: 1931143283}
---- !u!1 &1959099544 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1158271850568408, guid: eaeea0ca4739e0744a0b8603a2a413f9,
-    type: 2}
-  m_PrefabInternal: {fileID: 656379791}
 --- !u!4 &1959099545 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4972783988959882, guid: eaeea0ca4739e0744a0b8603a2a413f9,
