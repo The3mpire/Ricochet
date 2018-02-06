@@ -44,7 +44,7 @@ public class FuelUIController : MonoBehaviour
 
             var sR = Instantiate(fuelBubblePrefab, pos, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
 
-            sR.color = (pc.GetTeamNumber() == Enumerables.ETeam.BlueTeam ? Color.blue : Color.red);
+            sR.color = (pc.GetTeamNumber() == Enumerables.ETeam.BlueTeam ? new Color32(0, 0, 255, 255) : new Color32(255, 0, 0, 255));
 
             fuelBubbles.Add(sR);
         }
@@ -52,7 +52,7 @@ public class FuelUIController : MonoBehaviour
 
     public void Update()
     {
-        transform.Rotate(0f, 0f, rotateSpeed);
+        transform.Rotate(0f, 0f, rotateSpeed*Time.deltaTime);
 
         int count = 0;
 
