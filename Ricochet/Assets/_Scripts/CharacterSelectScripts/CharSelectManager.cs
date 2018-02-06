@@ -18,6 +18,9 @@ public class CharSelectManager : MonoBehaviour
     private float waitTime;
 
     [Header("Player 1")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private GameObject p1JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 1 character tokens")]
     private List<GameObject> p1Tokens;
@@ -34,6 +37,9 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p1Team;
 
     [Header("Player 2")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private GameObject p2JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 2 character tokens")]
     private List<GameObject> p2Tokens;
@@ -50,6 +56,9 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p2Team;
 
     [Header("Player 3")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private GameObject p3JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 3 character tokens")]
     private List<GameObject> p3Tokens;
@@ -66,6 +75,9 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p3Team;
 
     [Header("Player 4")]
+    [Tooltip("Press A to Join Icon")]
+    [SerializeField]
+    private GameObject p4JoinIcon;
     [SerializeField]
     [Tooltip("List of all Player 4 character tokens")]
     private List<GameObject> p4Tokens;
@@ -92,7 +104,25 @@ public class CharSelectManager : MonoBehaviour
     [Tooltip("Drag back timer here")]
     private Slider backSlider;
 
+    [Header("Character UI Images")]
+    [Tooltip("Character 1 Image (Cat)")]
+    [SerializeField]
+    private Image char1Image;
+    [Tooltip("Character 2 Image (Computer)")]
+    [SerializeField]
+    private Image char2Image;
+    [Tooltip("Character 3 Image (Mall Cop)")]
+    [SerializeField]
+    private Image char3Image;
+    [Tooltip("Character 4 Image (Sushi)")]
+    [SerializeField]
+    private Image char4Image;
+    [Tooltip("Default color")]
+    [SerializeField]
+    private Color defaultColor;
+
     private SelectionPhase[] playerPhase = new SelectionPhase[4];
+    private PSettings[] playerSettings = new PSettings[4];
     private float timer;
 
     private bool timerActive;
@@ -157,59 +187,45 @@ public class CharSelectManager : MonoBehaviour
     /// <param name="playerNumber">Player ID to activate</param>
     public void ActivatePlayer(int playerNumber)
     {
-        var playerData = new PSettings();
         switch (playerNumber)
         {
             case 0:
-                p1DefaultToken.SetActive(true);
-                p1ActiveToken = p1DefaultToken;
-                playerPhase[0] = SelectionPhase.CharacterSelect;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerPhase[0] = SelectionPhase.None;
+                playerSettings[0] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[0].Character == ECharacter.None)
                 {
-                    playerData.Character = p1DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[0].Character = p1DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p1ActiveToken = MoveSelectionTokenTo(playerData.Character, p1ActiveToken, p1Tokens);
-                p1Team = playerData.Team;
-                p1TeamPanel.color = GetTeamColor(p1Team);
+                p1Team = playerSettings[0].Team;
                 break;
             case 1:
-                p2DefaultToken.SetActive(true);
-                p2ActiveToken = p2DefaultToken;
-                playerPhase[1] = SelectionPhase.CharacterSelect;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerPhase[1] = SelectionPhase.None;
+                playerSettings[1] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[1].Character == ECharacter.None)
                 {
-                    playerData.Character = p2DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[1].Character = p2DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p2ActiveToken = MoveSelectionTokenTo(playerData.Character, p2ActiveToken, p2Tokens);
-                p2Team = playerData.Team;
+                p2Team = playerSettings[1].Team;
                 p2TeamPanel.color = GetTeamColor(p2Team);
                 break;
             case 2:
-                p3DefaultToken.SetActive(true);
-                p3ActiveToken = p3DefaultToken;
-                playerPhase[2] = SelectionPhase.CharacterSelect;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerPhase[2] = SelectionPhase.None;
+                playerSettings[2] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[2].Character == ECharacter.None)
                 {
-                    playerData.Character = p3DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[2].Character = p3DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p3ActiveToken = MoveSelectionTokenTo(playerData.Character, p3ActiveToken, p3Tokens);
-                p3Team = playerData.Team;
+                p3Team = playerSettings[2].Team;
                 p3TeamPanel.color = GetTeamColor(p3Team);
                 break;
             case 3:
-                p4DefaultToken.SetActive(true);
-                p4ActiveToken = p4DefaultToken;
-                playerPhase[3] = SelectionPhase.CharacterSelect;
-                playerData = LoadPlayerSettings(playerNumber);
-                if (playerData.Character == ECharacter.None)
+                playerPhase[3] = SelectionPhase.None;
+                playerSettings[3] = LoadPlayerSettings(playerNumber);
+                if (playerSettings[3].Character == ECharacter.None)
                 {
-                    playerData.Character = p4DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
+                    playerSettings[3].Character = p4DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
                 }
-                p4ActiveToken = MoveSelectionTokenTo(playerData.Character, p4ActiveToken, p4Tokens);
-                p4Team = playerData.Team;
+                p4Team = playerSettings[3].Team;
                 p4TeamPanel.color = GetTeamColor(p4Team);
                 break;
         }
@@ -233,13 +249,16 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void RouteInputA(int playerNumber)
+    public void RouteInputA(int playerNumber, Color playerColor)
     {
         var phase = playerPhase[playerNumber - 1];
         switch (phase)
         {
+            case SelectionPhase.None:
+                PlayerJoin(playerNumber);
+                break;
             case SelectionPhase.CharacterSelect:
-                SelectCharacter(playerNumber);
+                SelectCharacter(playerNumber, playerColor);
                 break;
             case SelectionPhase.TeamSelect:
                 SelectTeam(playerNumber);
@@ -256,6 +275,7 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.CharacterSelect:
                 break;
             case SelectionPhase.TeamSelect:
+                ClearImages(playerNumber);
                 ClearSelection(playerNumber);
                 break;
             case SelectionPhase.Ready:
@@ -297,9 +317,10 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    private void SelectCharacter(int playerNumber)
+    private void SelectCharacter(int playerNumber, Color playerColor)
     {
         var color = Color.white;
+        var selectedChar = ECharacter.None;
         switch (playerNumber)
         {
             case 1:
@@ -308,15 +329,21 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(0, selected.getCharacterId());
-                        p1TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p1TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[0] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(0, selected.getCharacterId());
+                            p1TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p1TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[0] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
+                p1TeamPanel.color = GetTeamColor(p1Team);
                 break;
             case 2:
                 foreach (var token in p2Tokens)
@@ -324,15 +351,21 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(1, selected.getCharacterId());
-                        p2TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p2TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[1] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(1, selected.getCharacterId());
+                            p2TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p2TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[1] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
+                p2TeamPanel.color = GetTeamColor(p2Team);
                 break;
             case 3:
                 foreach (var token in p3Tokens)
@@ -340,15 +373,21 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(2, selected.getCharacterId());
-                        p3TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p3TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[2] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(2, selected.getCharacterId());
+                            p3TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p3TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[2] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
+                p3TeamPanel.color = GetTeamColor(p3Team);
                 break;
             case 4:
                 foreach (var token in p4Tokens)
@@ -356,15 +395,39 @@ public class CharSelectManager : MonoBehaviour
                     if (token.activeInHierarchy)
                     {
                         var selected = token.GetComponentInParent<CharacterInfo>();
-                        gameData.SetPlayerCharacter(3, selected.getCharacterId());
-                        p4TeamImage.sprite = selected.getCharacterImage();
-                        color.a = 1;
-                        p4TeamImage.color = color;
-                        token.GetComponent<Shadow>().enabled = false;
-                        token.GetComponent<ParticleSystem>().Play();
-                        playerPhase[3] = SelectionPhase.TeamSelect;
+                        if (selected.GetIsSelectable())
+                        {
+                            selected.SetIsSelectable(false);
+                            selectedChar = selected.getCharacterId();
+                            gameData.SetPlayerCharacter(3, selected.getCharacterId());
+                            p4TeamImage.sprite = selected.getCharacterImage();
+                            color.a = 1;
+                            p4TeamImage.color = color;
+                            token.GetComponent<Shadow>().enabled = false;
+                            token.GetComponent<ParticleSystem>().Play();
+                            playerPhase[3] = SelectionPhase.TeamSelect;
+                        }
                     }
                 }
+                p4TeamPanel.color = GetTeamColor(p4Team);
+                break;
+        }
+        
+        switch (selectedChar)
+        {
+            case Enumerables.ECharacter.Cat:
+                char1Image.color = playerColor;
+                break;
+            case Enumerables.ECharacter.Computer:
+                char2Image.color = playerColor;
+                break;
+            case Enumerables.ECharacter.MallCop:
+                char3Image.color = playerColor;
+                break;
+            case Enumerables.ECharacter.Sushi:
+                char4Image.color = playerColor;
+                break;
+            default:
                 break;
         }
     }
@@ -419,6 +482,43 @@ public class CharSelectManager : MonoBehaviour
                 break;
         }
     }
+
+    private void PlayerJoin(int playerNumber)
+    {
+        // lock in a team
+        switch (playerNumber)
+        {
+            case 1:
+                playerPhase[0] = SelectionPhase.CharacterSelect;
+                p1JoinIcon.SetActive(false);
+                p1DefaultToken.SetActive(true);
+                p1ActiveToken = p1DefaultToken;
+                p1ActiveToken = MoveSelectionTokenTo(playerSettings[0].Character, p1ActiveToken, p1Tokens);
+                break;
+            case 2:
+                playerPhase[1] = SelectionPhase.CharacterSelect;
+                p2JoinIcon.SetActive(false);
+                p2DefaultToken.SetActive(true);
+                p2ActiveToken = p2DefaultToken;
+                p2ActiveToken = MoveSelectionTokenTo(playerSettings[1].Character, p2ActiveToken, p2Tokens);
+                break;
+            case 3:
+                playerPhase[2] = SelectionPhase.CharacterSelect;
+                p3JoinIcon.SetActive(false);
+                p3DefaultToken.SetActive(true);
+                p3ActiveToken = p3DefaultToken;
+                p3ActiveToken = MoveSelectionTokenTo(playerSettings[2].Character, p3ActiveToken, p3Tokens);
+                break;
+            case 4:
+                playerPhase[3] = SelectionPhase.CharacterSelect;
+                p4JoinIcon.SetActive(false);
+                p4DefaultToken.SetActive(true);
+                p4ActiveToken = p4DefaultToken;
+                p4ActiveToken = MoveSelectionTokenTo(playerSettings[3].Character, p4ActiveToken, p4Tokens);
+                break;
+        }
+    }
+
     #endregion
 
     #region Private Helpers
@@ -443,6 +543,7 @@ public class CharSelectManager : MonoBehaviour
         {
             allReady = false;
         }
+
         gameData.SetPlayerCount(readyCount);
         return allReady;
     }
@@ -483,13 +584,13 @@ public class CharSelectManager : MonoBehaviour
         switch (team)
         {
             case ETeam.BlueTeam:
-                return Color.blue;
+                return new Color32(102, 141, 229,255);
             case ETeam.RedTeam:
-                return Color.red;
+                return new Color32(237, 109, 121,255);
             case ETeam.None:
-                return Color.grey;
+                return new Color32(187, 150, 255, 255);
             default:
-                return Color.gray;
+                return Color.grey;
         }
     }
 
@@ -555,6 +656,52 @@ public class CharSelectManager : MonoBehaviour
         return activeToken;
     }
 
+    private void ClearImages(int playerNumber)
+    {
+        var selectedChar = Enumerables.ECharacter.None;
+        switch (playerNumber)
+        {
+            case 1:
+                var selectedImage1 = p1ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage1.SetIsSelectable(true);
+                selectedChar = selectedImage1.getCharacterId();
+                break;
+            case 2:
+                var selectedImage2 = p2ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage2.SetIsSelectable(true);
+                selectedChar = selectedImage2.getCharacterId();
+                break;
+            case 3:
+                var selectedImage3 = p3ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage3.SetIsSelectable(true);
+                selectedChar = selectedImage3.getCharacterId();
+                break;
+            case 4:
+                var selectedImage4 = p4ActiveToken.GetComponentInParent<CharacterInfo>();
+                selectedImage4.SetIsSelectable(true);
+                selectedChar = selectedImage4.getCharacterId();
+                break;
+        }
+
+        switch (selectedChar)
+        {
+            case Enumerables.ECharacter.Cat:
+                char1Image.color = defaultColor;
+                break;
+            case Enumerables.ECharacter.Computer:
+                char2Image.color = defaultColor;
+                break;
+            case Enumerables.ECharacter.MallCop:
+                char3Image.color = defaultColor;
+                break;
+            case Enumerables.ECharacter.Sushi:
+                char4Image.color = defaultColor;
+                break;
+            default:
+                break;
+        }
+    }
+
     /// <summary>
     /// Reset player's character selection to none. Re-enable character selecting for player.
     /// </summary>
@@ -573,6 +720,7 @@ public class CharSelectManager : MonoBehaviour
                 p1ActiveToken.GetComponent<Shadow>().enabled = true;
                 p1ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[0] = SelectionPhase.CharacterSelect;
+                p1TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
             case 2:
                 gameData.SetPlayerCharacter(1, ECharacter.None);
@@ -583,6 +731,7 @@ public class CharSelectManager : MonoBehaviour
                 p2ActiveToken.GetComponent<Shadow>().enabled = true;
                 p2ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[1] = SelectionPhase.CharacterSelect;
+                p2TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
             case 3:
                 gameData.SetPlayerCharacter(2, ECharacter.None);
@@ -593,6 +742,7 @@ public class CharSelectManager : MonoBehaviour
                 p3ActiveToken.GetComponent<Shadow>().enabled = true;
                 p3ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[2] = SelectionPhase.CharacterSelect;
+                p3TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
             case 4:
                 gameData.SetPlayerCharacter(3, ECharacter.None);
@@ -603,6 +753,7 @@ public class CharSelectManager : MonoBehaviour
                 p4ActiveToken.GetComponent<Shadow>().enabled = true;
                 p4ActiveToken.GetComponent<ParticleSystem>().Stop();
                 playerPhase[3] = SelectionPhase.CharacterSelect;
+                p4TeamPanel.color = GetTeamColor(ETeam.None);
                 break;
         }
     }

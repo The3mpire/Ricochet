@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CCParticles
 {
@@ -10,9 +8,8 @@ namespace CCParticles
 
         [SerializeField]
         private ParticleSystem lowFuelParticle;
-
-        [SerializeField]
-        private PlayerController playerController;
+        
+        private PlayerDashController dashController;
 
         #endregion
 
@@ -24,17 +21,21 @@ namespace CCParticles
 
         #region Monobehaviors
 
+        public void Awake()
+        {
+            dashController = GetComponent<PlayerDashController>();
+        }
+
         void Update()
         {
-            threshold = this.playerController.GetFuelPercentNeeded();
-            float percentage = this.playerController.GetCurrentFuel() / this.playerController.GetMaxFuel();
-            if (percentage <= threshold)
+            int dashes = this.dashController.GetDashCount();
+            if (dashes <= 0)
             {
                 if (!this.lowFuelParticle.isPlaying)
                 {
                     this.lowFuelParticle.Play();
                 }
-            } else
+            }else
             {
                 this.lowFuelParticle.Stop();
             }

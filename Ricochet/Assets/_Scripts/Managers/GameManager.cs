@@ -1,9 +1,11 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,9 +50,6 @@ public class GameManager : MonoBehaviour
     private float powerUpRespawnTime = 10f;
     [Tooltip("How long the players take to respawn in seconds")]
     [SerializeField]
-    private float playerRespawnTime = 2f;
-    [Tooltip("How long the ball takes to respawn in seconds")]
-    [SerializeField]
     private float ballRespawnTime = 2f;
     [Tooltip("How long a player can hold a ball with CatchNThrow")]
     [SerializeField]
@@ -78,6 +77,7 @@ public class GameManager : MonoBehaviour
     private int scoreLimit = 5;
     private bool gameTimerActive = true;
     private int timeLeftTillStart;
+    private bool multiBallInPlay = false;
 
     // dictionary of players cached based off the GameObject
     private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
@@ -221,8 +221,12 @@ public class GameManager : MonoBehaviour
             switch (currentPowerUp)
             {
                 case EPowerUp.Multiball:
-                    playerController.RemovePowerUp();
-                    SpawnMultipleBalls(ball);
+                    if (!ball.GetTempStatus() && balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount())
+                    {
+                        playerController.RemovePowerUp();
+                        SpawnMultipleBalls(ball);
+                        multiBallInPlay = false;
+                    }
                     break;
                 case EPowerUp.CatchNThrow:
                     playerController.RemovePowerUp();
@@ -246,6 +250,7 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetCurrentPowerUp())
         {
             case EPowerUp.CircleShield:
+                SheildBurst(playerController);
                 playerController.EnableSecondaryShield(false);
                 playerController.RemovePowerUp();
                 break;
@@ -309,7 +314,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ball.RedirectBall(collision.relativeVelocity);
+        ball.RedirectBall(collision.relativeVelocity, Vector2.zero);
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
         StartCoroutine(Camera.main.GetComponent<CCShaders.ChromaticAberrationEffect>().PlayEffect(1));
@@ -322,7 +327,8 @@ public class GameManager : MonoBehaviour
             onGoal.Raise();
             if (!modeManager.UpdateScore(team, points))
             {
-                ball.GetComponent<Ball>().OnBallGoalCollision();
+                Ball ballScpt = ball.GetComponent<Ball>();
+                ballScpt.OnBallGoalCollision();
                 ball.SetActive(false);
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
@@ -355,6 +361,10 @@ public class GameManager : MonoBehaviour
         if (powerUpType == EPowerUp.CircleShield) //need to have a list of powerups that reference a secondary shield
         {
             playerController.EnableSecondaryShield(true);
+        }
+        else if (powerUpType == EPowerUp.Multiball)
+        {
+            multiBallInPlay = true;
         }
     }
 
@@ -400,6 +410,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(SpawnBallCoroutine(ball));
         }
+        else
+        {
+            Destroy(ball);
+        }
     }
 
     public void RespawnPowerUp(GameObject powerUp)
@@ -408,12 +422,14 @@ public class GameManager : MonoBehaviour
     }
 
     private void SpawnMultipleBalls(Ball origBall)
-    {
-        Ball ball1 = Instantiate(origBall);
-        Ball ball2 = Instantiate(origBall);
-
-        ball1.SetTempStatus(true);
-        ball2.SetTempStatus(true);
+    { 
+        Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
+        for (int i = 0; i < powerUpManager.GetBallSpawnCount(); i++)
+        {
+            Ball ball = Instantiate(origBall);
+            ball.transform.localScale = tempBallScale;
+            ball.SetTempStatus(true);
+        }
     }
 
     private IEnumerator SpawnBallCoroutine(GameObject ball)
@@ -427,25 +443,29 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RespawnPlayer(PlayerController playerController)
     {
-        yield return new WaitForSeconds(playerRespawnTime);
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
 
         NoWaitRespawnPlayer(playerController);
     }
 
     private void NoWaitRespawnPlayer(PlayerController playerController)
     {
+        if (playerController.GetCurrentPowerUp() == EPowerUp.Multiball)
+        {
+            multiBallInPlay = false;
+        }
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
 
         switch (playerController.GetTeamNumber())
         {
             case ETeam.RedTeam:
-                playerController.transform.position = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].position;
-                playerController.transform.rotation = redTeamRespawns[UnityEngine.Random.Range(0, redTeamRespawns.Length)].rotation;
+                playerController.transform.position = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].position;
+                playerController.transform.rotation = redTeamRespawns[Random.Range(0, redTeamRespawns.Length)].rotation;
                 break;
             case ETeam.BlueTeam:
-                playerController.transform.position = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].position;
-                playerController.transform.rotation = blueTeamRespawns[UnityEngine.Random.Range(0, blueTeamRespawns.Length)].rotation;
+                playerController.transform.position = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].position;
+                playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
     }
@@ -464,6 +484,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RespawnPowerUpRoutine(GameObject powerUp)
     {
+        if (powerUp.GetComponent<PowerUp>().GetPowerUpType() == EPowerUp.Multiball)
+        {
+            yield return new WaitUntil(() => balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount() && !multiBallInPlay);
+        }
         yield return new WaitForSeconds(powerUpRespawnTime);
         powerUp.SetActive(true);
     }
@@ -524,6 +548,7 @@ public class GameManager : MonoBehaviour
         player.SetBallHeld(null);
         ball.SetHeld(false);
         ball.transform.SetParent(null, true);
+        ball.RedirectBall(new Vector2(10f, 10f), player.GetRightStick());
     }
     #endregion
 
@@ -541,6 +566,15 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region Public Helpers
+
+    public void FreezePlayer(PlayerController player)
+    {
+        player.SetFreezeTime(powerUpManager.GetFreezeTime());
+    }
+
+    #endregion
+
     #region Sound
     public void SetMusicVolume(float vol = .8f)
     {
@@ -552,7 +586,6 @@ public class GameManager : MonoBehaviour
         return musicManager.GetMusicVolume();
     }
 
-    /// <param name="volume"> scales the SFX volume (NOT the overall volume)</param>
     public AudioClip GetCharacterSFX(ECharacter character, ECharacterAction movement)
     {
         switch (movement)
@@ -583,9 +616,44 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private Helpers
+    private void SheildBurst(PlayerController center)
+    {
+        float radius = powerUpManager.GetBurstRadius();
+        float force = powerUpManager.GetBurstForce();
+        Vector3 direction;
+        Vector2 pushForce;
+        int pnum, cnum = center.GetPlayerNumber();
+
+        foreach (PlayerController player in playerControllers)
+        {
+            pnum = player.GetPlayerNumber();
+            if (pnum == cnum || !player.isActiveAndEnabled)
+                continue;
+
+            direction = player.transform.position - center.transform.position;
+            if (direction.magnitude < radius)
+            {
+                pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
+                pushForce *= force;
+                Debug.Log(pushForce.ToString());
+                player.GetComponent<Rigidbody2D>().AddForce(pushForce);
+            }
+        }
+        foreach (GameObject ball in balls)
+        {
+            direction = ball.transform.position - center.transform.position;
+            if (direction.magnitude < radius)
+            {
+                pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
+                pushForce *= force;
+                ball.GetComponent<Rigidbody2D>().AddForce(pushForce);
+            }
+        }
+    }
+
     private ETeam GetOpposingTeam(ETeam team)
     {
-        var opTeam = ETeam.None;
+        ETeam opTeam;
         if (team == ETeam.BlueTeam)
         {
             opTeam = ETeam.RedTeam;

@@ -3,6 +3,8 @@ using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Which team the player is on")]
     [SerializeField]
     private ETeam team;
-
     [Header("Movement Settings")]
     [Tooltip("Gravity scale on player")]
     [SerializeField]
@@ -43,37 +44,15 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed while grounded")]
     [SerializeField]
     private float groundedMoveSpeed = 12.5f;
-    [Tooltip("How quickly the player can accelerate")]
+    [Tooltip("How quickly the player can change direction. 0 = instantaneously, 1 = normally")]
     [SerializeField]
-    private float inertia = 1.5f;
+    private float directionSwitchRatio = 1f;
     [Tooltip("How much bounce off two opposite players will have as a percentage")]
     [SerializeField]
     private float boingFactor = 1.0f;
-
-    [Header("Fuel Settings")]
-    [Tooltip("Time in seconds of jetback fuel")]
+    [Tooltip("gravity scale for the rigid body so when the player unfreezes we can reset the gravity scale")]
     [SerializeField]
-    private float startFuel = 7f;
-    [Tooltip("Percent of fuel needed to reset jetpack burnout (ex 20% = .2)")]
-    [SerializeField]
-    private float fuelPercentNeeded = .2f;
-    [Tooltip("Fuel/second recharge when grounded")]
-    [SerializeField]
-    private float groundRechargeRate = 3.5f;
-    [Tooltip("Fuel/second recharge when falling")]
-    [SerializeField]
-    private float airRechargeRate = 1.5f;
-
-    [Header("Dash Settings")]
-    [Tooltip("How fast the player moves during dash")]
-    [SerializeField]
-    private float dashSpeed = 35f;
-    [Tooltip("How long the dash lasts")]
-    [SerializeField]
-    private float dashTime = .2f;
-    [Tooltip("How much fuel in seconds to spend on dash")]
-    [SerializeField]
-    private float dashCost = 2f;
+    private float gravityScale = 1.0f;
 
     [Header("Controller Settings")]
     [Tooltip("The motor to be used (default is 0)")]
@@ -88,6 +67,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much the above values should be multiplied by on death")]
     [SerializeField]
     private float rumbleMultiplier = 2f;
+    [Tooltip("How frequently the player sprite should blink on death")]
+    [SerializeField]
+    private float blinkMultiplier = 0.2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
@@ -111,9 +93,16 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
+    [Tooltip("Drag the player's \"BurstCollider\" here")]
+    [SerializeField]
+    private GameObject burstCollider;
     [Tooltip("Drag the player's audio source here")]
     [SerializeField]
     private AudioSource audioSource;
+    [Tooltip("Freeze Color")]
+    [SerializeField]
+    private Color freezeColor;
+
 
     [Header("Secondary Items")]
     [Tooltip("Drag the player's power up circle shield here")]
@@ -138,18 +127,13 @@ public class PlayerController : MonoBehaviour
 
     private bool infiniteFuel;
     private bool hasPowerUp;
-    private bool dashing;
-    private bool grounded;
     private bool jetpackBurnedOut;
-
-    private float currentFuel;
-    private float maxFuel;
+    private bool isInvincible;
+    private bool isFrozen;
+    private float remainingFreezeTime;
+    
     private float powerUpTimer;
-    private float timeSinceDash;
-    private Vector2 dashDirection;
     private Vector2 previousVelocity;
-    private int inertiaTime;
-    private bool inertiaSwitch;
 
     private float leftStickHorz;
     private float leftStickVert;
@@ -170,12 +154,10 @@ public class PlayerController : MonoBehaviour
 
         powerupParticle.Stop();
         jetpackBurnedOut = false;
+        isFrozen = false;
 
         killList = new List<PlayerController>();
-        currentFuel = startFuel;
-        maxFuel = startFuel;
-        timeSinceDash = 0f;
-        inertiaTime = 2;
+        rigid.gravityScale = 0;
         rightStickHorz = 1;
         rightStickVert = 0;
         shield = GetComponentInChildren<Shield>();
@@ -203,9 +185,11 @@ public class PlayerController : MonoBehaviour
         // Update vars
         Vector2 playerPosition = transform.position;
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
-        grounded = Physics2D.Linecast(playerPosition, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
+
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
+        leftTriggerAxis = player.GetAxis("Jetpack");
+
         if (player.GetAxis("RightStickHorizontal") != 0)
         {
             rightStickHorz = player.GetAxis("RightStickHorizontal");
@@ -214,18 +198,20 @@ public class PlayerController : MonoBehaviour
         {
             rightStickVert = player.GetAxis("RightStickVertical");
         }
-        timeSinceDash += Time.deltaTime;
-
-        // Check if still dashing
-        if (timeSinceDash >= dashTime)
+        
+        if (remainingFreezeTime > 0)
         {
-            dashing = false;
+            rigid.velocity = new Vector3(0, 0, 0);
+            remainingFreezeTime -= Time.deltaTime;
+            if (remainingFreezeTime <= 0)
+            {
+                isFrozen = false;
+                sprite.color = Color.white;
+            }
         }
 
-        if (!movementDisabled)
+        if (!movementDisabled && !isFrozen)
         {
-            MovementPreperation();
-            DashCheck();
             RotateShield();
             Flip();
         }
@@ -234,40 +220,52 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         previousVelocity = rigid.velocity;
-        if (!movementDisabled)
+        if (!movementDisabled && !isFrozen)
         {
             Move();
-
-            // Add dash velocity to movement
-            if (dashing)
-            {
-                rigid.velocity += dashDirection * dashSpeed;
-            }
         }
+
+        HandleAnimator();
     }
     #endregion
 
     #region Collision Management
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
+        if (!isInvincible)
         {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ball") && collision.otherCollider.CompareTag("Player"))
             {
-                gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
-            }
-        }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-            {
-                PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
-                if (team != otherPlayer.team)
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                 {
-                    Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
-                    body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
-                    Rumble(1.25f);
+                    gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
+                }
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    PlayerController otherPlayer = collision.gameObject.GetComponent<PlayerController>();
+                    if (team != otherPlayer.team)
+                    {
+                        EPowerUp otherPlayerPowUp = otherPlayer.GetCurrentPowerUp();
+                        if(otherPlayerPowUp == EPowerUp.Freeze)
+                        {
+                            isFrozen = true;
+                            rigid.gravityScale = 0.0f;
+                            rigid.velocity = new Vector3(0, 0, 0);
+                            sprite.color = freezeColor;
+                            otherPlayer.RemovePowerUp();
+                            gameManagerInstance.FreezePlayer(this);
+                            if(remainingFreezeTime <= 0)
+                            {
+                                isFrozen = false;
+                            }
+                        }
+                        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
+                        body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                        Rumble(1.25f);
+                    }
                 }
             }
         }
@@ -276,52 +274,49 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Helpers
-    private void MovementPreperation()
+
+    private void HandleAnimator()
     {
-        if (leftTriggerAxis != 0 && currentFuel > 0 && !jetpackBurnedOut)
-        {  // Jetpacking with fuel
-            grounded = false;
-            Vector2 md = new Vector2(leftStickHorz, leftStickVert);
-            currentFuel -= md != Vector2.zero ? Time.deltaTime * leftTriggerAxis : Time.deltaTime * 0.1f;
-        }
-        else if (grounded && currentFuel < maxFuel)
-        { // recharge fuel on ground
-            currentFuel += groundRechargeRate * Time.deltaTime;
-        }
-        else if (currentFuel < maxFuel)
-        { // recharge fuel in air
-            currentFuel += airRechargeRate * Time.deltaTime;
-        }
-        if (currentFuel <= 0)
+        if (leftTriggerAxis != 0)
         {
-            jetpackBurnedOut = true;
+            this.animator.SetBool("isJumping", true);
         }
-        else if (currentFuel >= (fuelPercentNeeded * startFuel) && jetpackBurnedOut)
+        else if (IsGrounded())
         {
-            jetpackBurnedOut = false;
+            this.animator.SetBool("isJumping", false);
+
+            if (rigid.velocity != Vector2.zero)
+            {
+                this.animator.SetBool("isWalking", true);
+            }
+            else
+            {
+                this.animator.SetBool("isWalking", false);
+            }
         }
-        leftTriggerAxis = player.GetAxis("Jetpack");
-        InertiaFunction("none", leftTriggerAxis != 0);
+
+        if (rigid.velocity.magnitude > thrusterSpeed)
+        {
+            this.animator.SetTrigger("dash");
+        }
     }
 
     private void Move()
     {
         Vector2 moveDirection;
-        float fuelFactor = (currentFuel > 0) ? 1f : 0.05f;
 
-        if (leftTriggerAxis != 0 && !jetpackBurnedOut)
+        if (leftTriggerAxis != 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
-            moveDirection *= fuelFactor;
-            this.animator.SetBool("isJumping", true);
-            if (this.jetpackParticle && !this.jetpackParticle.isPlaying)
+            
+            if (this.jetpackParticle && !this.jetpackParticle.isPlaying && !isFrozen)
             {
                 this.jetpackParticle.Play();
             }
             // If there is no directional input, decelerate movement to a still hover
             if (moveDirection == Vector2.zero)
             {
-                moveDirection = Vector2.up * fuelFactor;
+                moveDirection = Vector2.up;
                 float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
                 float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
                 rigid.velocity = new Vector2(x, y);
@@ -329,11 +324,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 float x, y;
-                x = moveDirection.x > 0 ? Mathf.Min(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(rigid.velocity.x + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
-                y = moveDirection.y >= 0 ? Mathf.Min(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(rigid.velocity.y + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
 
                 rigid.velocity = new Vector2(x, y);
             }
@@ -345,17 +340,9 @@ public class PlayerController : MonoBehaviour
             {
                 this.jetpackParticle.Stop();
             }
-            if (moveDirection != Vector2.zero)
+            
+            if (IsGrounded())
             {
-                this.animator.SetBool("isWalking", true);
-            }
-            else
-            {
-                this.animator.SetBool("isWalking", false);
-            }
-            if (grounded)
-            {
-                this.animator.SetBool("isJumping", false);
                 rigid.velocity = moveDirection * groundedMoveSpeed;
             }
             else
@@ -384,7 +371,6 @@ public class PlayerController : MonoBehaviour
                 rigid.velocity = new Vector2(x, y);
             }
         }
-
     }
 
     private void Flip()
@@ -396,22 +382,6 @@ public class PlayerController : MonoBehaviour
         else if (leftStickHorz > 0)
         {
             sprite.flipX = !isFlipped;
-        }
-    }
-
-    private void DashCheck()
-    {
-        if (player.GetButtonDown("Dash") && !dashing && (currentFuel >= dashCost || infiniteFuel) && !jetpackBurnedOut)
-        {
-            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
-            {
-                audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Dash));
-            }
-            this.animator.SetTrigger("dash");
-            currentFuel -= dashCost;
-            dashDirection = new Vector2(rightStickHorz, rightStickVert).normalized;
-            dashing = true;
-            timeSinceDash = 0f;
         }
     }
 
@@ -442,48 +412,16 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    private void InertiaFunction(string function, bool acc)
-    {
-        if (!grounded && !jetpackBurnedOut)
-        {
-            switch (function)
-            {
-                case "linear":
-                    if (acc)
-                    {
-                        rigid.gravityScale += (rigid.gravityScale > 0) ? -inertia : 0 - rigid.gravityScale;
-                    }
-                    else
-                    {
-                        rigid.gravityScale += (rigid.gravityScale < gravScale) ? inertia : gravScale - rigid.gravityScale;
-                    }
-                    break;
-                case "logarithmic":
-                    inertiaTime = (acc == inertiaSwitch) ? (inertiaTime + 1) : 1;
-                    inertiaSwitch = acc;
-                    if (acc)
-                    {
-                        rigid.gravityScale = (rigid.gravityScale <= 0) ? 0 : rigid.gravityScale - Mathf.Log((inertiaTime / inertia) + 1);
-                    }
-                    else
-                    {
-                        rigid.gravityScale = (rigid.gravityScale >= gravScale) ? gravScale : rigid.gravityScale + Mathf.Log((inertiaTime / inertia) + 1);
-                    }
-                    break;
-                case "none":
-                    rigid.gravityScale = 0;
-                    break;
-            }
-        }
-        else if (jetpackBurnedOut)
-        {
-            rigid.gravityScale = gravScale;
-        }
-    }
     #endregion
 
     #region External Functions
+    public void Push(Vector3 direction, float force)
+    {
+        Debug.Log("pushed");
+
+        Vector3 result = direction * force;
+        rigid.AddForce(result);
+    }
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
@@ -501,6 +439,11 @@ public class PlayerController : MonoBehaviour
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
+    }
+
+    public void AddVelocity(Vector2 velocity)
+    {
+        rigid.velocity += velocity;
     }
 
     public void RemovePowerUp()
@@ -525,17 +468,27 @@ public class PlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Death));
         }
-
         Rumble(rumbleMultiplier);
-
-        currentFuel = startFuel;
-        maxFuel = startFuel;
-        dashing = false;
-        timeSinceDash = 0f;
+        
         rigid.velocity = Vector3.zero;
-        gameObject.SetActive(false);
+        StartCoroutine(Blink(gameData.playerRespawnTime));
+        StartCoroutine(KillPlayer());
     }
 
+    private IEnumerator KillPlayer()
+    {
+        this.animator.SetBool("isDead", true);
+        isInvincible = true;
+        movementDisabled = true;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
+        this.animator.SetBool("isDead", false);
+        isInvincible = false;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        movementDisabled = false;
+    }
     public void EnableSecondaryShield(bool status)
     {
         switch (currPowerUp)
@@ -545,9 +498,46 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
+    private IEnumerator Blink(float waitTime)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(blinkMultiplier);
+        }
+    }
     #endregion
 
     #region Getters and Setters
+    public bool IsGrounded()
+    {
+        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
+
+        bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
+        bool jetpackActive = leftTriggerAxis != 0;
+
+        return touchingGround && !jetpackActive;
+    }
+
+    public Vector2 GetRightStickDirection()
+    {
+        return new Vector2(rightStickHorz, rightStickVert).normalized;
+    }
+
+    public Player GetPlayer()
+    {
+        return ReInput.players.GetPlayer(playerNumber - 1);
+    }
+
+    public ECharacter GetCharacter()
+    {
+        return chosenCharacter;
+    }
+
     public void DisableMovement(bool movementDisabled)
     {
         this.movementDisabled = movementDisabled;
@@ -561,6 +551,11 @@ public class PlayerController : MonoBehaviour
     public Transform GetShieldTransform()
     {
         return shieldTransform;
+    }
+
+    public Vector2 GetRightStick()
+    {
+        return new Vector2(rightStickHorz, rightStickVert);
     }
 
     public void SetBallHeld(Ball ball)
@@ -593,6 +588,11 @@ public class PlayerController : MonoBehaviour
         return previousVelocity;
     }
 
+    public int GetPlayerNumber()
+    {
+        return playerNumber;
+    }
+
     public void SetPlayerNumber(int num)
     {
         playerNumber = num;
@@ -608,19 +608,9 @@ public class PlayerController : MonoBehaviour
         this.jetpackParticle = system;
     }
 
-    internal float GetMaxFuel()
+    public void SetFreezeTime(float value)
     {
-        return maxFuel;
-    }
-
-    internal float GetCurrentFuel()
-    {
-        return currentFuel;
-    }
-
-    internal float GetFuelPercentNeeded()
-    {
-        return fuelPercentNeeded;
+        remainingFreezeTime = value;
     }
 
     internal Shield GetShield()
