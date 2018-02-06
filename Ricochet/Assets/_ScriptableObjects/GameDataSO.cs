@@ -7,9 +7,11 @@ public class GameDataSO : ScriptableObject
 {
 
     [SerializeField]
-    [Tooltip("How long the ball takes to respawn in seconds")]
+    [Tooltip("How long the player takes to respawn in seconds")]
     public float playerRespawnTime = 2f;    
-
+    [Tooltip("How frequently the player sprite should blink on death")]
+    [SerializeField]
+    public float blinkMultiplier = 0.2f;
     [SerializeField]
     private EMode gameMode;
 

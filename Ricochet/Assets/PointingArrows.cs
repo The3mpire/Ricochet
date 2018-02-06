@@ -21,6 +21,9 @@ public class PointingArrows : MonoBehaviour
 	#endregion
 
 	#region Private Variables
+    [SerializeField]
+    private GameDataSO gameData;
+
 	private float startTime;
 	#endregion
 
@@ -28,6 +31,7 @@ public class PointingArrows : MonoBehaviour
 	void Start ()
 	{
 		startTime = Time.time;
+        StartCoroutine(Blink(duration));
 	}
 
 	void LateUpdate () 
@@ -36,7 +40,7 @@ public class PointingArrows : MonoBehaviour
 		float angle = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
 		Quaternion rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, strength * Time.deltaTime);
-		StartCoroutine (FadeOut ());
+        StartCoroutine(FadeOut());
 	}
 	#endregion
 
@@ -47,5 +51,17 @@ public class PointingArrows : MonoBehaviour
 		sprite.color = new Color(1f,1f,1f,Mathf.SmoothStep(maximum, minimum, t)); 
 		yield return null;
 	}
+
+    private IEnumerator Blink(float waitTime)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(gameData.blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(gameData.blinkMultiplier);
+        }
+    }
 	#endregion
 }

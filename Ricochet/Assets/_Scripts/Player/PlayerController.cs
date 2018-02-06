@@ -67,9 +67,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much the above values should be multiplied by on death")]
     [SerializeField]
     private float rumbleMultiplier = 2f;
-    [Tooltip("How frequently the player sprite should blink on death")]
-    [SerializeField]
-    private float blinkMultiplier = 0.2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
@@ -505,9 +502,9 @@ public class PlayerController : MonoBehaviour
         while (Time.time < endTime)
         {
             sprite.enabled = false;
-            yield return new WaitForSeconds(blinkMultiplier);
+            yield return new WaitForSeconds(gameData.blinkMultiplier);
             sprite.enabled = true;
-            yield return new WaitForSeconds(blinkMultiplier);
+            yield return new WaitForSeconds(gameData.blinkMultiplier);
         }
     }
     #endregion
