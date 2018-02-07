@@ -1,4 +1,5 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
@@ -295,8 +296,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (rigid.velocity.magnitude > thrusterSpeed)
+        if (rigid.velocity.magnitude > thrusterSpeed+15)
         {
+            Debug.Log("Mag: "+ rigid.velocity.magnitude + " thrustSpd: " + thrusterSpeed);
             this.animator.SetTrigger("dash");
         }
     }
