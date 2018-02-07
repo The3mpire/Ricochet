@@ -1,4 +1,5 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
@@ -295,7 +296,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (rigid.velocity.magnitude > thrusterSpeed)
+        if (rigid.velocity.magnitude > thrusterSpeed+15)
         {
             this.animator.SetTrigger("dash");
         }
