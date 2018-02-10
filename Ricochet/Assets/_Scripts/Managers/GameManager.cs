@@ -384,11 +384,14 @@ public class GameManager : MonoBehaviour
                 PlayerController playerController;
                 if (!playerDictionary.TryGetValue(haplessSoul, out playerController))
                 {
-                    playerController = haplessSoul.GetComponent<PlayerController>();
+                    playerController = haplessSoul.GetComponentInParent<PlayerController>();
                     playerDictionary.Add(haplessSoul, playerController);
                 }
-                playerController.PlayerDead();
-                StartCoroutine(RespawnPlayer(playerController));
+                if (!playerController.IsInvincible())
+                {
+                    playerController.PlayerDead();
+                    StartCoroutine(RespawnPlayer(playerController));
+                }
                 break;
             case "Ball":
                 haplessSoul.GetComponent<Ball>().OnBallGoalCollision();
@@ -685,17 +688,20 @@ public class GameManager : MonoBehaviour
     {
         float scale = powerUpManager.GetShrinkScale();
         float delay = powerUpManager.GetShrinkDuration();
+        float multiplier = powerUpManager.GetShrinkMass();
+
         foreach (PlayerController player in playerControllers)
         {
             if (player.GetTeamNumber() == team)
             {
                 player.transform.localScale = new Vector3(scale, scale, scale);
+                player.ChangeMomentum(multiplier);
             }
         }
-        StartCoroutine(ResetTeamScale(team, delay));
+        StartCoroutine(ResetTeamScale(team, delay, multiplier));
     }
 
-    IEnumerator ResetTeamScale(ETeam team, float delay)
+    IEnumerator ResetTeamScale(ETeam team, float delay, float mult)
     {
         yield return new WaitForSeconds(delay);
 
@@ -703,7 +709,9 @@ public class GameManager : MonoBehaviour
         {
             if (player.GetTeamNumber() == team)
             {
+                player.GiveIFrames(powerUpManager.GetIFrames());
                 player.transform.localScale = new Vector3(1, 1, 1);
+                player.ChangeMomentum(1/mult);
             }
         }
     }

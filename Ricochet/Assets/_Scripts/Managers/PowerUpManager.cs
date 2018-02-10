@@ -56,10 +56,40 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField]
     private float freezeTime;
 
-    
+    [Header("Shrink")]
+    [Tooltip("Shrinks enemy team to this scale")]
+    [SerializeField]
+    private float shrinkScale = 0.5f;
+    [Tooltip("Shrink powerup duration in seconds")]
+    [SerializeField]
+    private float shrinkDuration = 5f;
+    [Tooltip("Mass of shrunken players multiplier of starting mass")]
+    [SerializeField]
+    private float shrinkMass = .2f;
+    [Tooltip("Seconds of invulnerability given to players when they expand to prevent colliding with walls")]
+    [SerializeField]
+    private float shrinkIFrames = .001f;
     #endregion
 
     #region External Functions
+    public float GetShrinkScale()
+    {
+        return shrinkScale;
+    }
+    public float GetShrinkDuration()
+    {
+        return shrinkDuration;
+    }
+    public float GetShrinkMass()
+    {
+        return shrinkMass;
+    }
+    public float GetIFrames()
+    {
+        return shrinkIFrames;
+    }
+
+
     public float GetBurstRadius()
     {
         return burstRadius;

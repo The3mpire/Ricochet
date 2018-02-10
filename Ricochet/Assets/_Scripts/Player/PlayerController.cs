@@ -413,6 +413,12 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator DelayedEndIFrames(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        isInvincible = false;
+    }
     #endregion
 
     #region External Functions
@@ -440,6 +446,19 @@ public class PlayerController : MonoBehaviour
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
+    }
+    public void GiveIFrames(float seconds)
+    {
+        if (isInvincible)
+        {
+            return;
+        }
+        isInvincible = true;
+        StartCoroutine(DelayedEndIFrames(seconds));
+    }
+    public void ChangeMomentum(float m)
+    {
+        rigid.mass *= m;
     }
 
     public void AddVelocity(Vector2 velocity)
@@ -514,6 +533,10 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Getters and Setters
+    public bool IsInvincible()
+    {
+        return isInvincible;
+    }
     public bool IsGrounded()
     {
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
