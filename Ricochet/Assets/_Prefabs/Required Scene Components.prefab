@@ -74,6 +74,8 @@ GameObject:
   - component: {fileID: 114731083047901876}
   - component: {fileID: 114620649267565144}
   - component: {fileID: 114720606445144248}
+  - component: {fileID: 114186423841661416}
+  - component: {fileID: 114639088394438882}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -360,8 +362,7 @@ MonoBehaviour:
   onTimerChanged: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49, type: 2}
   matchStartTime: 3
   timeAfterGameEnd: 3
-  powerUpRespawnTime: 10
-  playerRespawnTime: 2
+  powerUpRespawnTime: 20
   ballRespawnTime: 2
   ballHoldTime: 1
   redTeamRespawns:
@@ -370,6 +371,21 @@ MonoBehaviour:
   - {fileID: 0}
   ballRespawns:
   - {fileID: 0}
+--- !u!114 &114186423841661416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1532fdd6503411d4d911ed370ddf1a2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectShader: {fileID: 4800000, guid: aaa4522de7cc5544695f110e5d6d08bf, type: 3}
+  intensity: 0.025
+  cycles: 1
+  progress: 0
 --- !u!114 &114620649267565144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -385,6 +401,21 @@ MonoBehaviour:
   shakeStrength: 1
   shakeVibrato: 10
   shakeRandomness: 90
+--- !u!114 &114639088394438882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550601391691784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 665fea11bf33b4a4ca7394c56617f890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectShader: {fileID: 4800000, guid: cc66c8d302151504c8a61c8ed2a6a63f, type: 3}
+  intensityMultiplier: 0.025
+  frequency: 3
+  speed: 5.5
 --- !u!114 &114720606445144248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -427,8 +458,8 @@ MonoBehaviour:
   targets: []
   offset: {x: 0, y: 1.5, z: -10}
   smoothTime: 0.75
-  minPos: {x: -6, y: -4.5}
-  maxPos: {x: 6, y: 4.5}
+  minPos: {x: -6, y: -1}
+  maxPos: {x: 6, y: 1}
 --- !u!114 &114876842522859312
 MonoBehaviour:
   m_ObjectHideFlags: 1

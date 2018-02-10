@@ -157,9 +157,16 @@ public class Ball : MonoBehaviour
      * Called once the ball kills a player
      * Could be used to adjust post-kill velocity or direction
      */
-    public void RedirectBall(Vector2 relativeVelocity)
+    public void RedirectBall(Vector2 relativeVelocity, Vector2 newDirection)
     {
-        body.velocity = body.velocity.normalized * relativeVelocity.magnitude;
+        if (newDirection != Vector2.zero)
+        {
+            body.velocity = newDirection.normalized * relativeVelocity.magnitude;
+        }
+        else
+        {
+            body.velocity = body.velocity.normalized * relativeVelocity.magnitude;
+        }
     }
     #endregion
 

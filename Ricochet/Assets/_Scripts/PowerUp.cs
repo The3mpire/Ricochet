@@ -14,7 +14,10 @@ public class PowerUp : MonoBehaviour
     [SerializeField] private EPowerUp powerUpType;
     [Tooltip("The sprite of the powerup")]
     [SerializeField] private SpriteRenderer powerupSprite;
-    
+    [Tooltip("The animation controller of the powerup")]
+    [SerializeField]
+    private Animator powerupAnimator;
+
     [Serializable]
     private struct weight
     {
@@ -41,6 +44,8 @@ public class PowerUp : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
+        powerupSprite = this.GetComponent<SpriteRenderer>();
+        powerupAnimator = this.GetComponent<Animator>();
         if (powerUpType == EPowerUp.Random)
         {
             uint len = 0;
@@ -144,13 +149,16 @@ public class PowerUp : MonoBehaviour
             switch (instanceType)
             {
                 case EPowerUp.Multiball:
-                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/multiballiconplaceholder");
+                    powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/multi_ball_0");
                     break;
                 case EPowerUp.CatchNThrow:
                     powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/catchstickyiconplaceholder");
                     break;
                 case EPowerUp.CircleShield:
-                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/fullshieldiconplaceholder");
+                    powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/360_shield_0");
+                    break;
+                case EPowerUp.Freeze:
+                    powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/freeze_icon_0");
                     break;
                 case EPowerUp.Shrink:
                     powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/shrinkiconplaceholder");
