@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private UI_MatchTimer gameTimerText;
+    [Tooltip("Drag the neon lights here")]
+    [SerializeField]
+    private Transform[] lights;
 
     [Header("Events")]
     [SerializeField]
@@ -325,6 +328,14 @@ public class GameManager : MonoBehaviour
         if (gameMode == EMode.Soccer)
         {
             onGoal.Raise();
+            foreach (Transform light in lights)
+            {
+                Transform t = Instantiate(light);
+                NeonLight lightInstance = t.GetComponent<NeonLight>();
+                lightInstance.Initialize();
+                lightInstance.SetColor(team);
+                lightInstance.HitTheLights();
+            }
             if (!modeManager.UpdateScore(team, points))
             {
                 Ball ballScpt = ball.GetComponent<Ball>();

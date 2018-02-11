@@ -128,8 +128,8 @@ public class Ball : MonoBehaviour
                 }
             }
             psMain.startSpeed = body.velocity.magnitude / 3;
-            //psMain.startRotation = GetRotation();
-            psMain.startRotation = UnityEngine.Random.Range(0, 2 * Mathf.PI);
+            psMain.startRotation = GetRotation();
+            //psMain.startRotation = UnityEngine.Random.Range(0, 2 * Mathf.PI);
         }
     }
 
