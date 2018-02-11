@@ -544,6 +544,11 @@ public class PlayerController : MonoBehaviour
         this.movementDisabled = movementDisabled;
     }
 
+    public bool MovementDisabled()
+    {
+        return movementDisabled;
+    }
+
     public void SetInfiniteFuel(bool active)
     {
         infiniteFuel = active;
