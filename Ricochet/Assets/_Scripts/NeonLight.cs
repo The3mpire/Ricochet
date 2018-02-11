@@ -9,27 +9,36 @@ public class NeonLight : MonoBehaviour {
     [SerializeField] float speed;
 
     private TrailRenderer tr;
+    private ParticleSystem ps;
+    private ParticleSystem.MainModule psm;
+    private Color neonBlue;
+    private Color sparkBlue;
+    private Color neonRed;
+    private Color sparkRed;
 
     void Start()
     {
         transform.position = nodes[0];
         tr = GetComponent<TrailRenderer>();
+        ps = GetComponent<ParticleSystem>();
+        psm = ps.main;
     }
 
-    public void Initialize()
+    public void Initialize(Color[] colors)
     {
         transform.position = nodes[0];
         tr = GetComponent<TrailRenderer>();
-    }
-
-    void Update()
-    {
-        if (Input.anyKeyDown)
-            HitTheLights();
+        ps = GetComponent<ParticleSystem>();
+        psm = ps.main;
+        neonBlue = colors[0];
+        sparkBlue = colors[1];
+        neonRed = colors[2];
+        sparkRed = colors[3];
     }
 
     public void HitTheLights()
     {
+        StopCoroutine("StartTheShow");
         StartCoroutine("StartTheShow");
     }
 
@@ -37,6 +46,7 @@ public class NeonLight : MonoBehaviour {
     {
         tr.enabled = false;
         transform.position = nodes[0];
+        yield return new WaitForEndOfFrame();
         tr.enabled = true;
         float s = speed;
         int i = 0;
@@ -68,7 +78,9 @@ public class NeonLight : MonoBehaviour {
             position = transform.position;
             yield return new WaitForFixedUpdate();
         }
-        yield return new WaitForSeconds(tr.time);
+        ParticleSystem.EmissionModule emitter = ps.emission;
+        emitter.rateOverTime = 0f;
+        yield return new WaitForSeconds(psm.startLifetime.constant + ps.trails.lifetime.constant);
         Destroy(gameObject);
     }
 
@@ -84,12 +96,14 @@ public class NeonLight : MonoBehaviour {
         switch (t)
         {
             case ETeam.RedTeam:
-                tr.startColor = Color.blue;
-                tr.endColor = Color.blue;
+                tr.startColor = neonBlue;
+                tr.endColor = neonBlue;
+                psm.startColor = sparkBlue;
                 break;
             case ETeam.BlueTeam:
-                tr.startColor = Color.red;
-                tr.endColor = Color.red;
+                tr.startColor = neonRed;
+                tr.endColor = neonRed;
+                psm.startColor = sparkRed;
                 break;
         }
     }
