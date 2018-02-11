@@ -54,7 +54,7 @@ public class PlayerDashController : MonoBehaviour
     {
         HandleDashRecharge();
 
-        if (player.GetButtonDown("Dash") && dashCount > 0)
+        if (player.GetButtonDown("Dash") && dashCount > 0 && !pc.MovementDisabled())
         {
             Dash();
         }
