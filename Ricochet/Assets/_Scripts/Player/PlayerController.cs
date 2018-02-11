@@ -304,7 +304,14 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
+        bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
+
+        if (leftTriggerAxis != 0 && touchingGround)
+        {
+            AddVelocity(Vector2.up * 5);
+        }
 
         if (leftTriggerAxis != 0)
         {
@@ -416,13 +423,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
-    public void Push(Vector3 direction, float force)
-    {
-        Debug.Log("pushed");
-
-        Vector3 result = direction * force;
-        rigid.AddForce(result);
-    }
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
