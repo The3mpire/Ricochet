@@ -57,6 +57,12 @@ public class PowerUpManager : MonoBehaviour
     private float freezeTime;
 
     [Header("Shrink")]
+    [Tooltip("The color of shrink powerup objects")]
+    [SerializeField]
+    private Color shrinkColor;
+    [Tooltip("The color of shield with shrink power up")]
+    [SerializeField]
+    private Color shrinkShieldColor;
     [Tooltip("Shrinks enemy team to this scale")]
     [SerializeField]
     private float shrinkScale = 0.5f;
@@ -112,6 +118,8 @@ public class PowerUpManager : MonoBehaviour
                 return circleShieldColor;
             case EPowerUp.Freeze:
                 return freezeColor;
+            case EPowerUp.Shrink:
+                return shrinkColor;
             default:
                 return Color.white;
         }
@@ -129,6 +137,8 @@ public class PowerUpManager : MonoBehaviour
                 return circleShieldShieldColor;
             case EPowerUp.Freeze:
                 return freezeShieldColor;
+            case EPowerUp.Shrink:
+                return shrinkShieldColor;
             default:
                 return Color.white;
         }

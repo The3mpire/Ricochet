@@ -332,6 +332,10 @@ public class GameManager : MonoBehaviour
                 ball.SetActive(false);
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
+                
+                float multiplier = powerUpManager.GetShrinkMass();
+                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f, multiplier));
+                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f, multiplier));
             }
             else
             {
@@ -372,6 +376,7 @@ public class GameManager : MonoBehaviour
             ETeam opTeam = GetOpposingTeam(team);
 
             ShrinkTeam(opTeam);
+            playerController.RemovePowerUp();
         }
 
     }
@@ -696,6 +701,7 @@ public class GameManager : MonoBehaviour
             {
                 player.transform.localScale = new Vector3(scale, scale, scale);
                 player.ChangeMomentum(multiplier);
+                player.SetIsShrunken(true);
             }
         }
         StartCoroutine(ResetTeamScale(team, delay, multiplier));
@@ -712,6 +718,7 @@ public class GameManager : MonoBehaviour
                 player.GiveIFrames(powerUpManager.GetIFrames());
                 player.transform.localScale = new Vector3(1, 1, 1);
                 player.ChangeMomentum(1/mult);
+                player.SetIsShrunken(false);
             }
         }
     }
