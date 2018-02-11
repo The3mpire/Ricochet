@@ -10,9 +10,6 @@ public class GameDataSO : ScriptableObject
     [SerializeField]
     [Tooltip("How long the player takes to respawn in seconds")]
     public float playerRespawnTime = 2f;    
-    [Tooltip("How frequently the player sprite should blink on death")]
-    [SerializeField]
-    public float blinkMultiplier = 0.2f;
     [SerializeField]
     private EMode gameMode;
 
@@ -185,15 +182,4 @@ public class GameDataSO : ScriptableObject
         gameWinner = ETeam.None;
     }
 
-    public IEnumerator Blink(float waitTime, SpriteRenderer sprite)
-    {
-        float endTime = Time.time + waitTime;
-        while (Time.time < endTime)
-        {
-            sprite.enabled = false;
-            yield return new WaitForSeconds(blinkMultiplier);
-            sprite.enabled = true;
-            yield return new WaitForSeconds(blinkMultiplier);
-        }
-    }
 }

@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Gravity scale on player")]
     [SerializeField]
     private float gravScale = 8f;
+    [Tooltip("How frequently the player sprite should blink on death")]
+    [SerializeField]
+    public float blinkMultiplier = 0.2f;
     [Tooltip("Acceleration constant while moving laterally")]
     [SerializeField]
     private float lateralAcceleration;
@@ -468,8 +471,20 @@ public class PlayerController : MonoBehaviour
         Rumble(rumbleMultiplier);
         
         rigid.velocity = Vector3.zero;
-        StartCoroutine(gameData.Blink(gameData.playerRespawnTime,sprite));
+        StartCoroutine(Blink(gameData.playerRespawnTime));
         StartCoroutine(KillPlayer());
+    }
+
+    private IEnumerator Blink(float waitTime)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(blinkMultiplier);
+        }
     }
 
     private IEnumerator KillPlayer()
