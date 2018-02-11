@@ -1,4 +1,5 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using Rewired;
 using System.Collections.Generic;
 using UnityEngine;
@@ -295,7 +296,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (rigid.velocity.magnitude > thrusterSpeed)
+        if (rigid.velocity.magnitude > thrusterSpeed+15)
         {
             this.animator.SetTrigger("dash");
         }
@@ -303,7 +304,14 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
+        bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
+
+        if (leftTriggerAxis != 0 && touchingGround)
+        {
+            AddVelocity(Vector2.up * 5);
+        }
 
         if (leftTriggerAxis != 0)
         {
@@ -324,11 +332,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 float x, y;
-                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed + (rigid.velocity.x - thrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed + (rigid.velocity.x + thrusterSpeed) * 0.85f);
 
-                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed);
+                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed + (rigid.velocity.y + thrusterSpeed) * 0.85f);
 
                 rigid.velocity = new Vector2(x, y);
             }
@@ -350,11 +358,11 @@ public class PlayerController : MonoBehaviour
                 float x = 0, y = 0;
                 if (rigid.velocity.x > fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x - (lateralAcceleration * 2f);
+                    x = rigid.velocity.x - (rigid.velocity.x - fallingLateralSpeed) * 0.85f;
                 }
                 else if (rigid.velocity.x < -fallingLateralSpeed)
                 {
-                    x = rigid.velocity.x + (lateralAcceleration * 2f);
+                    x = rigid.velocity.x - ((rigid.velocity.x + fallingLateralSpeed) * 0.85f);
                 }
                 else
                 {
@@ -415,13 +423,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
-    public void Push(Vector3 direction, float force)
-    {
-        Debug.Log("pushed");
-
-        Vector3 result = direction * force;
-        rigid.AddForce(result);
-    }
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
@@ -541,6 +542,11 @@ public class PlayerController : MonoBehaviour
     public void DisableMovement(bool movementDisabled)
     {
         this.movementDisabled = movementDisabled;
+    }
+
+    public bool MovementDisabled()
+    {
+        return movementDisabled;
     }
 
     public void SetInfiniteFuel(bool active)
