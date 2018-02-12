@@ -199,6 +199,12 @@ public class PlayerController : MonoBehaviour
         {
             rightStickVert = player.GetAxis("RightStickVertical");
         }
+
+        if (player.GetAxis("Taunt") != 0)
+        {
+            PlayTaunt();
+        }
+
         
         if (remainingFreezeTime > 0)
         {
@@ -275,6 +281,10 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Helpers
+    private void PlayTaunt()
+    {
+        // play that taunt boi
+    }
 
     private void HandleAnimator()
     {
