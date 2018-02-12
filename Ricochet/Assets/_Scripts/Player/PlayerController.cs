@@ -143,6 +143,7 @@ public class PlayerController : MonoBehaviour
     private float leftTriggerAxis;
 
     private bool movementDisabled = false;
+    private AudioSource taunt;
     #endregion
 
     #region Monobehaviour
@@ -152,7 +153,7 @@ public class PlayerController : MonoBehaviour
         {
             playerNumberTag.text = playerNumber.ToString();
         }
-
+        taunt = GetComponent<AudioSource>();
         powerupParticle.Stop();
         jetpackBurnedOut = false;
         isFrozen = false;
@@ -284,6 +285,7 @@ public class PlayerController : MonoBehaviour
     private void PlayTaunt()
     {
         // play that taunt boi
+        taunt.Play();
     }
 
     private void HandleAnimator()
