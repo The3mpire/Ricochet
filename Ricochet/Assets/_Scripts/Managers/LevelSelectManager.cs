@@ -113,6 +113,11 @@ public class LevelSelectManager : MonoBehaviour
 
     public void LoadLevel()
     {
+        if (loadLevelBuildIndex == BuildIndex.CHARACTER_SELECT)
+        {
+            LevelSelect.LoadLevel(loadLevelBuildIndex);
+            return;
+        }
         LevelSelect.LoadLevel(BuildIndex.CONTROLLER_MAP);
     }
 

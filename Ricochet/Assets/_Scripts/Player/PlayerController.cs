@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Gravity scale on player")]
     [SerializeField]
     private float gravScale = 8f;
+    [Tooltip("How frequently the player sprite should blink on death")]
+    [SerializeField]
+    public float blinkMultiplier = 0.2f;
     [Tooltip("Acceleration constant while moving laterally")]
     [SerializeField]
     private float lateralAcceleration;
@@ -68,9 +71,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How much the above values should be multiplied by on death")]
     [SerializeField]
     private float rumbleMultiplier = 2f;
-    [Tooltip("How frequently the player sprite should blink on death")]
-    [SerializeField]
-    private float blinkMultiplier = 0.2f;
 
     [Header("Reference Components")]
     [Tooltip("The Shield Transform")]
@@ -304,7 +304,14 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
+        bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
+
+        if (leftTriggerAxis != 0 && touchingGround)
+        {
+            AddVelocity(Vector2.up * 5);
+        }
 
         if (leftTriggerAxis != 0)
         {
@@ -416,13 +423,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
-    public void Push(Vector3 direction, float force)
-    {
-        Debug.Log("pushed");
-
-        Vector3 result = direction * force;
-        rigid.AddForce(result);
-    }
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
@@ -476,6 +476,18 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(KillPlayer());
     }
 
+    private IEnumerator Blink(float waitTime)
+    {
+        float endTime = Time.time + waitTime;
+        while (Time.time < endTime)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(blinkMultiplier);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(blinkMultiplier);
+        }
+    }
+
     private IEnumerator KillPlayer()
     {
         this.animator.SetBool("isDead", true);
@@ -497,18 +509,6 @@ public class PlayerController : MonoBehaviour
             case EPowerUp.CircleShield:
                 circleShield.SetActive(status);
                 break;
-        }
-    }
-
-    private IEnumerator Blink(float waitTime)
-    {
-        float endTime = Time.time + waitTime;
-        while (Time.time < endTime)
-        {
-            sprite.enabled = false;
-            yield return new WaitForSeconds(blinkMultiplier);
-            sprite.enabled = true;
-            yield return new WaitForSeconds(blinkMultiplier);
         }
     }
     #endregion
@@ -542,6 +542,11 @@ public class PlayerController : MonoBehaviour
     public void DisableMovement(bool movementDisabled)
     {
         this.movementDisabled = movementDisabled;
+    }
+
+    public bool MovementDisabled()
+    {
+        return movementDisabled;
     }
 
     public void SetInfiniteFuel(bool active)

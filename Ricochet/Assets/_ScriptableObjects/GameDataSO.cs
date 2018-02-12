@@ -1,15 +1,15 @@
 ﻿using Enumerables;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 [CreateAssetMenu(menuName = "Game Data")]
 public class GameDataSO : ScriptableObject
 {
 
     [SerializeField]
-    [Tooltip("How long the ball takes to respawn in seconds")]
+    [Tooltip("How long the player takes to respawn in seconds")]
     public float playerRespawnTime = 2f;    
-
     [SerializeField]
     private EMode gameMode;
 
@@ -181,4 +181,5 @@ public class GameDataSO : ScriptableObject
         redTeamScore = 0;
         gameWinner = ETeam.None;
     }
+
 }
