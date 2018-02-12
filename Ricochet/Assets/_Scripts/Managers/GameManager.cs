@@ -395,9 +395,10 @@ public class GameManager : MonoBehaviour
     #region Respawners
     public void LoadPlayer(PlayerController playerController, int playerNumber)
     {
-        if (playerNumber <= gameData.GetPlayerCount())
+        if(gameData.GetActive(playerNumber))
         {
             NoWaitRespawnPlayer(playerController);
+
         }
         else
         {
