@@ -592,8 +592,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158271850568408}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18, y: -11, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -15, y: -11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224102686627786838}
@@ -714,7 +714,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ffe602ee2994b0b48bcc4717d463a9fa, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 3
@@ -1014,6 +1014,7 @@ MonoBehaviour:
   playerNumber: 1
   team: 1
   gravScale: 12
+  blinkMultiplier: 0.2
   lateralAcceleration: 0.5
   fallingLateralSpeed: 5
   thrusterAcceleration: 1.5
@@ -1028,7 +1029,6 @@ MonoBehaviour:
   motorLevel: 0.5
   rumbleDuration: 0.1
   rumbleMultiplier: 2
-  blinkMultiplier: 0.2
   shieldTransform: {fileID: 4414966702740056}
   shieldObject: {fileID: 1936325338366724}
   sprite: {fileID: 212644095525073304}
