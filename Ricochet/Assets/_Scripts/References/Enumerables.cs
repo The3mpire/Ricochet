@@ -20,7 +20,8 @@
         Multiball = 1,
         CatchNThrow = 2,
         CircleShield = 3,
-        Freeze = 4
+	Freeze = 4,
+	Shrink = 5
     }
 
     public enum EMode
