@@ -326,6 +326,9 @@ GameObject:
   - component: {fileID: 223643899638925116}
   - component: {fileID: 114498539661033504}
   - component: {fileID: 114691975479636340}
+  - component: {fileID: 114213632845137766}
+  - component: {fileID: 114389706046978036}
+  - component: {fileID: 114646417286102622}
   m_Layer: 5
   m_Name: Tag canvas
   m_TagString: Untagged
@@ -852,6 +855,45 @@ MonoBehaviour:
   lineRendererMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   colliderEdgeRadius: 0.2
   colliderMaterial: {fileID: 0}
+--- !u!114 &114213632845137766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1897236840323838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4e9d27a4d7a76749b87af48d17038ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114389706046978036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1897236840323838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee430f3068524d24a9fe1568f64e9202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d1a16fea81be59e4daf5abf50c8b18f5, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114213632845137766}
+        m_MethodName: ShowTag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114427545474809300
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -932,6 +974,34 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114646417286102622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1897236840323838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee430f3068524d24a9fe1568f64e9202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e49c3208878ea1e42b242fda94331339, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114213632845137766}
+        m_MethodName: HideTag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114691975479636340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1014,6 +1084,7 @@ MonoBehaviour:
   playerNumber: 1
   team: 1
   gravScale: 12
+  blinkMultiplier: 0.2
   lateralAcceleration: 0.5
   fallingLateralSpeed: 5
   thrusterAcceleration: 1.5
@@ -1028,7 +1099,6 @@ MonoBehaviour:
   motorLevel: 0.5
   rumbleDuration: 0.1
   rumbleMultiplier: 2
-  blinkMultiplier: 0.2
   shieldTransform: {fileID: 4414966702740056}
   shieldObject: {fileID: 1936325338366724}
   sprite: {fileID: 212644095525073304}
@@ -31603,7 +31673,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1897236840323838}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 2.75, z: 0}
   m_LocalScale: {x: 0.008259583, y: 0.009871407, z: 0.009871407}
   m_Children:
   - {fileID: 224630125391241672}
@@ -31612,7 +31682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2}
+  m_AnchoredPosition: {x: 0, y: 2.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224416047213912470
