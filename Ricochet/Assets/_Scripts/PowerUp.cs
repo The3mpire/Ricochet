@@ -160,6 +160,9 @@ public class PowerUp : MonoBehaviour
                 case EPowerUp.Freeze:
                     powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/freeze_icon_0");
                     break;
+                case EPowerUp.Shrink:
+                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/shrinkiconplaceholder");
+                    break;
                 default:
                     break;
             }
