@@ -123,7 +123,6 @@ GameObject:
   - component: {fileID: 70214067932584476}
   - component: {fileID: 114787925907891002}
   - component: {fileID: 114450103866478952}
-  - component: {fileID: 114837096486908798}
   - component: {fileID: 82779157815398102}
   - component: {fileID: 114427545474809300}
   m_Layer: 9
@@ -1014,6 +1013,7 @@ MonoBehaviour:
   playerNumber: 1
   team: 1
   gravScale: 12
+  blinkMultiplier: 0.2
   lateralAcceleration: 0.5
   fallingLateralSpeed: 5
   thrusterAcceleration: 1.5
@@ -1028,7 +1028,6 @@ MonoBehaviour:
   motorLevel: 0.5
   rumbleDuration: 0.1
   rumbleMultiplier: 2
-  blinkMultiplier: 0.2
   shieldTransform: {fileID: 4414966702740056}
   shieldObject: {fileID: 1936325338366724}
   sprite: {fileID: 212644095525073304}
@@ -1061,18 +1060,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114837096486908798
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1158271850568408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc28887d6950fe549b2966633cbcf8b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lowFuelParticle: {fileID: 198826147038616612}
 --- !u!120 &120864174213652354
 LineRenderer:
   m_ObjectHideFlags: 1
