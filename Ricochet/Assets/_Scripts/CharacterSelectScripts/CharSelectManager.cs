@@ -145,7 +145,7 @@ public class CharSelectManager : MonoBehaviour
     {
         timerActive = false;
         bHeld = false;
-        for(int i = 1; i< 4;i++)
+        for(int i = 1; i<= 4;i++)
         {
             gameData.SetPlayerInactive(i);
         }
