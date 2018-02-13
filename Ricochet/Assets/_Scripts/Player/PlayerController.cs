@@ -143,6 +143,8 @@ public class PlayerController : MonoBehaviour
     private float leftTriggerAxis;
 
     private bool movementDisabled = false;
+
+    private PlayerDashController dashController;
     #endregion
 
     #region Monobehaviour
@@ -167,6 +169,8 @@ public class PlayerController : MonoBehaviour
         team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
+
+        dashController = GetComponent<PlayerDashController>();
 
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
@@ -499,6 +503,7 @@ public class PlayerController : MonoBehaviour
         this.animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         movementDisabled = false;
     }
