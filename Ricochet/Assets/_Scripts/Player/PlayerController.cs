@@ -94,16 +94,15 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
-    [Tooltip("Drag the player's \"BurstCollider\" here")]
-    [SerializeField]
-    private GameObject burstCollider;
     [Tooltip("Drag the player's audio source here")]
     [SerializeField]
     private AudioSource audioSource;
     [Tooltip("Freeze Color")]
     [SerializeField]
     private Color freezeColor;
-
+    [Tooltip("The ball detection collider object")]
+    [SerializeField]
+    private GameObject detectionColliderObject;
 
     [Header("Secondary Items")]
     [Tooltip("Drag the player's power up circle shield here")]
@@ -622,6 +621,16 @@ public class PlayerController : MonoBehaviour
     public void SetFreezeTime(float value)
     {
         remainingFreezeTime = value;
+    }
+
+    public void SetBallDetection(bool value)
+    {
+        detectionColliderObject.SetActive(value);
+    }
+
+    public SpriteRenderer GetSprite()
+    {
+        return sprite;
     }
 
     internal Shield GetShield()
