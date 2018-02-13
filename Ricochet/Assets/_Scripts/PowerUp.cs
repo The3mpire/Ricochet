@@ -75,7 +75,7 @@ public class PowerUp : MonoBehaviour
             }
             if (runTrials)
             {
-                trial();
+                Trial();
             }
         }
         else
@@ -108,7 +108,7 @@ public class PowerUp : MonoBehaviour
     }
 
     // helps give exp
-    private void trial()
+    private void Trial()
     {
         Dictionary<EPowerUp, float> results = new Dictionary<EPowerUp, float>();
         float trials = 1000;
@@ -152,7 +152,7 @@ public class PowerUp : MonoBehaviour
                     powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/multi_ball_0");
                     break;
                 case EPowerUp.CatchNThrow:
-                    powerupSprite.sprite = Resources.Load<Sprite>("_Art/2D Sprites/Environment/Powerups/catchstickyiconplaceholder");
+                    powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/CatchNThrow_0");
                     break;
                 case EPowerUp.CircleShield:
                     powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/360_shield_0");
