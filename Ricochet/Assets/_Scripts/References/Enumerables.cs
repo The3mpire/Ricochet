@@ -9,6 +9,7 @@
         DIAGONAL_ALLEY,
         ELEVATOR,
         UP_N_OVER,
+        EMPTY_LEVEL,
         END_GAME,
         MOVE
     }
