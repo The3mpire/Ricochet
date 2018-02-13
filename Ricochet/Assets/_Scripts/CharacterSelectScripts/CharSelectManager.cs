@@ -145,6 +145,10 @@ public class CharSelectManager : MonoBehaviour
     {
         timerActive = false;
         bHeld = false;
+        for(int i = 1; i<= 4;i++)
+        {
+            gameData.SetPlayerInactive(i);
+        }
     }
 
     void Start()
@@ -517,6 +521,7 @@ public class CharSelectManager : MonoBehaviour
                 p4ActiveToken = MoveSelectionTokenTo(playerSettings[3].Character, p4ActiveToken, p4Tokens);
                 break;
         }
+        gameData.SetPlayerActive(playerNumber);
     }
 
     #endregion
