@@ -20,6 +20,9 @@ public class SoundStorage : ScriptableObject
     [Tooltip("Drag the cop death sounds here")]
     [SerializeField]
     private List<AudioClip> copDeathSounds;
+    [Tooltip("Drag the cop taunt sounds here")]
+    [SerializeField]
+    private List<AudioClip> copTauntSounds;
 
     [Header("Cat Sounds")]
     [Tooltip("Drag the cat jetpack sounds here")]
@@ -31,6 +34,9 @@ public class SoundStorage : ScriptableObject
     [Tooltip("Drag the cat death sounds here")]
     [SerializeField]
     private List<AudioClip> catDeathSounds;
+    [Tooltip("Drag the computer taunt sounds here")]
+    [SerializeField]
+    private List<AudioClip> catTauntSounds;
 
     [Header("Computer Sounds")]
     [Tooltip("Drag the computer jetpack sounds here")]
@@ -42,6 +48,9 @@ public class SoundStorage : ScriptableObject
     [Tooltip("Drag the computer death sounds here")]
     [SerializeField]
     private List<AudioClip> computerDeathSounds;
+    [Tooltip("Drag the computer taunt sounds here")]
+    [SerializeField]
+    private List<AudioClip> computerTauntSounds;
 
     [Space]
 
@@ -85,7 +94,17 @@ public class SoundStorage : ScriptableObject
                 return copDashSounds[Random.Range(0, copDashSounds.Count)];
         }
     }
-
+    public AudioClip GetPlayerTauntSound(ECharacter character)
+    {
+        switch (character)
+        {
+            case ECharacter.CatManP:
+            case ECharacter.CatManWT:
+            case ECharacter.Computer:
+            default: // for now we only have one asset, and its super standin, i mean quality
+                return computerTauntSounds[Random.Range(0, computerTauntSounds.Count)];
+        }
+    }
     public AudioClip GetPlayerJetpackSound(ECharacter character)
     {
         switch (character)

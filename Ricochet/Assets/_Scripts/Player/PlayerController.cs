@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
     private float leftTriggerAxis;
 
     private bool movementDisabled = false;
-    private AudioSource taunt;
+    private bool tauntIsPlaying = false;
     #endregion
 
     #region Monobehaviour
@@ -153,7 +153,6 @@ public class PlayerController : MonoBehaviour
         {
             playerNumberTag.text = playerNumber.ToString();
         }
-        taunt = GetComponent<AudioSource>();
         powerupParticle.Stop();
         jetpackBurnedOut = false;
         isFrozen = false;
@@ -203,9 +202,15 @@ public class PlayerController : MonoBehaviour
 
         if (player.GetAxis("Taunt") != 0)
         {
-            PlayTaunt();
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                if (!audioSource.isPlaying)
+                {
+                    ECharacter character = gameData.GetPlayerCharacter(playerNumber);
+                    audioSource.PlayOneShot(gameManagerInstance.GetTauntSound(character));
+                }
+            }
         }
-
         
         if (remainingFreezeTime > 0)
         {
@@ -282,12 +287,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Helpers
-    private void PlayTaunt()
-    {
-        // play that taunt boi
-        taunt.Play();
-    }
-
     private void HandleAnimator()
     {
         if (leftTriggerAxis != 0)
