@@ -20,6 +20,8 @@ public class GameDataSO : ScriptableObject
     private ECharacter[] playerCharacters;
     [SerializeField]
     private ETeam[] playerTeams;
+    [SerializeField]
+    private bool[] playerActive;
 
     [SerializeField]
     private BuildIndex gameLevel;
@@ -144,6 +146,11 @@ public class GameDataSO : ScriptableObject
         return gameWinner;
     }
 
+    public bool GetActive(int playerNumber)
+    {
+        return playerActive[playerNumber];
+    }
+
     public void SetGameWinner(ETeam winner)
     {
         gameWinner = winner;
@@ -170,6 +177,16 @@ public class GameDataSO : ScriptableObject
     public void SetPlayerTeam(int playerNumber, ETeam team)
     {
         playerTeams[playerNumber] = team;
+    }
+
+    public void SetPlayerActive(int playerNumber)
+    {
+        playerActive[playerNumber] = true;
+    }
+
+    public void SetPlayerInactive(int playerNumber)
+    {
+        playerActive[playerNumber] = false;
     }
     #endregion
 
