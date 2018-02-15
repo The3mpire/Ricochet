@@ -143,7 +143,6 @@ public class PlayerController : MonoBehaviour
     private float leftTriggerAxis;
 
     private bool movementDisabled = false;
-    private bool tauntIsPlaying = false;
     #endregion
 
     #region Monobehaviour
