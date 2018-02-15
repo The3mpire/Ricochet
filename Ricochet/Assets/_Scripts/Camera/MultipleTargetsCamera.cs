@@ -10,9 +10,14 @@ public class MultipleTargetsCamera : MonoBehaviour
     [SerializeField] private float smoothTime = .5f;
     [SerializeField] private Vector2 minPos;
     [SerializeField] private Vector2 maxPos;
+
+    [Header("Zoom Out")]
+    [SerializeField] private Vector2 zoomThresholds;
     [SerializeField] private float maxZoomOut = 2f;
-    [SerializeField] private float zoomOutTime = 0.4f;
-    [SerializeField] private float zoomInTime = 0.7f;
+    [SerializeField] private float zoomRatio;
+    [SerializeField] private float zoomOutTime;
+    [SerializeField] private float zoomInTime;
+    
 
     private Camera camera;
     private GameManager manager;
@@ -68,9 +73,16 @@ public class MultipleTargetsCamera : MonoBehaviour
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPoint, ref velocity, smoothTime);
 
-        if (targetBounds.extents.x > 2.25*maxPos.x)
+        if (targetBounds.extents.x > zoomThresholds.x)
         {
-            float z = initialZoom + Mathf.Abs(targetBounds.extents.x - maxPos.x);
+            float z = initialZoom + (zoomRatio / 100) * (targetBounds.extents.x - zoomThresholds.x);
+            z = Mathf.Clamp(z, initialZoom, initialZoom + maxZoomOut);
+            float smoothZ = Mathf.SmoothDamp(camera.orthographicSize, z, ref zoomVel, zoomOutTime);
+            camera.orthographicSize = smoothZ;
+        }
+        else if (targetBounds.extents.y > zoomThresholds.y)
+        {
+            float z = initialZoom + (zoomRatio / 100) * (targetBounds.extents.y - zoomThresholds.y);
             z = Mathf.Clamp(z, initialZoom, initialZoom + maxZoomOut);
             float smoothZ = Mathf.SmoothDamp(camera.orthographicSize, z, ref zoomVel, zoomOutTime);
             camera.orthographicSize = smoothZ;
