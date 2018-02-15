@@ -94,9 +94,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Drag the player's \"groundCheck\" here")]
     [SerializeField]
     private Transform groundCheck;
-    [Tooltip("Drag the player's \"BurstCollider\" here")]
-    [SerializeField]
-    private GameObject burstCollider;
     [Tooltip("Drag the player's audio source here")]
     [SerializeField]
     private AudioSource audioSource;
@@ -131,6 +128,7 @@ public class PlayerController : MonoBehaviour
     private bool jetpackBurnedOut;
     private bool isInvincible;
     private bool isFrozen;
+    private bool isShrunken;
     private float remainingFreezeTime;
     
     private float powerUpTimer;
@@ -143,6 +141,8 @@ public class PlayerController : MonoBehaviour
     private float leftTriggerAxis;
 
     private bool movementDisabled = false;
+
+    private PlayerDashController dashController;
     #endregion
 
     #region Monobehaviour
@@ -155,6 +155,7 @@ public class PlayerController : MonoBehaviour
         powerupParticle.Stop();
         jetpackBurnedOut = false;
         isFrozen = false;
+        isShrunken = false;
 
         killList = new List<PlayerController>();
         rigid.gravityScale = 0;
@@ -166,6 +167,8 @@ public class PlayerController : MonoBehaviour
         team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
+
+        dashController = GetComponent<PlayerDashController>();
 
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
@@ -274,8 +277,11 @@ public class PlayerController : MonoBehaviour
                                 isFrozen = false;
                             }
                         }
-                        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
-                        body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                        if (!GetIsShrunken())
+                        {
+                            Rigidbody2D body = this.gameObject.GetComponent<Rigidbody2D>();
+                            body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
+                        }
                         Rumble(1.25f);
                     }
                 }
@@ -430,6 +436,12 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator DelayedEndIFrames(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        isInvincible = false;
+    }
     #endregion
 
     #region External Functions
@@ -450,6 +462,22 @@ public class PlayerController : MonoBehaviour
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
+    }
+    public void GiveIFrames(float seconds)
+    {
+        if (this.gameObject.activeSelf)
+        {
+            if (isInvincible)
+            {
+                return;
+            }
+            isInvincible = true;
+            StartCoroutine(DelayedEndIFrames(seconds));
+        }
+    }
+    public void ChangeMomentum(float m)
+    {
+        rigid.mass *= m;
     }
 
     public void AddVelocity(Vector2 velocity)
@@ -509,6 +537,7 @@ public class PlayerController : MonoBehaviour
         this.animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         movementDisabled = false;
     }
@@ -524,6 +553,10 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Getters and Setters
+    public bool IsInvincible()
+    {
+        return isInvincible;
+    }
     public bool IsGrounded()
     {
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
@@ -617,6 +650,16 @@ public class PlayerController : MonoBehaviour
     public void SetTeam(ETeam teamValue)
     {
         team = teamValue;
+    }
+
+    public bool GetIsShrunken()
+    {
+        return isShrunken;
+    }
+
+    public void SetIsShrunken(bool value)
+    {
+        isShrunken = value;
     }
 
     public void SetJetpackParticle(ParticleSystem system)

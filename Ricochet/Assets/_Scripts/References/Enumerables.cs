@@ -9,6 +9,7 @@
         DIAGONAL_ALLEY,
         ELEVATOR,
         UP_N_OVER,
+        EMPTY_LEVEL,
         END_GAME,
         MOVE
     }
@@ -20,7 +21,8 @@
         Multiball = 1,
         CatchNThrow = 2,
         CircleShield = 3,
-        Freeze = 4
+	Freeze = 4,
+	Shrink = 5
     }
 
     public enum EMode
