@@ -549,7 +549,6 @@ public class CharSelectManager : MonoBehaviour
             allReady = false;
         }
 
-        gameData.SetPlayerCount(readyCount);
         return allReady;
     }
 
