@@ -1,15 +1,15 @@
 ﻿using Enumerables;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 [CreateAssetMenu(menuName = "Game Data")]
 public class GameDataSO : ScriptableObject
 {
 
     [SerializeField]
-    [Tooltip("How long the ball takes to respawn in seconds")]
+    [Tooltip("How long the player takes to respawn in seconds")]
     public float playerRespawnTime = 2f;    
-
     [SerializeField]
     private EMode gameMode;
 
@@ -20,6 +20,8 @@ public class GameDataSO : ScriptableObject
     private ECharacter[] playerCharacters;
     [SerializeField]
     private ETeam[] playerTeams;
+    [SerializeField]
+    private bool[] playerActive;
 
     [SerializeField]
     private BuildIndex gameLevel;
@@ -144,6 +146,11 @@ public class GameDataSO : ScriptableObject
         return gameWinner;
     }
 
+    public bool GetActive(int playerNumber)
+    {
+        return playerActive[playerNumber];
+    }
+
     public void SetGameWinner(ETeam winner)
     {
         gameWinner = winner;
@@ -171,6 +178,16 @@ public class GameDataSO : ScriptableObject
     {
         playerTeams[playerNumber] = team;
     }
+
+    public void SetPlayerActive(int playerNumber)
+    {
+        playerActive[playerNumber] = true;
+    }
+
+    public void SetPlayerInactive(int playerNumber)
+    {
+        playerActive[playerNumber] = false;
+    }
     #endregion
 
     #endregion
@@ -181,4 +198,5 @@ public class GameDataSO : ScriptableObject
         redTeamScore = 0;
         gameWinner = ETeam.None;
     }
+
 }

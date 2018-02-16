@@ -53,6 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4538094537529546}
   - component: {fileID: 114083169620717160}
+  - component: {fileID: 114150460956759452}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -371,6 +372,19 @@ MonoBehaviour:
   - {fileID: 0}
   ballRespawns:
   - {fileID: 0}
+--- !u!114 &114150460956759452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1349470231281830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798cb7a4b93517449888bdff7c133529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnShowPlayerTags: {fileID: 11400000, guid: d1a16fea81be59e4daf5abf50c8b18f5, type: 2}
+  OnHidePlayerTags: {fileID: 11400000, guid: e49c3208878ea1e42b242fda94331339, type: 2}
 --- !u!114 &114186423841661416
 MonoBehaviour:
   m_ObjectHideFlags: 1
