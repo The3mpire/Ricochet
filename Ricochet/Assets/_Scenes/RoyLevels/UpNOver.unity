@@ -112,63 +112,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &8234862
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 323199304}
-    m_Modifications:
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -7.86
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -5.45
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -0.140625
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114768322999356820, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: speed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 198155214058300962, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 198155214058300962, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: randomSeed
-      value: -310559281
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-  m_IsPrefabParent: 0
 --- !u!114 &30377640 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114524170790533896, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
@@ -1094,7 +1037,7 @@ Prefab:
         type: 2}
       propertyPath: lightsController
       value: 
-      objectReference: {fileID: 323199305}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
@@ -2263,82 +2206,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1481398476}
   m_Script: {fileID: 11500000, guid: cf7ccc82eac2bb34cb75d9515c51d911, type: 3}
---- !u!1001 &1484835044
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 323199304}
-    m_Modifications:
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 1.18
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -8.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -0.140625
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1205137858141626, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-      propertyPath: m_Name
-      value: Neon Lights (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 114768322999356820, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: nodes.Array.data[2].x
-      value: 25.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114768322999356820, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: nodes.Array.data[3].x
-      value: 25.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114768322999356820, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: speed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 198155214058300962, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 198155214058300962, guid: 03a1f043328882d4bb0808d843dd53d5,
-        type: 2}
-      propertyPath: randomSeed
-      value: -310559281
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 03a1f043328882d4bb0808d843dd53d5, type: 2}
-  m_IsPrefabParent: 0
---- !u!4 &1484835045 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5,
-    type: 2}
-  m_PrefabInternal: {fileID: 1484835044}
 --- !u!1 &1517664055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2975,11 +2842,6 @@ PolygonCollider2D:
       - {x: 0, y: -3.4}
       - {x: 4, y: 0.63}
       - {x: 4, y: 1.23}
---- !u!4 &1703981001 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4608504441257216, guid: 03a1f043328882d4bb0808d843dd53d5,
-    type: 2}
-  m_PrefabInternal: {fileID: 8234862}
 --- !u!1001 &1725008923
 Prefab:
   m_ObjectHideFlags: 0
