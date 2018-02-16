@@ -58,6 +58,7 @@ public class Ball : MonoBehaviour
     private GameManager gameManagerInstance;
     private LinkedList<PlayerController> lastTouchedBy;
     private ParticleSystem.MainModule psMain;
+    private ParticleSystem.EmissionModule psEmission;
     private float curveTimer;
     private bool beenHit;
     #endregion
@@ -68,6 +69,7 @@ public class Ball : MonoBehaviour
     {
         lastTouchedBy = new LinkedList<PlayerController>();
         psMain = trail.main;
+        psEmission = trail.emission;
         beenHit = false;
 
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
@@ -130,6 +132,11 @@ public class Ball : MonoBehaviour
             psMain.startSpeed = body.velocity.magnitude / 3;
             psMain.startRotation = GetRotation();
             //psMain.startRotation = UnityEngine.Random.Range(0, 2 * Mathf.PI);
+            psEmission.rateOverTime = (body.velocity.magnitude * 10f);
+        }
+        else
+        {
+            psEmission.rateOverTime = 0f;
         }
     }
 
