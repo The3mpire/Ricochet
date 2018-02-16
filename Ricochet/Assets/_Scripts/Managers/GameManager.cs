@@ -333,7 +333,10 @@ public class GameManager : MonoBehaviour
         if (gameMode == EMode.Soccer)
         {
             onGoal.Raise();
-            lightsController.HitTheLights(team);
+            if (lightsController != null)
+            {
+                lightsController.HitTheLights(team);
+            }
 
             if (!modeManager.UpdateScore(team, points))
             {
