@@ -141,11 +141,6 @@ public class GameManager : MonoBehaviour
         {
             MatchTimer();
         }
-
-        if (Input.anyKeyDown)
-        {
-            lightsController.HitTheLights(ETeam.BlueTeam);
-        }
     }
     #endregion
 
