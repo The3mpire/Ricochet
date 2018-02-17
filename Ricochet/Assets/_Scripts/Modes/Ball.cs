@@ -49,11 +49,16 @@ public class Ball : MonoBehaviour
     [Tooltip("Drag the audio source here")]
     [SerializeField]
     private AudioSource audioSource;
+    [Tooltip("Drag the trail particle system here")]
+    [SerializeField]
+    private ParticleSystem trail;
     #endregion
 
     #region Hidden Variables
     private GameManager gameManagerInstance;
     private LinkedList<PlayerController> lastTouchedBy;
+    private ParticleSystem.MainModule psMain;
+    private ParticleSystem.EmissionModule psEmission;
     private float curveTimer;
     private bool beenHit;
     #endregion
@@ -63,6 +68,8 @@ public class Ball : MonoBehaviour
     private void Awake()
     {
         lastTouchedBy = new LinkedList<PlayerController>();
+        psMain = trail.main;
+        psEmission = trail.emission;
         beenHit = false;
 
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
@@ -122,6 +129,14 @@ public class Ball : MonoBehaviour
                     body.velocity = body.velocity.normalized * (body.velocity.magnitude - slowRate * Time.deltaTime);
                 }
             }
+            psMain.startSpeed = body.velocity.magnitude / 3;
+            psMain.startRotation = GetRotation();
+            //psMain.startRotation = UnityEngine.Random.Range(0, 2 * Mathf.PI);
+            psEmission.rateOverTime = (body.velocity.magnitude * 10f);
+        }
+        else
+        {
+            psEmission.rateOverTime = 0f;
         }
     }
 
@@ -250,6 +265,24 @@ public class Ball : MonoBehaviour
             }
         }
         return player;
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private float GetRotation()
+    {
+        float x = body.velocity.x;
+        float y = body.velocity.y;
+        float degree = 0;
+        if (y == 0)
+            return degree = x >= 0 ? 90f : 270f;
+
+        degree = Vector2.Angle(new Vector2(1f, 0f), body.velocity) * Mathf.Deg2Rad;
+        if (y > 0)
+            degree *= -1;
+        return degree;
     }
 
     #endregion
