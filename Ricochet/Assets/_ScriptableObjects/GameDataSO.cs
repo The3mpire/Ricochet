@@ -13,9 +13,6 @@ public class GameDataSO : ScriptableObject
     [SerializeField]
     private EMode gameMode;
 
-    [Range(1, 4)]
-    [SerializeField]
-    private int playerCount;
     [SerializeField]
     private ECharacter[] playerCharacters;
     [SerializeField]
@@ -76,18 +73,6 @@ public class GameDataSO : ScriptableObject
     public void SetTimeLimit(int timeInSeconds)
     {
         timeLimit = Mathf.Clamp(timeInSeconds, 30, 600);
-    }
-    #endregion
-
-    #region Player Count
-    public int GetPlayerCount()
-    {
-        return playerCount;
-    }
-
-    public void SetPlayerCount(int value)
-    {
-        playerCount = Mathf.Clamp(value, 1, 4);
     }
     #endregion
 

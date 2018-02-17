@@ -630,6 +630,10 @@ public class GameManager : MonoBehaviour
     {
         return soundStorage.GetMenuClickSound();
     }
+    public AudioClip GetTauntSound(ECharacter character)
+    {
+        return soundStorage.GetPlayerTauntSound(character);
+    }
     #endregion
 
     #region Private Helpers

@@ -152,7 +152,6 @@ public class PlayerController : MonoBehaviour
         {
             playerNumberTag.text = playerNumber.ToString();
         }
-
         powerupParticle.Stop();
         jetpackBurnedOut = false;
         isFrozen = false;
@@ -201,6 +200,18 @@ public class PlayerController : MonoBehaviour
         if (player.GetAxis("RightStickVertical") != 0)
         {
             rightStickVert = player.GetAxis("RightStickVertical");
+        }
+
+        if (player.GetAxis("Taunt") != 0)
+        {
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                if (!audioSource.isPlaying)
+                {
+                    ECharacter character = gameData.GetPlayerCharacter(playerNumber);
+                    audioSource.PlayOneShot(gameManagerInstance.GetTauntSound(character));
+                }
+            }
         }
         
         if (remainingFreezeTime > 0)
@@ -281,7 +292,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Helpers
-
     private void HandleAnimator()
     {
         if (leftTriggerAxis != 0)
