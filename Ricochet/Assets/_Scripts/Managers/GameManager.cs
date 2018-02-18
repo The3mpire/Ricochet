@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the timer from the UI screen here")]
     [SerializeField]
     private UI_MatchTimer gameTimerText;
+    [Tooltip("Drag the neon lights here")]
+    [SerializeField]
+    private NeonLightController lightsController;
 
     [Header("Events")]
     [SerializeField]
@@ -119,7 +122,7 @@ public class GameManager : MonoBehaviour
         {
             defaultShieldColor = Color.white;
         }
-        
+
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
         {
             PlayerController p = go.GetComponent<PlayerController>();
@@ -328,6 +331,11 @@ public class GameManager : MonoBehaviour
         if (gameMode == EMode.Soccer)
         {
             onGoal.Raise();
+            if (lightsController != null)
+            {
+                lightsController.HitTheLights(team);
+            }
+
             if (!modeManager.UpdateScore(team, points))
             {
                 Ball ballScpt = ball.GetComponent<Ball>();
@@ -335,6 +343,10 @@ public class GameManager : MonoBehaviour
                 ball.SetActive(false);
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
+                
+                float multiplier = powerUpManager.GetShrinkMass();
+                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f, multiplier));
+                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f, multiplier));
             }
             else
             {
@@ -369,6 +381,15 @@ public class GameManager : MonoBehaviour
         {
             multiBallInPlay = true;
         }
+        else if (powerUpType == EPowerUp.Shrink)
+        {
+            ETeam team = playerController.GetTeamNumber();
+            ETeam opTeam = GetOpposingTeam(team);
+
+            ShrinkTeam(opTeam);
+            playerController.RemovePowerUp();
+        }
+
     }
 
     public void KillZoneCollision(GameObject haplessSoul)
@@ -379,11 +400,14 @@ public class GameManager : MonoBehaviour
                 PlayerController playerController;
                 if (!playerDictionary.TryGetValue(haplessSoul, out playerController))
                 {
-                    playerController = haplessSoul.GetComponent<PlayerController>();
+                    playerController = haplessSoul.GetComponentInParent<PlayerController>();
                     playerDictionary.Add(haplessSoul, playerController);
                 }
-                playerController.PlayerDead();
-                StartCoroutine(RespawnPlayer(playerController));
+                if (!playerController.IsInvincible())
+                {
+                    playerController.PlayerDead();
+                    StartCoroutine(RespawnPlayer(playerController));
+                }
                 break;
             case "Ball":
                 haplessSoul.GetComponent<Ball>().OnBallGoalCollision();
@@ -398,9 +422,10 @@ public class GameManager : MonoBehaviour
     #region Respawners
     public void LoadPlayer(PlayerController playerController, int playerNumber)
     {
-        if (playerNumber <= gameData.GetPlayerCount())
+        if(gameData.GetActive(playerNumber))
         {
             NoWaitRespawnPlayer(playerController);
+
         }
         else
         {
@@ -425,8 +450,8 @@ public class GameManager : MonoBehaviour
     }
 
     private void SpawnMultipleBalls(Ball origBall)
-    { 
-        Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x*powerUpManager.GetTempBallScale(),origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
+    {
+        Vector3 tempBallScale = new Vector3(origBall.transform.localScale.x * powerUpManager.GetTempBallScale(), origBall.transform.localScale.y * powerUpManager.GetTempBallScale(), origBall.transform.localScale.z);
         for (int i = 0; i < powerUpManager.GetBallSpawnCount(); i++)
         {
             Ball ball = Instantiate(origBall);
@@ -494,7 +519,7 @@ public class GameManager : MonoBehaviour
 
     public void NoWaitRespawnAllPlayers()
     {
-        foreach(PlayerController p in playerControllers)
+        foreach (PlayerController p in playerControllers)
         {
             if (p.gameObject.activeSelf)
             {
@@ -542,7 +567,7 @@ public class GameManager : MonoBehaviour
     {
         timeLeftTillStart = matchStartTime;
         gameTimerActive = false;
-        
+
         foreach (PlayerController p in playerControllers)
         {
             p.DisableMovement(true);
@@ -554,7 +579,7 @@ public class GameManager : MonoBehaviour
             timeLeftTillStart--;
             yield return new WaitForSeconds(1);
         }
-        
+
         gameTimerActive = true;
 
         foreach (PlayerController p in playerControllers)
@@ -635,6 +660,10 @@ public class GameManager : MonoBehaviour
     {
         return soundStorage.GetMenuClickSound();
     }
+    public AudioClip GetTauntSound(ECharacter character)
+    {
+        return soundStorage.GetPlayerTauntSound(character);
+    }
     #endregion
 
     #region Private Helpers
@@ -693,6 +722,40 @@ public class GameManager : MonoBehaviour
         scoreLimit = gameData.GetScoreLimit();
         timeLimit = gameData.GetTimeLimit();
         gameMode = gameData.GetGameMode();
+    }
+
+    private void ShrinkTeam(ETeam team)
+    {
+        float scale = powerUpManager.GetShrinkScale();
+        float delay = powerUpManager.GetShrinkDuration();
+        float multiplier = powerUpManager.GetShrinkMass();
+
+        foreach (PlayerController player in playerControllers)
+        {
+            if (player.GetTeamNumber() == team)
+            {
+                player.transform.localScale = new Vector3(scale, scale, scale);
+                player.ChangeMomentum(multiplier);
+                player.SetIsShrunken(true);
+            }
+        }
+        StartCoroutine(ResetTeamScale(team, delay, multiplier));
+    }
+
+    IEnumerator ResetTeamScale(ETeam team, float delay, float mult)
+    {
+        yield return new WaitForSeconds(delay);
+
+        foreach(PlayerController player in playerControllers)
+        {
+            if (player.GetTeamNumber() == team)
+            {
+                player.GiveIFrames(powerUpManager.GetIFrames());
+                player.transform.localScale = new Vector3(1, 1, 1);
+                player.ChangeMomentum(1/mult);
+                player.SetIsShrunken(false);
+            }
+        }
     }
     #endregion
 }

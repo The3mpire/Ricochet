@@ -8,7 +8,8 @@ public static class LevelSelect
     public static List<BuildIndex> glitchBallClassicLevels = new List<BuildIndex>() {
             BuildIndex.ELEVATOR,
             BuildIndex.UP_N_OVER,
-            BuildIndex.DIAGONAL_ALLEY
+            BuildIndex.DIAGONAL_ALLEY,
+            BuildIndex.EMPTY_LEVEL
         };
 
     public static void LoadRandomLevel(List<BuildIndex> levelSelection)

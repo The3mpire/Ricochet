@@ -58,10 +58,16 @@ MonoBehaviour:
   numBallsSpawned: 2
   catchNThrowPowerUpColor: {r: 1, g: 0.5586207, b: 0, a: 1}
   catchNThrowShieldColor: {r: 1, g: 0.5568628, b: 0, a: 1}
-  circleShieldColor: {r: 0, g: 0, b: 1, a: 1}
-  circleShieldShieldColor: {r: 0, g: 0, b: 1, a: 1}
+  circleShieldColor: {r: 0, g: 0.92941177, b: 0.68235296, a: 1}
+  circleShieldShieldColor: {r: 0, g: 0.92941177, b: 0.68235296, a: 1}
   burstForce: 500
   burstRadius: 10
-  freezeColor: {r: 0.5808823, g: 1, b: 1, a: 1}
-  freezeShieldColor: {r: 0.5803922, g: 1, b: 1, a: 1}
+  freezeColor: {r: 1, g: 0, b: 0.84827566, a: 1}
+  freezeShieldColor: {r: 1, g: 0, b: 0.84705883, a: 1}
   freezeTime: 5
+  shrinkColor: {r: 0, g: 1, b: 0, a: 1}
+  shrinkShieldColor: {r: 0, g: 1, b: 0, a: 1}
+  shrinkScale: 0.5
+  shrinkDuration: 8
+  shrinkMass: 0.2
+  shrinkIFrames: 0.001
