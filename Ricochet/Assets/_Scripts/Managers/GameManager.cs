@@ -480,12 +480,14 @@ public class GameManager : MonoBehaviour
     {
         float currentTime = 0.0f;
         SpriteRenderer sprite = player.GetSprite();
+        float blinkTime = .4f;
         while(currentTime < time)
         {
             sprite.color = new Color(1, 1, 1, .5f);
-            yield return new WaitForSeconds(.75f);
+            yield return new WaitForSeconds(blinkTime);
             sprite.color = new Color(1, 1, 1, 1);
-            currentTime += Time.deltaTime;
+            yield return new WaitForSeconds(blinkTime);
+            currentTime += Time.deltaTime + (blinkTime * 2);
         }
         player.SetBallDetection(true);
     }
