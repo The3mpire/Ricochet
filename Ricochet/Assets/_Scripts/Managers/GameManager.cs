@@ -57,6 +57,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("How long a player can hold a ball with CatchNThrow")]
     [SerializeField]
     private float ballHoldTime = 1f;
+    [Tooltip("How long a player is invulnerable when they respawn")]
+    [SerializeField]
+    private float invulnerableTime = 3f;
 
     [Header("Respawn Zones")]
     [Tooltip("Locations for where Red Team can spawn")]
@@ -481,6 +484,9 @@ public class GameManager : MonoBehaviour
         }
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
+        playerController.SetBallDetection(false);
+
+        StartCoroutine(FlashInvulnerable(invulnerableTime, playerController));
 
         switch (playerController.GetTeamNumber())
         {
@@ -493,6 +499,22 @@ public class GameManager : MonoBehaviour
                 playerController.transform.rotation = blueTeamRespawns[Random.Range(0, blueTeamRespawns.Length)].rotation;
                 break;
         }
+    }
+
+    private IEnumerator FlashInvulnerable(float time, PlayerController player)
+    {
+        float currentTime = 0.0f;
+        SpriteRenderer sprite = player.GetSprite();
+        float blinkTime = .4f;
+        while(currentTime < time)
+        {
+            sprite.color = new Color(1, 1, 1, .5f);
+            yield return new WaitForSeconds(blinkTime);
+            sprite.color = new Color(1, 1, 1, 1);
+            yield return new WaitForSeconds(blinkTime);
+            currentTime += Time.deltaTime + (blinkTime * 2);
+        }
+        player.SetBallDetection(true);
     }
 
     public void NoWaitRespawnAllPlayers()

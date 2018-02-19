@@ -85,6 +85,8 @@ public class Ball : MonoBehaviour
     {
         body.velocity = new Vector2(0.0f, 0.0f);
         curveTimer = slowRate;
+        psMain = trail.main;
+        psEmission = trail.emission;
 
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
