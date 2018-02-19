@@ -830,6 +830,11 @@ Prefab:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 114002943994296100, guid: 3419580e7384a694e94bfd81c6bf1b12,
+        type: 2}
+      propertyPath: trail
+      value: 
+      objectReference: {fileID: 1089513677}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3419580e7384a694e94bfd81c6bf1b12, type: 2}
   m_IsPrefabParent: 0
@@ -2034,6 +2039,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
   m_IsPrefabParent: 0
+--- !u!198 &1089513677 stripped
+ParticleSystem:
+  m_PrefabParentObject: {fileID: 198736349512548464, guid: 3419580e7384a694e94bfd81c6bf1b12,
+    type: 2}
+  m_PrefabInternal: {fileID: 565791214}
 --- !u!1 &1093487589
 GameObject:
   m_ObjectHideFlags: 0
