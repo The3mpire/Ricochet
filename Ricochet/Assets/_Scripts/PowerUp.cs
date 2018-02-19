@@ -149,6 +149,9 @@ public class PowerUp : MonoBehaviour
             switch (instanceType)
             {
                 case EPowerUp.Multiball:
+                    //AssetBundle powerUpBundle = AssetBundle.LoadFromFile("Assets/_Art/Animations/PowerUps");
+                    //UnityEngine.Object[] powerUpAssets = powerUpBundle.LoadAllAssets();
+                    //powerupAnimator.runtimeAnimatorController = powerUpAssets
                     powerupAnimator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("_Art/Animations/Powerups/multi_ball_0");
                     break;
                 case EPowerUp.CatchNThrow:
