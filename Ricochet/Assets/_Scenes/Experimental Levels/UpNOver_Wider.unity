@@ -354,7 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 129081893}
   - component: {fileID: 129081894}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -803,7 +803,7 @@ GameObject:
   m_Component:
   - component: {fileID: 620406803}
   - component: {fileID: 620406804}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1143,6 +1143,11 @@ Prefab:
       propertyPath: maxZoomOut
       value: 2.1
       objectReference: {fileID: 0}
+    - target: {fileID: 114731083047901876, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: zoomInTime
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
@@ -1359,7 +1364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 872702983}
   - component: {fileID: 872702984}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1654,7 +1659,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1051607073}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RightTriangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1855,7 +1860,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1162870406}
   - component: {fileID: 1162870407}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3116,7 +3121,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1859710499}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LeftTriangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
