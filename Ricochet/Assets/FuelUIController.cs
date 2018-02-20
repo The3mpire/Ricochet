@@ -34,26 +34,25 @@ public class FuelUIController : MonoBehaviour
     {
         int max = dashController.GetMaxDashCount();
 
-        for (int i=0; i<max; i++)
+        Vector3[] positions = new Vector3[]
         {
-            float count = (float)i/ max;
-            float angle = count * Mathf.PI * 2;
-            float x = Mathf.Sin(angle) * radius;
-            float y = Mathf.Cos(angle) * radius;
-            Vector3 pos = transform.position + new Vector3(x, y, 0);
+            transform.position + Vector3.down * radius,
+            transform.position + Vector3.down * radius + Vector3.right,
+            transform.position + Vector3.down * radius + Vector3.left
+        };
 
-            var sR = Instantiate(fuelBubblePrefab, pos, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
-
-            sR.color = (pc.GetTeamNumber() == Enumerables.ETeam.BlueTeam ? new Color32(0, 0, 255, 255) : new Color32(255, 0, 0, 255));
-
+        for (int i = 0; i < max; i++)
+        {
+            var sR = Instantiate(fuelBubblePrefab, positions[i], Quaternion.identity, transform).GetComponent<SpriteRenderer>();
+            
             fuelBubbles.Add(sR);
         }
+
+
     }
 
     public void Update()
     {
-        transform.Rotate(0f, 0f, rotateSpeed*Time.deltaTime);
-
         int count = 0;
 
         foreach (SpriteRenderer go in fuelBubbles)
