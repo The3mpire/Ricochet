@@ -100,7 +100,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Freeze Color")]
     [SerializeField]
     private Color freezeColor;
-
+    [Tooltip("The ball detection collider object")]
+    [SerializeField]
+    private GameObject detectionColliderObject;
 
     [Header("Secondary Items")]
     [Tooltip("Drag the player's power up circle shield here")]
@@ -670,6 +672,16 @@ public class PlayerController : MonoBehaviour
     public void SetFreezeTime(float value)
     {
         remainingFreezeTime = value;
+    }
+
+    public void SetBallDetection(bool value)
+    {
+        detectionColliderObject.SetActive(value);
+    }
+
+    public SpriteRenderer GetSprite()
+    {
+        return sprite;
     }
 
     internal Shield GetShield()

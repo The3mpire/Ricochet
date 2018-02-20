@@ -1065,9 +1065,8 @@ MonoBehaviour:
     type: 2}
   rotateSpeed: 100
   radius: 2
-  emptyFuelBubbleSprite: {fileID: 21300000, guid: 17181fcea5a31264a9bb042829442ab5,
-    type: 3}
-  FuelBubbleSprite: {fileID: 21300000, guid: c0d7bb19e6d7b400483d85741b495289, type: 3}
+  emptyFuelBubbleSprite: {fileID: 0}
+  FuelBubbleSprite: {fileID: 21300000, guid: da01a7a92c687ce4787e861419bb599f, type: 3}
 --- !u!114 &114787925907891002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1107,6 +1106,7 @@ MonoBehaviour:
   groundCheck: {fileID: 4777106846590376}
   audioSource: {fileID: 82779157815398102}
   freezeColor: {r: 0.5803922, g: 1, b: 1, a: 1}
+  detectionColliderObject: {fileID: 1299602293632904}
   circleShield: {fileID: 1433570636284172}
 --- !u!114 &114829729378149454
 MonoBehaviour:

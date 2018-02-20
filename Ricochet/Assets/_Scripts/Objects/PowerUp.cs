@@ -76,7 +76,7 @@ public class PowerUp : MonoBehaviour
             }
             if (runTrials)
             {
-                trial();
+                Trial();
             }
         }
         else
@@ -109,7 +109,7 @@ public class PowerUp : MonoBehaviour
     }
 
     // helps give exp
-    private void trial()
+    private void Trial()
     {
         Dictionary<EPowerUp, float> results = new Dictionary<EPowerUp, float>();
         float trials = 1000;
