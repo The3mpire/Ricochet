@@ -90,7 +90,7 @@ public class PlayerDashController : MonoBehaviour
             audioSource.PlayOneShot(gm.GetCharacterSFX(pc.GetCharacter(), ECharacterAction.Dash));
         }
 
-        Vector3 dashVelocity = pc.GetRightStickDirection() * dashSpeedBoost;
+        Vector3 dashVelocity = pc.GetShieldDirection() * dashSpeedBoost;
 
         pc.AddVelocity(dashVelocity);
 

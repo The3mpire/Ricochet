@@ -569,9 +569,9 @@ public class PlayerController : MonoBehaviour
         return touchingGround && !jetpackActive;
     }
 
-    public Vector2 GetRightStickDirection()
+    public Vector2 GetShieldDirection()
     {
-        return new Vector2(rightStickHorz, rightStickVert).normalized;
+        return shieldTransform.right.normalized;
     }
 
     public Player GetPlayer()
