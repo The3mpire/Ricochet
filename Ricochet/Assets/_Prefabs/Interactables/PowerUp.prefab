@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
-  powerUpType: 2
+  powerUpType: 0
   powerupSprite: {fileID: 212831421779647590}
   powerupAnimator: {fileID: 95029239046920978}
   runTrials: 0
@@ -105,8 +105,12 @@ MonoBehaviour:
   - type: 1
     probability: 1
   - type: 3
-    probability: 2
+    probability: 4
   - type: 4
+    probability: 3
+  - type: 2
+    probability: 2
+  - type: 5
     probability: 2
 --- !u!212 &212831421779647590
 SpriteRenderer:
