@@ -156,7 +156,7 @@ public class PowerUp : MonoBehaviour
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
                     break;
                 case EPowerUp.CatchNThrow:
-                    powerUpAssets = powerUpBundle.LoadAsset("catch", typeof(RuntimeAnimatorController));
+                    powerUpAssets = powerUpBundle.LoadAsset("CatchNThrow_0", typeof(RuntimeAnimatorController));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
                     break;
                 case EPowerUp.CircleShield:
