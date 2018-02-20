@@ -676,27 +676,5 @@ public class PlayerController : MonoBehaviour
     {
         return shieldTransform.GetComponent<Shield>();
     }
-
-    private Sprite GetCharacterSprite(Enumerables.ECharacter character)
-    {
-        Sprite charSprite = null;
-
-        switch (character)
-        {
-            case ECharacter.CatManWT:
-                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreview");
-                break;
-            case ECharacter.CatManP:
-                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/catWalkPreviewAlt");
-                break;
-            case ECharacter.Computer:
-                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Y2K_01");
-                break;
-            case ECharacter.MallCop:
-                charSprite = Resources.Load<Sprite>("_Art/2D Sprites/Characters/Forward");
-                break;
-        }
-        return charSprite;
-    }
     #endregion
 }

@@ -1133,7 +1133,7 @@ SpriteRenderer:
   m_Size: {x: 2.5, y: 0.625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!4 &786664997 stripped
 Transform:
@@ -2029,7 +2029,12 @@ Prefab:
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: powerUpType
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 95029239046920978, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
@@ -2536,7 +2541,7 @@ SpriteRenderer:
   m_Size: {x: 2.5, y: 0.625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!1001 &1287038268
 Prefab:
@@ -2953,7 +2958,7 @@ SpriteRenderer:
   m_Size: {x: 2.5, y: 0.625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!1 &1589217092
 GameObject:
@@ -3741,7 +3746,7 @@ SpriteRenderer:
   m_Size: {x: 2.5, y: 0.625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!1 &2106590355
 GameObject:
