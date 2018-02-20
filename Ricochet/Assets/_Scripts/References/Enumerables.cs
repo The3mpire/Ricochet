@@ -8,7 +8,7 @@
         CONTROLLER_MAP,
         DIAGONAL_ALLEY,
         ELEVATOR,
-        UP_N_OVER,
+        UP_N_OVER_WIDE,
         EMPTY_LEVEL,
         END_GAME,
         MOVE
