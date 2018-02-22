@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
-            moveDirection = new Vector2(leftStickHorz, 0).normalized;
+            moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             if (this.jetpackParticle)
             {
                 this.jetpackParticle.Stop();
@@ -369,7 +369,7 @@ public class PlayerController : MonoBehaviour
             
             if (IsGrounded())
             {
-                rigid.velocity = moveDirection * groundedMoveSpeed;
+                rigid.velocity = new Vector2(leftStickHorz, 0).normalized * groundedMoveSpeed;
             }
             else
             {
@@ -384,13 +384,13 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if (moveDirection.x > 0)
+                    if (rigid.velocity.x > 0)
                     {
-                        x = Mathf.Min(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), fallingLateralSpeed);
+                        x = Mathf.Min(rigid.velocity.x + (rigid.velocity.x * lateralAcceleration * 0.5f), fallingLateralSpeed);
                     }
-                    else if (moveDirection.x < 0)
+                    else if (rigid.velocity.x < 0)
                     {
-                        x = Mathf.Max(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), -fallingLateralSpeed);
+                        x = Mathf.Max(rigid.velocity.x + (rigid.velocity.x * lateralAcceleration * 0.5f), -fallingLateralSpeed);
                     }
                 }
                 y = Mathf.Max(rigid.velocity.y - 0.5f, -airMoveSpeed);
