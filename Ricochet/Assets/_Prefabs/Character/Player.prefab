@@ -906,8 +906,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dashSpeedBoost: 100
   maxDashCount: 3
-  groundRecharge: 0.33333
-  groundRechargeDelay: 0.66666
+  rechargeRate: 0.33333
+  _inAirRate: 5
+  rechargeDelay: 0.66666
+  _inAirDelay: 5
+  gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
 --- !u!114 &114450103866478952
 MonoBehaviour:
   m_ObjectHideFlags: 1

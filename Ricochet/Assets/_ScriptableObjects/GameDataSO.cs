@@ -37,6 +37,14 @@ public class GameDataSO : ScriptableObject
     [SerializeField]
     private int defaultTimeLimit;
 
+    [Header("AB Test Settings")]
+    [Tooltip("Dash Recharge Type")]
+    [SerializeField]
+    private ERechargeType _rechargeType;
+    [Tooltip("Invert Left Trigger?")]
+    [SerializeField]
+    private ELeftTriggerSetting _leftTriggerSetting;
+
     private int blueTeamScore, redTeamScore;
     private ETeam gameWinner;
     private Dictionary<string, List<string>> playerKills;
@@ -139,6 +147,16 @@ public class GameDataSO : ScriptableObject
     public void SetGameWinner(ETeam winner)
     {
         gameWinner = winner;
+    }
+
+    public ERechargeType GetRechargeType()
+    {
+        return _rechargeType;
+    }
+
+    public ELeftTriggerSetting GetLeftTriggerSetting()
+    {
+        return _leftTriggerSetting;
     }
 
     #region Player Character

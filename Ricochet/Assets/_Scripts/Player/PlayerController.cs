@@ -1,17 +1,20 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Enumerables;
 using Rewired;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-
 
 public class PlayerController : MonoBehaviour
 {
     #region Instance Variables
     [SerializeField]
     private GameDataSO gameData;
+
+    [Header("AB Test Settings")]
+    
+
+    private bool _leftTriggerToggled;
 
     [Header("Player Settings")]
     [Tooltip("Which player this is")]
@@ -61,7 +64,7 @@ public class PlayerController : MonoBehaviour
     [Header("Controller Settings")]
     [Tooltip("The motor to be used (default is 0)")]
     [SerializeField]
-    private int motorIndex = 0;
+    private int motorIndex;
     [Tooltip("Rumble intensity")]
     [SerializeField]
     private float motorLevel = .5f;
@@ -125,9 +128,7 @@ public class PlayerController : MonoBehaviour
     private Player player;
     private List<PlayerController> killList;
 
-    private bool infiniteFuel;
     private bool hasPowerUp;
-    private bool jetpackBurnedOut;
     private bool isInvincible;
     private bool isFrozen;
     private bool isShrunken;
@@ -142,7 +143,7 @@ public class PlayerController : MonoBehaviour
     private float rightStickVert;
     private float leftTriggerAxis;
 
-    private bool movementDisabled = false;
+    private bool movementDisabled;
 
     private PlayerDashController dashController;
     #endregion
@@ -155,7 +156,6 @@ public class PlayerController : MonoBehaviour
             playerNumberTag.text = playerNumber.ToString();
         }
         powerupParticle.Stop();
-        jetpackBurnedOut = false;
         isFrozen = false;
         isShrunken = false;
 
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
         rightStickVert = 0;
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
-        this.isFlipped = this.sprite.flipX;
+        isFlipped = sprite.flipX;
         team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
@@ -187,13 +187,13 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Update vars
-        Vector2 playerPosition = transform.position;
-        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
-
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         leftTriggerAxis = player.GetAxis("Jetpack");
+        if (player.GetAxis("Jetpack") > 0 && player.GetAxisPrev("Jetpack") == 0)
+        {
+            _leftTriggerToggled = !_leftTriggerToggled;
+        }
 
         if (player.GetAxis("RightStickHorizontal") != 0)
         {
@@ -255,7 +255,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                 {
-                    gameManagerInstance.BallPlayerCollision(this.gameObject, collision);
+                    gameManagerInstance.BallPlayerCollision(gameObject, collision);
                 }
             }
             if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -281,7 +281,7 @@ public class PlayerController : MonoBehaviour
                         }
                         if (!GetIsShrunken())
                         {
-                            Rigidbody2D body = this.gameObject.GetComponent<Rigidbody2D>();
+                            Rigidbody2D body = gameObject.GetComponent<Rigidbody2D>();
                             body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
                         }
                         Rumble(1.25f);
@@ -296,28 +296,46 @@ public class PlayerController : MonoBehaviour
     #region Helpers
     private void HandleAnimator()
     {
-        if (leftTriggerAxis != 0)
+        if (GetLeftTriggerSetting())
         {
-            this.animator.SetBool("isJumping", true);
+            animator.SetBool("isJumping", true);
         }
         else if (IsGrounded())
         {
-            this.animator.SetBool("isJumping", false);
+            animator.SetBool("isJumping", false);
 
             if (rigid.velocity != Vector2.zero)
             {
-                this.animator.SetBool("isWalking", true);
+                animator.SetBool("isWalking", true);
             }
             else
             {
-                this.animator.SetBool("isWalking", false);
+                animator.SetBool("isWalking", false);
             }
         }
 
         if (rigid.velocity.magnitude > thrusterSpeed+15)
         {
-            this.animator.SetTrigger("dash");
+            animator.SetTrigger("dash");
         }
+    }
+
+    private bool GetLeftTriggerSetting()
+    {
+        switch (gameData.GetLeftTriggerSetting())
+        {
+            case ELeftTriggerSetting.None:
+                return true;
+            case ELeftTriggerSetting.Normal:
+                return leftTriggerAxis != 0;
+            case ELeftTriggerSetting.Inverted:
+                return leftTriggerAxis == 0;
+            case ELeftTriggerSetting.Toggle:
+                return _leftTriggerToggled;
+        }
+
+        //default to Normal
+        return leftTriggerAxis != 0;
     }
 
     private void Move()
@@ -326,18 +344,18 @@ public class PlayerController : MonoBehaviour
         bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
 
-        if (leftTriggerAxis != 0 && touchingGround)
+        if (GetLeftTriggerSetting() && touchingGround && gameData.GetLeftTriggerSetting()!=ELeftTriggerSetting.None)
         {
             AddVelocity(Vector2.up * 5);
         }
 
-        if (leftTriggerAxis != 0)
+        if (GetLeftTriggerSetting())
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             
-            if (this.jetpackParticle && !this.jetpackParticle.isPlaying && !isFrozen)
+            if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
             {
-                this.jetpackParticle.Play();
+                jetpackParticle.Play();
             }
             // If there is no directional input, decelerate movement to a still hover
             if (moveDirection == Vector2.zero)
@@ -350,11 +368,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 float x, y;
-                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), thrusterSpeed + (rigid.velocity.x - thrusterSpeed) * 0.85f) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed + (rigid.velocity.x + thrusterSpeed) * 0.85f);
+                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration), thrusterSpeed + (rigid.velocity.x - thrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration), -thrusterSpeed + (rigid.velocity.x + thrusterSpeed) * 0.85f);
 
-                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * leftTriggerAxis), -thrusterSpeed + (rigid.velocity.y + thrusterSpeed) * 0.85f);
+                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), -thrusterSpeed + (rigid.velocity.y + thrusterSpeed) * 0.85f);
 
                 rigid.velocity = new Vector2(x, y);
             }
@@ -362,9 +380,9 @@ public class PlayerController : MonoBehaviour
         else
         { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
             moveDirection = new Vector2(leftStickHorz, 0).normalized;
-            if (this.jetpackParticle)
+            if (jetpackParticle)
             {
-                this.jetpackParticle.Stop();
+                jetpackParticle.Stop();
             }
             
             if (IsGrounded())
@@ -467,7 +485,7 @@ public class PlayerController : MonoBehaviour
     }
     public void GiveIFrames(float seconds)
     {
-        if (this.gameObject.activeSelf)
+        if (gameObject.activeSelf)
         {
             if (isInvincible)
             {
@@ -530,13 +548,13 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator KillPlayer()
     {
-        this.animator.SetBool("isDead", true);
+        animator.SetBool("isDead", true);
         isInvincible = true;
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         yield return new WaitForSeconds(gameData.playerRespawnTime);
-        this.animator.SetBool("isDead", false);
+        animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         dashController.ResetDashController();
@@ -564,7 +582,7 @@ public class PlayerController : MonoBehaviour
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
 
         bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
-        bool jetpackActive = leftTriggerAxis != 0;
+        bool jetpackActive = GetLeftTriggerSetting();
 
         return touchingGround && !jetpackActive;
     }
@@ -592,11 +610,6 @@ public class PlayerController : MonoBehaviour
     public bool MovementDisabled()
     {
         return movementDisabled;
-    }
-
-    public void SetInfiniteFuel(bool active)
-    {
-        infiniteFuel = active;
     }
 
     public Transform GetShieldTransform()
@@ -666,7 +679,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetJetpackParticle(ParticleSystem system)
     {
-        this.jetpackParticle = system;
+        jetpackParticle = system;
     }
 
     public void SetFreezeTime(float value)
