@@ -38,15 +38,17 @@ public class BackgroundParallax : MonoBehaviour
 
 	void Update ()
 	{
-		// The parallax is the opposite of the camera movement since the previous frame multiplied by the scale.
-		float parallax = (previousCamPos.x - cam.position.x) * parallaxScale;
-
-		// For each successive background...
-		for(int i = 0; i < backgrounds.Length; i++)
+        // The parallax is the opposite of the camera movement since the previous frame multiplied by the scale.
+        float parallax = 0f;
+        // For each successive background...
+        for (int i = 0; i < backgrounds.Length; i++)
 		{
             if (backgrounds[i].useCustomScale)
             {
                 parallax = (previousCamPos.x - cam.position.x) * backgrounds[i].customScale;
+            } else
+            {
+                parallax = (previousCamPos.x - cam.position.x) * parallaxScale;
             }
 
 			// ... set a target x position which is their current position plus the parallax multiplied by the reduction.
@@ -59,7 +61,7 @@ public class BackgroundParallax : MonoBehaviour
 			backgrounds[i].background.position = Vector3.Lerp(backgrounds[i].background.position, backgroundTargetPos, smoothing * Time.deltaTime);
 		}
 
-		// Set the previousCamPos to the camera's position at the end of this frame.
+        // Set the previousCamPos to the camera's position at the end of this frame.
 		previousCamPos = cam.position;
 	}
 
