@@ -2591,6 +2591,11 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1287038268}
   m_Script: {fileID: 11500000, guid: cf7ccc82eac2bb34cb75d9515c51d911, type: 3}
+--- !u!1 &1292490853 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1723054784546634, guid: 268c9032cf81e114ea588f3ee710b0b2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1243404977}
 --- !u!1 &1292837650
 GameObject:
   m_ObjectHideFlags: 0
@@ -3349,6 +3354,16 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: blueGoal
+      value: 
+      objectReference: {fileID: 1292490853}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: redGoal
+      value: 
+      objectReference: {fileID: 1939434444}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
@@ -3608,6 +3623,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4889930954892590, guid: 53333940c2ad3d04b8bc919a7670e1ac,
     type: 2}
   m_PrefabInternal: {fileID: 1931143283}
+--- !u!1 &1939434444 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1998894205038724, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+    type: 2}
+  m_PrefabInternal: {fileID: 857899350}
 --- !u!4 &1959099545 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4972783988959882, guid: eaeea0ca4739e0744a0b8603a2a413f9,

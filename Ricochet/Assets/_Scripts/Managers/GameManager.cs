@@ -20,9 +20,15 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the sound storage here")]
     [SerializeField]
     private SoundStorage soundStorage;
-    [Tooltip("Drag the Goals gameObject here")]
+    [Tooltip("Drag the red goal gameObject here")]
     [SerializeField]
-    private GameObject goals;
+    private GameObject redGoal;
+    [Tooltip("Drag the blue goal gameObject here")]
+    [SerializeField]
+    private GameObject blueGoal;
+    [Tooltip("Drag the middle column gameObject here")]
+    [SerializeField]
+    private BoxCollider2D column;
     [Tooltip("Drag the Pointing Arrows Script here")]
     [SerializeField]
     private PointingArrows arrowDisable;
@@ -142,11 +148,22 @@ public class GameManager : MonoBehaviour
         if(gameMode == EMode.Deathmatch)
         {
             Debug.Log("Deathmatch mode active");
-            goals.SetActive(false);
+            redGoal.SetActive(false);
+            blueGoal.SetActive(false);
+            if(gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
+            {
+                column.enabled = true;
+            }
+
         }
         else
         {
-            goals.SetActive(true);
+            redGoal.SetActive(true);
+            blueGoal.SetActive(true);
+            if (gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
+            {
+                column.enabled = false;
+            }
         }
     }
 
