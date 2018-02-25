@@ -1,12 +1,19 @@
 ﻿using Enumerables;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UI_LevelButton : UI_MenuButton
+public class UI_LevelButton : UI_MenuButton, ISelectHandler
 {
     [SerializeField] private BuildIndex buildIndex;
+    [SerializeField] private UI_PreviewPanel previewPanel;
 
     private LevelSelectManager manager;
-    
+
+    public new void OnSelect(BaseEventData eventData)
+    {
+        previewPanel.ChangeSprite(buildIndex);
+    }
+
     public BuildIndex GetBuildIndex()
     {
         return buildIndex;
