@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the sound storage here")]
     [SerializeField]
     private SoundStorage soundStorage;
+    [Tooltip("Drag the Goals gameObject here")]
+    [SerializeField]
+    private GameObject goals;
     [Tooltip("Drag the Pointing Arrows Script here")]
     [SerializeField]
     private PointingArrows arrowDisable;
@@ -136,6 +139,15 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         StartCoroutine(BeginMatchStartTimer());
+        if(gameMode == EMode.Deathmatch)
+        {
+            Debug.Log("Deathmatch mode active");
+            goals.SetActive(false);
+        }
+        else
+        {
+            goals.SetActive(true);
+        }
     }
 
     void Update()
