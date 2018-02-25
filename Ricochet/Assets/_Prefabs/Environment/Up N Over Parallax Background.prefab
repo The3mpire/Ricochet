@@ -200,7 +200,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4837454684154636}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4073804398384312
 Transform:
@@ -226,7 +226,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4837454684154636}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4476598696279900
 Transform:
@@ -239,7 +239,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4837454684154636}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4837454684154636
 Transform:
@@ -252,10 +252,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4073804398384312}
-  - {fileID: 4838042521427528}
   - {fileID: 4424719626058870}
   - {fileID: 4476598696279900}
   - {fileID: 4071946473687708}
+  - {fileID: 4838042521427528}
   - {fileID: 4062914989368602}
   m_Father: {fileID: 4885502822637510}
   m_RootOrder: 1
@@ -271,7 +271,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4837454684154636}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4885502822637510
 Transform:
@@ -408,16 +408,16 @@ MonoBehaviour:
   - background: {fileID: 4073804398384312}
     useCustomScale: 1
     customScale: 0
-  - background: {fileID: 4838042521427528}
+  - background: {fileID: 4476598696279900}
     useCustomScale: 1
     customScale: 0
   - background: {fileID: 4424719626058870}
     useCustomScale: 0
     customScale: 0
-  - background: {fileID: 4476598696279900}
+  - background: {fileID: 4071946473687708}
     useCustomScale: 0
     customScale: 0
-  - background: {fileID: 4071946473687708}
+  - background: {fileID: 4838042521427528}
     useCustomScale: 0
     customScale: 0
   parallaxScale: 10
@@ -481,7 +481,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1535931219
   m_SortingLayer: -1
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: eb9dc52934999cf4cafd9afc5952a71b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -569,7 +569,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1535931219
   m_SortingLayer: -1
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 9a9b83d8c54830846992f91fc0deaacb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -613,7 +613,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1535931219
   m_SortingLayer: -1
-  m_SortingOrder: 4
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 223273a666046d849bd49f0d2dd46bcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -657,7 +657,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1535931219
   m_SortingLayer: -1
-  m_SortingOrder: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 325ab82e06460f942bb524f0cca42bd1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -701,7 +701,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1554063940977514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.2000122, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
   m_LocalScale: {x: 0.025, y: 0.025, z: 1}
   m_Children: []
   m_Father: {fileID: 224823528103308040}
@@ -709,8 +709,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 27, y: 15.8}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_AnchoredPosition: {x: 33.600037, y: 16}
+  m_SizeDelta: {x: 2448, y: 1089.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224823528103308040
 RectTransform:
@@ -729,5 +729,5 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 54, y: 32}
+  m_SizeDelta: {x: 64.2, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
