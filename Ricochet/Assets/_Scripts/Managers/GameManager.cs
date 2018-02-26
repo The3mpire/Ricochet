@@ -308,7 +308,6 @@ public class GameManager : MonoBehaviour
 
         // Check if the ball has been touched by anyone
         PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
-        Debug.Log(lastTouchedBy);
         if (lastTouchedBy != null)
         {
             lastTouchedBy.RegisterKill(playerController);
@@ -317,7 +316,6 @@ public class GameManager : MonoBehaviour
             {
                 if (lastTouchedBy.GetTeamNumber() == playerController.GetTeamNumber())
                 {
-                    Debug.Log(lastTouchedBy.GetTeamNumber());
                     if(lastTouchedBy.GetTeamNumber() == ETeam.RedTeam)
                     {
                         modeManager.AltUpdateScore(ETeam.BlueTeam, 1);
@@ -750,7 +748,6 @@ public class GameManager : MonoBehaviour
             {
                 pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
                 pushForce *= force;
-                Debug.Log(pushForce.ToString());
                 player.GetComponent<Rigidbody2D>().AddForce(pushForce);
             }
         }
