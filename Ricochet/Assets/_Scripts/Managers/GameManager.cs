@@ -305,6 +305,7 @@ public class GameManager : MonoBehaviour
 
         // Check if the ball has been touched by anyone
         PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
+        Debug.Log(lastTouchedBy);
         if (lastTouchedBy != null)
         {
             lastTouchedBy.RegisterKill(playerController);
@@ -313,7 +314,15 @@ public class GameManager : MonoBehaviour
             {
                 if (lastTouchedBy.GetTeamNumber() == playerController.GetTeamNumber())
                 {
-                    modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), -1);
+                    Debug.Log(lastTouchedBy.GetTeamNumber());
+                    if(lastTouchedBy.GetTeamNumber() == ETeam.RedTeam)
+                    {
+                        modeManager.AltUpdateScore(ETeam.BlueTeam, 1);
+                    }
+                    else
+                    {
+                        modeManager.AltUpdateScore(ETeam.RedTeam, 1);
+                    }
                 }
                 else
                 {
@@ -329,22 +338,45 @@ public class GameManager : MonoBehaviour
         {
             if (gameMode == EMode.Deathmatch)
             {
-                if (modeManager.AltUpdateScore(playerController.GetTeamNumber(), -1))
+                if (playerController.GetTeamNumber() == ETeam.BlueTeam)
                 {
-                    if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                    if (modeManager.AltUpdateScore(ETeam.RedTeam, 1))
                     {
-                        gameData.SetGameWinner(ETeam.RedTeam);
-                        EndMatch();
+                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                        {
+                            gameData.SetGameWinner(ETeam.RedTeam);
+                            EndMatch();
+                        }
+                        else
+                        {
+                            gameData.SetGameWinner(ETeam.BlueTeam);
+                            EndMatch();
+                        }
+                        ball.GetComponent<Ball>().OnBallGoalCollision();
+                        ball.gameObject.SetActive(false);
+                        RespawnBall(ball.gameObject);
+                        NoWaitRespawnAllPlayers();
                     }
-                    else
+                }
+                else
+                {
+                    if (modeManager.AltUpdateScore(ETeam.BlueTeam, 1))
                     {
-                        gameData.SetGameWinner(ETeam.BlueTeam);
-                        EndMatch();
+                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                        {
+                            gameData.SetGameWinner(ETeam.RedTeam);
+                            EndMatch();
+                        }
+                        else
+                        {
+                            gameData.SetGameWinner(ETeam.BlueTeam);
+                            EndMatch();
+                        }
+                        ball.GetComponent<Ball>().OnBallGoalCollision();
+                        ball.gameObject.SetActive(false);
+                        RespawnBall(ball.gameObject);
+                        NoWaitRespawnAllPlayers();
                     }
-                    ball.GetComponent<Ball>().OnBallGoalCollision();
-                    ball.gameObject.SetActive(false);
-                    RespawnBall(ball.gameObject);
-                    NoWaitRespawnAllPlayers();
                 }
             }
         }
