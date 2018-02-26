@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
     private Ball ballHeld;
 
     private Animator animator;
-    private bool isFlipped;
+    private bool flip;
     private ParticleSystem jetpackParticle;
 
     private ECharacter chosenCharacter;
@@ -190,10 +190,6 @@ public class PlayerController : MonoBehaviour
         leftStickHorz = player.GetAxis("MoveHorizontal");
         leftStickVert = player.GetAxis("MoveVertical");
         leftTriggerAxis = player.GetAxis("Jetpack");
-        if (player.GetAxis("Jetpack") > 0 && player.GetAxisPrev("Jetpack") == 0)
-        {
-            _leftTriggerToggled = !_leftTriggerToggled;
-        }
 
         if (player.GetAxis("RightStickHorizontal") != 0)
         {
@@ -403,11 +399,11 @@ public class PlayerController : MonoBehaviour
     {
         if (leftStickHorz < 0)
         {
-            sprite.flipX = isFlipped;
+            sprite.flipX = flip;
         }
         else if (leftStickHorz > 0)
         {
-            sprite.flipX = !isFlipped;
+            sprite.flipX = !flip;
         }
     }
 
@@ -530,19 +526,30 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator KillPlayer()
     {
-        animator.SetBool("isDead", true);
+        if(chosenCharacter == ECharacter.Computer && sprite.flipX)
+        {
+            sprite.flipX = flip;
+        }
+        this.animator.SetBool("isDead", true);
         isInvincible = true;
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         yield return new WaitForSeconds(gameData.playerRespawnTime);
-        animator.SetBool("isDead", false);
+
+        RespawnPlayer();
+    }
+
+    private void RespawnPlayer()
+    {
+        this.animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         movementDisabled = false;
     }
+
     public void EnableSecondaryShield(bool status)
     {
         switch (currPowerUp)
