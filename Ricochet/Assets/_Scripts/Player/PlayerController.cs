@@ -11,11 +11,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameDataSO gameData;
 
-    [Header("AB Test Settings")]
-    
-
-    private bool _leftTriggerToggled;
-
     [Header("Player Settings")]
     [Tooltip("Which player this is")]
     [SerializeField]
