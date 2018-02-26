@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
     private Ball ballHeld;
 
     private Animator animator;
-    private bool isFlipped;
+    private bool flip;
     private ParticleSystem jetpackParticle;
 
     private ECharacter chosenCharacter;
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
         rightStickVert = 0;
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
-        this.isFlipped = this.sprite.flipX;
+        this.flip = this.sprite.flipX;
         team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
@@ -403,11 +403,11 @@ public class PlayerController : MonoBehaviour
     {
         if (leftStickHorz < 0)
         {
-            sprite.flipX = isFlipped;
+            sprite.flipX = flip;
         }
         else if (leftStickHorz > 0)
         {
-            sprite.flipX = !isFlipped;
+            sprite.flipX = !flip;
         }
     }
 
@@ -530,12 +530,22 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator KillPlayer()
     {
+        if(chosenCharacter == ECharacter.Computer && sprite.flipX)
+        {
+            sprite.flipX = flip;
+        }
         this.animator.SetBool("isDead", true);
         isInvincible = true;
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         yield return new WaitForSeconds(gameData.playerRespawnTime);
+
+        RespawnPlayer();
+    }
+
+    private void RespawnPlayer()
+    {
         this.animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
@@ -543,6 +553,7 @@ public class PlayerController : MonoBehaviour
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         movementDisabled = false;
     }
+
     public void EnableSecondaryShield(bool status)
     {
         switch (currPowerUp)
