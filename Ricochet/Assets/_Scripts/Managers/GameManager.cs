@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        StartCoroutine(BeginMatchStartTimer());
+        StartCoroutine(StartBeginMatchTimer());
         if(gameMode == EMode.Deathmatch)
         {
             ToggleGoals(false);
@@ -167,13 +167,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (gameTimerText != null && timeLimit > 0)
-        {
-            MatchTimer();
-        }
-    }
     #endregion
 
     #region Getters
