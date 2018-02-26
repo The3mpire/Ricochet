@@ -147,9 +147,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(BeginMatchStartTimer());
         if(gameMode == EMode.Deathmatch)
         {
-            Debug.Log("Deathmatch mode active");
-            redGoal.SetActive(false);
-            blueGoal.SetActive(false);
+            ToggleGoals(false);
             if(gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
             {
                 column.enabled = true;
@@ -158,8 +156,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            redGoal.SetActive(true);
-            blueGoal.SetActive(true);
+            ToggleGoals(true);
             if (gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
             {
                 column.enabled = false;
@@ -227,6 +224,12 @@ public class GameManager : MonoBehaviour
     private void EndMatch()
     {
         LevelSelect.LoadEndGameScene();
+    }
+
+    private void ToggleGoals(bool active)
+    {
+        redGoal.SetActive(active);
+        blueGoal.SetActive(active);
     }
     #endregion
 
