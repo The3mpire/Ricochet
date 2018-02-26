@@ -30,6 +30,9 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("The color of shields with a catch n throw powerup")]
     [SerializeField]
     private Color catchNThrowShieldColor;
+    [Tooltip("Prevents the ball from dying to killzones for x seconds")]
+    [SerializeField]
+    private float ballIFrames = .01f;
 
     [Header("Circle Shield")]
     [Tooltip("The color of circle shield powerup objects")]
@@ -94,7 +97,10 @@ public class PowerUpManager : MonoBehaviour
     {
         return shrinkIFrames;
     }
-
+    public float GetBallIFrames()
+    {
+        return ballIFrames;
+    }
 
     public float GetBurstRadius()
     {

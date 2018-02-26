@@ -452,9 +452,13 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case "Ball":
-                haplessSoul.GetComponent<Ball>().OnBallGoalCollision();
-                haplessSoul.SetActive(false);
-                RespawnBall(haplessSoul);
+                Ball b = haplessSoul.GetComponent<Ball>();
+                if (!b.GetIsInvincible())
+                {
+                    b.OnBallGoalCollision();
+                    haplessSoul.SetActive(false);
+                    RespawnBall(haplessSoul);
+                }
                 break;
         }
     }
@@ -595,6 +599,7 @@ public class GameManager : MonoBehaviour
         ball.SetHeld(false);
         ball.transform.SetParent(null, true);
         ball.RedirectBall(new Vector2(10f, 10f), player.GetRightStick());
+        ball.GiveIFrames(powerUpManager.GetBallIFrames());
     }
     #endregion
 

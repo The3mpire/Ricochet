@@ -61,6 +61,7 @@ public class Ball : MonoBehaviour
     private ParticleSystem.EmissionModule psEmission;
     private float curveTimer;
     private bool beenHit;
+    private bool isInvinsible = false;
     #endregion
 
     #region MonoBehaviour
@@ -185,6 +186,12 @@ public class Ball : MonoBehaviour
             body.velocity = body.velocity.normalized * relativeVelocity.magnitude;
         }
     }
+    public void GiveIFrames(float duration)
+    {
+        isInvinsible = true;
+        StartCoroutine(EndIFrames(duration));
+    }
+
     #endregion
 
     #region Getters and Setters
@@ -201,6 +208,10 @@ public class Ball : MonoBehaviour
     public bool GetCanScore()
     {
         return canScore;
+    }
+    public bool GetIsInvincible()
+    {
+        return isInvinsible;
     }
 
     public void SetCanScore(bool value)
@@ -287,5 +298,10 @@ public class Ball : MonoBehaviour
         return degree;
     }
 
+    private IEnumerator EndIFrames(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        isInvinsible = false;
+    }
     #endregion
 }
