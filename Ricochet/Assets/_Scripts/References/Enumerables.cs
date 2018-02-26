@@ -57,21 +57,4 @@
         Dash = 1,
         Death = 3
     }
-
-    public enum ELeftTriggerSetting
-    {
-        None,
-        Normal,
-        Inverted,
-        Toggle
-    }
-
-    public enum ERechargeType
-    {
-        None,
-        OnGround,
-        InAir,
-        GroundAndAir,
-        InZone
-    }
 }
