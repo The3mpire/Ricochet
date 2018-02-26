@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Max lateral speed when falling")]
     [SerializeField]
     private float fallingLateralSpeed = 1f;
+
+    [Header("Standard movement")]
     [Tooltip("Acceleration/deceleartion constant while using jetpack")]
     [SerializeField]
     private float thrusterAcceleration = 0.05f;
@@ -45,6 +47,16 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed while using jetpack w/ directional input")]
     [SerializeField]
     private float thrusterSpeed = 15f;
+
+    [Header("Precision Movement")]
+    [Tooltip("Acceleration/deceleartion constant while using precision movement")]
+    [SerializeField]
+    private float precisionThrusterAcceleration = 0.05f;
+    [Tooltip("Move speed while using precision movement w/ directional input")]
+    [SerializeField]
+    private float precisionThrusterSpeed = 15f;
+
+    [Header("Other movement")]
     [Tooltip("Move speed while in the air, not using jetpack")]
     [SerializeField]
     private float airMoveSpeed = 5f;
@@ -165,7 +177,6 @@ public class PlayerController : MonoBehaviour
         rightStickVert = 0;
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
-        isFlipped = sprite.flipX;
         team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
@@ -338,7 +349,6 @@ public class PlayerController : MonoBehaviour
             // If there is no directional input, decelerate movement to a still hover
             if (moveDirection == Vector2.zero)
             {
-                moveDirection = Vector2.up;
                 float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
                 float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
                 rigid.velocity = new Vector2(x, y);
@@ -356,40 +366,35 @@ public class PlayerController : MonoBehaviour
             }
         }
         else
-        { // if jetpack is not engaged, only move horizontally with groundedMoveSpeed or airMovespeed
-            moveDirection = new Vector2(leftStickHorz, 0).normalized;
+        { // if jetpack is not engaged, Move at reduces speed and acceleration
+            moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             if (jetpackParticle)
             {
                 jetpackParticle.Stop();
             }
-            
-            if (IsGrounded())
-            {
-                rigid.velocity = moveDirection * groundedMoveSpeed;
-            }
             else
             {
-                float x = 0, y = 0;
-                if (rigid.velocity.x > fallingLateralSpeed)
+                if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
                 {
-                    x = rigid.velocity.x - (rigid.velocity.x - fallingLateralSpeed) * 0.85f;
+                    jetpackParticle.Play();
                 }
-                else if (rigid.velocity.x < -fallingLateralSpeed)
-                {
-                    x = rigid.velocity.x - ((rigid.velocity.x + fallingLateralSpeed) * 0.85f);
-                }
-                else
-                {
-                    if (moveDirection.x > 0)
-                    {
-                        x = Mathf.Min(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), fallingLateralSpeed);
-                    }
-                    else if (moveDirection.x < 0)
-                    {
-                        x = Mathf.Max(rigid.velocity.x + (moveDirection.x * lateralAcceleration * 0.5f), -fallingLateralSpeed);
-                    }
-                }
-                y = Mathf.Max(rigid.velocity.y - 0.5f, -airMoveSpeed);
+            }
+            // If there is no directional input, decelerate movement to a still hover
+            if (moveDirection == Vector2.zero)
+            {
+                float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
+                float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.9f : 0;
+                rigid.velocity = new Vector2(x, y);
+            } // else go in the direction of input with thruster speed
+            else
+            {
+                float x, y;
+                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * precisionThrusterAcceleration), precisionThrusterSpeed + (rigid.velocity.x - precisionThrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * precisionThrusterAcceleration), -precisionThrusterSpeed + (rigid.velocity.x + precisionThrusterSpeed) * 0.85f);
+
+                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * precisionThrusterAcceleration), precisionThrusterSpeed + (rigid.velocity.y - precisionThrusterSpeed) * 0.85f) :
+                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * precisionThrusterAcceleration), -precisionThrusterSpeed + (rigid.velocity.y + precisionThrusterSpeed) * 0.85f);
+
                 rigid.velocity = new Vector2(x, y);
             }
         }
