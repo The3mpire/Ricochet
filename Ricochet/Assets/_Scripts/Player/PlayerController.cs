@@ -296,7 +296,7 @@ public class PlayerController : MonoBehaviour
     #region Helpers
     private void HandleAnimator()
     {
-        if (GetLeftTriggerSetting())
+        if (leftTriggerAxis == 0)
         {
             animator.SetBool("isJumping", true);
         }
@@ -320,36 +320,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool GetLeftTriggerSetting()
-    {
-        switch (gameData.GetLeftTriggerSetting())
-        {
-            case ELeftTriggerSetting.None:
-                return true;
-            case ELeftTriggerSetting.Normal:
-                return leftTriggerAxis != 0;
-            case ELeftTriggerSetting.Inverted:
-                return leftTriggerAxis == 0;
-            case ELeftTriggerSetting.Toggle:
-                return _leftTriggerToggled;
-        }
-
-        //default to Normal
-        return leftTriggerAxis != 0;
-    }
-
     private void Move()
     {
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
         bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
 
-        if (GetLeftTriggerSetting() && touchingGround && gameData.GetLeftTriggerSetting()!=ELeftTriggerSetting.None)
+        if (leftTriggerAxis == 0 && touchingGround)
         {
             AddVelocity(Vector2.up * 5);
         }
 
-        if (GetLeftTriggerSetting())
+        if (leftTriggerAxis == 0)
         {
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             
@@ -582,7 +564,7 @@ public class PlayerController : MonoBehaviour
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
 
         bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
-        bool jetpackActive = GetLeftTriggerSetting();
+        bool jetpackActive = leftTriggerAxis == 0;
 
         return touchingGround && !jetpackActive;
     }

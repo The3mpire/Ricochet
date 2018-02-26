@@ -71,11 +71,6 @@ public class GameManager : MonoBehaviour
     [Tooltip("Locations where the ball can spawn")]
     [SerializeField]
     private Transform[] ballRespawns;
-
-    [Header("Recharge Zones")]
-    [SerializeField]
-    [Tooltip("Drag all RechargeZones here")]
-    private GameObject[] _rechargeZones;
     #endregion
 
     #region Hidden Variables
@@ -134,14 +129,6 @@ public class GameManager : MonoBehaviour
             if (p != null)
             {
                 playerControllers.Add(p);
-            }
-        }
-
-        if (gameData.GetRechargeType() != ERechargeType.InZone)
-        {
-            foreach (var zone in _rechargeZones)
-            {
-                zone.SetActive(false);
             }
         }
     }

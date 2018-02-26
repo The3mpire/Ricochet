@@ -113,73 +113,7 @@ public class PlayerDashController : MonoBehaviour
 
     private void HandleDashRecharge()
     {
-        switch (gameData.GetRechargeType())
-        {
-            case ERechargeType.None:
-                break;
-            case ERechargeType.OnGround:
-                GroundedRecharge();
-                break;
-            case ERechargeType.InAir:
-                InAirRecharge();
-                break;
-            case ERechargeType.GroundAndAir:
-                GroundAirRecharge();
-                break;
-            case ERechargeType.InZone:
-                InZoneRecharge();
-                break;
-        }
-    }
-
-    private void GroundedRecharge()
-    {
-        // If not grounded, not recharge, reset timers
-        if (!pc.IsGrounded())
-        {
-            rechargeTimer = 0;
-            delayTimer = 0;
-            return;
-        }
-
-        // Recharge one dash if grounded longer than rechargeDelay
-        // Recharge another dash every rechargeRate seconds
-        delayTimer += Time.deltaTime;
-        if (delayTimer > rechargeDelay)
-        {
-            rechargeTimer += Time.deltaTime;
-            if (rechargeTimer > rechargeRate)
-            {
-                rechargeTimer = 0;
-                delayTimer = 0;
-                dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
-            }
-        }
-    }
-
-    private void InAirRecharge()
-    {
-        // If not in air, not recharge, reset timers
-        if (pc.IsGrounded())
-        {
-            rechargeTimer = 0;
-            delayTimer = 0;
-            return;
-        }
-
-        // Recharge one dash if in air longer than rechargeDelay
-        // Recharge another dash every rechargeRate seconds
-        delayTimer += Time.deltaTime;
-        if (delayTimer > rechargeDelay*_inAirDelay)
-        {
-            rechargeTimer += Time.deltaTime;
-            if (rechargeTimer > rechargeRate*_inAirRate)
-            {
-                rechargeTimer = 0;
-                delayTimer = 0;
-                dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
-            }
-        }
+        GroundAirRecharge();
     }
 
     private void GroundAirRecharge()
@@ -204,36 +138,6 @@ public class PlayerDashController : MonoBehaviour
                 dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
             }
         }
-    }
-
-    private void InZoneRecharge()
-    {
-        // If not in zone, not recharge, reset timers
-        if (!playerInZone)
-        {
-            rechargeTimer = rechargeRate;
-            delayTimer = 0;
-            return;
-        }
-
-        // Recharge one dash if in zone longer than rechargeDelay
-        // Recharge another dash every rechargeRate seconds
-        delayTimer += Time.deltaTime;
-        if (delayTimer > rechargeDelay)
-        {
-            rechargeTimer += Time.deltaTime;
-            if (rechargeTimer > rechargeRate)
-            {
-                rechargeTimer = 0;
-                delayTimer = 0;
-                dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
-            }
-        }
-    }
-
-    internal void SetInZone(bool inZone)
-    {
-        playerInZone = inZone;
     }
     #endregion
 }
