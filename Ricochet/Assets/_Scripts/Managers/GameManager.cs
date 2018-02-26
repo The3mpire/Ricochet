@@ -591,6 +591,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(ballHoldTime);
 
+        player.GiveIFrames(0.25f);
         player.SetBallHeld(null);
         ball.SetHeld(false);
         ball.transform.SetParent(null, true);

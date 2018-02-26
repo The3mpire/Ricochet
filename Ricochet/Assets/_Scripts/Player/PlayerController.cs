@@ -539,6 +539,7 @@ public class PlayerController : MonoBehaviour
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        shield.gameObject.SetActive(false);
         yield return new WaitForSeconds(gameData.playerRespawnTime);
 
         RespawnPlayer();
@@ -549,6 +550,7 @@ public class PlayerController : MonoBehaviour
         this.animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        shield.gameObject.SetActive(true);
         dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         movementDisabled = false;
