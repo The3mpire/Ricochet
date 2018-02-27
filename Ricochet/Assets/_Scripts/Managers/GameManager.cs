@@ -19,6 +19,15 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the sound storage here")]
     [SerializeField]
     private SoundStorage soundStorage;
+    [Tooltip("Drag the red goal gameObject here")]
+    [SerializeField]
+    private GameObject redGoal;
+    [Tooltip("Drag the blue goal gameObject here")]
+    [SerializeField]
+    private GameObject blueGoal;
+    [Tooltip("Drag the middle column gameObject here")]
+    [SerializeField]
+    private BoxCollider2D column;
     [Tooltip("Drag the Pointing Arrows Script here")]
     [SerializeField]
     private PointingArrows arrowDisable;
@@ -139,7 +148,25 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         StartCoroutine(StartBeginMatchTimer());
+        if(gameMode == EMode.Deathmatch)
+        {
+            ToggleGoals(false);
+            if(gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
+            {
+                column.enabled = true;
+            }
+
+        }
+        else
+        {
+            ToggleGoals(true);
+            if (gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
+            {
+                column.enabled = false;
+            }
+        }
     }
+
     #endregion
 
     #region Getters
@@ -242,6 +269,12 @@ public class GameManager : MonoBehaviour
     {
         LevelSelect.LoadEndGameScene();
     }
+
+    private void ToggleGoals(bool active)
+    {
+        redGoal.SetActive(active);
+        blueGoal.SetActive(active);
+    }
     #endregion
 
     #region Collision Management
@@ -327,14 +360,20 @@ public class GameManager : MonoBehaviour
             {
                 if (lastTouchedBy.GetTeamNumber() == playerController.GetTeamNumber())
                 {
-                    modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), -1);
+                    if(lastTouchedBy.GetTeamNumber() == ETeam.RedTeam)
+                    {
+                        modeManager.AltUpdateScore(ETeam.BlueTeam, 1);
+                    }
+                    else
+                    {
+                        modeManager.AltUpdateScore(ETeam.RedTeam, 1);
+                    }
                 }
                 else
                 {
                     if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
                     {
-                        gameData.SetGameWinner(lastTouchedBy.GetTeamNumber());
-                        EndMatch();
+                        SetWinningTeam(lastTouchedBy.GetTeamNumber());
                     }
                 }
             }
@@ -343,22 +382,36 @@ public class GameManager : MonoBehaviour
         {
             if (gameMode == EMode.Deathmatch)
             {
-                if (modeManager.AltUpdateScore(playerController.GetTeamNumber(), -1))
+                if (playerController.GetTeamNumber() == ETeam.BlueTeam)
                 {
-                    if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                    if (modeManager.AltUpdateScore(ETeam.RedTeam, 1))
                     {
-                        gameData.SetGameWinner(ETeam.RedTeam);
-                        EndMatch();
+                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                        {
+                            SetWinningTeam(ETeam.RedTeam);
+                        }
+                        else
+                        {
+                            SetWinningTeam(ETeam.BlueTeam);
+
+                        }
+                        BallHandling(ball);
                     }
-                    else
+                }
+                else
+                {
+                    if (modeManager.AltUpdateScore(ETeam.BlueTeam, 1))
                     {
-                        gameData.SetGameWinner(ETeam.BlueTeam);
-                        EndMatch();
+                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                        {
+                            SetWinningTeam(ETeam.RedTeam);
+                        }
+                        else
+                        {
+                            SetWinningTeam(ETeam.BlueTeam);
+                        }
+                        BallHandling(ball);
                     }
-                    ball.GetComponent<Ball>().OnBallGoalCollision();
-                    ball.gameObject.SetActive(false);
-                    RespawnBall(ball.gameObject);
-                    NoWaitRespawnAllPlayers();
                 }
             }
         }
@@ -367,6 +420,20 @@ public class GameManager : MonoBehaviour
         playerController.PlayerDead();
         StartCoroutine(RespawnPlayer(playerController));
         StartCoroutine(Camera.main.GetComponent<CCShaders.ChromaticAberrationEffect>().PlayEffect(1));
+    }
+
+    private void SetWinningTeam(ETeam team)
+    {
+        gameData.SetGameWinner(team);
+        EndMatch();
+    }
+
+    private void BallHandling(Ball affectedBall)
+    {
+        affectedBall.GetComponent<Ball>().OnBallGoalCollision();
+        affectedBall.gameObject.SetActive(false);
+        RespawnBall(affectedBall.gameObject);
+        NoWaitRespawnAllPlayers();
     }
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
@@ -687,7 +754,6 @@ public class GameManager : MonoBehaviour
             {
                 pushForce = new Vector2(direction.normalized.x, direction.normalized.y);
                 pushForce *= force;
-                Debug.Log(pushForce.ToString());
                 player.GetComponent<Rigidbody2D>().AddForce(pushForce);
             }
         }
