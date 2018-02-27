@@ -26,6 +26,7 @@ public class UI_StartTimer : MonoBehaviour
         }
         else if (manager.MatchTimeLeft <= 5)
         {
+            text.color = Color.red;
             text.text = manager.MatchTimeLeft.ToString();
             StartCoroutine(Timer());
         }
