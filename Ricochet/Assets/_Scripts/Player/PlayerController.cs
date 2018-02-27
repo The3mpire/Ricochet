@@ -335,8 +335,6 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        //Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
-        //bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
         bool jetpacking = autoJetpack ? leftTriggerAxis == 0 : leftTriggerAxis != 0;
         bool precisionMode = autoJetpack ? leftTriggerAxis != 0 : false;
