@@ -281,8 +281,9 @@ public class PlayerController : MonoBehaviour
                                 isFrozen = false;
                             }
                         }
-                        if (!GetIsShrunken())
+                        if (!isShrunken)
                         {
+                            audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter));
                             Rigidbody2D body = gameObject.GetComponent<Rigidbody2D>();
                             body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
                         }
@@ -535,8 +536,13 @@ public class PlayerController : MonoBehaviour
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        yield return new WaitForSeconds(gameData.playerRespawnTime);
 
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterDeathSFX(chosenCharacter)); 
+        }
+
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
         RespawnPlayer();
     }
 
@@ -547,6 +553,10 @@ public class PlayerController : MonoBehaviour
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterRespawnSFX(chosenCharacter)); 
+        }
         movementDisabled = false;
     }
 

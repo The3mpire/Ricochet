@@ -264,9 +264,15 @@ public class SoundStorage : ScriptableObject
         return ballGoalSounds[Random.Range(0, ballGoalSounds.Count)];
     }
 
-    public AudioClip GetBallSound()
+    public AudioClip GetBallSound(string tag)
     {
-        return ballSounds[Random.Range(0, ballSounds.Count)];
+        switch (tag)
+        {
+            case "Wall":
+                return ballWallBumpSounds[Random.Range(0, ballWallBumpSounds.Count)];
+            default: // "Shield":
+                return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
+        }
     }
     #endregion
 
