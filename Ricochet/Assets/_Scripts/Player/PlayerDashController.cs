@@ -31,6 +31,10 @@ public class PlayerDashController : MonoBehaviour
     [Tooltip("Multiplier to apply to in-air recharge delay")]
     private int _inAirDelay = 1;
 
+    [Tooltip("How quickly does the mini-dash recharge?")]
+    [SerializeField]
+    private float miniDashChargeTime;
+
     [Tooltip("Drag the player's revup ricle here")]
     [SerializeField]
     private GameObject revupCircle;
@@ -43,6 +47,7 @@ public class PlayerDashController : MonoBehaviour
 
     private bool playerInZone = false;
 
+    private float miniDashCharge;
     private float rechargeTimer;
     private float delayTimer;
 
@@ -71,6 +76,20 @@ public class PlayerDashController : MonoBehaviour
     public void Update()
     {
         HandleDashRecharge();
+
+        bool charging = pc.GetLeftTrigger() != 0;
+        if (charging)
+        {
+            miniDashCharge = Mathf.Min(miniDashCharge + Time.deltaTime, miniDashChargeTime);
+        }
+        else
+        {
+            if (miniDashCharge >= miniDashChargeTime && !pc.MovementDisabled())
+            {
+                Dash(0, 0.45f);
+            }
+            miniDashCharge = 0f;
+        }
 
         if (player.GetButtonDown("Dash") && dashCount > 0 && !pc.MovementDisabled())
         {

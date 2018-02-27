@@ -644,6 +644,11 @@ public class PlayerController : MonoBehaviour
         return shieldTransform;
     }
 
+    public float GetLeftTrigger()
+    {
+        return leftTriggerAxis;
+    }
+
     public Vector2 GetLeftStick()
     {
         return new Vector2(leftStickHorz, leftStickVert);
