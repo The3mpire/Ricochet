@@ -74,14 +74,15 @@ public class PlayerDashController : MonoBehaviour
     {
         HandleDashRecharge();
 
-        bool charging = (pc.GetAutoJetpack() ? pc.GetLeftTrigger() != 0 : pc.GetLeftTrigger() == 0) && !pc.IsGrounded() && !pc.MovementDisabled();
+        bool grounded = pc.IsGrounded();
+        bool charging = (pc.GetAutoJetpack() ? pc.GetLeftTrigger() != 0 : pc.GetLeftTrigger() == 0) && !grounded && !pc.MovementDisabled();
         if (charging)
         {
             miniDashCharge = Mathf.Min(miniDashCharge + Time.deltaTime, miniDashChargeTime);
         }
         else
         {
-            if (miniDashCharge >= miniDashChargeTime && !pc.MovementDisabled())
+            if (miniDashCharge >= miniDashChargeTime && !pc.MovementDisabled() && !grounded)
             {
                 Dash(0, 0.45f);
             }
