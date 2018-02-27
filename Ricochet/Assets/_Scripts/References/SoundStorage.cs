@@ -71,8 +71,7 @@ public class SoundStorage : ScriptableObject
     {
         switch (character)
         {
-            case ECharacter.CatManP:
-            case ECharacter.CatManWT:
+            case ECharacter.Cat:
                 return catDeathSounds[Random.Range(0, catDeathSounds.Count)];
             case ECharacter.Computer:
                 return computerDeathSounds[Random.Range(0, computerDeathSounds.Count)];
@@ -85,8 +84,7 @@ public class SoundStorage : ScriptableObject
     {
         switch (character)
         {
-            case ECharacter.CatManP:
-            case ECharacter.CatManWT:
+            case ECharacter.Cat:
                 return catDashSounds[Random.Range(0, catDashSounds.Count)];
             case ECharacter.Computer:
                 return computerDashSounds[Random.Range(0, computerDashSounds.Count)];
@@ -98,8 +96,7 @@ public class SoundStorage : ScriptableObject
     {
         switch (character)
         {
-            case ECharacter.CatManP:
-            case ECharacter.CatManWT:
+            case ECharacter.Cat:
             case ECharacter.Computer:
             default: // for now we only have one asset, and its super standin, i mean quality
                 return computerTauntSounds[Random.Range(0, computerTauntSounds.Count)];
@@ -109,8 +106,7 @@ public class SoundStorage : ScriptableObject
     {
         switch (character)
         {
-            case ECharacter.CatManP:
-            case ECharacter.CatManWT:
+            case ECharacter.Cat:
                 return catJetpackSounds[Random.Range(0, catJetpackSounds.Count)];
             case ECharacter.Computer:
                 return computerJetpackSounds[Random.Range(0, computerJetpackSounds.Count)];
