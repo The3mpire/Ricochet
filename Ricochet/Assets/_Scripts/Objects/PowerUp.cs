@@ -45,8 +45,6 @@ public class PowerUp : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        powerupSprite = this.GetComponent<SpriteRenderer>();
-        powerupAnimator = this.GetComponent<Animator>();
         if (powerUpType == EPowerUp.Random)
         {
             uint len = 0;
