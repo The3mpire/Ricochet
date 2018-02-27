@@ -21,15 +21,12 @@ public class PlayerDashController : MonoBehaviour
     private float rechargeRate = .33333f;
 
     [SerializeField]
-    [Tooltip("Multiplier to apply for in-air recharge rate")]
-    private int _inAirRate = 1;
+    [Tooltip("Delay until grounded dash recharge rate begins")]
+    private float rechargeDelay = .66666f;
 
     [SerializeField]
-    [Tooltip("Delay until dash recharge begins")]
-    private float rechargeDelay = .66666f;
-    [SerializeField]
-    [Tooltip("Multiplier to apply to in-air recharge delay")]
-    private int _inAirDelay = 1;
+    [Tooltip("Multiplier to apply for the grounded recharge rate")]
+    private float groundedRechargeRate = 0.333f;
 
     [Tooltip("How quickly does the mini-dash recharge?")]
     [SerializeField]
@@ -175,28 +172,35 @@ public class PlayerDashController : MonoBehaviour
 
     private void HandleDashRecharge()
     {
-        GroundAirRecharge();
+        bool grounded = pc.IsGrounded();
+
+        if (!grounded)
+        {
+            Recharge(1f);
+            delayTimer = 0f;
+        }
+        else if (grounded)
+        {
+            if (delayTimer < rechargeDelay)
+            {
+                delayTimer += Time.deltaTime;
+                Recharge(1f);
+            }
+            else
+            {
+                Recharge(groundedRechargeRate);
+            }
+        }
     }
 
-    private void GroundAirRecharge()
+    private void Recharge(float rate)
     {
-        var delayMultiplier = 1;
-        var rateMultiplier = 1;
-
-        if (!pc.IsGrounded())
+        if (dashCount < maxDashCount)
         {
-            delayMultiplier = _inAirDelay;
-            rateMultiplier = _inAirRate;
-        }
-
-        delayTimer += Time.deltaTime;
-        if (delayTimer > rechargeDelay*delayMultiplier)
-        {
-            rechargeTimer += Time.deltaTime;
-            if (rechargeTimer > rechargeRate*rateMultiplier)
+            rechargeTimer += Time.deltaTime * rate;
+            if (rechargeTimer >= rechargeRate)
             {
-                rechargeTimer = 0;
-                delayTimer = 0;
+                rechargeTimer = 0f;
                 dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
             }
         }
