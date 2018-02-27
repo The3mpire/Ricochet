@@ -1,5 +1,4 @@
-﻿using System;
-using Enumerables;
+﻿using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -86,11 +85,16 @@ public class GameManager : MonoBehaviour
     private bool multiBallInPlay = false;
 
     // dictionary of players cached based off the GameObject
-    private Dictionary<GameObject, PlayerController> playerDictionary = new Dictionary<GameObject, PlayerController>();
+    private Dictionary<GameObject, PlayerController> playerDictionary = 
+        new Dictionary<GameObject, PlayerController>();
 
     private float currentMatchTime;
 
     private Color defaultShieldColor;
+
+    public bool GameRunning { get; private set; }
+
+    public float MatchTimeLeft { get { return currentMatchTime; } }
     #endregion
 
     #region MonoBehaviour
@@ -110,8 +114,7 @@ public class GameManager : MonoBehaviour
         if (timeLimit > 0)
         {
             gameTimerText.gameObject.SetActive(true);
-            gameTimerText.UpdateText(currentMatchTime);
-            MatchTimer();
+            gameTimerText.SetText(currentMatchTime);
         }
 
         if (powerUpManager)
@@ -135,15 +138,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        StartCoroutine(BeginMatchStartTimer());
-    }
-
-    void Update()
-    {
-        if (gameTimerText != null && timeLimit > 0)
-        {
-            MatchTimer();
-        }
+        StartCoroutine(StartBeginMatchTimer());
     }
     #endregion
 
@@ -161,6 +156,53 @@ public class GameManager : MonoBehaviour
     public int GetTimeTillMatchStart()
     {
         return timeLeftTillStart;
+    }
+    #endregion
+
+    #region Timers
+    private IEnumerator StartBeginMatchTimer()
+    {
+        timeLeftTillStart = matchStartTime;
+        gameTimerActive = false;
+
+        foreach (PlayerController p in playerControllers)
+        {
+            p.DisableMovement(true);
+        }
+
+        while (timeLeftTillStart > 0)
+        {
+            onTimerChanged.Raise();
+            timeLeftTillStart--;
+            yield return new WaitForSeconds(1);
+        }
+
+        gameTimerActive = true;
+
+        foreach (PlayerController p in playerControllers)
+        {
+            p.DisableMovement(false);
+        }
+
+        StartCoroutine(StartGameTimer());
+    }
+
+    private IEnumerator StartGameTimer()
+    {
+        GameRunning = true;
+        currentMatchTime = timeLimit;
+
+        while (currentMatchTime > 0)
+        {
+            onTimerChanged.Raise();
+            currentMatchTime--;
+            yield return new WaitForSeconds(1);
+        }
+
+        GameRunning = false;
+
+        gameData.SetGameWinner(modeManager.GetMaxScore());
+        EndMatch();
     }
     #endregion
 
@@ -539,53 +581,10 @@ public class GameManager : MonoBehaviour
         powerUp.SetActive(true);
     }
 
-    private void MatchTimer()
-    {
-        if (currentMatchTime > 0)
-        {
-            if (gameTimerActive)
-            {
-                currentMatchTime -= Time.deltaTime;
-                gameTimerText.UpdateText(currentMatchTime);
-            }
-        }
-        else
-        {
-            gameData.SetGameWinner(modeManager.GetMaxScore());
-            timeLimit = 0.0f;
-            EndMatch();
-        }
-    }
-
     IEnumerator DelayedWinScreen()
     {
         yield return new WaitForSeconds(timeAfterGameEnd);
         CharacterSelect();
-    }
-
-    private IEnumerator BeginMatchStartTimer()
-    {
-        timeLeftTillStart = matchStartTime;
-        gameTimerActive = false;
-
-        foreach (PlayerController p in playerControllers)
-        {
-            p.DisableMovement(true);
-        }
-
-        while (timeLeftTillStart > 0)
-        {
-            onTimerChanged.Raise();
-            timeLeftTillStart--;
-            yield return new WaitForSeconds(1);
-        }
-
-        gameTimerActive = true;
-
-        foreach (PlayerController p in playerControllers)
-        {
-            p.DisableMovement(false);
-        }
     }
 
     private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)

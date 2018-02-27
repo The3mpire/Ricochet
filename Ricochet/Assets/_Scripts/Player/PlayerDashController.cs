@@ -1,4 +1,6 @@
-﻿using Enumerables;
+﻿using System;
+using System.Collections;
+using Enumerables;
 using Rewired;
 using UnityEngine;
 
@@ -16,20 +18,32 @@ public class PlayerDashController : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Recharge one dash every x seconds")]
-    private float groundRecharge = .33333f;
+    private float rechargeRate = .33333f;
+
+    [SerializeField]
+    [Tooltip("Multiplier to apply for in-air recharge rate")]
+    private int _inAirRate = 1;
 
     [SerializeField]
     [Tooltip("Delay until dash recharge begins")]
-    private float groundRechargeDelay = .66666f;
-    
+    private float rechargeDelay = .66666f;
+    [SerializeField]
+    [Tooltip("Multiplier to apply to in-air recharge delay")]
+    private int _inAirDelay = 1;
+
     private PlayerController pc;
     private Player player;
     private Animator anim;
     private GameManager gm;
     private AudioSource audioSource;
 
+    private bool playerInZone = false;
+
     private float rechargeTimer;
     private float delayTimer;
+
+    [SerializeField]
+    private GameDataSO gameData;
     #endregion
 
     #region Monobehaviours
@@ -64,7 +78,7 @@ public class PlayerDashController : MonoBehaviour
     #region Public Methods
     public void ResetDashController()
     {
-        rechargeTimer = groundRecharge;
+        rechargeTimer = rechargeRate;
         delayTimer = 0;
         dashCount = maxDashCount;
     }
@@ -90,7 +104,7 @@ public class PlayerDashController : MonoBehaviour
             audioSource.PlayOneShot(gm.GetCharacterSFX(pc.GetCharacter(), ECharacterAction.Dash));
         }
 
-        Vector3 dashVelocity = pc.GetRightStickDirection() * dashSpeedBoost;
+        Vector3 dashVelocity = pc.GetShieldDirection() * dashSpeedBoost;
 
         pc.AddVelocity(dashVelocity);
 
@@ -99,23 +113,28 @@ public class PlayerDashController : MonoBehaviour
 
     private void HandleDashRecharge()
     {
-        // If not grounded, not recharge, reset timers
+        GroundAirRecharge();
+    }
+
+    private void GroundAirRecharge()
+    {
+        var delayMultiplier = 1;
+        var rateMultiplier = 1;
+
         if (!pc.IsGrounded())
         {
-            rechargeTimer = groundRecharge;
-            delayTimer = 0;
-            return;
+            delayMultiplier = _inAirDelay;
+            rateMultiplier = _inAirRate;
         }
 
-        // Recharge one dash if grounded longer than groundRechargeDelay
-        // Recharge another dash every rechargeRate seconds
         delayTimer += Time.deltaTime;
-        if (delayTimer > groundRechargeDelay)
+        if (delayTimer > rechargeDelay*delayMultiplier)
         {
             rechargeTimer += Time.deltaTime;
-            if (rechargeTimer > groundRecharge)
+            if (rechargeTimer > rechargeRate*rateMultiplier)
             {
                 rechargeTimer = 0;
+                delayTimer = 0;
                 dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
             }
         }

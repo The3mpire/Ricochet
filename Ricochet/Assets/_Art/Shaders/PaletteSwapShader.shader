@@ -34,7 +34,7 @@
 			struct appdata_t
 			{
 				float4 vertex   : POSITION;
-				//float4 color    : COLOR;
+				float4 color    : COLOR;
 				float2 texcoord : TEXCOORD0;
 			};
 
@@ -70,7 +70,7 @@
 				v2f OUT;
 				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord;
-				//OUT.color = IN.color * _Color;
+				OUT.color = IN.color * _Color;
 				#ifdef PIXELSNAP_ON
 					OUT.vertex = UnityPixelSnap (OUT.vertex);
 				#endif
