@@ -177,7 +177,7 @@ public class CharSelectManager : MonoBehaviour
     }
     public void RouteInputAltB(int playerNumber)
     {
-        if (playerPhase[playerNumber] == SelectionPhase.CharacterSelect)
+        if (playerPhase[playerNumber] == SelectionPhase.CharacterSelect || playerPhase[playerNumber] == SelectionPhase.None)
         {
             bHeld = true;
         }
