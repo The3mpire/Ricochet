@@ -17,6 +17,8 @@ public class CharSelectManager : MonoBehaviour
     [Tooltip("Amount of time to wait in seconds after all players are ready")]
     private float waitTime;
 
+    [SerializeField] private CharacterSelectObjects[] PlayerObjects;
+
     [Header("Player 1")]
     [Tooltip("Press A to Join Icon")]
     [SerializeField]
@@ -94,9 +96,6 @@ public class CharSelectManager : MonoBehaviour
     private Enumerables.ETeam p4Team;
 
     [Header("Misc UI Objects")]
-    [SerializeField]
-    [Tooltip("Drag all ready text objects for each player in order")]
-    private GameObject[] readyTags;
     [SerializeField]
     [Tooltip("Drag timer text object here")]
     private Text timerText;
@@ -466,22 +465,23 @@ public class CharSelectManager : MonoBehaviour
         {
             case 1:
                 playerPhase[0] = SelectionPhase.Ready;
-                readyTags[0].SetActive(true);
+                //TODO: convert to use CharSelectObjects
+                //readyTags[0].SetActive(true);
                 gameData.SetPlayerTeam(0, p1Team);
                 break;
             case 2:
                 playerPhase[1] = SelectionPhase.Ready;
-                readyTags[1].SetActive(true);
+                //readyTags[1].SetActive(true);
                 gameData.SetPlayerTeam(1, p2Team);
                 break;
             case 3:
                 playerPhase[2] = SelectionPhase.Ready;
-                readyTags[2].SetActive(true);
+                //readyTags[2].SetActive(true);
                 gameData.SetPlayerTeam(2, p3Team);
                 break;
             case 4:
                 playerPhase[3] = SelectionPhase.Ready;
-                readyTags[3].SetActive(true);
+                //readyTags[3].SetActive(true);
                 gameData.SetPlayerTeam(3, p4Team);
                 break;
         }
@@ -772,19 +772,20 @@ public class CharSelectManager : MonoBehaviour
         {
             case 1:
                 playerPhase[0] = SelectionPhase.TeamSelect;
-                readyTags[0].SetActive(false);
+                //TODO: Convert to use CharacterSelectObjects
+                //readyTags[0].SetActive(false);
                 break;
             case 2:
                 playerPhase[1] = SelectionPhase.TeamSelect;
-                readyTags[1].SetActive(false);
+                //readyTags[1].SetActive(false);
                 break;
             case 3:
                 playerPhase[2] = SelectionPhase.TeamSelect;
-                readyTags[2].SetActive(false);
+                //readyTags[2].SetActive(false);
                 break;
             case 4:
                 playerPhase[3] = SelectionPhase.TeamSelect;
-                readyTags[3].SetActive(false);
+                //readyTags[3].SetActive(false);
                 break;
         }
     }
