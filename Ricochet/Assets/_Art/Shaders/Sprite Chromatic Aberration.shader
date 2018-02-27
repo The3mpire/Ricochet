@@ -1,11 +1,12 @@
-﻿Shader "Custom/PaletteSwapShader"
+﻿Shader "Custom/Sprite Chromatic Aberration"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
-		_SwapTex ("Swap Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
+		_XIntensity("X Intensity", Range(-1,1)) = 0
+		_YIntensity("Y Intensity", Range(-1,1)) = 0
 	}
 	SubShader
 	{
@@ -47,9 +48,10 @@
 
 			sampler2D _MainTex;
 			sampler2D _AlphaTex;
-			sampler2D _SwapTex;
 			fixed4 _Color;
 			float _AlphaSplitEnabled;
+			float _XIntensity;
+			float _YIntensity;
 
 			fixed4 SampleSpriteTexture (float2 uv)
 			{
@@ -80,12 +82,16 @@
 			
 			fixed4 frag (v2f IN) : SV_Target
 			{
-				float4 c = SampleSpriteTexture (IN.texcoord);
-				float4 swapCol = tex2D(_SwapTex, float2(c.r, 0));
-				fixed4 final = swapCol;// lerp(c, swapCol, swapCol.a);// * IN.color;
-				final.a = c.a;
-				//final.rgb *= c.a;
-				return final;
+				float4 col;
+				col.r = SampleSpriteTexture(float2(IN.texcoord.x + _XIntensity, IN.texcoord.y + _YIntensity)).r;
+				col.g = SampleSpriteTexture(float2(IN.texcoord.x, IN.texcoord.y)).g;
+				col.b = SampleSpriteTexture(float2(IN.texcoord.x - _XIntensity, IN.texcoord.y - _YIntensity)).b;
+				col.a = SampleSpriteTexture(IN.texcoord).a;
+
+				col = col * IN.color;
+				col.rgb *= col.a;
+
+				return col;
 			}
 			ENDCG
 		}
