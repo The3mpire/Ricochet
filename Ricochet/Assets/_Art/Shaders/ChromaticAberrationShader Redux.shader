@@ -6,7 +6,9 @@
 		_Intensity ("Intensity", float) = .025
 		_Cycles ("Cycles", float) = 1
 		_Progress ("Progress", Range(0,1)) = 0
-		_DefaultValue ("Default Value", float) = .002
+		_Direction ("Direction", Vector) = (0,0,0,0)
+		_ChannelIntensity("Channel Intensity Modifier", Vector) = (1,1,1,1) 
+		_DefaultValue ("Default Value", float) = 0
 	}
 	SubShader
 	{
@@ -44,7 +46,10 @@
 			float _Intensity;
 			float _Cycles;
 			float _Progress;
+			float4 _Direction;
+			float4 _ChannelIntensity;
 			float _DefaultValue;
+
 
 			fixed Cycle(){
 				float min = 0;
@@ -55,16 +60,16 @@
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed xAmnt = _Intensity * Cycle();
-				xAmnt += _DefaultValue;
-				fixed yAmnt = sin(xAmnt);
+				fixed amount = _Intensity * Cycle() + _DefaultValue;
+
+				fixed4 direction = _Direction * amount;
 
 				fixed3 col;
-				col.r = tex2D(_MainTex, fixed2(i.uv.x + xAmnt, i.uv.y + yAmnt)).r;
-				col.g = tex2D(_MainTex, fixed2(i.uv.x, i.uv.y)).g;
-				col.b = tex2D(_MainTex, fixed2(i.uv.x - xAmnt, i.uv.y - yAmnt)).b;
+				col.r = tex2D(_MainTex, fixed2(i.uv.x + direction.x, i.uv.y + direction.y)).r * _ChannelIntensity.r;
+				col.g = tex2D(_MainTex, fixed2(i.uv.x, i.uv.y)).g * _ChannelIntensity.g;
+				col.b = tex2D(_MainTex, fixed2(i.uv.x - direction.x, i.uv.y - direction.y)).b * _ChannelIntensity.b;
 				
-				return fixed4(col, 1.0);
+				return fixed4(col, 1.0 * _ChannelIntensity.a);
 			}
 			ENDCG
 		}
