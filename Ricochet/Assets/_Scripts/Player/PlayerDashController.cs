@@ -74,7 +74,7 @@ public class PlayerDashController : MonoBehaviour
     {
         HandleDashRecharge();
 
-        bool charging = pc.GetLeftTrigger() != 0;
+        bool charging = (pc.GetAutoJetpack() ? pc.GetLeftTrigger() != 0 : pc.GetLeftTrigger() == 0) && !pc.IsGrounded();
         if (charging)
         {
             miniDashCharge = Mathf.Min(miniDashCharge + Time.deltaTime, miniDashChargeTime);
@@ -145,8 +145,7 @@ public class PlayerDashController : MonoBehaviour
         revupCircle.SetActive(true);
         while (pc.MovementDisabled())
         {
-            float revPower = pc.GetLeftStick().magnitude;
-            //leftTriggerAxis = player.GetAxis("Jetpack");
+            float revPower = pc.GetAutoJetpack() ? pc.GetLeftStick().magnitude : pc.GetLeftTrigger();
             if (revPower != 0)
             {
                 power += revPower * Time.deltaTime;
