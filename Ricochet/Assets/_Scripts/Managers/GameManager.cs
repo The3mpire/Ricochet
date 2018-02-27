@@ -168,6 +168,7 @@ public class GameManager : MonoBehaviour
         foreach (PlayerController p in playerControllers)
         {
             p.DisableMovement(true);
+            p.StartingBoost();
         }
 
         while (timeLeftTillStart > 0)
