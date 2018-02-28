@@ -725,6 +725,12 @@ public class PlayerController : MonoBehaviour
         return new Vector2(leftStickHorz, leftStickVert);
     }
 
+    public Vector2 GetNormalizedLeftStick()
+    {
+        return new Vector2(leftStickHorz, leftStickVert).normalized;
+
+    }
+
     public Vector2 GetRightStick()
     {
         return new Vector2(rightStickHorz, rightStickVert);
