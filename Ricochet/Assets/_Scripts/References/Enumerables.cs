@@ -10,8 +10,7 @@
         ELEVATOR,
         UP_N_OVER_WIDE,
         EMPTY_LEVEL,
-        END_GAME,
-        MOVE
+        END_GAME
     }
 
     public enum EPowerUp
