@@ -159,7 +159,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            ToggleGoals(true);
             if (gameData.GetGameLevel() == BuildIndex.UP_N_OVER_WIDE)
             {
                 column.enabled = false;
