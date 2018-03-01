@@ -969,6 +969,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &624707356 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1998894205038724, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+    type: 2}
+  m_PrefabInternal: {fileID: 624707355}
 --- !u!1001 &731874266
 Prefab:
   m_ObjectHideFlags: 0
@@ -1120,6 +1125,26 @@ Prefab:
       propertyPath: zoomInTime
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: goals
+      value: 
+      objectReference: {fileID: 1057684761}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: blueGoal
+      value: 
+      objectReference: {fileID: 1168866588}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: redGoal
+      value: 
+      objectReference: {fileID: 624707356}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: column
+      value: 
+      objectReference: {fileID: 1651255804}
     - target: {fileID: 114186423841661416, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: m_Enabled
@@ -1544,6 +1569,10 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1559412486299254, guid: c74b601544e41844bb46698d9d26c676, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c74b601544e41844bb46698d9d26c676, type: 2}
@@ -1992,6 +2021,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 268c9032cf81e114ea588f3ee710b0b2, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1168866588 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1723054784546634, guid: 268c9032cf81e114ea588f3ee710b0b2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1168866587}
 --- !u!4 &1263598273 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4179848699403000, guid: 268c9032cf81e114ea588f3ee710b0b2,
@@ -2770,6 +2804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1651255802}
   - component: {fileID: 1651255803}
+  - component: {fileID: 1651255804}
   m_Layer: 0
   m_Name: InsideColumn
   m_TagString: Untagged
@@ -2838,6 +2873,31 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 2
+--- !u!61 &1651255804
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1651255801}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.02479732, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4.2187567, y: 18.000029}
+    newSize: {x: 4.2187567, y: 18.000029}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.962672, y: 18.000029}
+  m_EdgeRadius: 0
 --- !u!1001 &1725008923
 Prefab:
   m_ObjectHideFlags: 0

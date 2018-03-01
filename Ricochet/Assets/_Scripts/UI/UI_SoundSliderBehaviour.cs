@@ -13,6 +13,7 @@ public class UI_SoundSliderBehaviour : MonoBehaviour
 
     #region Hidden Variables
     private GameManager gameManagerInstance;
+    private MusicManager musicManagerInstance;
     #endregion
 
     #region Mono Behaviour
@@ -21,6 +22,10 @@ public class UI_SoundSliderBehaviour : MonoBehaviour
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             slider.value = gameManagerInstance.GetMusicVolume();
+        }
+        if (musicManagerInstance != null || MusicManager.TryGetInstance(out musicManagerInstance))
+        {
+            slider.onValueChanged.AddListener(SetMusicVolume);
         }
     }
     #endregion
@@ -31,6 +36,10 @@ public class UI_SoundSliderBehaviour : MonoBehaviour
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             gameManagerInstance.SetMusicVolume(vol);
+        }
+        if (musicManagerInstance != null || MusicManager.TryGetInstance(out musicManagerInstance))
+        {
+            musicManagerInstance.SetMusicVolume(vol);
         }
         slider.value = vol;
     }
