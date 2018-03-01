@@ -28,6 +28,7 @@ public class LevelSelectManager : MonoBehaviour
     private IList<Player> players;
     private Player P1;
     private bool bHeld = false;
+    private bool _goingBack = false;
     #endregion
 
     #region Monobehaviours
@@ -82,6 +83,7 @@ public class LevelSelectManager : MonoBehaviour
                 if (backSlider.value >= backSlider.maxValue)
                 {
                     OnCancel();
+                    _goingBack = true;
                 }
             }
         }
@@ -118,7 +120,10 @@ public class LevelSelectManager : MonoBehaviour
 
     public void OnCancel()
     {
-        LevelSelect.LoadLevel(BuildIndex.CHARACTER_SELECT);
+        if (!_goingBack)
+        {
+            LevelSelect.LoadLevel(BuildIndex.CHARACTER_SELECT);
+        }
     }
 
     public void LoadLevel()

@@ -51,6 +51,7 @@ public class CharSelectManager : MonoBehaviour
     private bool timerActive;
 
     private bool bHeld;
+    private bool _goingBack = false;
     #endregion
 
     #region Phase Enum
@@ -87,6 +88,7 @@ public class CharSelectManager : MonoBehaviour
             if (backSlider.value >= backSlider.maxValue)
             {
                 RouteInputBack();
+                _goingBack = true;
             }
         }
         else
@@ -185,7 +187,10 @@ public class CharSelectManager : MonoBehaviour
 
     public void RouteInputBack()
     {
-        LevelSelect.LoadMainMenu();
+        if (!_goingBack)
+        {
+            LevelSelect.LoadMainMenu();
+        }
     }
     #endregion
 
