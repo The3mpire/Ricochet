@@ -449,6 +449,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &447775543 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1998894205038724, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+    type: 2}
+  m_PrefabInternal: {fileID: 447775542}
 --- !u!1001 &496995994
 Prefab:
   m_ObjectHideFlags: 0
@@ -728,6 +733,16 @@ Prefab:
       propertyPath: powerUpRespawnTime
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: blueGoal
+      value: 
+      objectReference: {fileID: 1168866588}
+    - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: redGoal
+      value: 
+      objectReference: {fileID: 447775543}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
@@ -1221,6 +1236,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 268c9032cf81e114ea588f3ee710b0b2, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1168866588 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1723054784546634, guid: 268c9032cf81e114ea588f3ee710b0b2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1168866587}
 --- !u!4 &1263598273 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4179848699403000, guid: 268c9032cf81e114ea588f3ee710b0b2,

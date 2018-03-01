@@ -117,5 +117,17 @@ public class MusicManager : MonoBehaviour
     #endregion
 
     #region Helpers
+    public static bool TryGetInstance(out MusicManager mm)
+    {
+        mm = instance;
+        if (instance == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     #endregion
 }

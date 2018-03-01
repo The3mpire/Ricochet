@@ -17,6 +17,7 @@ public class LevelSelectManager : MonoBehaviour
 
     [SerializeField] private Slider timeSlider;
     [SerializeField] private Slider scoreSlider;
+    [SerializeField] private Slider backSlider;
 
     [SerializeField] private GameDataSO gameData;
     #endregion
@@ -25,6 +26,8 @@ public class LevelSelectManager : MonoBehaviour
     private BuildIndex loadLevelBuildIndex;
     private GameObject defaultSelectedLevelButton;
     private IList<Player> players;
+    private Player P1;
+    private bool bHeld = false;
     #endregion
 
     #region Monobehaviours
@@ -60,23 +63,31 @@ public class LevelSelectManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(defaultSelectedLevelButton);
 
         players = ReInput.players.AllPlayers;
+        P1 = players[1]; // System is player 0
     }
 
     private void Update()
     {
-        bool cancel = false;
-        foreach (Player p in players)
-        {
-            if (p.GetButtonDown("UICancel"))
-            {
-                cancel = true;
-                break;
-            }
-        }
+        bool cancel = P1.GetButton("UICancel");
 
         if (cancel)
         {
-            OnCancel();
+            if (confirmationMenu.gameObject.activeSelf)
+            {
+                CloseConfirmationMenu();
+            }
+            else
+            {
+                backSlider.value += (Time.deltaTime * 1.75f);
+                if (backSlider.value >= backSlider.maxValue)
+                {
+                    OnCancel();
+                }
+            }
+        }
+        else
+        {
+            backSlider.value -= Time.deltaTime * 2;
         }
     }
     #endregion
@@ -107,8 +118,7 @@ public class LevelSelectManager : MonoBehaviour
 
     public void OnCancel()
     {
-        loadLevelBuildIndex = BuildIndex.CHARACTER_SELECT;
-        OpenConfirmationMenu();
+        LevelSelect.LoadLevel(BuildIndex.CHARACTER_SELECT);
     }
 
     public void LoadLevel()
