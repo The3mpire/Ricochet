@@ -168,7 +168,7 @@ public class PowerUp : MonoBehaviour
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
                     break;
                 case EPowerUp.Shrink:
-                    powerUpAssets = powerUpBundle.LoadAsset("shrink", typeof(RuntimeAnimatorController));
+                    powerUpAssets = powerUpBundle.LoadAsset("Shrink_0", typeof(RuntimeAnimatorController));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
                     break;
                 default:
