@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
 {
-    private Text text;
+    protected Text text;
 
     public void Awake()
     {
@@ -16,12 +16,12 @@ public class UI_MenuButton : MonoBehaviour, IDeselectHandler, ISelectHandler
         text.color = Color.white;
     }
 
-    public void OnDeselect(BaseEventData eventData)
+    public virtual void OnDeselect(BaseEventData eventData)
     {
         text.color = Color.white;
     }
 
-    public void OnSelect(BaseEventData eventData)
+    public virtual void OnSelect(BaseEventData eventData)
     {
         text.color = Color.yellow;
     }

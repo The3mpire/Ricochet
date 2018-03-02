@@ -6,12 +6,15 @@ public class UI_UpdateSliderLabel : MonoBehaviour, ISelectHandler, IDeselectHand
 {
 
     #region Inspector Variables
-    [SerializeField] private Text disc;
+    [SerializeField] private Text desc;
+    [SerializeField] private Image panel;
     [SerializeField] private Text label;
     [SerializeField] private Slider slider;
 
-    [SerializeField] private Color defaultColor = Color.white;
-    [SerializeField] private Color selectedColor = Color.red;
+    [SerializeField] private Color defaultTextColor = Color.white;
+    [SerializeField] private Color selectedTextColor = Color.red;
+    [SerializeField] private Color defaultPanelColor = Color.white;
+    [SerializeField] private Color selectedPanelColor = Color.red;
     #endregion
 
     #region Private Variables
@@ -52,12 +55,14 @@ public class UI_UpdateSliderLabel : MonoBehaviour, ISelectHandler, IDeselectHand
     #region ISelect and IDeselect Methods
     public void OnDeselect(BaseEventData eventData)
     {
-        disc.color = defaultColor;
+        desc.color = defaultTextColor;
+        panel.color = defaultPanelColor;
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        disc.color = selectedColor;
+        desc.color = selectedTextColor;
+        panel.color = selectedPanelColor;
     }
     #endregion
 
