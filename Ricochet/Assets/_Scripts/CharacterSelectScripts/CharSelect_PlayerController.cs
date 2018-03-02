@@ -50,21 +50,21 @@ public class CharSelect_PlayerController : MonoBehaviour
         if (moveX != 0 && joystickAcceptingInput)
         {
             joystickAcceptingInput = false;
-            manager.RouteInputAxis(playerNumber, moveX);
+            manager.RouteInputAxis(playerNumber - 1, moveX);
             StartCoroutine(ReactivateAfterDelay());
         }
 
         if (player.GetButtonDown("UISubmit"))
         {
-            manager.RouteInputA(playerNumber, playerColor);
+            manager.RouteInputA(playerNumber - 1, playerColor);
         }
         if (player.GetButtonDown("UICancel"))
         {
-            manager.RouteInputB(playerNumber);
+            manager.RouteInputB(playerNumber - 1);
         }
         if (player.GetButton("UICancel"))
         {
-            manager.RouteInputAltB(playerNumber);
+            manager.RouteInputAltB(playerNumber - 1);
         }
     }
     #endregion

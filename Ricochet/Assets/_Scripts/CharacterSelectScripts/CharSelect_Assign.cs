@@ -37,12 +37,17 @@ public class CharSelect_Assign : MonoBehaviour
     }
     #endregion
     #region Rewired
+
     void OnControllerConnected(ControllerStatusChangedEventArgs args)
     {
         if (args.controllerType != ControllerType.Joystick) return;
-
-        AssignJoystickToNextOpenPlayer(ReInput.controllers.GetJoystick(args.controllerId));
-
+        foreach (Player p in ReInput.players.Players) { 
+            if (p.controllers.ContainsController(args.controllerType, args.controllerId)) 
+            {
+                manager.ActivatePlayer(p.id);
+            }
+        
+        }
     }
     #endregion
     #region Helpers
@@ -55,7 +60,6 @@ public class CharSelect_Assign : MonoBehaviour
                 continue;
             }
             p.controllers.AddController(j, true);
-            manager.ActivatePlayer(p.id);
             return;
         }
     }
