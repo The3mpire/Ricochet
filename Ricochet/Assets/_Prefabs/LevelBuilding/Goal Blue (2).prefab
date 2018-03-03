@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 95625078111278100}
   m_Layer: 0
   m_Name: GoalArea
-  m_TagString: Untagged
+  m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -472,6 +472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc129ead373d47709afcce1e7e92121, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blinkMultiplier: 0.2
   target: {fileID: 4691707604922506}
   strength: 100
   minimum: 0
