@@ -21,15 +21,20 @@ public class PlayerDashController : MonoBehaviour
     private float rechargeRate = .33333f;
 
     [SerializeField]
-    [Tooltip("Multiplier to apply for in-air recharge rate")]
-    private int _inAirRate = 1;
+    [Tooltip("Delay until grounded dash recharge rate begins")]
+    private float rechargeDelay = .66666f;
 
     [SerializeField]
-    [Tooltip("Delay until dash recharge begins")]
-    private float rechargeDelay = .66666f;
+    [Tooltip("Multiplier to apply for the grounded recharge rate")]
+    private float groundedRechargeRate = 0.333f;
+
+    [Tooltip("How quickly does the mini-dash recharge?")]
     [SerializeField]
-    [Tooltip("Multiplier to apply to in-air recharge delay")]
-    private int _inAirDelay = 1;
+    private float miniDashChargeTime;
+
+    [Tooltip("Drag the player's revup ricle here")]
+    [SerializeField]
+    private GameObject revupCircle;
 
     private PlayerController pc;
     private Player player;
@@ -39,6 +44,7 @@ public class PlayerDashController : MonoBehaviour
 
     private bool playerInZone = false;
 
+    private float miniDashCharge;
     private float rechargeTimer;
     private float delayTimer;
 
@@ -68,9 +74,24 @@ public class PlayerDashController : MonoBehaviour
     {
         HandleDashRecharge();
 
+        bool grounded = pc.IsGrounded();
+        bool charging = (pc.GetAutoJetpack() ? pc.GetLeftTrigger() != 0 : pc.GetLeftTrigger() == 0) && !grounded && !pc.MovementDisabled();
+        if (charging)
+        {
+            miniDashCharge = Mathf.Min(miniDashCharge + Time.deltaTime, miniDashChargeTime);
+        }
+        else
+        {
+            if (miniDashCharge >= miniDashChargeTime && !pc.MovementDisabled() && !grounded)
+            {
+                Dash(0, 0.45f);
+            }
+            miniDashCharge = 0f;
+        }
+
         if (player.GetButtonDown("Dash") && dashCount > 0 && !pc.MovementDisabled())
         {
-            Dash();
+            Dash(1,1f);
         }
     }
     #endregion
@@ -81,6 +102,14 @@ public class PlayerDashController : MonoBehaviour
         rechargeTimer = rechargeRate;
         delayTimer = 0;
         dashCount = maxDashCount;
+    }
+
+    public void StartingBoost()
+    {
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine("StartingBoostCoroutine");
+        }
     }
     #endregion
 
@@ -97,44 +126,81 @@ public class PlayerDashController : MonoBehaviour
     #endregion
 
     #region Private Helpers
-    private void Dash()
+    private void Dash(int cost, float modifier)
     {
         if (gm != null || GameManager.TryGetInstance(out gm))
         {
             audioSource.PlayOneShot(gm.GetCharacterSFX(pc.GetCharacter(), ECharacterAction.Dash));
         }
 
-        Vector3 dashVelocity = pc.GetShieldDirection() * dashSpeedBoost;
+        Vector3 dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
 
         pc.AddVelocity(dashVelocity);
 
-        dashCount--;
+        dashCount -= cost;
+    }
+
+    private IEnumerator StartingBoostCoroutine()
+    {
+        float power = 0f, angle = 0f, radius = 1.5f;
+        revupCircle.SetActive(true);
+        while (pc.MovementDisabled())
+        {
+            float revPower = pc.GetAutoJetpack() ? pc.GetLeftStick().magnitude : pc.GetLeftTrigger();
+            if (revPower != 0)
+            {
+                power += revPower * Time.deltaTime;
+            }
+            else
+            {
+                power -= 0.5f * Time.deltaTime;
+                power = Mathf.Clamp(power - (0.5f * Time.deltaTime), 0, 3f);
+            }
+
+            Vector3 tp = transform.position;
+            angle += 25f * power * Time.deltaTime;
+            Vector2 offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
+            revupCircle.transform.position = new Vector3(tp.x + offset.x, tp.y + offset.y, tp.z);
+            yield return new WaitForEndOfFrame();
+        }
+        if (power >= 1.5f && power <= 2.0f)
+        {
+            Dash(0, 0.8f);
+        }
+        revupCircle.SetActive(false);
     }
 
     private void HandleDashRecharge()
     {
-        GroundAirRecharge();
+        bool grounded = pc.IsGrounded();
+
+        if (!grounded)
+        {
+            Recharge(1f);
+            delayTimer = 0f;
+        }
+        else if (grounded)
+        {
+            if (delayTimer < rechargeDelay)
+            {
+                delayTimer += Time.deltaTime;
+                Recharge(1f);
+            }
+            else
+            {
+                Recharge(groundedRechargeRate);
+            }
+        }
     }
 
-    private void GroundAirRecharge()
+    private void Recharge(float rate)
     {
-        var delayMultiplier = 1;
-        var rateMultiplier = 1;
-
-        if (!pc.IsGrounded())
+        if (dashCount < maxDashCount)
         {
-            delayMultiplier = _inAirDelay;
-            rateMultiplier = _inAirRate;
-        }
-
-        delayTimer += Time.deltaTime;
-        if (delayTimer > rechargeDelay*delayMultiplier)
-        {
-            rechargeTimer += Time.deltaTime;
-            if (rechargeTimer > rechargeRate*rateMultiplier)
+            rechargeTimer += Time.deltaTime * rate;
+            if (rechargeTimer >= rechargeRate)
             {
-                rechargeTimer = 0;
-                delayTimer = 0;
+                rechargeTimer = 0f;
                 dashCount = Mathf.Clamp(++dashCount, 0, maxDashCount);
             }
         }
