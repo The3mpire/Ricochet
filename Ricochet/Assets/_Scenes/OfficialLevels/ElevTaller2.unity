@@ -191,6 +191,10 @@ Prefab:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1939287981088042, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212791653157057870, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
     - {fileID: 61871195474827406, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
@@ -1818,6 +1822,10 @@ Prefab:
       propertyPath: m_Offset.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1939287981088042, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212791653157057870, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
@@ -2263,6 +2271,10 @@ Prefab:
         type: 2}
       propertyPath: m_Offset.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939287981088042, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212791653157057870, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
@@ -3278,6 +3290,10 @@ Prefab:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1939287981088042, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212791653157057870, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
     - {fileID: 61871195474827406, guid: 50a1ba6435392ee4d8e4c602da85ea82, type: 2}
@@ -3329,7 +3345,7 @@ GameObject:
   - component: {fileID: 1667804778}
   m_Layer: 0
   m_Name: BackCollider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3528,7 +3544,7 @@ GameObject:
   - component: {fileID: 1856367414}
   m_Layer: 0
   m_Name: BackCollider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -374,6 +374,10 @@ public class PlayerController : MonoBehaviour
             else
             {
                 // flying
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Jetpack));
+                }
 
                 moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
                 if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
