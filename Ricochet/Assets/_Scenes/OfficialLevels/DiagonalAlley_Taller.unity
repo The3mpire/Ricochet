@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 176428486}
   m_Layer: 12
   m_Name: Left Wall Triangle
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -615,7 +615,7 @@ GameObject:
   - component: {fileID: 387811592}
   m_Layer: 12
   m_Name: BottomWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1715,6 +1715,10 @@ Prefab:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 6200000, guid: af69d4d730c92e54c8e9abe75d09446c, type: 2}
+    - target: {fileID: 1559412486299254, guid: c74b601544e41844bb46698d9d26c676, type: 2}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212307703914633882, guid: c74b601544e41844bb46698d9d26c676, type: 2}
     - {fileID: 61560479753874318, guid: c74b601544e41844bb46698d9d26c676, type: 2}
@@ -1969,7 +1973,7 @@ GameObject:
   - component: {fileID: 975286118}
   m_Layer: 12
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2027,7 +2031,7 @@ GameObject:
   - component: {fileID: 992830104}
   m_Layer: 12
   m_Name: TopWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2330,6 +2334,10 @@ Prefab:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 6200000, guid: af69d4d730c92e54c8e9abe75d09446c, type: 2}
+    - target: {fileID: 1559412486299254, guid: c74b601544e41844bb46698d9d26c676, type: 2}
+      propertyPath: m_TagString
+      value: Shield
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 212307703914633882, guid: c74b601544e41844bb46698d9d26c676, type: 2}
     - {fileID: 61560479753874318, guid: c74b601544e41844bb46698d9d26c676, type: 2}
@@ -2691,7 +2699,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &1096237860
 Transform:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1096237859}
@@ -3318,7 +3326,7 @@ GameObject:
   - component: {fileID: 1479157215}
   m_Layer: 12
   m_Name: Right Wall Triangle
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3423,7 +3431,7 @@ GameObject:
   - component: {fileID: 1487781865}
   m_Layer: 12
   m_Name: BottomCollider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3661,7 +3669,7 @@ GameObject:
   - component: {fileID: 1649779430}
   m_Layer: 12
   m_Name: RightWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3965,7 +3973,7 @@ GameObject:
   - component: {fileID: 1795465031}
   m_Layer: 12
   m_Name: FloatingWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4065,7 +4073,7 @@ GameObject:
   - component: {fileID: 1826366412}
   m_Layer: 12
   m_Name: LeftWall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4400,7 +4408,7 @@ GameObject:
   - component: {fileID: 1862892486}
   m_Layer: 12
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4474,7 +4482,7 @@ GameObject:
   - component: {fileID: 1917055420}
   m_Layer: 12
   m_Name: TopCollider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

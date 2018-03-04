@@ -129,6 +129,11 @@ public class MusicManager : MonoBehaviour
     {
         fxSource.PlayOneShot(soundStorage.GetPauseSound());
     }
+
+    public void PlayMenuTraversalSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
+    }
     #endregion
 
     #region Helpers
