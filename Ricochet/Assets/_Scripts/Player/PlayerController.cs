@@ -560,6 +560,9 @@ public class PlayerController : MonoBehaviour
     {
         ParticleSystem.MainModule sparks = powerupParticle.main;
         ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
+
+        audioSource.PlayOneShot(gameManagerInstance.GetPowerupPickupSound(powerUp));
+
         sparks.startColor = powerUpColor;
         orb.startColor = powerUpColor;
         if (powerupParticle.isStopped)
