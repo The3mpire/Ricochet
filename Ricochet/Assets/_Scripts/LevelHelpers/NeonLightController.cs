@@ -10,35 +10,31 @@ public class NeonLightController : MonoBehaviour {
     [SerializeField] private Color neonRed;
     [SerializeField] private Color sparkRed;
 
-    Transform[] lights;
+    NeonLight[] lights;
     Color[] colors;
 
 	void Start () {
-        int count = transform.childCount;
-        lights = new Transform[count];
-        for (int i = 0; i < count; i++)
-        {
-            Transform child = transform.GetChild(i);
-            lights[i] = child;
-            child.gameObject.SetActive(false);
-        }
         colors = new Color[4];
         colors[0] = neonBlue;
         colors[1] = sparkBlue;
         colors[2] = neonRed;
         colors[3] = sparkRed;
+
+        int count = transform.childCount;
+        lights = new NeonLight[count];
+        for (int i = 0; i < count; i++)
+        {
+            lights[i] = transform.GetChild(i).GetComponent<NeonLight>(); ;
+            lights[i].InitializeColors(colors);
+        }
     }
 
     public void HitTheLights(ETeam t)
     {
-        foreach (Transform tr in lights)
+        foreach (NeonLight light in lights)
         {
-            Transform tra = Instantiate(tr);
-            tra.gameObject.SetActive(true);
-            NeonLight lightInstance = tra.GetComponent<NeonLight>();
-            lightInstance.Initialize(colors);
-            lightInstance.SetColor(t);
-            lightInstance.HitTheLights();
+            light.SetColor(t);
+            light.HitTheLights();
         }
     }
 }
