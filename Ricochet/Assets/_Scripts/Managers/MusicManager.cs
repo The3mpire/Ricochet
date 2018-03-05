@@ -23,9 +23,9 @@ public class MusicManager : MonoBehaviour
     [Tooltip("The highest a sound effect will be randomly pitched")]
     [SerializeField]
     private float highPitchRange = 1.05f;
-    [Tooltip("The menu song")]
+    [Tooltip("The current song")]
     [SerializeField]
-    private AudioClip menuSong;
+    private AudioClip currentSong;
     [Tooltip("The music volume at when the level is loaded")]
     [SerializeField]
     private float musicVol;
@@ -58,19 +58,23 @@ public class MusicManager : MonoBehaviour
 
         Cursor.visible = true;
 
-        instance.musicSource.clip = menuSong;
+        int buildIndex = SceneManager.GetActiveScene().buildIndex;
+        BuildIndex levelIndex = (BuildIndex)buildIndex;
+        currentSong = soundStorage.GetSceneMusic(levelIndex);
+        instance.musicSource.clip = currentSong;
         instance.musicSource.Play();
     }
 
     void OnLevelWasLoaded()
     {
-        if (SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
+        int buildIndex = SceneManager.GetActiveScene().buildIndex;
+        BuildIndex levelIndex = (BuildIndex)buildIndex;
+        AudioClip newSong = soundStorage.GetSceneMusic(levelIndex);
+        if (currentSong != newSong && newSong != null)
         {
-            if (instance.musicSource.clip != menuSong)
-            {
-                instance.musicSource.clip = menuSong;
-                instance.musicSource.Play();
-            }
+            currentSong = newSong;
+            instance.musicSource.clip = newSong;
+            instance.musicSource.Play();
         }
     }
     #endregion

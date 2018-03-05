@@ -128,6 +128,24 @@ public class SoundStorage : ScriptableObject
 
     [Space]
 
+    [Header("Scene Music")]
+    [SerializeField]
+    private List<AudioClip> mainMenuMusic;
+    [SerializeField]
+    private List<AudioClip> characterSelectMusic;
+    [SerializeField]
+    private List<AudioClip> levelSelectMusic;
+    [SerializeField]
+    private List<AudioClip> upNOverMusic;
+    [SerializeField]
+    private List<AudioClip> elevatorMusic;
+    [SerializeField]
+    private List<AudioClip> voidMusic;
+    [SerializeField]
+    private List<AudioClip> diagonalAlleyMusic;
+
+    [Space]
+
     [Header("Miscellaneous Sounds")]
     [SerializeField]
     private AudioClip initialSpawnSound;
@@ -309,6 +327,32 @@ public class SoundStorage : ScriptableObject
             default: //EPowerUp.Shrink
                 return shrinkUsed;
         }
+    }
+    #endregion
+
+    #region Scene Music
+    public AudioClip GetSceneMusic(BuildIndex buildIndex)
+    {
+        switch (buildIndex)
+        {
+            case BuildIndex.MAIN_MENU:
+                return mainMenuMusic[Random.Range(0, mainMenuMusic.Count)];
+            case BuildIndex.CHARACTER_SELECT:
+                return characterSelectMusic[Random.Range(0, characterSelectMusic.Count)];
+            case BuildIndex.LEVEL_SELECT:
+                return levelSelectMusic[Random.Range(0, levelSelectMusic.Count)];
+            case BuildIndex.DIAGONAL_ALLEY:
+                return diagonalAlleyMusic[Random.Range(0, diagonalAlleyMusic.Count)];
+            case BuildIndex.ELEVATOR:
+                return elevatorMusic[Random.Range(0, elevatorMusic.Count)];
+            case BuildIndex.UP_N_OVER_WIDE:
+                return upNOverMusic[Random.Range(0, upNOverMusic.Count)];
+            case BuildIndex.EMPTY_LEVEL:
+                return voidMusic[Random.Range(0, voidMusic.Count)];
+            default:
+                return null;
+        }
+
     }
     #endregion
 }
