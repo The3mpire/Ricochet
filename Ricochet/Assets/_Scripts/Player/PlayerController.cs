@@ -301,6 +301,13 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter));
+                }
+            }
         }
     }
 
@@ -376,7 +383,9 @@ public class PlayerController : MonoBehaviour
                 // flying
                 if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                 {
-                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Jetpack));
+                    //TODO come back to this with a coroutine?
+                    //Debug.Log("we jetting");
+                    //audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Jetpack));
                 }
 
                 moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;

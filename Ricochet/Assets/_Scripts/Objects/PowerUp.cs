@@ -18,6 +18,9 @@ public class PowerUp : MonoBehaviour
     [Tooltip("The animation controller of the powerup")]
     [SerializeField]
     private Animator powerupAnimator;
+    [Tooltip("Drag the audio source here")]
+    [SerializeField]
+    private AudioSource audioSource;
 
     [Serializable]
     private struct weight
@@ -93,6 +96,7 @@ public class PowerUp : MonoBehaviour
                 gameManagerInstance.PlayerPowerUpCollision(collider.gameObject, this);
                 gameObject.SetActive(false);
                 gameManagerInstance.RespawnPowerUp(gameObject);
+                audioSource.PlayOneShot(gameManagerInstance.GetPowerupPickupSound(powerUpType));
             }
         }
     }
