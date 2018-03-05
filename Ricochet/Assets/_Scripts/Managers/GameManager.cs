@@ -737,6 +737,11 @@ public class GameManager : MonoBehaviour
     {
         return soundStorage.GetBallSound(tag);
     }
+    
+    public AudioClip GetPowerupPickupSound(EPowerUp powerUp)
+    {
+        return soundStorage.GetPowerUpPickUpSound(powerUp);
+    }
 
     public AudioClip GetMenuClickSound()
     {
