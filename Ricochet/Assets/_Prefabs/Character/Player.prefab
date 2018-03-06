@@ -610,8 +610,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158271850568408}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15, y: -11, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.821572, y: -0.64000034, z: 0.106359996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224102686627786838}
@@ -1225,9 +1225,9 @@ MonoBehaviour:
   boingFactor: 1
   gravityScale: 1
   motorIndex: 0
-  motorLevel: 0.5
-  rumbleDuration: 0.1
-  rumbleMultiplier: 2
+  motorLevel: 0
+  rumbleDuration: 0
+  rumbleMultiplier: 0
   shieldTransform: {fileID: 4414966702740056}
   shieldObject: {fileID: 1936325338366724}
   sprite: {fileID: 212644095525073304}
@@ -31677,7 +31677,7 @@ SpriteRenderer:
   m_SortingLayerID: -1783731295
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 33560526237b55b44b72bb74e92abcdb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b768927fa4be91408eeeb567848fea7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -31685,7 +31685,7 @@ SpriteRenderer:
   m_Size: {x: 0.72, y: 0.72}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
 --- !u!212 &212644095525073304
 SpriteRenderer:
