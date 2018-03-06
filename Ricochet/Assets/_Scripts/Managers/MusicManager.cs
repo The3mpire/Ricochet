@@ -79,6 +79,8 @@ public class MusicManager : MonoBehaviour
             currentSong = newSong;
             instance.musicSource.clip = newSong;
             instance.musicSource.Play();
+            IEnumerator fadeInCoroutine = FadeIn(0f, 3f);
+            StartCoroutine(fadeInCoroutine);
         }
     }
     #endregion
@@ -94,6 +96,18 @@ public class MusicManager : MonoBehaviour
     {
         musicSource.DOFade(musicVol, musicFadeDuration);
 
+    }
+
+    private IEnumerator FadeIn(float startVol, float duration)
+    {
+        musicSource.volume = startVol;
+        float volumesPerUpdate = (1f - startVol) / duration ;
+        while (musicSource.volume <= 1f)
+        {
+            musicSource.volume += volumesPerUpdate * Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        musicSource.volume = 1f;
     }
 
     public void SceneMusic(AudioClip song)
