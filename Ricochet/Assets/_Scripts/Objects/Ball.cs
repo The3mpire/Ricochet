@@ -81,6 +81,15 @@ public class Ball : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (isTempBall)
+        {
+            audioSource.mute = true;
+            StartCoroutine(UnmuteSpawnedBall(.5f));
+        }
+    }
+
     private void OnEnable()
     {
         body.velocity = new Vector2(0.0f, 0.0f);
@@ -148,7 +157,7 @@ public class Ball : MonoBehaviour
         Collider2D hitCollider = col.collider;
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            audioSource.PlayOneShot(gameManagerInstance.GetBallSound());
+            audioSource.PlayOneShot(gameManagerInstance.GetBallSound(hitCollider.tag));
             beenHit = true;
             if (hitCollider.tag == "Shield")
             {
@@ -272,6 +281,11 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region Helpers
+    private IEnumerator UnmuteSpawnedBall(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        audioSource.mute = false;
+    }
 
     private float GetRotation()
     {
