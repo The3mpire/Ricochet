@@ -713,14 +713,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public AudioClip GetCharacterRespawnSFX(ECharacter character)
+    {
+        return soundStorage.GetPlayerRespawnSound(character);
+    }
+
+    public AudioClip GetCharacterDeathSFX(ECharacter character)
+    {
+        return soundStorage.GetPlayerDeathSound(character);
+    }
+
+    public AudioClip GetCharacterBumpSFX(ECharacter character)
+    {
+        return soundStorage.GetPlayerBumpSound(character);
+    }
+
     public AudioClip GetScoringSound()
     {
         return soundStorage.GetScoringSound();
     }
 
-    public AudioClip GetBallSound()
+    public AudioClip GetBallSound(string tag)
     {
-        return soundStorage.GetBallSound();
+        return soundStorage.GetBallSound(tag);
+    }
+    
+    public AudioClip GetPowerupPickupSound(EPowerUp powerUp)
+    {
+        return soundStorage.GetPowerUpPickUpSound(powerUp);
     }
 
     public AudioClip GetMenuClickSound()
