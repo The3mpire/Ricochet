@@ -305,7 +305,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                 {
-                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter));
+                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter), 1f);
                 }
             }
         }

@@ -81,6 +81,15 @@ public class Ball : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (isTempBall)
+        {
+            audioSource.mute = true;
+            StartCoroutine(UnmuteSpawnedBall(.5f));
+        }
+    }
+
     private void OnEnable()
     {
         body.velocity = new Vector2(0.0f, 0.0f);
@@ -272,6 +281,11 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region Helpers
+    private IEnumerator UnmuteSpawnedBall(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        audioSource.mute = false;
+    }
 
     private float GetRotation()
     {
