@@ -54,17 +54,6 @@ public class MusicManager : MonoBehaviour
         OnLevelWasLoaded();
     }
 
-    void Start()
-    {
-        //int buildIndex = SceneManager.GetActiveScene().buildIndex;
-        //BuildIndex levelIndex = (BuildIndex)buildIndex;
-        //currentSong = soundStorage.GetSceneMusic(levelIndex);
-        //instance.musicSource.clip = currentSong;
-        //instance.musicSource.Play();
-        //OnLevelWasLoaded();
-        //if (instance.musicSource.clip )
-    }
-
     void OnLevelWasLoaded()
     {
         int buildIndex = SceneManager.GetActiveScene().buildIndex;
