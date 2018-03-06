@@ -51,7 +51,7 @@ public class MusicManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         musicVol = 1f;
         volumeLock = false;
         OnLevelWasLoaded();
