@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Which team the player is on")]
     [SerializeField]
     private ETeam team;
+    [Tooltip("Autojetpack?")]
+    [SerializeField]
+    private bool autoJetpack = true;
+
     [Header("Movement Settings")]
     [Tooltip("Gravity scale on player")]
     [SerializeField]
@@ -42,6 +46,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed while using jetpack w/ directional input")]
     [SerializeField]
     private float thrusterSpeed = 15f;
+    [Tooltip("How much faster is downward movement? 1.0 is the same. > 1 is faster")]
+    [SerializeField]
+    private float downwardMovementSpeedup = 1.3f;
 
     [Header("Precision Movement")]
     [Tooltip("Acceleration/deceleartion constant while using precision movement")]
@@ -229,10 +236,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (!movementDisabled && !isFrozen)
+        if (!isFrozen)
         {
             RotateShield();
-            Flip();
+            if (!movementDisabled)
+            {
+                Flip();
+            }
         }
     }
 
@@ -281,13 +291,21 @@ public class PlayerController : MonoBehaviour
                                 isFrozen = false;
                             }
                         }
-                        if (!GetIsShrunken())
+                        if (!isShrunken)
                         {
+                            audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter));
                             Rigidbody2D body = gameObject.GetComponent<Rigidbody2D>();
                             body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
                         }
                         Rumble(1.25f);
                     }
+                }
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter), 1f);
                 }
             }
         }
@@ -298,11 +316,12 @@ public class PlayerController : MonoBehaviour
     #region Helpers
     private void HandleAnimator()
     {
-        if (leftTriggerAxis == 0)
+        bool grounded = IsGrounded();
+        if (!grounded)
         {
             animator.SetBool("isJumping", true);
         }
-        else if (IsGrounded())
+        else
         {
             animator.SetBool("isJumping", false);
 
@@ -324,44 +343,80 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
-        bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
         Vector2 moveDirection;
+        bool jetpacking = autoJetpack ? leftTriggerAxis == 0 : leftTriggerAxis != 0;
+        bool precisionMode = autoJetpack ? leftTriggerAxis != 0 : false;
 
-        if (leftTriggerAxis == 0 && touchingGround)
+        if (jetpacking)
         {
-            AddVelocity(Vector2.up * 5);
-        }
+            if (IsGrounded())
+            {
+                // walking
 
-        if (leftTriggerAxis == 0)
-        {
-            moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
-            
-            if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
-            {
-                jetpackParticle.Play();
-            }
-            // If there is no directional input, decelerate movement to a still hover
-            if (moveDirection == Vector2.zero)
-            {
-                float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
-                float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
+                moveDirection = new Vector2(leftStickHorz, leftStickVert);
+                if (jetpackParticle && jetpackParticle.isPlaying)
+                {
+                    jetpackParticle.Stop();
+                }
+                float x = 0;
+                if (moveDirection.x > 0)
+                {
+                    x = rigid.velocity.x > 0 ? rigid.velocity.x : rigid.velocity.x * (directionSwitchRatio - 0.2f);
+                    x = Mathf.Min(x + (moveDirection.x * 2.5f), groundedMoveSpeed * Mathf.Abs(moveDirection.x));
+                }
+                else if (moveDirection.x < 0)
+                {
+                    x = rigid.velocity.x < 0 ? rigid.velocity.x : rigid.velocity.x * (directionSwitchRatio - 0.2f);
+                    x = Mathf.Max(x + (moveDirection.x * 2.5f), -groundedMoveSpeed * Mathf.Abs(moveDirection.x));
+                }
+                else
+                {
+                    float sign = rigid.velocity.x / Mathf.Abs(rigid.velocity.x);
+                    x = Mathf.Abs(rigid.velocity.x) > 0.1f ? rigid.velocity.x - (sign * 1.5f) : 0f;
+                }
+                float y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
+                        Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * downwardMovementSpeedup), -(thrusterSpeed * downwardMovementSpeedup) + (rigid.velocity.y + (thrusterSpeed * downwardMovementSpeedup)) * 0.85f);
                 rigid.velocity = new Vector2(x, y);
-            } // else go in the direction of input with thruster speed
+            }
             else
             {
-                float x, y;
-                x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration), thrusterSpeed + (rigid.velocity.x - thrusterSpeed) * 0.85f) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration), -thrusterSpeed + (rigid.velocity.x + thrusterSpeed) * 0.85f);
+                // flying
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    //TODO come back to this with a coroutine?
+                    //Debug.Log("we jetting");
+                    //audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Jetpack));
+                }
 
-                y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
-                    Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), -thrusterSpeed + (rigid.velocity.y + thrusterSpeed) * 0.85f);
+                moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
+                if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
+                {
+                    jetpackParticle.Play();
+                }
+                // If there is no directional input, decelerate movement to a still hover
+                if (moveDirection == Vector2.zero)
+                {
+                    float x = Mathf.Abs(rigid.velocity.x) > 0.1 ? rigid.velocity.x * 0.8f : 0f;
+                    float y = Mathf.Abs(rigid.velocity.y) > 0.5f ? rigid.velocity.y * 0.90f : 0;
+                    rigid.velocity = new Vector2(x, y);
+                } // else go in the direction of input with thruster speed
+                else
+                {
+                    float lta = autoJetpack ? 1 : leftTriggerAxis;
+                    float ts = thrusterSpeed * lta;
+                    float x, y;
+                    x = moveDirection.x > 0 ? Mathf.Min(Mathf.Max(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * lta), ts + (rigid.velocity.x - ts) * 0.85f) :
+                        Mathf.Max(Mathf.Min(rigid.velocity.x, rigid.velocity.x * directionSwitchRatio) + (moveDirection.x * thrusterAcceleration * lta), -ts + (rigid.velocity.x + ts) * 0.85f);
 
-                rigid.velocity = new Vector2(x, y);
+                    y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * lta), ts + (rigid.velocity.y - ts) * 0.85f) :
+                        Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * downwardMovementSpeedup * lta), -(ts * downwardMovementSpeedup) + (rigid.velocity.y + (ts * downwardMovementSpeedup)) * 0.85f);
+
+                    rigid.velocity = new Vector2(x, y);
+                }
             }
         }
-        else
-        { // if jetpack is not engaged, Move at reduces speed and acceleration
+        else if (precisionMode)
+        { // if precision mode is engaged, Move at reduces speed and acceleration
             moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
             if (jetpackParticle)
             {
@@ -393,6 +448,59 @@ public class PlayerController : MonoBehaviour
                 rigid.velocity = new Vector2(x, y);
             }
         }
+        else if (!jetpacking && !autoJetpack)
+        {
+            moveDirection = new Vector2(leftStickHorz, 0);
+            if (this.jetpackParticle)
+            {
+                this.jetpackParticle.Stop();
+            }
+
+            if (IsGrounded())
+            {
+                float x = 0;
+                if (moveDirection.x > 0)
+                {
+                    x = rigid.velocity.x > 0 ? rigid.velocity.x : rigid.velocity.x * (directionSwitchRatio - 0.2f);
+                    x = Mathf.Min(x + (moveDirection.x * 2.5f), groundedMoveSpeed * Mathf.Abs(moveDirection.x));
+                }
+                else if (moveDirection.x < 0)
+                {
+                    x = rigid.velocity.x < 0 ? rigid.velocity.x : rigid.velocity.x * (directionSwitchRatio - 0.2f);
+                    x = Mathf.Max(x + (moveDirection.x * 2.5f), -groundedMoveSpeed * Mathf.Abs(moveDirection.x));
+                }
+                else
+                {
+                    float sign = rigid.velocity.x / Mathf.Abs(rigid.velocity.x);
+                    x = Mathf.Abs(rigid.velocity.x) > 0.1f ? rigid.velocity.x - (sign * 1.5f) : 0f;
+                }
+                rigid.velocity = new Vector2(x, 0f);
+            }
+            else
+            {
+                float x = 0, y = 0;
+                if (rigid.velocity.x > fallingLateralSpeed)
+                {
+                    x = rigid.velocity.x - (rigid.velocity.x - fallingLateralSpeed) * 0.1f;
+                }
+                else if (rigid.velocity.x < -fallingLateralSpeed)
+                {
+                    x = rigid.velocity.x - ((rigid.velocity.x + fallingLateralSpeed) * 0.1f);
+                }
+
+                if (moveDirection.x > 0)
+                {
+                    x = Mathf.Min(rigid.velocity.x + (moveDirection.x * lateralAcceleration), rigid.velocity.x - (rigid.velocity.x - fallingLateralSpeed) * 0.1f);
+                }
+                else if (moveDirection.x < 0)
+                {
+                    x = Mathf.Max(rigid.velocity.x + (moveDirection.x * lateralAcceleration), rigid.velocity.x - ((rigid.velocity.x + fallingLateralSpeed) * 0.1f));
+                }
+
+                y = Mathf.Max(rigid.velocity.y - 0.75f, -airMoveSpeed);
+                rigid.velocity = new Vector2(x, y);
+            }
+        }
     }
 
     private void Flip()
@@ -410,7 +518,7 @@ public class PlayerController : MonoBehaviour
     private void RotateShield()
     {
         //make sure there is magnitude
-        if (Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0)
+        if ((Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0) && shield.gameObject.activeSelf)
         {
 
             if (rightStickHorz > 0)
@@ -452,6 +560,9 @@ public class PlayerController : MonoBehaviour
     {
         ParticleSystem.MainModule sparks = powerupParticle.main;
         ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
+
+        audioSource.PlayOneShot(gameManagerInstance.GetPowerupPickupSound(powerUp));
+
         sparks.startColor = powerUpColor;
         orb.startColor = powerUpColor;
         if (powerupParticle.isStopped)
@@ -512,6 +623,14 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(KillPlayer());
     }
 
+    public void StartingBoost()
+    {
+        if (gameObject.activeSelf)
+        {
+            dashController.StartingBoost();
+        }
+    }
+
     private IEnumerator Blink(float waitTime)
     {
         float endTime = Time.time + waitTime;
@@ -535,8 +654,14 @@ public class PlayerController : MonoBehaviour
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        yield return new WaitForSeconds(gameData.playerRespawnTime);
 
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterDeathSFX(chosenCharacter)); 
+        }
+
+        shield.gameObject.SetActive(false);
+        yield return new WaitForSeconds(gameData.playerRespawnTime);
         RespawnPlayer();
     }
 
@@ -545,8 +670,13 @@ public class PlayerController : MonoBehaviour
         this.animator.SetBool("isDead", false);
         isInvincible = false;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        shield.gameObject.SetActive(true);
         dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterRespawnSFX(chosenCharacter)); 
+        }
         movementDisabled = false;
     }
 
@@ -571,9 +701,9 @@ public class PlayerController : MonoBehaviour
         Vector2 groundChecker = new Vector2(groundCheck.position.x, groundCheck.position.y - 0.1f);
 
         bool touchingGround = Physics2D.Linecast(transform.position, groundChecker, 1 << LayerMask.NameToLayer("Ground"));
-        bool jetpackActive = leftTriggerAxis == 0;
+        touchingGround = autoJetpack ? touchingGround : (touchingGround && leftTriggerAxis == 0);
 
-        return touchingGround && !jetpackActive;
+        return touchingGround;
     }
 
     public Vector2 GetShieldDirection()
@@ -591,6 +721,11 @@ public class PlayerController : MonoBehaviour
         return chosenCharacter;
     }
 
+    public bool GetAutoJetpack()
+    {
+        return autoJetpack;
+    }
+
     public void DisableMovement(bool movementDisabled)
     {
         this.movementDisabled = movementDisabled;
@@ -604,6 +739,16 @@ public class PlayerController : MonoBehaviour
     public Transform GetShieldTransform()
     {
         return shieldTransform;
+    }
+
+    public float GetLeftTrigger()
+    {
+        return leftTriggerAxis;
+    }
+
+    public Vector2 GetLeftStick()
+    {
+        return new Vector2(leftStickHorz, leftStickVert);
     }
 
     public Vector2 GetRightStick()

@@ -10,8 +10,7 @@
         ELEVATOR,
         UP_N_OVER_WIDE,
         EMPTY_LEVEL,
-        END_GAME,
-        MOVE
+        END_GAME
     }
 
     public enum EPowerUp
@@ -21,8 +20,8 @@
         Multiball = 1,
         CatchNThrow = 2,
         CircleShield = 3,
-	Freeze = 4,
-	Shrink = 5
+	    Freeze = 4,
+	    Shrink = 5
     }
 
     public enum EMode
@@ -42,12 +41,10 @@
     public enum ECharacter
     {
         None = 0,
-        CatManWT = 1,
+        Cat = 1,
         Computer = 2,
         MallCop = 3,
-        CatManP = 4,
-        Cat = 5,
-        Sushi = 6
+        Sushi = 4
     }
 
     public enum ECharacterAction

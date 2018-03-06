@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4901584931640014}
   - component: {fileID: 20093229175937568}
   - component: {fileID: 124726624095255106}
-  - component: {fileID: 81799971389900458}
   - component: {fileID: 114154988891727604}
   m_Layer: 0
   m_Name: Camera
@@ -257,8 +256,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1117056089252980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: 0, y: -0.09, z: 0}
+  m_LocalScale: {x: 2.5, y: 2.483432, z: 1}
   m_Children: []
   m_Father: {fileID: 4238375400679774}
   m_RootOrder: 0
@@ -283,8 +282,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1582373770796422}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: 1, y: -2.1, z: 0}
+  m_LocalScale: {x: 2.5, y: 1.9715843, z: 1}
   m_Children:
   - {fileID: 4886273016140646}
   - {fileID: 4198464576477084}
@@ -383,13 +382,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &81799971389900458
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1053490342532492}
-  m_Enabled: 1
 --- !u!114 &114154988891727604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -840,7 +832,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1309087781540556}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.2000122, z: 0}
+  m_LocalPosition: {x: 0, y: -0.32000732, z: 0}
   m_LocalScale: {x: 0.025, y: 0.025, z: 1}
   m_Children: []
   m_Father: {fileID: 224600367964716300}
@@ -848,8 +840,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 27, y: 15.8}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_AnchoredPosition: {x: 27, y: 15.68}
+  m_SizeDelta: {x: 1920, y: 1497.58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224600367964716300
 RectTransform:

@@ -45,8 +45,6 @@ public class PowerUp : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        powerupSprite = this.GetComponent<SpriteRenderer>();
-        powerupAnimator = this.GetComponent<Animator>();
         if (powerUpType == EPowerUp.Random)
         {
             uint len = 0;
@@ -168,7 +166,7 @@ public class PowerUp : MonoBehaviour
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
                     break;
                 case EPowerUp.Shrink:
-                    powerUpAssets = powerUpBundle.LoadAsset("shrink", typeof(RuntimeAnimatorController));
+                    powerUpAssets = powerUpBundle.LoadAsset("Shrink_0", typeof(RuntimeAnimatorController));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
                     break;
                 default:

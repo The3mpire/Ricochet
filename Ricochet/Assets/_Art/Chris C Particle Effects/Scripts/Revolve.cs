@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace CCParticles
@@ -7,7 +6,6 @@ namespace CCParticles
     [ExecuteInEditMode]
     public class Revolve : MonoBehaviour
     {
-
         [SerializeField]
         private Transform center;
 
@@ -18,19 +16,36 @@ namespace CCParticles
         private Vector3 axis;
 
         [SerializeField]
-        private Vector3 startPosition;
+        private bool useRotation = false;
 
+        [SerializeField]
+        private float radius = 5;
+
+        float angle = 0;
+
+        private Vector3 startPosition;
 
         private void Start()
         {
-            gameObject.transform.position = center.position + startPosition;
+            //speed = (2 * Mathf.PI) / 5;
+            startPosition = gameObject.transform.position;
         }
 
-        // Update is called once per frame
         void Update()
         {
-            gameObject.transform.RotateAround(this.center.position, this.axis, Time.deltaTime * speed);
+            if (this.useRotation)
+            {
+                gameObject.transform.RotateAround(this.center.position, this.axis, Time.deltaTime * speed);
+            }
+            else
+            {
+                angle += speed * Time.deltaTime;
+                float x = Mathf.Cos(angle) * radius;
+                float y = Mathf.Sin(angle) * radius;
+                transform.position = new Vector3(x, transform.position.y, y);
+            }
         }
+
     }
 
 }
