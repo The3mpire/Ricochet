@@ -51,18 +51,18 @@ public class MusicManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+        OnLevelWasLoaded();
     }
 
     void Start()
     {
-
-        Cursor.visible = true;
-
-        int buildIndex = SceneManager.GetActiveScene().buildIndex;
-        BuildIndex levelIndex = (BuildIndex)buildIndex;
-        currentSong = soundStorage.GetSceneMusic(levelIndex);
-        instance.musicSource.clip = currentSong;
-        instance.musicSource.Play();
+        //int buildIndex = SceneManager.GetActiveScene().buildIndex;
+        //BuildIndex levelIndex = (BuildIndex)buildIndex;
+        //currentSong = soundStorage.GetSceneMusic(levelIndex);
+        //instance.musicSource.clip = currentSong;
+        //instance.musicSource.Play();
+        //OnLevelWasLoaded();
+        //if (instance.musicSource.clip )
     }
 
     void OnLevelWasLoaded()
@@ -70,7 +70,11 @@ public class MusicManager : MonoBehaviour
         int buildIndex = SceneManager.GetActiveScene().buildIndex;
         BuildIndex levelIndex = (BuildIndex)buildIndex;
         AudioClip newSong = soundStorage.GetSceneMusic(levelIndex);
-        if (currentSong != newSong && newSong != null)
+        if (instance.musicSource.isPlaying && currentSong == null)
+        {
+            currentSong = newSong;
+        }
+        else if (currentSong != newSong && newSong != null)
         {
             currentSong = newSong;
             instance.musicSource.clip = newSong;
