@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace CCParticles
 {
-    [ExecuteInEditMode]
     public class Revolve : MonoBehaviour
     {
         [SerializeField]
@@ -16,7 +15,7 @@ namespace CCParticles
         private Vector3 axis;
 
         [SerializeField]
-        private bool useRotation = false;
+        private bool useRotation = true;
 
         [SerializeField]
         private float radius = 5;

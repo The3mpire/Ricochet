@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
         {
             playerNumberTag.text = playerNumber.ToString();
         }
-        powerupParticle.Stop();
+        //powerupParticle.Stop();
         isFrozen = false;
         isShrunken = false;
 
@@ -558,6 +558,7 @@ public class PlayerController : MonoBehaviour
 
     public void ReceivePowerUp(EPowerUp powerUp, Color powerUpColor)
     {
+        if (!powerupParticle) { return; }
         ParticleSystem.MainModule sparks = powerupParticle.main;
         ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
 
@@ -596,7 +597,7 @@ public class PlayerController : MonoBehaviour
 
     public void RemovePowerUp()
     {
-        if (powerupParticle.isPlaying)
+        if (powerupParticle && powerupParticle.isPlaying)
         {
             powerupParticle.Stop();
         }
