@@ -11,6 +11,7 @@ namespace CCParticles
         [SerializeField]
         private PowerupParticleSystems systems;
 
+        /*
         private void OnTriggerEnter2D(Collider2D collision)
         {
             PowerUp power = collision.gameObject.GetComponent<PowerUp>();
@@ -20,43 +21,48 @@ namespace CCParticles
                 PlayPowerupEffect(type);
             }
         }
+        */
 
-        public void PlayPowerupEffect(EPowerUp powerup, int version = 0)
+        public void StopPowerupEffect(EPowerUp powerup, int version = 0)
+        {
+            PlayPowerupEffect(powerup, version, false);
+        }
+
+        public void PlayPowerupEffect(EPowerUp powerup, int version = 0, bool play = true)
         {
             switch (powerup)
             {
                 case EPowerUp.Multiball:
-                    PlayEffect(this.systems.multiball);
+                    PlayEffect(this.systems.multiball, play);
                     break;
                 case EPowerUp.CatchNThrow:
-                    PlayEffect(this.systems.catchNThrow);
+                    PlayEffect(this.systems.catchNThrow, play);
                     break;
                 case EPowerUp.Freeze:
-                    PlayFreezeEffect(version);
+                    PlayFreezeEffect(version, play);
                     break;
                 case EPowerUp.CircleShield:
-                    PlayEffect(this.systems.shield);
+                    PlayEffect(this.systems.shield, play);
                     break;
             }
         }
 
-        private void PlayFreezeEffect(int version)
+        private void PlayFreezeEffect(int version, bool shouldPlay)
         {
             switch (version)
             {
                 case 1:
-                    PlayEffect(this.systems.freezeCube);
+                    PlayEffect(this.systems.freezeCube, shouldPlay);
                     break;
                 default:
-                    PlayEffect(this.systems.freezeOrb);
+                    PlayEffect(this.systems.freezeOrb, shouldPlay);
                     break;
             }
         }
 
-        private IEnumerable PlayEffect(GameObject system)
+        private void PlayEffect(GameObject system, bool shouldPlay)
         {
-            system.SetActive(true);
-            yield return null;
+            system.SetActive(shouldPlay);
         }
 
         [System.Serializable]
