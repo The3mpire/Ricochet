@@ -14,7 +14,7 @@ public class CharSelectManager : MonoBehaviour
     private GameDataSO gameData;
 
     [SerializeField]
-    private MusicManager musicManager;
+    private SFXManager sfxManager;
 
     [SerializeField]
     [Tooltip("Amount of time to wait in seconds after all players are ready")]
@@ -137,11 +137,11 @@ public class CharSelectManager : MonoBehaviour
         {
             case SelectionPhase.CharacterSelect:
                 MoveSelectionToken(playerNumber, direction);
-                musicManager.PlayMenuTraversalSound();
+                sfxManager.PlayMenuTraversalSound();
                 break;
             case SelectionPhase.TeamSelect:
                 ChangeTeam(playerNumber, direction);
-                musicManager.PlayMenuTraversalSound();
+                sfxManager.PlayMenuTraversalSound();
                 break;
             case SelectionPhase.Ready:
                 break;
@@ -155,15 +155,15 @@ public class CharSelectManager : MonoBehaviour
         {
             case SelectionPhase.None:
                 PlayerJoin(playerNumber);
-                musicManager.PlayMenuClickSound();
+                sfxManager.PlayMenuClickSound();
                 break;
             case SelectionPhase.CharacterSelect:
                 SelectCharacter(playerNumber, playerColor);
-                musicManager.PlayMenuClickSound();
+                sfxManager.PlayMenuClickSound();
                 break;
             case SelectionPhase.TeamSelect:
                 SelectTeam(playerNumber);
-                musicManager.PlayMenuClickSound();
+                sfxManager.PlayMenuClickSound();
                 break;
             case SelectionPhase.Ready:
                 break;
@@ -179,11 +179,11 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.TeamSelect:
                 ClearImages(playerNumber);
                 ClearSelection(playerNumber);
-                musicManager.PlayMenuBackSound();
+                sfxManager.PlayMenuBackSound();
                 break;
             case SelectionPhase.Ready:
                 UndoReady(playerNumber);
-                musicManager.PlayMenuBackSound();
+                sfxManager.PlayMenuBackSound();
                 break;
         }
     }
@@ -199,7 +199,7 @@ public class CharSelectManager : MonoBehaviour
     {
         if (!_goingBack)
         {
-            musicManager.PlayMenuBackSound();
+            sfxManager.PlayMenuBackSound();
             LevelSelect.LoadMainMenu();
         }
     }

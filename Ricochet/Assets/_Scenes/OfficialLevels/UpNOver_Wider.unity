@@ -1173,6 +1173,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &731874267 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114473000812631014, guid: 026a8a43db466b841ab459e8a0cef1f0,
+    type: 2}
+  m_PrefabInternal: {fileID: 731874266}
+  m_Script: {fileID: 11500000, guid: 26cf2a664fe9405eb2625a22d5c5ed6b, type: 3}
 --- !u!4 &757112376 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4889930954892590, guid: 53333940c2ad3d04b8bc919a7670e1ac,
@@ -1314,6 +1320,86 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 580888522}
+    - target: {fileID: 114992116315346430, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114992116315346430, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayMenuBackSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114377486844559398, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114377486844559398, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayMenuTraversalSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114849356085631064, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114849356085631064, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayMenuClickSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114463665172923414, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114463665172923414, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayMenuTraversalSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424870803303450, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114424870803303450, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayMenuClickSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114647630666893744, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114647630666893744, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayMenuTraversalSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114107290176479848, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114107290176479848, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayMenuClickSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 114547541383847168, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 731874267}
+    - target: {fileID: 114547541383847168, guid: 39c81f79d261ce04fbb9bb81fba1b72f,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayMenuTraversalSound
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39c81f79d261ce04fbb9bb81fba1b72f, type: 2}
   m_IsPrefabParent: 0
