@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer sprite;
     [Tooltip("Drag the powerup particle here")]
     [SerializeField]
-    private CCParticles.PowerUpParticlesConroller powerupParticleController;
+    private CCParticles.PowerUpParticlesController powerupParticleController;
     [Tooltip("Drag the Tag canvas's tag object here")]
     [SerializeField]
     private Text playerNumberTag;
@@ -562,17 +562,6 @@ public class PlayerController : MonoBehaviour
     {
         if (powerupParticleController)
         {
-            //ParticleSystem.MainModule sparks = powerupParticle.main;
-            //ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
-
-            //audioSource.PlayOneShot(gameManagerInstance.GetPowerupPickupSound(powerUp));
-
-            //sparks.startColor = powerUpColor;
-            //orb.startColor = powerUpColor;
-            //if (powerupParticle.isStopped)
-            //{
-            //    powerupParticle.Play();
-            //}
             powerupParticleController.PlayPowerupEffect(powerUp, 0, true);
         }
         hasPowerUp = true;

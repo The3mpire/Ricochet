@@ -1,27 +1,18 @@
 ﻿using Enumerables;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CCParticles
 {
-    [RequireComponent(typeof(Collider2D))]
-    public class PowerUpParticlesConroller : MonoBehaviour
+    public class PowerUpParticlesController : MonoBehaviour
     {
+        #region Inspector Variables
+
         [SerializeField]
         private PowerupParticleSystems systems;
 
-        /*
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            PowerUp power = collision.gameObject.GetComponent<PowerUp>();
-            if (power)
-            {
-                EPowerUp type = power.GetPowerUpType();
-                PlayPowerupEffect(type);
-            }
-        }
-        */
+        #endregion
+
+        #region Public Methods
 
         public void StopPowerupEffect(EPowerUp powerup, int version = 0)
         {
@@ -47,12 +38,22 @@ namespace CCParticles
             }
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void PlayFreezeEffect(int version, bool shouldPlay)
         {
             switch (version)
             {
                 case 1:
-                    PlayEffect(this.systems.freezeCube, shouldPlay);
+                    this.systems.freezeCube.Stop();
+                    this.systems.freezeCube.transform.parent.gameObject.SetActive(shouldPlay);
+                    if (!shouldPlay)
+                    {
+                        return;
+                    }
+                    this.systems.freezeCube.Play();
                     break;
                 default:
                     PlayEffect(this.systems.freezeOrb, shouldPlay);
@@ -65,14 +66,20 @@ namespace CCParticles
             system.SetActive(shouldPlay);
         }
 
+        #endregion
+
+        #region Structs
+
         [System.Serializable]
         struct PowerupParticleSystems
         {
             public GameObject multiball;
             public GameObject catchNThrow;
             public GameObject freezeOrb;
-            public GameObject freezeCube;
+            public ParticleSystem freezeCube;
             public GameObject shield;
         }
+
+        #endregion
     }
 }
