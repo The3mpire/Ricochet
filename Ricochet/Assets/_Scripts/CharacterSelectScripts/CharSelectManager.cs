@@ -14,6 +14,9 @@ public class CharSelectManager : MonoBehaviour
     private GameDataSO gameData;
 
     [SerializeField]
+    private MusicManager musicManager;
+
+    [SerializeField]
     [Tooltip("Amount of time to wait in seconds after all players are ready")]
     private float waitTime;
 
@@ -134,9 +137,11 @@ public class CharSelectManager : MonoBehaviour
         {
             case SelectionPhase.CharacterSelect:
                 MoveSelectionToken(playerNumber, direction);
+                musicManager.PlayMenuTraversalSound();
                 break;
             case SelectionPhase.TeamSelect:
                 ChangeTeam(playerNumber, direction);
+                musicManager.PlayMenuTraversalSound();
                 break;
             case SelectionPhase.Ready:
                 break;
@@ -150,12 +155,15 @@ public class CharSelectManager : MonoBehaviour
         {
             case SelectionPhase.None:
                 PlayerJoin(playerNumber);
+                musicManager.PlayMenuClickSound();
                 break;
             case SelectionPhase.CharacterSelect:
                 SelectCharacter(playerNumber, playerColor);
+                musicManager.PlayMenuClickSound();
                 break;
             case SelectionPhase.TeamSelect:
                 SelectTeam(playerNumber);
+                musicManager.PlayMenuClickSound();
                 break;
             case SelectionPhase.Ready:
                 break;
@@ -171,9 +179,11 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.TeamSelect:
                 ClearImages(playerNumber);
                 ClearSelection(playerNumber);
+                musicManager.PlayMenuBackSound();
                 break;
             case SelectionPhase.Ready:
                 UndoReady(playerNumber);
+                musicManager.PlayMenuBackSound();
                 break;
         }
     }
@@ -189,6 +199,7 @@ public class CharSelectManager : MonoBehaviour
     {
         if (!_goingBack)
         {
+            musicManager.PlayMenuBackSound();
             LevelSelect.LoadMainMenu();
         }
     }
