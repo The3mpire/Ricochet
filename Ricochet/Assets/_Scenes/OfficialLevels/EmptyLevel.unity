@@ -739,7 +739,7 @@ Prefab:
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
       propertyPath: powerUpRespawnTime
-      value: 60
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114083169620717160, guid: 026a8a43db466b841ab459e8a0cef1f0,
         type: 2}
@@ -1677,7 +1677,7 @@ Prefab:
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: weights.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4167491335430156, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
       propertyPath: m_LocalPosition.x
@@ -1714,7 +1714,7 @@ Prefab:
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: powerUpType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1391296096353396, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
       propertyPath: m_IsActive
@@ -1733,12 +1733,12 @@ Prefab:
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: weights.Array.data[1].type
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: weights.Array.data[1].probability
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
@@ -1765,6 +1765,16 @@ Prefab:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 305929450}
+    - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
+        type: 2}
+      propertyPath: weights.Array.data[0].type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
+        type: 2}
+      propertyPath: weights.Array.data[0].probability
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
   m_IsPrefabParent: 0

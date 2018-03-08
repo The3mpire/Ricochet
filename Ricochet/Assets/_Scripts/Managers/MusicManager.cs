@@ -36,6 +36,7 @@ public class MusicManager : MonoBehaviour
 
     #region Hidden Variables
     private static MusicManager instance = null;
+    private bool volumeLock;
     #endregion
 
     #region Mono Behaviour
@@ -50,7 +51,9 @@ public class MusicManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
+        musicVol = 1f;
+        volumeLock = false;
         OnLevelWasLoaded();
     }
 
@@ -89,14 +92,18 @@ public class MusicManager : MonoBehaviour
 
     private IEnumerator FadeIn(float startVol, float duration)
     {
+        volumeLock = true;
+        float finalVol = musicSource.volume;
         musicSource.volume = startVol;
-        float volumesPerUpdate = (1f - startVol) / duration ;
-        while (musicSource.volume <= 1f)
+        float volumesPerUpdate = (finalVol - startVol) / duration;
+        while (musicSource.volume <= finalVol)
         {
+            finalVol = musicVol;
             musicSource.volume += volumesPerUpdate * Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
-        musicSource.volume = 1f;
+        musicSource.volume = musicVol;
+        volumeLock = false;
     }
 
     public void SceneMusic(AudioClip song)
@@ -111,7 +118,8 @@ public class MusicManager : MonoBehaviour
     public void SetMusicVolume(float vol = .8f)
     {
         musicVol = vol;
-        musicSource.volume = vol;
+        if (!volumeLock)
+            musicSource.volume = vol;
     }
 
     public float GetMusicVolume()

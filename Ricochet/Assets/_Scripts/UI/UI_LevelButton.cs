@@ -11,7 +11,13 @@ public class UI_LevelButton : UI_MenuButton, ISelectHandler
 
     public new void OnSelect(BaseEventData eventData)
     {
+        text.color = Color.white;
         previewPanel.ChangeSprite(buildIndex);
+    }
+
+    public override void OnDeselect(BaseEventData eventData)
+    {
+        text.color = Color.black;
     }
 
     public BuildIndex GetBuildIndex()
