@@ -11,9 +11,6 @@ public class MusicManager : MonoBehaviour
     [Tooltip("Drag the SoundStorage object here")]
     [SerializeField]
     private SoundStorage soundStorage;
-    [Tooltip("Drag  in FXSource here")]
-    [SerializeField]
-    private AudioSource fxSource;
     [Tooltip("Drag in Music Source here")]
     [SerializeField]
     private AudioSource musicSource;
@@ -51,7 +48,7 @@ public class MusicManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
         musicVol = 1f;
         volumeLock = false;
         OnLevelWasLoaded();
@@ -125,48 +122,6 @@ public class MusicManager : MonoBehaviour
     public float GetMusicVolume()
     {
         return musicSource.volume;
-    }
-    #endregion
-
-    #region SFX
-    public void PlayMenuClickSound()
-    {
-        if (fxSource != null)
-        {
-            fxSource.PlayOneShot(soundStorage.GetMenuClickSound());
-        }
-    }
-
-    public void PlayMenuBackSound()
-    {
-        if (fxSource != null)
-        {
-            fxSource.PlayOneShot(soundStorage.GetMenuBackSound());
-        }
-    }
-
-    public void PlayMenuUnpauseSound()
-    {
-        if (fxSource != null)
-        {
-            fxSource.PlayOneShot(soundStorage.GetUnpauseSound());
-        }
-    }
-
-    public void PlayMenuPauseSound()
-    {
-        if (fxSource != null)
-        {
-            fxSource.PlayOneShot(soundStorage.GetPauseSound());
-        }
-    }
-
-    public void PlayMenuTraversalSound()
-    {
-        if (fxSource != null)
-        {
-            fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
-        }
     }
     #endregion
 
