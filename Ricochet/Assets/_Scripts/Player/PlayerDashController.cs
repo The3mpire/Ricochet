@@ -128,12 +128,20 @@ public class PlayerDashController : MonoBehaviour
     #region Private Helpers
     private void Dash(int cost, float modifier)
     {
+        Vector3 dashVelocity = Vector3.zero;
+
         if (gm != null || GameManager.TryGetInstance(out gm))
         {
             audioSource.PlayOneShot(gm.GetCharacterSFX(pc.GetCharacter(), ECharacterAction.Dash));
         }
-
-        Vector3 dashVelocity = pc.GetNormalizedLeftStick() * (dashSpeedBoost * modifier);
+        if (gameData.GetDashSetting())
+        {
+            dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
+        }
+        else
+        {
+            dashVelocity = pc.GetNormalizedLeftStick() * (dashSpeedBoost * modifier);
+        }
 
         pc.AddVelocity(dashVelocity);
 

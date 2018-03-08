@@ -753,8 +753,12 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 GetNormalizedLeftStick()
     {
-        return new Vector2(leftStickHorz, leftStickVert).normalized;
-
+        Vector2 vec = new Vector2(leftStickHorz, leftStickVert).normalized;
+        if (vec.magnitude == 0)
+        {
+            vec = GetPreviousVelocity().normalized;
+        }
+        return vec;
     }
 
     public Vector2 GetRightStick()

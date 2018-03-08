@@ -131,27 +131,42 @@ public class MusicManager : MonoBehaviour
     #region SFX
     public void PlayMenuClickSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetMenuClickSound());
+        if (fxSource != null)
+        {
+            fxSource.PlayOneShot(soundStorage.GetMenuClickSound());
+        }
     }
 
     public void PlayMenuBackSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetMenuBackSound());
+        if (fxSource != null)
+        {
+            fxSource.PlayOneShot(soundStorage.GetMenuBackSound());
+        }
     }
 
     public void PlayMenuUnpauseSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetUnpauseSound());
+        if (fxSource != null)
+        {
+            fxSource.PlayOneShot(soundStorage.GetUnpauseSound());
+        }
     }
 
     public void PlayMenuPauseSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetPauseSound());
+        if (fxSource != null)
+        {
+            fxSource.PlayOneShot(soundStorage.GetPauseSound());
+        }
     }
 
     public void PlayMenuTraversalSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
+        if (fxSource != null)
+        {
+            fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
+        }
     }
     #endregion
 
