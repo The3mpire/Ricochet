@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer sprite;
     [Tooltip("Drag the powerup particle here")]
     [SerializeField]
-    private ParticleSystem powerupParticle;
+    private CCParticles.PowerUpParticlesController powerupParticleController;
     [Tooltip("Drag the Tag canvas's tag object here")]
     [SerializeField]
     private Text playerNumberTag;
@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
         {
             playerNumberTag.text = playerNumber.ToString();
         }
-        powerupParticle.Stop();
+        //powerupParticle.Stop();
         isFrozen = false;
         isShrunken = false;
 
@@ -280,6 +280,7 @@ public class PlayerController : MonoBehaviour
                         EPowerUp otherPlayerPowUp = otherPlayer.GetCurrentPowerUp();
                         if(otherPlayerPowUp == EPowerUp.Freeze)
                         {
+                            powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, true);
                             isFrozen = true;
                             rigid.gravityScale = 0.0f;
                             rigid.velocity = new Vector3(0, 0, 0);
@@ -289,6 +290,7 @@ public class PlayerController : MonoBehaviour
                             if(remainingFreezeTime <= 0)
                             {
                                 isFrozen = false;
+                                powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, false);
                             }
                         }
                         if (!isShrunken)
@@ -558,16 +560,9 @@ public class PlayerController : MonoBehaviour
 
     public void ReceivePowerUp(EPowerUp powerUp, Color powerUpColor)
     {
-        ParticleSystem.MainModule sparks = powerupParticle.main;
-        ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
-
-        audioSource.PlayOneShot(gameManagerInstance.GetPowerupPickupSound(powerUp));
-
-        sparks.startColor = powerUpColor;
-        orb.startColor = powerUpColor;
-        if (powerupParticle.isStopped)
+        if (powerupParticleController)
         {
-            powerupParticle.Play();
+            powerupParticleController.PlayPowerupEffect(powerUp, 0, true);
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
@@ -596,12 +591,17 @@ public class PlayerController : MonoBehaviour
 
     public void RemovePowerUp()
     {
-        if (powerupParticle.isPlaying)
+        //if (powerupParticle && powerupParticle.isPlaying)
+        //{
+        //    powerupParticle.Stop();
+        //}
+        if (powerupParticleController)
         {
-            powerupParticle.Stop();
+            powerupParticleController.StopPowerupEffect(currPowerUp, 0);
         }
         hasPowerUp = false;
         EnableSecondaryShield(false);
+
         currPowerUp = EPowerUp.None;
     }
 
