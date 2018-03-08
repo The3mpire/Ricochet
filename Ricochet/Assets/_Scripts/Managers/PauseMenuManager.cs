@@ -14,6 +14,8 @@ public class PauseMenuManager : MonoBehaviour
     private GameObject defaultSelectedButton;
     [SerializeField]
     private GameDataSO gameData;
+    [SerializeField]
+    private AudioSource fxSource;
     #endregion
 
     #region Hidden Variables
@@ -41,6 +43,7 @@ public class PauseMenuManager : MonoBehaviour
                 if (p.GetButtonDown("UIMenu") && !pausePanel.activeSelf)
                 {
                     pausePanel.SetActive(true);
+                    //TODO play the pause soundddddd
                     EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
                     Time.timeScale = 0;
                     lastPlayer = p;

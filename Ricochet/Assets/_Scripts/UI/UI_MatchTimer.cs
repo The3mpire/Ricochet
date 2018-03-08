@@ -37,12 +37,12 @@ public class UI_MatchTimer : MonoBehaviour
         if (gm.MatchTimeLeft <= redPulseTime)
         {
             text.color = Color.red;
-            Pulse(redPulseSize);
+          
         }
         else if (gm.MatchTimeLeft <= yellowPulseTime)
         {
             text.color = Color.yellow;
-            Pulse(yellowPulseSize);    
+            
         }
     }
 
@@ -62,10 +62,5 @@ public class UI_MatchTimer : MonoBehaviour
         text.text = minutes + ':' + seconds;
     }
 
-    private void Pulse(float pulseSize)
-    {
-        transform.DOScale(originalScale, .5f).SetEase(Ease.InFlash).OnComplete(
-            () => transform.DOScale(pulseSize * Vector2.one, .5f).SetEase(Ease.InQuad));
-    }
-
+    
 }
