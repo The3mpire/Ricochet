@@ -45,8 +45,6 @@ public class PowerUp : MonoBehaviour
     #region MonoBehaviour
     void Awake()
     {
-        powerupSprite = this.GetComponent<SpriteRenderer>();
-        powerupAnimator = this.GetComponent<Animator>();
         if (powerUpType == EPowerUp.Random)
         {
             uint len = 0;
@@ -149,27 +147,38 @@ public class PowerUp : MonoBehaviour
         {
             AssetBundle powerUpBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "AssetBundles/powerup"));
             UnityEngine.Object powerUpAssets = null;
+            UnityEngine.Object powerUpSprite = null;
             switch (instanceType)
             {
                 case EPowerUp.Multiball:
                     powerUpAssets = powerUpBundle.LoadAsset("multi_ball_0", typeof(RuntimeAnimatorController));
+                    powerUpSprite = powerUpBundle.LoadAsset("multi_ball_0", typeof(Sprite));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
+                    powerupSprite.sprite = powerUpSprite as Sprite;
                     break;
                 case EPowerUp.CatchNThrow:
                     powerUpAssets = powerUpBundle.LoadAsset("CatchNThrow_0", typeof(RuntimeAnimatorController));
+                    powerUpSprite = powerUpBundle.LoadAsset("CatchNThrow_0", typeof(Sprite));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
+                    powerupSprite.sprite = powerUpSprite as Sprite;
                     break;
                 case EPowerUp.CircleShield:
                     powerUpAssets = powerUpBundle.LoadAsset("360_shield_0", typeof(RuntimeAnimatorController));
+                    powerUpSprite = powerUpBundle.LoadAsset("360_shield_0", typeof(Sprite));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
+                    powerupSprite.sprite = powerUpSprite as Sprite;
                     break;
                 case EPowerUp.Freeze:
                     powerUpAssets = powerUpBundle.LoadAsset("freeze_icon_0", typeof(RuntimeAnimatorController));
+                    powerUpSprite = powerUpBundle.LoadAsset("freeze_icon_0", typeof(Sprite));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
+                    powerupSprite.sprite = powerUpSprite as Sprite;
                     break;
                 case EPowerUp.Shrink:
-                    powerUpAssets = powerUpBundle.LoadAsset("shrink", typeof(RuntimeAnimatorController));
+                    powerUpAssets = powerUpBundle.LoadAsset("Shrink_0", typeof(RuntimeAnimatorController));
+                    powerUpSprite = powerUpBundle.LoadAsset("Shrink_0", typeof(Sprite));
                     powerupAnimator.runtimeAnimatorController = powerUpAssets as RuntimeAnimatorController;
+                    powerupSprite.sprite = powerUpSprite as Sprite;
                     break;
                 default:
                     break;

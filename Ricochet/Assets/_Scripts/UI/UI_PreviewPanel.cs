@@ -14,6 +14,7 @@ public class UI_PreviewPanel : MonoBehaviour
     [SerializeField] private Sprite ElevatorSprite;
     [SerializeField] private Sprite OverTheTopSprite;
     [SerializeField] private Sprite TheVoidSprite;
+    [SerializeField] private Sprite RandomSprite;
 
     public void ChangeSprite(BuildIndex level)
     {
@@ -30,6 +31,9 @@ public class UI_PreviewPanel : MonoBehaviour
                 break;
             case BuildIndex.EMPTY_LEVEL:
                 _previewImage.sprite = TheVoidSprite;
+                break;
+            case BuildIndex.RANDOM:
+                _previewImage.sprite = RandomSprite;
                 break;
         }
     }

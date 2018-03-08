@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer sprite;
     [Tooltip("Drag the powerup particle here")]
     [SerializeField]
-    private ParticleSystem powerupParticle;
+    private CCParticles.PowerUpParticlesController powerupParticleController;
     [Tooltip("Drag the Tag canvas's tag object here")]
     [SerializeField]
     private Text playerNumberTag;
@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
         {
             playerNumberTag.text = playerNumber.ToString();
         }
-        powerupParticle.Stop();
+        //powerupParticle.Stop();
         isFrozen = false;
         isShrunken = false;
 
@@ -280,6 +280,7 @@ public class PlayerController : MonoBehaviour
                         EPowerUp otherPlayerPowUp = otherPlayer.GetCurrentPowerUp();
                         if(otherPlayerPowUp == EPowerUp.Freeze)
                         {
+                            powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, true);
                             isFrozen = true;
                             rigid.gravityScale = 0.0f;
                             rigid.velocity = new Vector3(0, 0, 0);
@@ -289,15 +290,24 @@ public class PlayerController : MonoBehaviour
                             if(remainingFreezeTime <= 0)
                             {
                                 isFrozen = false;
+                                powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, false);
                             }
                         }
-                        if (!GetIsShrunken())
+                        if (!isShrunken)
                         {
+                            audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter));
                             Rigidbody2D body = gameObject.GetComponent<Rigidbody2D>();
                             body.velocity = otherPlayer.GetPreviousVelocity() * -boingFactor;
                         }
                         Rumble(1.25f);
                     }
+                }
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    audioSource.PlayOneShot(gameManagerInstance.GetCharacterBumpSFX(chosenCharacter), 1f);
                 }
             }
         }
@@ -373,6 +383,12 @@ public class PlayerController : MonoBehaviour
             else
             {
                 // flying
+                if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                {
+                    //TODO come back to this with a coroutine?
+                    //Debug.Log("we jetting");
+                    //audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(chosenCharacter, ECharacterAction.Jetpack));
+                }
 
                 moveDirection = new Vector2(leftStickHorz, leftStickVert).normalized;
                 if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
@@ -544,13 +560,9 @@ public class PlayerController : MonoBehaviour
 
     public void ReceivePowerUp(EPowerUp powerUp, Color powerUpColor)
     {
-        ParticleSystem.MainModule sparks = powerupParticle.main;
-        ParticleSystem.MainModule orb = powerupParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
-        sparks.startColor = powerUpColor;
-        orb.startColor = powerUpColor;
-        if (powerupParticle.isStopped)
+        if (powerupParticleController)
         {
-            powerupParticle.Play();
+            powerupParticleController.PlayPowerupEffect(powerUp, 0, true);
         }
         hasPowerUp = true;
         currPowerUp = powerUp;
@@ -579,12 +591,17 @@ public class PlayerController : MonoBehaviour
 
     public void RemovePowerUp()
     {
-        if (powerupParticle.isPlaying)
+        //if (powerupParticle && powerupParticle.isPlaying)
+        //{
+        //    powerupParticle.Stop();
+        //}
+        if (powerupParticleController)
         {
-            powerupParticle.Stop();
+            powerupParticleController.StopPowerupEffect(currPowerUp, 0);
         }
         hasPowerUp = false;
         EnableSecondaryShield(false);
+
         currPowerUp = EPowerUp.None;
     }
 
@@ -637,9 +654,14 @@ public class PlayerController : MonoBehaviour
         movementDisabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterDeathSFX(chosenCharacter)); 
+        }
+
         shield.gameObject.SetActive(false);
         yield return new WaitForSeconds(gameData.playerRespawnTime);
-
         RespawnPlayer();
     }
 
@@ -651,6 +673,10 @@ public class PlayerController : MonoBehaviour
         shield.gameObject.SetActive(true);
         dashController.ResetDashController();
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            audioSource.PlayOneShot(gameManagerInstance.GetCharacterRespawnSFX(chosenCharacter)); 
+        }
         movementDisabled = false;
     }
 

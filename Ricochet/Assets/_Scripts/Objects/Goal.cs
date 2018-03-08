@@ -23,6 +23,7 @@ public class Goal : MonoBehaviour
     #region Hidden Variables
     private GameManager gameManagerInstance = null;
     #endregion
+
     #region MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {

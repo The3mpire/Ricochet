@@ -28,6 +28,7 @@ public class LevelSelectManager : MonoBehaviour
     private IList<Player> players;
     private Player P1;
     private bool bHeld = false;
+    private bool _goingBack = false;
     #endregion
 
     #region Monobehaviours
@@ -45,18 +46,10 @@ public class LevelSelectManager : MonoBehaviour
         {
             UI_LevelButton script = b.GetComponent<UI_LevelButton>();
             script.SetManager(this);
-            if (levels.Contains(script.GetBuildIndex()))
+            if (!defaultFound)
             {
-                if (!defaultFound)
-                {
-                    defaultSelectedLevelButton = b.gameObject;
-                    defaultFound = true;
-                }
-                b.interactable = true;
-            }
-            else
-            {
-                b.interactable = false;
+                defaultSelectedLevelButton = b.gameObject;
+                defaultFound = true;
             }
         }
 
@@ -82,6 +75,7 @@ public class LevelSelectManager : MonoBehaviour
                 if (backSlider.value >= backSlider.maxValue)
                 {
                     OnCancel();
+                    _goingBack = true;
                 }
             }
         }
@@ -105,6 +99,10 @@ public class LevelSelectManager : MonoBehaviour
 
     public void SetLoadLevel(BuildIndex levelInt)
     {
+        if (levelInt == BuildIndex.RANDOM)
+        {
+            levelInt = SelectRandomLevel();
+        }
         gameData.SetGameLevel(levelInt);
         loadLevelBuildIndex = levelInt;
         OpenConfirmationMenu();
@@ -118,7 +116,10 @@ public class LevelSelectManager : MonoBehaviour
 
     public void OnCancel()
     {
-        LevelSelect.LoadLevel(BuildIndex.CHARACTER_SELECT);
+        if (!_goingBack)
+        {
+            LevelSelect.LoadLevel(BuildIndex.CHARACTER_SELECT);
+        }
     }
 
     public void LoadLevel()
@@ -135,6 +136,12 @@ public class LevelSelectManager : MonoBehaviour
     {
         confirmationMenu.gameObject.SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultConfirmationGameObject);
+    }
+
+    private BuildIndex SelectRandomLevel()
+    {
+        int level = Random.Range(0, 3);
+        return LevelSelect.glitchBallClassicLevels[level];
     }
     #endregion
 }

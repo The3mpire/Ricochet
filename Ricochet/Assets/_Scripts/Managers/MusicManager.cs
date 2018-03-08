@@ -23,9 +23,9 @@ public class MusicManager : MonoBehaviour
     [Tooltip("The highest a sound effect will be randomly pitched")]
     [SerializeField]
     private float highPitchRange = 1.05f;
-    [Tooltip("The menu song")]
+    [Tooltip("The current song")]
     [SerializeField]
-    private AudioClip menuSong;
+    private AudioClip currentSong;
     [Tooltip("The music volume at when the level is loaded")]
     [SerializeField]
     private float musicVol;
@@ -36,6 +36,7 @@ public class MusicManager : MonoBehaviour
 
     #region Hidden Variables
     private static MusicManager instance = null;
+    private bool volumeLock;
     #endregion
 
     #region Mono Behaviour
@@ -50,27 +51,28 @@ public class MusicManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
-    }
-
-    void Start()
-    {
-
-        Cursor.visible = true;
-
-        instance.musicSource.clip = menuSong;
-        instance.musicSource.Play();
+        //DontDestroyOnLoad(gameObject);
+        musicVol = 1f;
+        volumeLock = false;
+        OnLevelWasLoaded();
     }
 
     void OnLevelWasLoaded()
     {
-        if (SceneManager.GetActiveScene().buildIndex == LevelIndex.MAIN_MENU)
+        int buildIndex = SceneManager.GetActiveScene().buildIndex;
+        BuildIndex levelIndex = (BuildIndex)buildIndex;
+        AudioClip newSong = soundStorage.GetSceneMusic(levelIndex);
+        if (instance.musicSource.isPlaying && currentSong == null)
         {
-            if (instance.musicSource.clip != menuSong)
-            {
-                instance.musicSource.clip = menuSong;
-                instance.musicSource.Play();
-            }
+            currentSong = newSong;
+        }
+        else if (currentSong != newSong && newSong != null)
+        {
+            currentSong = newSong;
+            instance.musicSource.clip = newSong;
+            instance.musicSource.Play();
+            IEnumerator fadeInCoroutine = FadeIn(0f, 3f);
+            StartCoroutine(fadeInCoroutine);
         }
     }
     #endregion
@@ -88,6 +90,22 @@ public class MusicManager : MonoBehaviour
 
     }
 
+    private IEnumerator FadeIn(float startVol, float duration)
+    {
+        volumeLock = true;
+        float finalVol = musicSource.volume;
+        musicSource.volume = startVol;
+        float volumesPerUpdate = (finalVol - startVol) / duration;
+        while (musicSource.volume <= finalVol)
+        {
+            finalVol = musicVol;
+            musicSource.volume += volumesPerUpdate * Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        musicSource.volume = musicVol;
+        volumeLock = false;
+    }
+
     public void SceneMusic(AudioClip song)
     {
         if (instance.musicSource != null || !instance.musicSource.clip.Equals(song))
@@ -100,7 +118,8 @@ public class MusicManager : MonoBehaviour
     public void SetMusicVolume(float vol = .8f)
     {
         musicVol = vol;
-        musicSource.volume = vol;
+        if (!volumeLock)
+            musicSource.volume = vol;
     }
 
     public float GetMusicVolume()
@@ -112,7 +131,27 @@ public class MusicManager : MonoBehaviour
     #region SFX
     public void PlayMenuClickSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetScoringSound());
+        fxSource.PlayOneShot(soundStorage.GetMenuClickSound());
+    }
+
+    public void PlayMenuBackSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetMenuBackSound());
+    }
+
+    public void PlayMenuUnpauseSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetUnpauseSound());
+    }
+
+    public void PlayMenuPauseSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetPauseSound());
+    }
+
+    public void PlayMenuTraversalSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
     }
     #endregion
 

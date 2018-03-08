@@ -11,7 +11,7 @@
         UP_N_OVER_WIDE,
         EMPTY_LEVEL,
         END_GAME,
-        MOVE
+        RANDOM
     }
 
     public enum EPowerUp
@@ -21,8 +21,8 @@
         Multiball = 1,
         CatchNThrow = 2,
         CircleShield = 3,
-	Freeze = 4,
-	Shrink = 5
+	    Freeze = 4,
+	    Shrink = 5
     }
 
     public enum EMode
