@@ -29,6 +29,9 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Drag back timer here")]
     private Slider backSlider;
+    [SerializeField]
+    [Tooltip("Drag autojetpack toggles here")]
+    private Toggle[] ajToggles;
 
     [Header("Character UI Images")]
     [Tooltip("Character 1 Image (Cat)")]
@@ -194,6 +197,18 @@ public class CharSelectManager : MonoBehaviour
             bHeld = true;
         }
     }
+    public void RouteInputX(int playerNumber)
+    {
+        var phase = playerPhase[playerNumber];
+        switch (phase)
+        {
+            case SelectionPhase.TeamSelect:
+                ajToggles[playerNumber].isOn = !ajToggles[playerNumber].isOn;
+                gameData.SetPlayerAutoJetpack(playerNumber + 1, ajToggles[playerNumber].isOn);
+                break;
+        }
+
+    }
 
     public void RouteInputBack()
     {
@@ -232,6 +247,9 @@ public class CharSelectManager : MonoBehaviour
                     token.GetComponent<ParticleSystem>().Play();
                     playerPhase[playerNumber] = SelectionPhase.TeamSelect;
                     _playerObjects[playerNumber].TeamPanel.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                    ajToggles[playerNumber].gameObject.SetActive(true);
+                    ajToggles[playerNumber].isOn = true;
+                    gameData.SetPlayerAutoJetpack(playerNumber + 1, true);
                 }
             }
         }
@@ -265,6 +283,7 @@ public class CharSelectManager : MonoBehaviour
         playerPhase[playerNumber] = SelectionPhase.Ready;
         _playerObjects[playerNumber].ReadyTag.SetActive(true);
         gameData.SetPlayerTeam(playerNumber, _playerObjects[playerNumber].Team);
+        ajToggles[playerNumber].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
     }
 
     private void PlayerJoin(int playerNumber)
@@ -275,6 +294,7 @@ public class CharSelectManager : MonoBehaviour
         _playerObjects[playerNumber].ActiveToken = _playerObjects[playerNumber].DefaultToken;
         _playerObjects[playerNumber].ActiveToken = MoveSelectionTokenTo(playerSettings[playerNumber].Character, _playerObjects[playerNumber].ActiveToken, _playerObjects[playerNumber].Tokens);
         gameData.SetPlayerActive(playerNumber + 1);
+        gameData.SetPlayerAutoJetpack(playerNumber + 1, true);
     }
 
     #endregion
@@ -414,6 +434,9 @@ public class CharSelectManager : MonoBehaviour
         _playerObjects[playerNumber].ActiveToken.GetComponent<ParticleSystem>().Stop();
         playerPhase[playerNumber] = SelectionPhase.CharacterSelect;
         //_playerObjects[playerNumber].TeamPanel.color = GetTeamColor(ETeam.None);
+        ajToggles[playerNumber].isOn = true;
+        ajToggles[playerNumber].gameObject.SetActive(false);
+        gameData.SetPlayerAutoJetpack(playerNumber + 1, true);
     }
 
     private void UndoReady(int playerNumber)
@@ -424,6 +447,7 @@ public class CharSelectManager : MonoBehaviour
         timerText.text = "Waiting...";
         playerPhase[playerNumber] = SelectionPhase.TeamSelect;
         _playerObjects[playerNumber].ReadyTag.SetActive(false);
+        ajToggles[playerNumber].transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
     }
     #endregion
 }

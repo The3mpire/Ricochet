@@ -19,6 +19,8 @@ public class GameDataSO : ScriptableObject
     private ETeam[] playerTeams;
     [SerializeField]
     private bool[] playerActive;
+    [SerializeField]
+    private bool[] playerJetpacks;
 
     [SerializeField]
     private BuildIndex gameLevel;
@@ -172,6 +174,16 @@ public class GameDataSO : ScriptableObject
     public void SetPlayerInactive(int playerNumber)
     {
         playerActive[playerNumber] = false;
+    }
+
+    public void SetPlayerAutoJetpack(int playerNumber, bool on)
+    {
+        playerJetpacks[playerNumber] = on;
+    }
+
+    public bool GetPlayerAutoJetpack(int playerNumber)
+    {
+        return playerJetpacks[playerNumber];
     }
     #endregion
 

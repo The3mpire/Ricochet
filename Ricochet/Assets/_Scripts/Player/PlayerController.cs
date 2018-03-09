@@ -180,6 +180,7 @@ public class PlayerController : MonoBehaviour
         shield = GetComponentInChildren<Shield>();
         animator = transform.GetComponentInChildren<Animator>();
         team = gameData.GetPlayerTeam(playerNumber - 1);
+        autoJetpack = gameData.GetPlayerAutoJetpack(playerNumber);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
 
@@ -374,7 +375,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     float sign = rigid.velocity.x / Mathf.Abs(rigid.velocity.x);
-                    x = Mathf.Abs(rigid.velocity.x) > 0.1f ? rigid.velocity.x - (sign * 1.5f) : 0f;
+                    x = Mathf.Abs(rigid.velocity.x) > 1.5 ? rigid.velocity.x - (sign * 1.2f) : 0f;
                 }
                 float y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
                         Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * downwardMovementSpeedup), -(thrusterSpeed * downwardMovementSpeedup) + (rigid.velocity.y + (thrusterSpeed * downwardMovementSpeedup)) * 0.85f);
@@ -474,7 +475,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     float sign = rigid.velocity.x / Mathf.Abs(rigid.velocity.x);
-                    x = Mathf.Abs(rigid.velocity.x) > 0.1f ? rigid.velocity.x - (sign * 1.5f) : 0f;
+                    x = Mathf.Abs(rigid.velocity.x) > 1.5f ? rigid.velocity.x - (sign * 1.2f) : 0f;
                 }
                 rigid.velocity = new Vector2(x, 0f);
             }
@@ -819,6 +820,11 @@ public class PlayerController : MonoBehaviour
     public void SetFreezeTime(float value)
     {
         remainingFreezeTime = value;
+    }
+
+    public void SetFrozen(bool frozen)
+    {
+        isFrozen = frozen;
     }
 
     public void SetBallDetection(bool value)
