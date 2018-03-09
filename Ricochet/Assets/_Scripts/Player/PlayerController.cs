@@ -821,6 +821,11 @@ public class PlayerController : MonoBehaviour
         remainingFreezeTime = value;
     }
 
+    public void SetFrozen(bool frozen)
+    {
+        isFrozen = frozen;
+    }
+
     public void SetBallDetection(bool value)
     {
         detectionColliderObject.SetActive(value);

@@ -687,6 +687,24 @@ public class GameManager : MonoBehaviour
         player.SetFreezeTime(powerUpManager.GetFreezeTime());
     }
 
+    public void FreezePlayers()
+    {
+        foreach (PlayerController player in playerControllers)
+            player.SetFreezeTime(10f);
+    }
+
+    public void PausePlayers(bool pause)
+    {
+        foreach (PlayerController player in playerControllers)
+        {
+            player.SetFrozen(pause);
+            if (pause)
+                player.SetFreezeTime(10f);
+            else
+                player.SetFreezeTime(-1f);
+        }
+    }
+
     #endregion
 
     #region Sound
