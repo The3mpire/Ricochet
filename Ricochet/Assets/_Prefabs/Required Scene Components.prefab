@@ -117,7 +117,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047315934321546}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4533791810839964}
@@ -355,10 +355,15 @@ MonoBehaviour:
   modeManager: {fileID: 0}
   powerUpManager: {fileID: 0}
   soundStorage: {fileID: 11400000, guid: f3742bc292919044ca874d1cefbe6f0f, type: 2}
+  redGoal: {fileID: 0}
+  blueGoal: {fileID: 0}
+  column: {fileID: 0}
   arrowDisable: {fileID: 0}
   musicManager: {fileID: 114876842522859312}
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
   gameTimerText: {fileID: 0}
+  lightsController: {fileID: 0}
+  mtCamera: {fileID: 114731083047901876}
   onGoal: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f, type: 2}
   onTimerChanged: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49, type: 2}
   matchStartTime: 3
@@ -366,6 +371,7 @@ MonoBehaviour:
   powerUpRespawnTime: 20
   ballRespawnTime: 2
   ballHoldTime: 1
+  invulnerableTime: 3
   redTeamRespawns:
   - {fileID: 0}
   blueTeamRespawns:
@@ -391,15 +397,18 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1550601391691784}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1532fdd6503411d4d911ed370ddf1a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effectShader: {fileID: 4800000, guid: aaa4522de7cc5544695f110e5d6d08bf, type: 3}
+  direction: {x: 1, y: 0, z: 0, w: 0}
+  channelIntensity: {x: 1, y: 1, z: 1, w: 1}
   intensity: 0.025
   cycles: 1
   progress: 0
+  defaultValue: 0.0025
 --- !u!114 &114620649267565144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -474,6 +483,11 @@ MonoBehaviour:
   smoothTime: 0.75
   minPos: {x: -6, y: -1}
   maxPos: {x: 6, y: 1}
+  zoomThresholds: {x: 0, y: 0}
+  maxZoomOut: 2
+  zoomRatio: 0
+  zoomOutTime: 0
+  zoomInTime: 0
 --- !u!114 &114876842522859312
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -490,7 +504,7 @@ MonoBehaviour:
   musicSource: {fileID: 82811567684986724}
   lowPitchRange: 0.95
   highPitchRange: 1.05
-  menuSong: {fileID: 8300000, guid: 95bd3f352dd5a6e4695e88b6b4b6dfe4, type: 3}
+  currentSong: {fileID: 0}
   musicVol: 0
   musicFadeDuration: 0
 --- !u!124 &124825466531352990

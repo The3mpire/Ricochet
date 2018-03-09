@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the neon lights here")]
     [SerializeField]
     private NeonLightController lightsController;
+    [Tooltip("Drag the camera here")]
+    [SerializeField]
+    private MultipleTargetsCamera mtCamera;
 
     [Header("Events")]
     [SerializeField]
@@ -549,6 +552,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            mtCamera.RemoveTarget(ball.transform);
             Destroy(ball);
         }
     }
@@ -566,6 +570,7 @@ public class GameManager : MonoBehaviour
             Ball ball = Instantiate(origBall);
             ball.transform.localScale = tempBallScale;
             ball.SetTempStatus(true);
+            mtCamera.AddTarget(ball.transform);
         }
     }
 
