@@ -38,13 +38,10 @@ public class NeonLight : MonoBehaviour {
     {
         NeonFlash nf = Instantiate(neonFlash);
         nf.gameObject.SetActive(true);
+        nf.Initialize();
         nf.HitTheLights();
     }
 
-    public void SetColor(ETeam t)
-    {
-        neonFlash.SetColor(t);
-    }
     #endregion
 
     #region Helpers

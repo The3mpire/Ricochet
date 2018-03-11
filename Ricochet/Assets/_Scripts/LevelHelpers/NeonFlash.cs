@@ -5,35 +5,18 @@ using Enumerables;
 
 public class NeonFlash : MonoBehaviour {
 
-    [SerializeField] Vector2[] nodes;
+    [SerializeField] Vector3[] nodes;
     [SerializeField] float speed;
+    [SerializeField] TrailRenderer tr;
 
-    private TrailRenderer tr;
-    private ParticleSystem ps;
-    private ParticleSystem.MainModule psm;
-    private Color neonBlue;
-    private Color sparkBlue;
-    private Color neonRed;
-    private Color sparkRed;
+    //private ParticleSystem ps;
+    //private ParticleSystem.MainModule psm;
 
-    void Start()
+    public void Initialize()
     {
         transform.position = nodes[0];
-        tr = GetComponent<TrailRenderer>();
-        ps = GetComponent<ParticleSystem>();
-        psm = ps.main;
-    }
-
-    public void Initialize(Color[] colors)
-    {
-        transform.position = nodes[0];
-        tr = GetComponent<TrailRenderer>();
-        ps = GetComponent<ParticleSystem>();
-        psm = ps.main;
-        neonBlue = colors[0];
-        sparkBlue = colors[1];
-        neonRed = colors[2];
-        sparkRed = colors[3];
+        //ps = GetComponent<ParticleSystem>();
+        //psm = ps.main;
     }
 
     public void HitTheLights()
@@ -78,26 +61,22 @@ public class NeonFlash : MonoBehaviour {
             position = transform.position;
             yield return new WaitForFixedUpdate();
         }
-        ParticleSystem.EmissionModule emitter = ps.emission;
-        emitter.rateOverTime = 0f;
-        yield return new WaitForSeconds(psm.startLifetime.constant + ps.trails.lifetime.constant);
+        //ParticleSystem.EmissionModule emitter = ps.emission;
+        //emitter.rateOverTime = 0f;
+        //yield return new WaitForSeconds(psm.startLifetime.constant + ps.trails.lifetime.constant);
+        yield return new WaitForSeconds(tr.time);
         Destroy(gameObject);
     }
 
-    public void SetColor(ETeam t)
+    public void SetNodes(Vector3[] nodes)
     {
-        switch (t)
-        {
-            case ETeam.RedTeam:
-                tr.startColor = neonBlue;
-                tr.endColor = neonBlue;
-                psm.startColor = sparkBlue;
-                break;
-            case ETeam.BlueTeam:
-                tr.startColor = neonRed;
-                tr.endColor = neonRed;
-                psm.startColor = sparkRed;
-                break;
-        }
+        this.nodes = nodes;
+    }
+
+    public void SetWidth(float width)
+    {
+        //tr.startWidth = width;
+        //tr.endWidth = width;
+        tr.widthMultiplier = width;
     }
 }

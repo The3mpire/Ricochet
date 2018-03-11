@@ -33,7 +33,6 @@ public class NeonLightController : MonoBehaviour {
     {
         foreach (NeonLight light in lights)
         {
-            light.SetColor(t);
             light.HitTheLights();
         }
     }
