@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MultipleTargetsCamera : MonoBehaviour
 {
-
+    [Header("XY Movement Settings")]
     [SerializeField] private List<Transform> targets;
     [SerializeField] private Vector3 offset;
     [SerializeField] private float smoothTime = .5f;
@@ -12,28 +12,45 @@ public class MultipleTargetsCamera : MonoBehaviour
     [SerializeField] private Vector2 maxPos;
 
     [Header("Zoom Out")]
-    [SerializeField] private Vector2 zoomThresholds;
-    [SerializeField] private float maxZoomOut = 2f;
-    [SerializeField] private float zoomRatio;
     [SerializeField] private float zoomOutTime;
     [SerializeField] private float zoomInTime;
-    
+
+    [Header("Level Wall Transforms")]
+    [SerializeField] private Transform topWallTransform;
+    [SerializeField] private Transform bottomWallTransform;
+    [SerializeField] private Transform leftWallTransform;
+    [SerializeField] private Transform rightWallTransform;
+
 
     private Camera camera;
     private GameManager manager;
     private Vector3 velocity;
-    private float zoomVel;
+    
+    // zoom variables
+    private Transform[] outerWalls;
+    private Vector2 minZoomPos;
+    private Vector2 maxZoomPos;
+    private Vector2 zoomThresholds;
     private float initialZoom;
+    private float maxZoomOut;
+    private float zoomRatio;
+    private float zoomVel;
+    private float aspectRatio;
 
     #region Monobehaviours
     public void Awake()
     {
         camera = gameObject.GetComponent<Camera>();
+        aspectRatio = camera.aspect;
         GameObject center = new GameObject("Center Transform");
         center.transform.parent = transform;
         center.transform.position = Vector3.zero;
         targets.Add(center.transform);
-        initialZoom = camera.orthographicSize;
+
+        outerWalls = new Transform[] {topWallTransform, bottomWallTransform, leftWallTransform, rightWallTransform};
+        SetZoom(aspectRatio, outerWalls);
+        //initialZoom = camera.orthographicSize;
+        camera.orthographicSize = initialZoom;
     }
 
     public void Start()
@@ -66,8 +83,8 @@ public class MultipleTargetsCamera : MonoBehaviour
         Bounds targetBounds = GetTargetBounds();
         Vector3 centerPoint = targetBounds.center;
 
-        float x = Mathf.Clamp(centerPoint.x, minPos.x, maxPos.x);
-        float y = Mathf.Clamp(centerPoint.y, minPos.y, maxPos.y);
+        float x = Mathf.Clamp(centerPoint.x, minZoomPos.x, maxZoomPos.x);
+        float y = Mathf.Clamp(centerPoint.y, minZoomPos.y, maxZoomPos.y);
 
         Vector3 targetPoint = new Vector3(x, y) + offset;
 
@@ -92,6 +109,9 @@ public class MultipleTargetsCamera : MonoBehaviour
             float smoothZ = Mathf.SmoothDamp(camera.orthographicSize, initialZoom, ref zoomVel, zoomInTime);
             camera.orthographicSize = smoothZ;
         }
+
+        minZoomPos = minPos - minPos * (camera.orthographicSize - initialZoom) / maxZoomOut;
+        maxZoomPos = maxPos - maxPos * (camera.orthographicSize - initialZoom) / maxZoomOut;
     }
     #endregion
 
@@ -115,4 +135,33 @@ public class MultipleTargetsCamera : MonoBehaviour
         return bounds;
     }
     #endregion
+
+    private void SetZoom(float aspectRatio, Transform[] outerWalls)
+    {
+        float hHalfDistance = Mathf.Abs(outerWalls[3].localPosition.x - outerWalls[2].localPosition.x) / 2;
+        float vHalfDistance = Mathf.Abs(outerWalls[1].localPosition.y - outerWalls[0].localPosition.y) / 2;
+        float sceneRatio = hHalfDistance / vHalfDistance;
+        if (sceneRatio > aspectRatio)
+        {
+            initialZoom = vHalfDistance;
+            maxZoomOut = (hHalfDistance - initialZoom) * aspectRatio / 2;
+            zoomThresholds[0] = initialZoom / 1.1f * aspectRatio - 3 ;
+            zoomThresholds[1] = vHalfDistance;
+            maxPos[0] = Mathf.Abs(hHalfDistance - initialZoom * aspectRatio);
+            minPos[0] = -maxPos[0];
+            zoomRatio = maxPos[0] / maxZoomOut * 100;
+        }
+        else
+        {
+            initialZoom = hHalfDistance / aspectRatio;
+            maxZoomOut = (vHalfDistance / aspectRatio - initialZoom) / 2;
+            zoomThresholds[0] = hHalfDistance;
+            zoomThresholds[1] = initialZoom / 1.1f - 3;
+            maxPos[1] = Mathf.Abs(vHalfDistance - initialZoom);
+            minPos[1] = -maxPos[1];
+            zoomRatio = maxPos[1] / maxZoomOut * 100;
+        }
+        minZoomPos = minPos;
+        maxZoomPos = maxPos;
+    }
 }
