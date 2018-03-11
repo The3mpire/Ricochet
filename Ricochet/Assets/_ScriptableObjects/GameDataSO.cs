@@ -6,13 +6,18 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Game Data")]
 public class GameDataSO : ScriptableObject
 {
+    [Header("Test Settings")] [SerializeField]
+    [Tooltip("Dash in direction of Shield = true. Dash in direction of movement = false.")]
+    private bool _dashInShieldDirection = true;
 
-    [SerializeField]
-    [Tooltip("How long the player takes to respawn in seconds")]
-    public float playerRespawnTime = 2f;    
+    [Header("Game Mode")]
     [SerializeField]
     private EMode gameMode;
 
+    [Header("Player Settings")]
+    [SerializeField]
+    [Tooltip("How long the player takes to respawn in seconds")]
+    public float playerRespawnTime = 2f;    
     [SerializeField]
     private ECharacter[] playerCharacters;
     [SerializeField]
@@ -20,6 +25,7 @@ public class GameDataSO : ScriptableObject
     [SerializeField]
     private bool[] playerActive;
 
+    [Header("Match Settings")]
     [SerializeField]
     private BuildIndex gameLevel;
     [Range(1, 100)]
@@ -51,6 +57,20 @@ public class GameDataSO : ScriptableObject
     #endregion
 
     #region Getters and Setters
+
+    #region Test Settings
+
+    public bool GetDashSetting()
+    {
+        return _dashInShieldDirection;
+    }
+
+    public void SetDashSetting(bool dashShieldDir)
+    {
+        _dashInShieldDirection = dashShieldDir;
+    }
+
+    #endregion
 
     #region Score Limit
     public int GetScoreLimit()

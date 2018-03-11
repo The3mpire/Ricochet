@@ -112,6 +112,131 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &32719703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 32719706}
+  - component: {fileID: 32719705}
+  - component: {fileID: 32719704}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &32719704
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 32719703}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+--- !u!114 &32719705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 32719703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26cf2a664fe9405eb2625a22d5c5ed6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundStorage: {fileID: 11400000, guid: f3742bc292919044ca874d1cefbe6f0f, type: 2}
+  fxSource: {fileID: 32719704}
+  lowPitchRange: 0.95
+  highPitchRange: 1.05
+--- !u!4 &32719706
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 32719703}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 360.8028, y: 219.40439, z: 3.497879}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &74558078
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,8 +325,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
-        m_MethodName: PlayMenuPauseSound
+      - m_Target: {fileID: 32719705}
+        m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -248,7 +373,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -476,8 +601,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
-        m_MethodName: PlayMenuPauseSound
+      - m_Target: {fileID: 32719705}
+        m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -524,7 +649,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -1559,8 +1684,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
-        m_MethodName: PlayMenuPauseSound
+      - m_Target: {fileID: 32719705}
+        m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1607,7 +1732,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -2884,12 +3009,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 70d1720f243648a49b59ca385a24056f, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1024800593 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114999235992050648, guid: 70d1720f243648a49b59ca385a24056f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1024800592}
-  m_Script: {fileID: 11500000, guid: 19d4d5a09195d5c44928913a458b955e, type: 3}
 --- !u!1 &1026914882
 GameObject:
   m_ObjectHideFlags: 0
@@ -2978,8 +3097,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
-        m_MethodName: PlayMenuPauseSound
+      - m_Target: {fileID: 32719705}
+        m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3026,7 +3145,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -3202,7 +3321,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1218902698}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -166.57999, z: 0}
+  m_LocalPosition: {x: 0, y: -166.57996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 548827760}
@@ -3360,7 +3479,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1266844569
 GameObject:
@@ -3678,8 +3797,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
-        m_MethodName: PlayMenuUnpauseSound
+      - m_Target: {fileID: 32719705}
+        m_MethodName: PlayMenuBackSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3740,7 +3859,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -3815,7 +3934,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1445004342
 MonoBehaviour:
@@ -3948,7 +4067,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4772475034258036, guid: 02a71893f99c3954fafdbdb4cbce668b, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 02a71893f99c3954fafdbdb4cbce668b, type: 2}
@@ -4222,7 +4341,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-      - m_Target: {fileID: 1024800593}
+      - m_Target: {fileID: 32719705}
         m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
@@ -4251,7 +4370,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -4353,8 +4472,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
-        m_MethodName: PlayMenuPauseSound
+      - m_Target: {fileID: 32719705}
+        m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4401,7 +4520,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -4600,12 +4719,12 @@ RectTransform:
   m_GameObject: {fileID: 1765042949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 90}
-  m_LocalScale: {x: 0.022229467, y: 0.022229467, z: 0.022229467}
+  m_LocalScale: {x: 0.022212442, y: 0.022212442, z: 0.022212442}
   m_Children:
   - {fileID: 1460505819}
   - {fileID: 149546899}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4971,7 +5090,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-      - m_Target: {fileID: 1024800593}
+      - m_Target: {fileID: 32719705}
         m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
@@ -5019,7 +5138,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
@@ -5207,7 +5326,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1024800593}
+      - m_Target: {fileID: 32719705}
         m_MethodName: PlayMenuClickSound
         m_Mode: 1
         m_Arguments:
@@ -5269,7 +5388,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1024800593}
+        - m_Target: {fileID: 32719705}
           m_MethodName: PlayMenuTraversalSound
           m_Mode: 1
           m_Arguments:
