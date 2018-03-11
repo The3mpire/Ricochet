@@ -25,7 +25,16 @@ public class MainMenuFunctions : MonoBehaviour
 
     [SerializeField]
     private GameDataSO gameData;
+
+    [Header("Test Settings")]
+    [SerializeField]
+    private Toggle _dashSettingToggle;
     #endregion
+
+    public void Start()
+    {
+        _dashSettingToggle.isOn = gameData.GetDashSetting();
+    }
 
     #region Public Functions
     public void OpenGameOptions()
@@ -59,6 +68,11 @@ public class MainMenuFunctions : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void SetDashSetting()
+    {
+        gameData.SetDashSetting(_dashSettingToggle.isOn);
     }
     #endregion
 }
