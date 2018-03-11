@@ -115,4 +115,18 @@ public class MultipleTargetsCamera : MonoBehaviour
         return bounds;
     }
     #endregion
+
+    #region Public Helpers
+
+    public void AddTarget(Transform t)
+    {
+        targets.Add(t);
+    }
+
+    public void RemoveTarget(Transform t)
+    {
+        targets.Remove(t);
+    }
+
+    #endregion
 }

@@ -147,7 +147,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047315934321546}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4533791810839964}
@@ -474,6 +474,7 @@ MonoBehaviour:
   gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
   gameTimerText: {fileID: 0}
   lightsController: {fileID: 0}
+  mtCamera: {fileID: 114731083047901876}
   onGoal: {fileID: 11400000, guid: 327ff20145fd428428eac270ce79344f, type: 2}
   onTimerChanged: {fileID: 11400000, guid: b54cd185998acb4479c40df7ec853a49, type: 2}
   matchStartTime: 3
@@ -606,13 +607,13 @@ MonoBehaviour:
   targets: []
   offset: {x: 0, y: 1.5, z: -10}
   smoothTime: 0.75
-  minPos: {x: -5, y: -6}
-  maxPos: {x: 5, y: 6}
-  zoomThresholds: {x: 22, y: 9}
-  maxZoomOut: 4
-  zoomRatio: 75
+  minPos: {x: -6, y: -6}
+  maxPos: {x: 6, y: 6}
+  zoomThresholds: {x: 20, y: 15}
+  maxZoomOut: 2.1
+  zoomRatio: 50
   zoomOutTime: 0.2
-  zoomInTime: 0.2
+  zoomInTime: 0.4
 --- !u!114 &114876842522859312
 MonoBehaviour:
   m_ObjectHideFlags: 1
