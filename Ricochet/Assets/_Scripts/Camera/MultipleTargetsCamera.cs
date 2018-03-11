@@ -144,7 +144,7 @@ public class MultipleTargetsCamera : MonoBehaviour
         if (sceneRatio > aspectRatio)
         {
             initialZoom = vHalfDistance;
-            maxZoomOut = (hHalfDistance - initialZoom) * aspectRatio / 2;
+			maxZoomOut = hHalfDistance / aspectRatio - initialZoom;
             zoomThresholds[0] = initialZoom / 1.1f * aspectRatio - 3 ;
             zoomThresholds[1] = vHalfDistance;
             maxPos[0] = Mathf.Abs(hHalfDistance - initialZoom * aspectRatio);
