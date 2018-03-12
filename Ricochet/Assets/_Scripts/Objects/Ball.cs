@@ -115,23 +115,10 @@ public class Ball : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-
-    //    if (hit.collider != null)
-    //    {
-    //        Debug.Log("Target Hit: " + hit.collider.gameObject.name);
-    //    }
-    //}
-
     private void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            //gameManagerInstance.RespawnBall(gameObject);
-            //beenHit = false;
-            //gameObject.SetActive(false);
             transform.position = new Vector3(UnityEngine.Random.Range(-29, 29), 20, 0);
             body.velocity = new Vector2(0, 100);
         }
