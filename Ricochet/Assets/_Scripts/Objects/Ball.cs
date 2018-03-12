@@ -59,6 +59,7 @@ public class Ball : MonoBehaviour
     private LinkedList<PlayerController> lastTouchedBy;
     private ParticleSystem.MainModule psMain;
     private ParticleSystem.EmissionModule psEmission;
+    private Vector3 lastPosition;
     private float curveTimer;
     private bool beenHit;
     #endregion
@@ -114,10 +115,29 @@ public class Ball : MonoBehaviour
         }
     }
 
+    //private void Update()
+    //{
+    //    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+    //    if (hit.collider != null)
+    //    {
+    //        Debug.Log("Target Hit: " + hit.collider.gameObject.name);
+    //    }
+    //}
+
     private void FixedUpdate()
     {
-        if (beenHit)
+        if (Input.GetKeyDown(KeyCode.Z))
         {
+            //gameManagerInstance.RespawnBall(gameObject);
+            //beenHit = false;
+            //gameObject.SetActive(false);
+            transform.position = new Vector3(UnityEngine.Random.Range(-29, 29), 20, 0);
+            body.velocity = new Vector2(0, 100);
+        }
+        else if (beenHit)
+        {
+            lastPosition = transform.position;
             // add the constant force
             if (body.velocity.magnitude < minimumSpeed)
             {
@@ -192,6 +212,29 @@ public class Ball : MonoBehaviour
         else
         {
             body.velocity = body.velocity.normalized * relativeVelocity.magnitude;
+        }
+    }
+
+    public void ResetPosition()
+    {
+        Vector2[] directions = { Vector2.up, new Vector2(1, 1), Vector2.right, new Vector2(1, -1),
+            Vector2.down, new Vector2(-1, -1), Vector2.left, new Vector2(-1, 1) };
+        Vector2 spawn = Vector2.zero;
+        RaycastHit2D[] hits = new RaycastHit2D[8];
+        float max = 0f;
+        for (int r = 0; r < 8; r++)
+        {
+            hits[r] = Physics2D.Raycast(transform.position, directions[r], 30f, LayerMask.GetMask("Spawn"), -1, 1);
+            if (hits[r].collider != null && hits[r].distance > max)
+            {
+                max = hits[r].distance;
+                spawn = hits[r].point;
+            }
+        }
+        if (spawn != Vector2.zero)
+        {
+            transform.position = spawn;
+            body.velocity = -body.velocity;
         }
     }
     #endregion
