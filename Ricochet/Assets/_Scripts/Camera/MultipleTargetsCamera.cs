@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MultipleTargetsCamera : MonoBehaviour
 {
+	#region Inspector Variables
 	[Header("XY Movement Settings")]
 	[SerializeField] private List<Transform> targets;
 	[SerializeField] private Vector3 offset;
@@ -31,8 +32,9 @@ public class MultipleTargetsCamera : MonoBehaviour
 	[SerializeField] private Transform leftWallTransform;
 	[Tooltip("Drag the right outer wall here")]
 	[SerializeField] private Transform rightWallTransform;
+	#endregion
 
-
+	#region Private Variables
 	private Camera camera;
 	private GameManager manager;
 	private Vector3 velocity;
@@ -44,6 +46,7 @@ public class MultipleTargetsCamera : MonoBehaviour
 
 	private float zoomVel;
 	private float aspectRatio;
+	#endregion
 
 	#region Monobehaviours
 
@@ -148,6 +151,21 @@ public class MultipleTargetsCamera : MonoBehaviour
 
 	#endregion
 
+	#region Public Helpers
+
+	public void AddTarget(Transform t)
+	{
+		targets.Add(t);
+	}
+
+	public void RemoveTarget(Transform t)
+	{
+		targets.Remove(t);
+	}
+
+	#endregion
+
+	#region Private Functions
 	private void SetZoom(float aspectRatio, Transform[] outerWalls)
 	{
 		float hHalfDistance = Mathf.Abs(outerWalls[3].localPosition.x - outerWalls[2].localPosition.x) / 2;
@@ -185,4 +203,5 @@ public class MultipleTargetsCamera : MonoBehaviour
 		minZoomPos = minPos;
 		maxZoomPos = maxPos;
 	}
+	#endregion
 }

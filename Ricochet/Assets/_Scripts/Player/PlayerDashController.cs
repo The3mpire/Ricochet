@@ -2,7 +2,7 @@
 using System.Collections;
 using Enumerables;
 using Rewired;
-using UnityEngine;
+using UnityEngine; 
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerDashController : MonoBehaviour
@@ -14,11 +14,19 @@ public class PlayerDashController : MonoBehaviour
     [SerializeField]
     private int maxDashCount = 5;
 
+    [SerializeField]
+    [Tooltip("Below this velocity the player will dash in sheild direction")]
+    private float dashThreshold = 0.01f;
+
     private int dashCount;
 
     [SerializeField]
     [Tooltip("Recharge one dash every x seconds")]
     private float rechargeRate = .33333f;
+
+    [SerializeField]
+    [Tooltip("Drag Rigidbody from Player here")]
+    private Rigidbody2D rigid;
 
     [SerializeField]
     [Tooltip("Delay until grounded dash recharge rate begins")]
@@ -128,12 +136,21 @@ public class PlayerDashController : MonoBehaviour
     #region Private Helpers
     private void Dash(int cost, float modifier)
     {
+        Vector3 dashVelocity = Vector3.zero;
+
         if (gm != null || GameManager.TryGetInstance(out gm))
         {
             audioSource.PlayOneShot(gm.GetCharacterSFX(pc.GetCharacter(), ECharacterAction.Dash));
         }
 
-        Vector3 dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
+        if (gameData.GetDashSetting() ||  Mathf.Abs(rigid.velocity.magnitude) <= dashThreshold)
+        {
+            dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
+        }
+        else
+        {
+            dashVelocity = pc.GetNormalizedLeftStick() * (dashSpeedBoost * modifier);
+        }
 
         pc.AddVelocity(dashVelocity);
 
