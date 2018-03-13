@@ -18,7 +18,7 @@ public class MultipleTargetsCamera : MonoBehaviour
 
 	[Header("Manual Sizing Options")]
 	[SerializeField] private bool manualZooming;
-	[SerializeField] private float initialZoom = 0f;
+	[SerializeField] private float initialZoom = 15f;
 	[SerializeField] private float maxZoomOut;
 	[SerializeField] private float zoomRatio;
 	[SerializeField] private Vector2 zoomThresholds;
@@ -60,8 +60,10 @@ public class MultipleTargetsCamera : MonoBehaviour
 		targets.Add(center.transform);
 
 		outerWalls = new Transform[] { topWallTransform, bottomWallTransform, leftWallTransform, rightWallTransform };
-		SetZoom(aspectRatio, outerWalls);
-		//initialZoom = camera.orthographicSize;
+		if(!manualZooming)
+		{
+			SetZoom(aspectRatio, outerWalls);
+		}
 		camera.orthographicSize = initialZoom;
 	}
 
@@ -166,38 +168,41 @@ public class MultipleTargetsCamera : MonoBehaviour
 	#endregion
 
 	#region Private Functions
+	// Automatically sets the parameters for camera zooming based on the dimensions of the camera's outer walls.
 	private void SetZoom(float aspectRatio, Transform[] outerWalls)
 	{
 		float hHalfDistance = Mathf.Abs(outerWalls[3].localPosition.x - outerWalls[2].localPosition.x) / 2;
 		float vHalfDistance = Mathf.Abs(outerWalls[1].localPosition.y - outerWalls[0].localPosition.y) / 2;
 		float sceneRatio = hHalfDistance / vHalfDistance;
 
-		// automatically set zoom based on level dimensions
-		if(!manualZooming)
+		// if the level is horizontally longer than the camera, lock the vertical position
+		//   and only move/scale based on x positions
+		if(sceneRatio > aspectRatio)
 		{
-			if(sceneRatio > aspectRatio)
-			{
-				Debug.Log("Horizontal Level");
-				initialZoom = vHalfDistance;
-				maxZoomOut = hHalfDistance / aspectRatio - initialZoom;
-				zoomThresholds[0] = initialZoom / 1.1f * aspectRatio - 3;
-				zoomThresholds[1] = initialZoom;
-				maxPos[0] = Mathf.Abs(hHalfDistance - initialZoom * aspectRatio);
-				minPos[0] = -maxPos[0];
-				zoomRatio = maxPos[0] / maxZoomOut * 100;
-			}
-			else
-			{
-				Debug.Log("Vertical Level");
-				initialZoom = hHalfDistance / aspectRatio;
-				maxZoomOut = vHalfDistance - initialZoom;
-				zoomThresholds[0] = initialZoom * aspectRatio;
-				zoomThresholds[1] = initialZoom / 1.1f - 3;
-				maxPos[1] = Mathf.Abs(vHalfDistance - initialZoom);
-				minPos[1] = -maxPos[1];
-				// set other dimension if not autozoom
-				zoomRatio = maxPos[1] / maxZoomOut * 100;
-			}
+			initialZoom = vHalfDistance;
+			maxZoomOut = hHalfDistance / aspectRatio - initialZoom;
+			zoomThresholds[0] = initialZoom / 1.1f * aspectRatio - 3;
+			zoomThresholds[1] = initialZoom;
+			maxPos[0] = Mathf.Abs(hHalfDistance - initialZoom * aspectRatio);
+			minPos[0] = -maxPos[0];
+			maxPos[1] = 0;
+			minPos[1] = 0;
+			zoomRatio = maxPos[0] / maxZoomOut * 100;
+		}
+
+		// if the level is vertically taller than the camera, lock the horizontal position
+		//   and only move/scale based on y positions
+		else
+		{
+			initialZoom = hHalfDistance / aspectRatio;
+			maxZoomOut = vHalfDistance - initialZoom;
+			zoomThresholds[0] = initialZoom * aspectRatio;
+			zoomThresholds[1] = initialZoom / 1.1f - 3;
+			maxPos[1] = Mathf.Abs(vHalfDistance - initialZoom);
+			minPos[1] = -maxPos[1];
+			maxPos[0] = 0;
+			minPos[0] = 0;
+			zoomRatio = maxPos[1] / maxZoomOut * 100;
 		}
 
 		minZoomPos = minPos;
