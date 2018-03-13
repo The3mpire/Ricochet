@@ -13,15 +13,23 @@ public class MainMenuFunctions : MonoBehaviour
 
     [Tooltip("The first button to be selected in the scene")]
     [SerializeField]
-    private GameObject mainMenuButton;
+    private GameObject defaultButton;
 
-    [Tooltip("The panel to be enabled when start is pressed")]
+    [Tooltip("The panel to be enabled when Play is selected")]
+    [SerializeField]
+    private GameObject playPanel;
+
+    [Tooltip("The first button to be selected when the panel is on")]
+    [SerializeField]
+    private GameObject playPanelDefaultItem;
+
+    [Tooltip("The panel to be enabled when Options is selected")]
     [SerializeField]
     private GameObject optionsPanel;
 
     [Tooltip("The first button to be selected when the panel is on")]
     [SerializeField]
-    private GameObject optionsButton;
+    private GameObject optionsPanelDefaultItem;
 
     [SerializeField]
     private GameDataSO gameData;
@@ -37,18 +45,32 @@ public class MainMenuFunctions : MonoBehaviour
     }
 
     #region Public Functions
-    public void OpenGameOptions()
+    public void OpenPlayMenu()
+    {
+        mainMenuPanel.SetActive(false);
+        playPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(playPanelDefaultItem);
+    }
+
+    public void ClosePlayMenu()
+    {
+        mainMenuPanel.SetActive(true);
+        playPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(defaultButton);
+    }
+
+    public void OpenOptionsMenu()
     {
         mainMenuPanel.SetActive(false);
         optionsPanel.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(optionsButton);
+        EventSystem.current.SetSelectedGameObject(optionsPanelDefaultItem);
     }
 
-    public void CloseGameOptions()
+    public void CloseOptionsMenu()
     {
         mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(mainMenuButton);
+        EventSystem.current.SetSelectedGameObject(defaultButton);
     }
 
     public void LaunchClassicMode()
