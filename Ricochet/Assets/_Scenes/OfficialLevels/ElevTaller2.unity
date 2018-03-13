@@ -3101,6 +3101,26 @@ Transform:
   m_PrefabParentObject: {fileID: 4612335812914612, guid: 357af6189dcb74222a2bce796922b555,
     type: 2}
   m_PrefabInternal: {fileID: 1458463877}
+--- !u!4 &1458463879 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4317774452080126, guid: 357af6189dcb74222a2bce796922b555,
+    type: 2}
+  m_PrefabInternal: {fileID: 1458463877}
+--- !u!4 &1458463880 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4526373401678370, guid: 357af6189dcb74222a2bce796922b555,
+    type: 2}
+  m_PrefabInternal: {fileID: 1458463877}
+--- !u!4 &1458463881 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4264187077837160, guid: 357af6189dcb74222a2bce796922b555,
+    type: 2}
+  m_PrefabInternal: {fileID: 1458463877}
+--- !u!4 &1458463882 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4531831209514996, guid: 357af6189dcb74222a2bce796922b555,
+    type: 2}
+  m_PrefabInternal: {fileID: 1458463877}
 --- !u!1 &1476537418
 GameObject:
   m_ObjectHideFlags: 0
@@ -4267,6 +4287,26 @@ Prefab:
       propertyPath: ballRespawns.Array.data[0]
       value: 
       objectReference: {fileID: 1492658029}
+    - target: {fileID: 114731083047901876, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: topWallTransform
+      value: 
+      objectReference: {fileID: 1458463882}
+    - target: {fileID: 114731083047901876, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: bottomWallTransform
+      value: 
+      objectReference: {fileID: 1458463881}
+    - target: {fileID: 114731083047901876, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: leftWallTransform
+      value: 
+      objectReference: {fileID: 1458463880}
+    - target: {fileID: 114731083047901876, guid: 026a8a43db466b841ab459e8a0cef1f0,
+        type: 2}
+      propertyPath: rightWallTransform
+      value: 
+      objectReference: {fileID: 1458463879}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 026a8a43db466b841ab459e8a0cef1f0, type: 2}
   m_IsPrefabParent: 0
