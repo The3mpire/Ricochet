@@ -520,7 +520,7 @@ public class PlayerController : MonoBehaviour
     private void RotateShield()
     {
         //make sure there is magnitude
-        if ((Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0) && shield.gameObject.activeSelf)
+        if ((Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0) && shield.gameObject.activeSelf && !isFrozen)
         {
 
             if (rightStickHorz > 0)
@@ -831,9 +831,18 @@ public class PlayerController : MonoBehaviour
         remainingFreezeTime = value;
     }
 
+    public bool GetFrozen()
+    {
+        return isFrozen;
+    }
+
     public void SetFrozen(bool frozen)
     {
         isFrozen = frozen;
+        if(!isFrozen)
+        {
+            powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, false);
+        }
     }
 
     public void SetBallDetection(bool value)
