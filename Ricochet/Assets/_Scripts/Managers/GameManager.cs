@@ -506,26 +506,30 @@ public class GameManager : MonoBehaviour
 
     public void KillZoneCollision(GameObject haplessSoul)
     {
-        switch (haplessSoul.tag)
+        if (haplessSoul.activeSelf)
         {
-            case "Player":
-                PlayerController playerController;
-                if (!playerDictionary.TryGetValue(haplessSoul, out playerController))
-                {
-                    playerController = haplessSoul.GetComponentInParent<PlayerController>();
-                    playerDictionary.Add(haplessSoul, playerController);
-                }
-                if (!playerController.IsInvincible())
-                {
-                    playerController.PlayerDead();
-                    StartCoroutine(RespawnPlayer(playerController));
-                }
-                break;
-            case "Ball":
-                haplessSoul.GetComponent<Ball>().OnBallGoalCollision();
-                haplessSoul.SetActive(false);
-                RespawnBall(haplessSoul);
-                break;
+            switch (haplessSoul.tag)
+            {
+                case "Player":
+                    PlayerController playerController;
+                    if (!playerDictionary.TryGetValue(haplessSoul, out playerController))
+                    {
+                        playerController = haplessSoul.GetComponentInParent<PlayerController>();
+                        playerDictionary.Add(haplessSoul, playerController);
+                    }
+                    if (!playerController.IsInvincible())
+                    {
+                        playerController.PlayerDead();
+                        StartCoroutine(RespawnPlayer(playerController));
+                    }
+                    break;
+                case "Ball":
+                    //haplessSoul.GetComponent<Ball>().OnBallGoalCollision();
+                    //haplessSoul.SetActive(false);
+                    //RespawnBall(haplessSoul);
+                    haplessSoul.GetComponent<Ball>().ResetPosition();
+                    break;
+            }
         }
     }
 
