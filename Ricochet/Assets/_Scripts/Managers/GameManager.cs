@@ -603,6 +603,10 @@ public class GameManager : MonoBehaviour
         playerController.RemovePowerUp();
         playerController.gameObject.SetActive(true);
         playerController.SetBallDetection(false);
+        if(playerController.GetFrozen())
+        {
+            playerController.SetFrozen(false);
+        }
 
         StartCoroutine(FlashInvulnerable(invulnerableTime, playerController));
 
@@ -699,7 +703,7 @@ public class GameManager : MonoBehaviour
     public void FreezePlayers()
     {
         foreach (PlayerController player in playerControllers)
-            player.SetFreezeTime(10f);
+            player.SetFreezeTime(powerUpManager.GetFreezeTime());
     }
 
     public void PausePlayers(bool pause)

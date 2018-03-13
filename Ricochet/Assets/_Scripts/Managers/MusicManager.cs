@@ -67,6 +67,7 @@ public class MusicManager : MonoBehaviour
         {
             currentSong = newSong;
             instance.musicSource.clip = newSong;
+            instance.musicSource.loop = true;
             instance.musicSource.Play();
             IEnumerator fadeInCoroutine = FadeIn(0f, 3f);
             StartCoroutine(fadeInCoroutine);
@@ -108,6 +109,7 @@ public class MusicManager : MonoBehaviour
         if (instance.musicSource != null || !instance.musicSource.clip.Equals(song))
         {
             instance.musicSource.clip = song;
+            instance.musicSource.loop = true;
             instance.musicSource.Play();
         }
     }
