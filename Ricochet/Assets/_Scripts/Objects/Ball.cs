@@ -117,12 +117,7 @@ public class Ball : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            transform.position = new Vector3(UnityEngine.Random.Range(-29, 29), 20, 0);
-            body.velocity = new Vector2(0, 100);
-        }
-        else if (beenHit)
+        if (beenHit)
         {
             lastPosition = transform.position;
             // add the constant force
