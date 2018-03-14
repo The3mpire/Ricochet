@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
 
@@ -34,8 +35,9 @@ public class Neon : MonoBehaviour {
     private Material outerMaterial;
     private Color outerColor;
 
-    private float magMult;
-    private float widMult;
+    private bool linearPulse;
+    private float ogF;
+    private float x;
     #endregion
 
     #region Monobehaviour
@@ -47,9 +49,9 @@ public class Neon : MonoBehaviour {
         innerColor = innerMaterial.GetColor(emissionID);
         outerMaterial = outerBand.material;
         outerColor = outerMaterial.GetColor(emissionID);
+        linearPulse = false;
+        ogF = pulseFrequency;
 
-        magMult = 1.2f / pulseFrequency;
-        widMult = 1 / (pulseFrequency / 0.1f);
         UpdateLineRenderers();
     }
 
@@ -88,18 +90,42 @@ public class Neon : MonoBehaviour {
 
     public void EmissionPulse()
     {
-        float emissionMagnitude = .8f + Mathf.PingPong(Time.time * magMult, 2.0f - 0.8f);
-        float emissionWidth = width + Mathf.PingPong(Time.time * widMult, 0.1f);
+        float emissionMagnitude;
+        float emissionWidth;
+
+        if (!linearPulse)
+        {
+            float y = -(Mathf.Sin(x / 2)) - (Mathf.Cos(x) / 4) + 0.75f;
+            //float y = (float)Y;
+            //Debug.Log(y);
+            emissionMagnitude = 0.9f + y * 2;
+            emissionWidth = 1 + y / 2;
+        }
+        else
+        {
+            float y = (Mathf.Sin(x) + 1) * 0.5f;
+            //double Y = (Math.Sin(x) + 1) * 0.5;
+            //float y = (float)Y;
+            //Debug.Log(y);
+            emissionMagnitude = 0.9f + y * 2;
+            emissionWidth = 1 + y / 2;
+        }
+
+        x += Time.deltaTime * pulseFrequency;
+        if (x >= 2 * Mathf.PI)
+            x = 0;
 
         Color emissionColor = innerColor * Mathf.LinearToGammaSpace(emissionMagnitude);
         innerMaterial.SetColor(emissionID, emissionColor);
-        innerBand.startWidth = emissionWidth;
-        innerBand.endWidth = emissionWidth;
+        //innerBand.startWidth = emissionWidth;
+        //innerBand.endWidth = emissionWidth;
+        innerBand.widthMultiplier = emissionWidth;
 
         emissionColor = outerColor * Mathf.LinearToGammaSpace(emissionMagnitude);
         outerMaterial.SetColor(emissionID, emissionColor);
-        outerBand.startWidth = emissionWidth;
-        outerBand.endWidth = emissionWidth;
+        //outerBand.startWidth = emissionWidth;
+        //outerBand.endWidth = emissionWidth;
+        outerBand.widthMultiplier = emissionWidth;
     }
 
     public void Flash()
@@ -109,7 +135,7 @@ public class Neon : MonoBehaviour {
         nf.Initialize();
         nf.HitTheLights();
 
-        IEnumerator coroutine = TempChangeFrequency(0.2f, 1.6f);
+        IEnumerator coroutine = TempChangeFrequency(9f, 2.5f);
         StopAllCoroutines();
         StartCoroutine(coroutine);
     }
@@ -117,12 +143,10 @@ public class Neon : MonoBehaviour {
     private IEnumerator TempChangeFrequency(float frequency, float duration)
     {
         pulseFrequency = frequency;
-        magMult = 1.2f / pulseFrequency;
-        widMult = 1 / (pulseFrequency / 0.1f);
+        linearPulse = true;
         yield return new WaitForSeconds(duration);
-        pulseFrequency = 0.8f;
-        magMult = 1.2f / pulseFrequency;
-        widMult = 1 / (pulseFrequency / 0.1f);
+        linearPulse = false;
+        pulseFrequency = ogF;
     }
 
     void OnDrawGizmosSelected()

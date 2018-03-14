@@ -36,28 +36,22 @@ public class NeonFlash : MonoBehaviour {
         Vector2 position = nodes[0];
         while (true)
         {
-            Vector2 newTarget;
-
             Vector2 target = nodes[i + 1];
             Vector2 difference = target - position;
             Vector2 translation;
             if (difference.magnitude <= s * Time.fixedDeltaTime)
             {
-                float rem = speed - difference.magnitude;
                 i++;
                 if (i == nodes.Length - 1)
                     break;
-                newTarget = nodes[i + 1];
-                translation = (newTarget - target).normalized * (rem * Time.fixedDeltaTime);
-                translation = target + translation;
-                translation = translation - position;
-                target = newTarget;
+                transform.position = target;
+                target = nodes[i + 1];
             }
             else
             {
                 translation = difference.normalized * (speed * Time.fixedDeltaTime);
+                transform.Translate(translation);
             }
-            transform.Translate(translation);
             position = transform.position;
             yield return new WaitForFixedUpdate();
         }
