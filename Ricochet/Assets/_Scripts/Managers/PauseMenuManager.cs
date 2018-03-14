@@ -36,6 +36,14 @@ public class PauseMenuManager : MonoBehaviour
 
     public void Update()
     {
+        if (pausePanel.activeSelf)
+        {
+            if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+            {
+                gameManagerInstance.FreezePlayers();
+            }
+        }
+
         foreach (Player p in players)
         {
             if (lastPlayer == null || p == lastPlayer)
@@ -47,6 +55,10 @@ public class PauseMenuManager : MonoBehaviour
                     EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
                     Time.timeScale = 0;
                     lastPlayer = p;
+                    if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+                    {
+                        gameManagerInstance.PausePlayers(true);
+                    }
                 }
                 else if (p.GetButtonDown("UIMenu") && pausePanel.activeSelf)
                 {
@@ -64,6 +76,10 @@ public class PauseMenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         Time.timeScale = 1;
         lastPlayer = null;
+        if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
+        {
+            gameManagerInstance.PausePlayers(false);
+        }
     }
 
     public void MainMenu()

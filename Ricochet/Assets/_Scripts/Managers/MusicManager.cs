@@ -11,9 +11,6 @@ public class MusicManager : MonoBehaviour
     [Tooltip("Drag the SoundStorage object here")]
     [SerializeField]
     private SoundStorage soundStorage;
-    [Tooltip("Drag  in FXSource here")]
-    [SerializeField]
-    private AudioSource fxSource;
     [Tooltip("Drag in Music Source here")]
     [SerializeField]
     private AudioSource musicSource;
@@ -51,7 +48,7 @@ public class MusicManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
         musicVol = 1f;
         volumeLock = false;
         OnLevelWasLoaded();
@@ -70,6 +67,7 @@ public class MusicManager : MonoBehaviour
         {
             currentSong = newSong;
             instance.musicSource.clip = newSong;
+            instance.musicSource.loop = true;
             instance.musicSource.Play();
             IEnumerator fadeInCoroutine = FadeIn(0f, 3f);
             StartCoroutine(fadeInCoroutine);
@@ -111,6 +109,7 @@ public class MusicManager : MonoBehaviour
         if (instance.musicSource != null || !instance.musicSource.clip.Equals(song))
         {
             instance.musicSource.clip = song;
+            instance.musicSource.loop = true;
             instance.musicSource.Play();
         }
     }
@@ -125,33 +124,6 @@ public class MusicManager : MonoBehaviour
     public float GetMusicVolume()
     {
         return musicSource.volume;
-    }
-    #endregion
-
-    #region SFX
-    public void PlayMenuClickSound()
-    {
-        fxSource.PlayOneShot(soundStorage.GetMenuClickSound());
-    }
-
-    public void PlayMenuBackSound()
-    {
-        fxSource.PlayOneShot(soundStorage.GetMenuBackSound());
-    }
-
-    public void PlayMenuUnpauseSound()
-    {
-        fxSource.PlayOneShot(soundStorage.GetUnpauseSound());
-    }
-
-    public void PlayMenuPauseSound()
-    {
-        fxSource.PlayOneShot(soundStorage.GetPauseSound());
-    }
-
-    public void PlayMenuTraversalSound()
-    {
-        fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
     }
     #endregion
 

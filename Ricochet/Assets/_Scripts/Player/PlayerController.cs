@@ -374,7 +374,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     float sign = rigid.velocity.x / Mathf.Abs(rigid.velocity.x);
-                    x = Mathf.Abs(rigid.velocity.x) > 0.1f ? rigid.velocity.x - (sign * 1.5f) : 0f;
+                    x = Mathf.Abs(rigid.velocity.x) > 1.5f ? rigid.velocity.x - (sign * 1.2f) : 0f;
                 }
                 float y = moveDirection.y >= 0 ? Mathf.Min(Mathf.Max(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration), thrusterSpeed + (rigid.velocity.y - thrusterSpeed) * 0.85f) :
                         Mathf.Max(Mathf.Min(rigid.velocity.y, rigid.velocity.y * directionSwitchRatio) + (moveDirection.y * thrusterAcceleration * downwardMovementSpeedup), -(thrusterSpeed * downwardMovementSpeedup) + (rigid.velocity.y + (thrusterSpeed * downwardMovementSpeedup)) * 0.85f);
@@ -474,7 +474,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     float sign = rigid.velocity.x / Mathf.Abs(rigid.velocity.x);
-                    x = Mathf.Abs(rigid.velocity.x) > 0.1f ? rigid.velocity.x - (sign * 1.5f) : 0f;
+                    x = Mathf.Abs(rigid.velocity.x) > 1.5f ? rigid.velocity.x - (sign * 1.2f) : 0f;
                 }
                 rigid.velocity = new Vector2(x, 0f);
             }
@@ -520,7 +520,7 @@ public class PlayerController : MonoBehaviour
     private void RotateShield()
     {
         //make sure there is magnitude
-        if ((Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0) && shield.gameObject.activeSelf)
+        if ((Mathf.Abs(rightStickHorz) > 0 || Mathf.Abs(rightStickVert) > 0) && shield.gameObject.activeSelf && !isFrozen)
         {
 
             if (rightStickHorz > 0)
@@ -751,6 +751,16 @@ public class PlayerController : MonoBehaviour
         return new Vector2(leftStickHorz, leftStickVert);
     }
 
+    public Vector2 GetNormalizedLeftStick()
+    {
+        Vector2 vec = new Vector2(leftStickHorz, leftStickVert).normalized;
+        if (vec.magnitude == 0)
+        {
+            vec = GetPreviousVelocity().normalized;
+        }
+        return vec;
+    }
+
     public Vector2 GetRightStick()
     {
         return new Vector2(rightStickHorz, rightStickVert);
@@ -819,6 +829,20 @@ public class PlayerController : MonoBehaviour
     public void SetFreezeTime(float value)
     {
         remainingFreezeTime = value;
+    }
+
+    public bool GetFrozen()
+    {
+        return isFrozen;
+    }
+
+    public void SetFrozen(bool frozen)
+    {
+        isFrozen = frozen;
+        if(!isFrozen)
+        {
+            powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, false);
+        }
     }
 
     public void SetBallDetection(bool value)
