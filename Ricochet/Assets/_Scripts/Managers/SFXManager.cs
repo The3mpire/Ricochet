@@ -66,7 +66,10 @@ public class SFXManager : MonoBehaviour
 
     public void PlayMenuTraversalSound()
     {
-        fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
+        if (fxSource != null)
+        {
+            fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
+        }
     }
     #endregion
 
