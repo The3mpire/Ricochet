@@ -854,7 +854,7 @@ public class GameManager : MonoBehaviour
                 player.transform.localScale = new Vector3(scale, scale, scale);
                 player.ChangeMomentum(multiplier);
                 player.SetIsShrunken(true);
-                player.GetPowerupParticleController().PlayPowerupEffect(EPowerUp.Shrink, 0, true);
+                player.gameObject.GetComponent<CCParticles.PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, true);
             }
         }
         StartCoroutine(ResetTeamScale(team, delay, multiplier));
@@ -872,7 +872,7 @@ public class GameManager : MonoBehaviour
                 player.transform.localScale = new Vector3(1, 1, 1);
                 player.ChangeMomentum(1/mult);
                 player.SetIsShrunken(false);
-                player.GetPowerupParticleController().PlayPowerupEffect(EPowerUp.Shrink, 0, false);
+                player.gameObject.GetComponent<CCParticles.PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, false);
             }
         }
     }

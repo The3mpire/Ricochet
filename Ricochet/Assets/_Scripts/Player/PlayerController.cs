@@ -859,10 +859,5 @@ public class PlayerController : MonoBehaviour
     {
         return shieldTransform.GetComponent<Shield>();
     }
-
-    public CCParticles.PowerUpParticlesController GetPowerupParticleController()
-    {
-        return this.powerupParticleController;
-    }
     #endregion
 }
