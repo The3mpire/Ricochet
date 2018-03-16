@@ -148,6 +148,7 @@ public class Neon : MonoBehaviour {
         StopCoroutine("TempChangeFrequency");
         StartCoroutine(coroutine);
         StartCoroutine("AuraPulse");
+
     }
 
     private IEnumerator TempChangeFrequency(float frequency, float duration)
@@ -155,6 +156,11 @@ public class Neon : MonoBehaviour {
         pulseFrequency = frequency;
         linearPulse = true;
         yield return new WaitForSeconds(duration);
+
+        while (!Approximately(x, (1.5f * Mathf.PI), 0.1f))
+            yield return new WaitForEndOfFrame();
+
+        x = Mathf.PI;
         linearPulse = false;
         pulseFrequency = ogF;
     }
@@ -164,14 +170,14 @@ public class Neon : MonoBehaviour {
         LineRenderer aura = Instantiate(auraBand);
         aura.widthMultiplier = 0.1f;
         aura.gameObject.SetActive(true);
-        float w = 0.1f;
+        float w = 0f;
         while (w < 3f)
         {
-            float y = (Mathf.Log10(w) + 4f) * 0.5f;
+            w += Time.fixedDeltaTime;
+            float y = (Mathf.Log(w) + 4f) * 0.5f;
             aura.widthMultiplier = y * 2f;
             aura.startColor = new Color(aura.startColor.r, aura.startColor.g, aura.startColor.b, 2.3f - y);
             aura.endColor = new Color(aura.startColor.r, aura.startColor.g, aura.startColor.b, 2.3f - y);
-            w += Time.fixedDeltaTime;
             yield return new WaitForEndOfFrame();
         }
         Destroy(aura.gameObject);
@@ -182,6 +188,11 @@ public class Neon : MonoBehaviour {
         Gizmos.color = Color.black;
         for (int i = 0; i <= nodes.Length - 2; i++)
             Gizmos.DrawLine(nodes[i], nodes[i + 1]);
+    }
+
+    bool Approximately(float a, float b, float error)
+    {
+        return (Mathf.Abs(a - b) <= error);
     }
 
     #endregion
