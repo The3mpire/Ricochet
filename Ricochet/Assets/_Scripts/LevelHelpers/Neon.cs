@@ -25,6 +25,7 @@ public class Neon : MonoBehaviour {
     [Header("Renderer References")]
     [SerializeField] private LineRenderer innerBand;
     [SerializeField] private LineRenderer outerBand;
+    [SerializeField] private LineRenderer auraBand;
     [SerializeField] private NeonFlash neonFlash;
     #endregion
 
@@ -84,6 +85,14 @@ public class Neon : MonoBehaviour {
         outerBand.endWidth = width;
         outerBand.loop = loop;
 
+        auraBand.numCornerVertices = cornerVertices;
+        auraBand.numCapVertices = endCapVertices;
+        auraBand.positionCount = nodes.Length;
+        auraBand.SetPositions(nodes);
+        auraBand.startWidth = width;
+        auraBand.endWidth = width;
+        auraBand.loop = loop;
+
         neonFlash.SetNodes(nodes);
         neonFlash.SetWidth(width);
     }
@@ -136,8 +145,9 @@ public class Neon : MonoBehaviour {
         nf.HitTheLights();
 
         IEnumerator coroutine = TempChangeFrequency(9f, 2.5f);
-        StopAllCoroutines();
+        StopCoroutine("TempChangeFrequency");
         StartCoroutine(coroutine);
+        StartCoroutine("AuraPulse");
     }
 
     private IEnumerator TempChangeFrequency(float frequency, float duration)
@@ -147,6 +157,24 @@ public class Neon : MonoBehaviour {
         yield return new WaitForSeconds(duration);
         linearPulse = false;
         pulseFrequency = ogF;
+    }
+
+    private IEnumerator AuraPulse()
+    {
+        LineRenderer aura = Instantiate(auraBand);
+        aura.widthMultiplier = 0.1f;
+        aura.gameObject.SetActive(true);
+        float w = 0.1f;
+        while (w < 3f)
+        {
+            float y = (Mathf.Log10(w) + 4f) * 0.5f;
+            aura.widthMultiplier = y * 2f;
+            aura.startColor = new Color(aura.startColor.r, aura.startColor.g, aura.startColor.b, 2.3f - y);
+            aura.endColor = new Color(aura.startColor.r, aura.startColor.g, aura.startColor.b, 2.3f - y);
+            w += Time.fixedDeltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        Destroy(aura.gameObject);
     }
 
     void OnDrawGizmosSelected()
