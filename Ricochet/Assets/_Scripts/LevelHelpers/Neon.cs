@@ -194,7 +194,7 @@ public class Neon : MonoBehaviour {
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.black;
+        Gizmos.color = Color.green;
         for (int i = 0; i <= nodes.Length - 2; i++)
             Gizmos.DrawLine(nodes[i], nodes[i + 1]);
     }

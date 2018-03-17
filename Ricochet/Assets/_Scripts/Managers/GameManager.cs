@@ -232,6 +232,17 @@ public class GameManager : MonoBehaviour
         GameRunning = false;
 
         gameData.SetGameWinner(modeManager.GetMaxScore());
+        DeactivatePlayersAndGoals();
+        lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
+
+        int postMatchTimer = 4;
+        while (postMatchTimer > 0)
+        {
+            postMatchTimer--;
+            yield return new WaitForSeconds(1);
+        }
+
+
         EndMatch();
     }
     #endregion
@@ -334,7 +345,7 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetCurrentPowerUp())
         {
             case EPowerUp.CircleShield:
-                SheildBurst(playerController);
+                ShieldBurst(playerController);
                 playerController.EnableSecondaryShield(false);
                 playerController.RemovePowerUp();
                 break;
@@ -445,7 +456,8 @@ public class GameManager : MonoBehaviour
             onGoal.Raise();
             if (lightsController != null)
             {
-                lightsController.HitTheLights();
+                ETeam t = team == ETeam.RedTeam ? ETeam.BlueTeam : ETeam.RedTeam;
+                lightsController.HitTheTeamLights(t, 3);
             }
 
             if (!modeManager.UpdateScore(team, points))
@@ -785,7 +797,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private Helpers
-    private void SheildBurst(PlayerController center)
+    private void ShieldBurst(PlayerController center)
     {
         float radius = powerUpManager.GetBurstRadius();
         float force = powerUpManager.GetBurstForce();
@@ -873,6 +885,17 @@ public class GameManager : MonoBehaviour
                 player.SetIsShrunken(false);
             }
         }
+    }
+
+    void DeactivatePlayersAndGoals()
+    {
+        foreach (PlayerController player in playerControllers)
+        {
+            player.SetAutoJetpack(false);
+            player.SetAcceptingInput(false);
+        }
+        blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+        redGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>().enabled = false;
     }
     #endregion
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Enumerables;
@@ -44,38 +45,61 @@ public class NeonLightController : MonoBehaviour {
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))
-            HitTheLights();
+            HitTheLights(1);
         else if (Input.GetKeyDown(KeyCode.X))
-            HitTheTeamLights(ETeam.BlueTeam);
+            HitTheTeamLights(ETeam.BlueTeam, 1);
         else if (Input.GetKeyDown(KeyCode.C))
-            HitTheTeamLights(ETeam.RedTeam);
+            HitTheTeamLights(ETeam.RedTeam, 1);
         else if (Input.GetKeyDown(KeyCode.R))
-            HitAllTheLightsAsTeam(ETeam.RedTeam);
+            HitAllTheLightsAsTeam(ETeam.RedTeam, 1);
         else if (Input.GetKeyDown(KeyCode.B))
-            HitAllTheLightsAsTeam(ETeam.BlueTeam);
+            HitAllTheLightsAsTeam(ETeam.BlueTeam, 1);
         else if (Input.GetKeyDown(KeyCode.V))
             ResetLightsMaterials();
+
     }
     #endregion
 
-    public void HitTheLights()
+    public void HitTheLights(int repeats)
     {
-        foreach (Neon light in lights)
+        IEnumerator crtn = HitTheLightsCoroutine(repeats);
+        StartCoroutine(crtn);
+    }
+
+    private IEnumerator HitTheLightsCoroutine(int repeats)
+    {
+        while (repeats > 0)
         {
-            light.Flash();
+            foreach (Neon light in lights)
+            {
+                light.Flash();
+            }
+            repeats--;
+            yield return new WaitForSeconds(0.25f);
         }
     }
 
-    public void HitTheTeamLights(ETeam t)
+    public void HitTheTeamLights(ETeam t, int repeats)
     {
-        List<Neon> teamLights = t == ETeam.RedTeam ? redLights : blueLights;
-        foreach (Neon light in teamLights)
+        IEnumerator crtn = HitTheTeamLightsCoroutine(t, repeats);
+        StartCoroutine(crtn);
+    }
+
+    private IEnumerator HitTheTeamLightsCoroutine(ETeam t, int repeats)
+    {
+        while (repeats > 0)
         {
-            light.Flash();
+            List<Neon> teamLights = t == ETeam.RedTeam ? redLights : blueLights;
+            foreach (Neon light in teamLights)
+            {
+                light.Flash();
+            }
+            repeats--;
+            yield return new WaitForSeconds(0.25f);
         }
     }
 
-    public void HitAllTheLightsAsTeam(ETeam t)
+    public void HitAllTheLightsAsTeam(ETeam t, int repeats)
     {
         List<Neon> otherTeamLights = t == ETeam.RedTeam ? blueLights : redLights;
         TeamMaterials thisTeamMats = t == ETeam.RedTeam ? redMaterials : blueMaterials;
@@ -87,7 +111,7 @@ public class NeonLightController : MonoBehaviour {
             light.SetFlashGradient(thisTeamMats.flash);
             light.ReInitialize();
         }
-        HitTheLights();
+        HitTheLights(repeats);
     }
 
     public void ResetLightsMaterials()
