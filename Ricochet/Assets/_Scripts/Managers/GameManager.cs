@@ -445,7 +445,7 @@ public class GameManager : MonoBehaviour
             onGoal.Raise();
             if (lightsController != null)
             {
-                lightsController.HitTheLights(team);
+                lightsController.HitTheLights();
             }
 
             if (!modeManager.UpdateScore(team, points))

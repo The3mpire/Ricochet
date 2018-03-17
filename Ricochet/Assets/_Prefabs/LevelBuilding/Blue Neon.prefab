@@ -152,8 +152,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1696312564780060}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.11410341, y: 10.030595, z: -1.28125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4786059754868138}
@@ -261,6 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbeff7253baaa548ba0e639776a8152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 1
+  pulseFrequency: 2
   nodes:
   - {x: -1.87, y: 3.93, z: 0}
   - {x: -0.225, y: 2.11, z: 0}
@@ -275,7 +277,6 @@ MonoBehaviour:
   endCapVertices: 3
   loop: 0
   emission: 0
-  pulseFrequency: 2
   innerBand: {fileID: 120783993907398984}
   outerBand: {fileID: 120571066242534146}
   auraBand: {fileID: 120242745304384000}

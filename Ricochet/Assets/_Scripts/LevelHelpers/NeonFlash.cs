@@ -62,6 +62,11 @@ public class NeonFlash : MonoBehaviour {
         Destroy(gameObject);
     }
 
+    public void SetTrailGradient(Gradient grad)
+    {
+        tr.colorGradient = grad;
+    }
+
     public void SetNodes(Vector3[] nodes)
     {
         this.nodes = nodes;

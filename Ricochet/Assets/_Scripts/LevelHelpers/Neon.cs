@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEditor;
+using Enumerables;
 
 public class Neon : MonoBehaviour {
 
     #region Serialized Fields
+
+    [Header("Neon Options")]
+    [SerializeField] private ETeam team;
+    [SerializeField] private float pulseFrequency;
+
+    [Space]
+
     [Header("Line Renderer Options")]
     [SerializeField] private Vector3[] nodes;
     [SerializeField] private float width;
@@ -14,11 +22,6 @@ public class Neon : MonoBehaviour {
     [SerializeField] private int endCapVertices;
     [SerializeField] private bool loop;
     [SerializeField] private float emission;
-
-    [Space]
-
-    [Header("Neon Options")]
-    [SerializeField] private float pulseFrequency;
 
     [Space]
 
@@ -36,6 +39,7 @@ public class Neon : MonoBehaviour {
     private Material outerMaterial;
     private Color outerColor;
 
+    private IEnumerator tcf;
     private bool linearPulse;
     private float ogF;
     private float x;
@@ -59,13 +63,24 @@ public class Neon : MonoBehaviour {
     void Update()
     {
         EmissionPulse();
-        if (Input.GetKeyDown(KeyCode.Z))
-            Flash();
     }
 
     #endregion
 
     #region Helpers
+
+    public void ReInitialize()
+    {
+        emissionID = Shader.PropertyToID("_EmissionColor");
+        innerMaterial = innerBand.material;
+        innerColor = innerMaterial.GetColor(emissionID);
+        outerMaterial = outerBand.material;
+        outerColor = outerMaterial.GetColor(emissionID);
+        linearPulse = false;
+        ogF = pulseFrequency;
+
+        UpdateLineRenderers();
+    }
 
     public void UpdateLineRenderers()
     {
@@ -97,7 +112,23 @@ public class Neon : MonoBehaviour {
         neonFlash.SetWidth(width);
     }
 
-    public void EmissionPulse()
+    public void Flash()
+    {
+        NeonFlash nf = Instantiate(neonFlash);
+        nf.gameObject.SetActive(true);
+        nf.Initialize();
+        nf.HitTheLights();
+
+        //StopCoroutine("TempChangeFrequency");
+        //IEnumerator coroutine = TempChangeFrequency(9f, 2.5f);
+        if (tcf != null)
+            StopCoroutine(tcf);
+        tcf = TempChangeFrequency(9f, 2.5f);
+        StartCoroutine(tcf);
+        StartCoroutine("AuraPulse");
+    }
+
+    private void EmissionPulse()
     {
         float emissionMagnitude;
         float emissionWidth;
@@ -105,17 +136,12 @@ public class Neon : MonoBehaviour {
         if (!linearPulse)
         {
             float y = -(Mathf.Sin(x / 2)) - (Mathf.Cos(x) / 4) + 0.75f;
-            //float y = (float)Y;
-            //Debug.Log(y);
             emissionMagnitude = 0.9f + y * 2;
             emissionWidth = 1 + y / 2;
         }
         else
         {
             float y = (Mathf.Sin(x) + 1) * 0.5f;
-            //double Y = (Math.Sin(x) + 1) * 0.5;
-            //float y = (float)Y;
-            //Debug.Log(y);
             emissionMagnitude = 0.9f + y * 2;
             emissionWidth = 1 + y / 2;
         }
@@ -126,29 +152,11 @@ public class Neon : MonoBehaviour {
 
         Color emissionColor = innerColor * Mathf.LinearToGammaSpace(emissionMagnitude);
         innerMaterial.SetColor(emissionID, emissionColor);
-        //innerBand.startWidth = emissionWidth;
-        //innerBand.endWidth = emissionWidth;
         innerBand.widthMultiplier = emissionWidth;
 
         emissionColor = outerColor * Mathf.LinearToGammaSpace(emissionMagnitude);
         outerMaterial.SetColor(emissionID, emissionColor);
-        //outerBand.startWidth = emissionWidth;
-        //outerBand.endWidth = emissionWidth;
         outerBand.widthMultiplier = emissionWidth;
-    }
-
-    public void Flash()
-    {
-        NeonFlash nf = Instantiate(neonFlash);
-        nf.gameObject.SetActive(true);
-        nf.Initialize();
-        nf.HitTheLights();
-
-        IEnumerator coroutine = TempChangeFrequency(9f, 2.5f);
-        StopCoroutine("TempChangeFrequency");
-        StartCoroutine(coroutine);
-        StartCoroutine("AuraPulse");
-
     }
 
     private IEnumerator TempChangeFrequency(float frequency, float duration)
@@ -163,6 +171,7 @@ public class Neon : MonoBehaviour {
         x = Mathf.PI;
         linearPulse = false;
         pulseFrequency = ogF;
+        tcf = null;
     }
 
     private IEnumerator AuraPulse()
@@ -193,6 +202,35 @@ public class Neon : MonoBehaviour {
     bool Approximately(float a, float b, float error)
     {
         return (Mathf.Abs(a - b) <= error);
+    }
+
+    #endregion
+
+    #region Getters & Setters
+
+    public ETeam GetTeam()
+    {
+        return team;
+    }
+
+    public void SetOuterBandMaterial(Material mat)
+    {
+        outerBand.material = mat;
+    }
+
+    public void SetInnerBandMaterial(Material mat)
+    {
+        innerBand.material = mat;
+    }
+
+    public void SetAuraBandGradient(Gradient grad)
+    {
+        auraBand.colorGradient = grad;
+    }
+
+    public void SetFlashGradient(Gradient grad)
+    {
+        neonFlash.SetTrailGradient(grad);
     }
 
     #endregion
