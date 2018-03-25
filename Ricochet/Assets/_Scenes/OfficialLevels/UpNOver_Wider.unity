@@ -484,6 +484,11 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!212 &200616632 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212862626132077676, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+    type: 2}
+  m_PrefabInternal: {fileID: 624707355}
 --- !u!1001 &407750152
 Prefab:
   m_ObjectHideFlags: 0
@@ -1052,6 +1057,20 @@ Prefab:
       propertyPath: m_Name
       value: Goal Red
       objectReference: {fileID: 0}
+    - target: {fileID: 82964063460667214, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178196255008724, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4, type: 2}
+      propertyPath: m_Name
+      value: GoalAreaRed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114149531142859628, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
+        type: 2}
+      propertyPath: targetSprite
+      value: 
+      objectReference: {fileID: 200616632}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4, type: 2}
   m_IsPrefabParent: 0
@@ -1788,6 +1807,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4889930954892590, guid: 53333940c2ad3d04b8bc919a7670e1ac,
     type: 2}
   m_PrefabInternal: {fileID: 1934927274}
+--- !u!212 &960923214 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212342978748853898, guid: 268c9032cf81e114ea588f3ee710b0b2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1168866587}
 --- !u!1 &975671441
 GameObject:
   m_ObjectHideFlags: 0
@@ -2219,6 +2243,20 @@ Prefab:
       propertyPath: m_LocalPosition.x
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 82351184269600966, guid: 268c9032cf81e114ea588f3ee710b0b2,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1731842939579470, guid: 268c9032cf81e114ea588f3ee710b0b2, type: 2}
+      propertyPath: m_Name
+      value: GoalAreaBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 114649423981810766, guid: 268c9032cf81e114ea588f3ee710b0b2,
+        type: 2}
+      propertyPath: targetSprite
+      value: 
+      objectReference: {fileID: 960923214}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 268c9032cf81e114ea588f3ee710b0b2, type: 2}
   m_IsPrefabParent: 0
