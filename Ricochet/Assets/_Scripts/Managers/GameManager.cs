@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
         GameRunning = true;
         currentMatchTime = timeLimit;
 
-        while (currentMatchTime > 0)
+        while (currentMatchTime > 0 && GameRunning)
         {
             onTimerChanged.Raise();
             currentMatchTime--;
@@ -233,6 +233,17 @@ public class GameManager : MonoBehaviour
         GameRunning = false;
 
         gameData.SetGameWinner(modeManager.GetMaxScore());
+        DeactivatePlayersAndGoals();
+        lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
+
+        int postMatchTimer = 4;
+        while (postMatchTimer > 0)
+        {
+            postMatchTimer--;
+            yield return new WaitForSeconds(1);
+        }
+
+
         EndMatch();
     }
     #endregion
@@ -335,7 +346,7 @@ public class GameManager : MonoBehaviour
         switch (playerController.GetCurrentPowerUp())
         {
             case EPowerUp.CircleShield:
-                SheildBurst(playerController);
+                ShieldBurst(playerController);
                 playerController.EnableSecondaryShield(false);
                 playerController.RemovePowerUp();
                 break;
@@ -441,12 +452,13 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        if (gameMode == EMode.Soccer)
+        if (gameMode == EMode.Soccer && GameRunning)
         {
             onGoal.Raise();
             if (lightsController != null)
             {
-                lightsController.HitTheLights(team);
+                ETeam t = team == ETeam.RedTeam ? ETeam.BlueTeam : ETeam.RedTeam;
+                lightsController.HitTheTeamLights(t, 3);
             }
 
             if (!modeManager.UpdateScore(team, points))
@@ -463,8 +475,12 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                GameRunning = false;
+
                 gameData.SetGameWinner(GetOpposingTeam(team));
-                EndMatch();
+                DeactivatePlayersAndGoals();
+                lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
+                StartCoroutine("DelayedWinScreen");
             }
         }
     }
@@ -662,10 +678,15 @@ public class GameManager : MonoBehaviour
         powerUp.SetActive(true);
     }
 
-    IEnumerator DelayedWinScreen()
+    private IEnumerator DelayedWinScreen()
     {
-        yield return new WaitForSeconds(timeAfterGameEnd);
-        CharacterSelect();
+        float postMatchTimer = 4;
+        while (postMatchTimer > 0)
+        {
+            postMatchTimer--;
+            yield return new WaitForSeconds(1);
+        }
+        EndMatch();
     }
 
     private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)
@@ -786,7 +807,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private Helpers
-    private void SheildBurst(PlayerController center)
+    private void ShieldBurst(PlayerController center)
     {
         float radius = powerUpManager.GetBurstRadius();
         float force = powerUpManager.GetBurstForce();
@@ -876,6 +897,17 @@ public class GameManager : MonoBehaviour
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, false);
             }
         }
+    }
+
+    void DeactivatePlayersAndGoals()
+    {
+        foreach (PlayerController player in playerControllers)
+        {
+            player.SetAutoJetpack(false);
+            player.SetAcceptingInput(false);
+        }
+        blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+        redGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>().enabled = false;
     }
     #endregion
 }
