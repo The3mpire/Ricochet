@@ -399,10 +399,10 @@ TrailRenderer:
       m_RotationOrder: 0
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.972549, g: 0.69803923, b: 1, a: 1}
-      key1: {r: 0.7305218, g: 0.1102941, b: 1, a: 1}
-      key2: {r: 0.972549, g: 0.69803923, b: 1, a: 0}
-      key3: {r: 0.7294118, g: 0.10980392, b: 1, a: 0}
+      key0: {r: 0.7036104, g: 0.6117647, b: 1, a: 1}
+      key1: {r: 0.44313726, g: 0, b: 0.972549, a: 1}
+      key2: {r: 0.7019608, g: 0.6117647, b: 1, a: 0}
+      key3: {r: 0.44313726, g: 0, b: 0.972549, a: 0}
       key4: {r: 0.972549, g: 0.69803923, b: 1, a: 0}
       key5: {r: 0.972549, g: 0.69803923, b: 1, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
@@ -597,8 +597,8 @@ MonoBehaviour:
     innerBand: {fileID: 2100000, guid: efe7a1ea94a028c4fa62ed436df9f1f0, type: 2}
     aura:
       serializedVersion: 2
-      key0: {r: 0.8989897, g: 0, b: 1, a: 1}
-      key1: {r: 0.8989897, g: 0, b: 1, a: 1}
+      key0: {r: 0.15388775, g: 0, b: 1, a: 1}
+      key1: {r: 0.36078432, g: 0, b: 1, a: 1}
       key2: {r: 0.89411765, g: 0, b: 0, a: 0}
       key3: {r: 0.89411765, g: 0, b: 0, a: 0}
       key4: {r: 0.89411765, g: 0, b: 0, a: 0}
@@ -626,10 +626,10 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     flash:
       serializedVersion: 2
-      key0: {r: 0.972549, g: 0.69803923, b: 1, a: 1}
-      key1: {r: 0.7305218, g: 0.1102941, b: 1, a: 1}
-      key2: {r: 0.972549, g: 0.69803923, b: 1, a: 0}
-      key3: {r: 0.7294118, g: 0.10980392, b: 1, a: 0}
+      key0: {r: 0.8, g: 0.6117647, b: 1, a: 1}
+      key1: {r: 0.44313726, g: 0, b: 0.972549, a: 1}
+      key2: {r: 0.8, g: 0.6117647, b: 1, a: 0}
+      key3: {r: 0.44313726, g: 0, b: 0.972549, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
@@ -676,8 +676,8 @@ MonoBehaviour:
   - {x: 29, y: 14, z: 0}
   - {x: 0, y: 14, z: 0}
   width: 0.75
-  cornerVertices: 3
-  endCapVertices: 3
+  cornerVertices: 0
+  endCapVertices: 1
   loop: 0
   emission: 0
   innerBand: {fileID: 120564987934544376}
@@ -751,8 +751,8 @@ MonoBehaviour:
   - {x: -29, y: 14, z: 0}
   - {x: 0, y: 14, z: 0}
   width: 0.75
-  cornerVertices: 3
-  endCapVertices: 3
+  cornerVertices: 0
+  endCapVertices: 1
   loop: 0
   emission: 0
   innerBand: {fileID: 120404025839777230}
@@ -825,8 +825,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.8989897, g: 0, b: 1, a: 1}
-      key1: {r: 0.8989897, g: 0, b: 1, a: 1}
+      key0: {r: 0.15294118, g: 0, b: 1, a: 1}
+      key1: {r: 0.23692083, g: 0, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -852,8 +852,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 3
-    numCapVertices: 3
+    numCornerVertices: 0
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     generateLightingData: 0
@@ -952,8 +952,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 3
-    numCapVertices: 3
+    numCornerVertices: 0
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     generateLightingData: 0
@@ -1052,8 +1052,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 3
-    numCapVertices: 3
+    numCornerVertices: 0
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     generateLightingData: 0
@@ -1152,8 +1152,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 3
-    numCapVertices: 3
+    numCornerVertices: 0
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     generateLightingData: 0
@@ -1252,8 +1252,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 3
-    numCapVertices: 3
+    numCornerVertices: 0
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     generateLightingData: 0
@@ -1352,8 +1352,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 3
-    numCapVertices: 3
+    numCornerVertices: 0
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     generateLightingData: 0

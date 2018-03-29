@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
         GameRunning = true;
         currentMatchTime = timeLimit;
 
-        while (currentMatchTime > 0)
+        while (currentMatchTime > 0 && GameRunning)
         {
             onTimerChanged.Raise();
             currentMatchTime--;
@@ -451,7 +451,7 @@ public class GameManager : MonoBehaviour
 
     public void BallGoalCollision(GameObject ball, ETeam team, int points)
     {
-        if (gameMode == EMode.Soccer)
+        if (gameMode == EMode.Soccer && GameRunning)
         {
             onGoal.Raise();
             if (lightsController != null)
@@ -474,8 +474,12 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                GameRunning = false;
+
                 gameData.SetGameWinner(GetOpposingTeam(team));
-                EndMatch();
+                DeactivatePlayersAndGoals();
+                lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
+                StartCoroutine("DelayedWinScreen");
             }
         }
     }
@@ -673,10 +677,15 @@ public class GameManager : MonoBehaviour
         powerUp.SetActive(true);
     }
 
-    IEnumerator DelayedWinScreen()
+    private IEnumerator DelayedWinScreen()
     {
-        yield return new WaitForSeconds(timeAfterGameEnd);
-        CharacterSelect();
+        float postMatchTimer = 4;
+        while (postMatchTimer > 0)
+        {
+            postMatchTimer--;
+            yield return new WaitForSeconds(1);
+        }
+        EndMatch();
     }
 
     private IEnumerator DropBallCoroutine(PlayerController player, Ball ball)

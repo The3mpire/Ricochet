@@ -1084,6 +1084,40 @@ GameObject:
   m_PrefabParentObject: {fileID: 1998894205038724, guid: 83fcedd76f6e66c40a6c49eb89e1cfe4,
     type: 2}
   m_PrefabInternal: {fileID: 624707355}
+--- !u!1 &669486061 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1559412486299254, guid: c74b601544e41844bb46698d9d26c676,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612127537}
+--- !u!60 &669486062
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 669486061}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: af69d4d730c92e54c8e9abe75d09446c, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.505, y: 0.5}
+      - {x: -0.505, y: 0.27}
+      - {x: 0.0022794518, y: -0.58}
+      - {x: 0.5, y: 0.27}
+      - {x: 0.5, y: 0.5}
 --- !u!1001 &731874266
 Prefab:
   m_ObjectHideFlags: 0
@@ -1804,7 +1838,8 @@ Prefab:
       propertyPath: m_TagString
       value: Wall
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 61560479753874318, guid: c74b601544e41844bb46698d9d26c676, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: c74b601544e41844bb46698d9d26c676, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &902754141 stripped
@@ -2211,7 +2246,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1517664056}
     m_Modifications:
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalPosition.x
@@ -2219,7 +2254,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -10.030595
+      value: -10.450595
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2227,15 +2262,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_LocalRotation.w
@@ -2243,7 +2278,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4034669191229524, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_RootOrder
@@ -2251,7 +2286,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4236337599784698, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114960293452919262, guid: 647109c3449f43645b670a4ce9d10690,
         type: 2}
@@ -2461,6 +2496,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 647109c3449f43645b670a4ce9d10690, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &1167284670 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4078101043849082, guid: 647109c3449f43645b670a4ce9d10690,
+    type: 2}
+  m_PrefabInternal: {fileID: 1167284669}
 --- !u!1001 &1168866587
 Prefab:
   m_ObjectHideFlags: 0
@@ -2934,6 +2974,7 @@ Transform:
   - {fileID: 1911546357}
   - {fileID: 46550792}
   - {fileID: 1254133307}
+  - {fileID: 1167284670}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3122,7 +3163,7 @@ Prefab:
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: powerUpType
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
@@ -3330,7 +3371,8 @@ Prefab:
       propertyPath: m_TagString
       value: Wall
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 61560479753874318, guid: c74b601544e41844bb46698d9d26c676, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: c74b601544e41844bb46698d9d26c676, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1612127538 stripped
@@ -4392,3 +4434,37 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaeea0ca4739e0744a0b8603a2a413f9, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2097442849 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1559412486299254, guid: c74b601544e41844bb46698d9d26c676,
+    type: 2}
+  m_PrefabInternal: {fileID: 902754140}
+--- !u!60 &2097442850
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2097442849}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: af69d4d730c92e54c8e9abe75d09446c, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 0.48431018}
+      - {x: -0.5, y: 0.23}
+      - {x: -0.5, y: -0.5175404}
+      - {x: 0.5, y: -0.5175403}
+      - {x: 0.5, y: 0.23}
