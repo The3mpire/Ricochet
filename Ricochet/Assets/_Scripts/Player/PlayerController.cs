@@ -158,6 +158,7 @@ public class PlayerController : MonoBehaviour
     private float leftTriggerAxis;
 
     private bool movementDisabled;
+    private bool acceptingInput;
 
     private PlayerDashController dashController;
     #endregion
@@ -182,6 +183,7 @@ public class PlayerController : MonoBehaviour
         team = gameData.GetPlayerTeam(playerNumber - 1);
         chosenCharacter = gameData.GetPlayerCharacter(playerNumber - 1);
         shield.SetTeamColor(team);
+        acceptingInput = true;
 
         dashController = GetComponent<PlayerDashController>();
 
@@ -200,17 +202,26 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        leftStickHorz = player.GetAxis("MoveHorizontal");
-        leftStickVert = player.GetAxis("MoveVertical");
-        leftTriggerAxis = player.GetAxis("Jetpack");
+        if (acceptingInput)
+        {
+            leftStickHorz = player.GetAxis("MoveHorizontal");
+            leftStickVert = player.GetAxis("MoveVertical");
+            leftTriggerAxis = player.GetAxis("Jetpack");
 
-        if (player.GetAxis("RightStickHorizontal") != 0)
-        {
-            rightStickHorz = player.GetAxis("RightStickHorizontal");
+            if (player.GetAxis("RightStickHorizontal") != 0)
+            {
+                rightStickHorz = player.GetAxis("RightStickHorizontal");
+            }
+            if (player.GetAxis("RightStickVertical") != 0)
+            {
+                rightStickVert = player.GetAxis("RightStickVertical");
+            }
         }
-        if (player.GetAxis("RightStickVertical") != 0)
+        else
         {
-            rightStickVert = player.GetAxis("RightStickVertical");
+            leftStickHorz = 0;
+            leftStickVert = 0;
+            leftTriggerAxis = 0;
         }
 
         if (player.GetAxis("Taunt") != 0)
@@ -726,6 +737,16 @@ public class PlayerController : MonoBehaviour
     public bool GetAutoJetpack()
     {
         return autoJetpack;
+    }
+
+    public void SetAutoJetpack(bool aj)
+    {
+        autoJetpack = aj;
+    }
+
+    public void SetAcceptingInput(bool ai)
+    {
+        acceptingInput = ai;
     }
 
     public void DisableMovement(bool movementDisabled)
