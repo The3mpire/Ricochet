@@ -1,4 +1,5 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using UnityEngine;
 
 namespace CCParticles
@@ -35,12 +36,25 @@ namespace CCParticles
                 case EPowerUp.CircleShield:
                     PlayEffect(this.systems.shield, play);
                     break;
+                case EPowerUp.Shrink:
+                    PlayEffect(this.systems.shrink, play);
+                    break;
             }
         }
 
         #endregion
 
         #region Private Methods
+
+        private void PlayEffect(ParticleSystem shrink, bool play)
+        {
+            shrink.Stop();
+            if (!play)
+            {
+                return;
+            }
+            shrink.Play();
+        }
 
         private void PlayFreezeEffect(int version, bool shouldPlay)
         {
@@ -56,14 +70,9 @@ namespace CCParticles
                     this.systems.freezeCube.Play();
                     break;
                 default:
-                    PlayEffect(this.systems.freezeOrb, shouldPlay);
+                    this.systems.freezeOrb.SetActive(shouldPlay);
                     break;
             }
-        }
-
-        private void PlayEffect(GameObject system, bool shouldPlay)
-        {
-            system.SetActive(shouldPlay);
         }
 
         #endregion
@@ -73,11 +82,12 @@ namespace CCParticles
         [System.Serializable]
         struct PowerupParticleSystems
         {
-            public GameObject multiball;
-            public GameObject catchNThrow;
+            public ParticleSystem multiball;
+            public ParticleSystem catchNThrow;
             public GameObject freezeOrb;
             public ParticleSystem freezeCube;
-            public GameObject shield;
+            public ParticleSystem shield;
+            public ParticleSystem shrink;
         }
 
         #endregion
