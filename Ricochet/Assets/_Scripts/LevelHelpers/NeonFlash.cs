@@ -9,14 +9,9 @@ public class NeonFlash : MonoBehaviour {
     [SerializeField] float speed;
     [SerializeField] TrailRenderer tr;
 
-    //private ParticleSystem ps;
-    //private ParticleSystem.MainModule psm;
-
     public void Initialize()
     {
         transform.position = nodes[0];
-        //ps = GetComponent<ParticleSystem>();
-        //psm = ps.main;
     }
 
     public void HitTheLights()
@@ -55,9 +50,6 @@ public class NeonFlash : MonoBehaviour {
             position = transform.position;
             yield return new WaitForFixedUpdate();
         }
-        //ParticleSystem.EmissionModule emitter = ps.emission;
-        //emitter.rateOverTime = 0f;
-        //yield return new WaitForSeconds(psm.startLifetime.constant + ps.trails.lifetime.constant);
         yield return new WaitForSeconds(tr.time);
         Destroy(gameObject);
     }
@@ -74,8 +66,6 @@ public class NeonFlash : MonoBehaviour {
 
     public void SetWidth(float width)
     {
-        //tr.startWidth = width;
-        //tr.endWidth = width;
         tr.widthMultiplier = width;
     }
 }
