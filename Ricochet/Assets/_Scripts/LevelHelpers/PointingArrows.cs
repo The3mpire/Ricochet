@@ -10,7 +10,9 @@ public class PointingArrows : MonoBehaviour
     [SerializeField]public float blinkMultiplier = 0.2f;
 	[Tooltip("Target the arrow will follow")]
 	[SerializeField] public Transform target;
-	[Tooltip("How fast the arrow will move towards the goal")]
+    [Tooltip("Sprite of the targer that the arrow will follow")]
+    [SerializeField] public SpriteRenderer targetSprite;
+    [Tooltip("How fast the arrow will move towards the goal")]
 	[SerializeField] public float strength = 100f;
 	[Tooltip("Minimum alpha value")]
 	[SerializeField] public float minimum = 0.0f;
@@ -31,16 +33,26 @@ public class PointingArrows : MonoBehaviour
 	{
 		startTime = Time.time;
         StartCoroutine(Blink(duration));
-
 	}
 
 	void LateUpdate () 
 	{
-		Vector2 direction = target.position - transform.position;
-		float angle = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
-		Quaternion rotation = Quaternion.AngleAxis (angle, Vector3.forward);
-		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, strength * Time.deltaTime);
-        StartCoroutine(FadeOut());
+
+        //arrows when goals are offscreen
+        if (!targetSprite.isVisible)
+        {
+            sprite.color = new Color(1f, 1f, 1f, 1f);
+            sprite.enabled = true;
+        }
+        else
+        {
+            //blinking arrows
+            Vector2 direction = target.position - transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, strength * Time.deltaTime);
+            StartCoroutine(FadeOut());
+        }
 	}
 	#endregion
 
