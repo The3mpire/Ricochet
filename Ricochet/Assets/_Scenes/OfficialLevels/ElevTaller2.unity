@@ -674,6 +674,20 @@ Prefab:
       propertyPath: m_Name
       value: Goal Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 82141276371570768, guid: 58ebfdc7c5e215d41b15d2af3f7d24b8,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1593928653613142, guid: 58ebfdc7c5e215d41b15d2af3f7d24b8, type: 2}
+      propertyPath: m_Name
+      value: GoalAreaBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 114744980597301650, guid: 58ebfdc7c5e215d41b15d2af3f7d24b8,
+        type: 2}
+      propertyPath: targetSprite
+      value: 
+      objectReference: {fileID: 1784644978}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 58ebfdc7c5e215d41b15d2af3f7d24b8, type: 2}
   m_IsPrefabParent: 0
@@ -783,6 +797,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4167491335430156, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
     type: 2}
   m_PrefabInternal: {fileID: 1059750530}
+--- !u!212 &297505614 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212559684797919774, guid: 64de1a795f3580c4fafcde6fb72b89bf,
+    type: 2}
+  m_PrefabInternal: {fileID: 1628231991}
 --- !u!1 &320483979
 GameObject:
   m_ObjectHideFlags: 0
@@ -3494,6 +3513,20 @@ Prefab:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 82141276371570768, guid: 64de1a795f3580c4fafcde6fb72b89bf,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1593928653613142, guid: 64de1a795f3580c4fafcde6fb72b89bf, type: 2}
+      propertyPath: m_Name
+      value: GoalAreaRed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114744980597301650, guid: 64de1a795f3580c4fafcde6fb72b89bf,
+        type: 2}
+      propertyPath: targetSprite
+      value: 
+      objectReference: {fileID: 297505614}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64de1a795f3580c4fafcde6fb72b89bf, type: 2}
   m_IsPrefabParent: 0
@@ -3872,6 +3905,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5767cc17d78ab2d44b324ebf7b6e9e88, type: 2}
   m_IsPrefabParent: 0
+--- !u!212 &1784644978 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212559684797919774, guid: 58ebfdc7c5e215d41b15d2af3f7d24b8,
+    type: 2}
+  m_PrefabInternal: {fileID: 151464087}
 --- !u!1 &1794198211
 GameObject:
   m_ObjectHideFlags: 0

@@ -630,6 +630,7 @@ public class PlayerController : MonoBehaviour
         Rumble(rumbleMultiplier);
         
         rigid.velocity = Vector3.zero;
+        detectionColliderObject.SetActive(false);
         StartCoroutine(Blink(gameData.playerRespawnTime));
         StartCoroutine(KillPlayer());
     }
@@ -680,6 +681,7 @@ public class PlayerController : MonoBehaviour
     {
         this.animator.SetBool("isDead", false);
         isInvincible = false;
+        detectionColliderObject.SetActive(true);
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         shield.gameObject.SetActive(true);
         dashController.ResetDashController();
