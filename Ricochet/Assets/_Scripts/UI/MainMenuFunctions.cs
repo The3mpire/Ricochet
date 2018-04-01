@@ -96,5 +96,11 @@ public class MainMenuFunctions : MonoBehaviour
     {
         gameData.SetDashSetting(_dashSettingToggle.isOn);
     }
+
+    public void SelectDefaultOption()
+    {
+        EventSystem.current.SetSelectedGameObject(defaultButton);
+        defaultButton.GetComponent<Button>().Select();
+    }
     #endregion
 }
