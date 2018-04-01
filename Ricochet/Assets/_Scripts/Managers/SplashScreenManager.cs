@@ -24,7 +24,6 @@ public class SplashScreenManager : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-        //TODO:Start fade out of splash screen and main menu slide in
 	}
 
     public void StartLogIn()
@@ -40,13 +39,11 @@ public class SplashScreenManager : MonoBehaviour
 
     IEnumerator BeginSplashFadeOut()
     {
-        Debug.Log("Fading out");
         _panel.DOFade(0.0f, 2.0f);
         _titlePanel.GetComponent<PanelSlide>().ExecuteMoveTo(2.0f);
 
         yield return new WaitUntil(() => _panel.color.a == 0);
 
-        Debug.Log("Fade complete");
         _panel.gameObject.SetActive(false);
     }
 

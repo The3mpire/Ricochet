@@ -32,7 +32,7 @@ public class InitPlayerOne : MonoBehaviour
                 Debug.Log("Player One assigned");
                 _splashScreenManager.StartLogIn();
                 ReInput.configuration.autoAssignJoysticks = true;
-                this.enabled = false; // disable this script
+                enabled = false; // disable this script
             }
         }
     }

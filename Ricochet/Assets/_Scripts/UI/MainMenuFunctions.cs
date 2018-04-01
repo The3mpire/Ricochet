@@ -73,6 +73,12 @@ public class MainMenuFunctions : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(defaultButton);
     }
 
+    public void OpenCredits()
+    {
+        //TODO: Implement Credits page/panel.
+
+    }
+
     public void LaunchClassicMode()
     {
         gameData.SetGameMode(EMode.Soccer);

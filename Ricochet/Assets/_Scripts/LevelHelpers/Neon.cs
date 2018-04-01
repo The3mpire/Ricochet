@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
-using UnityEditor;
 using Enumerables;
 
 public class Neon : MonoBehaviour {
@@ -235,27 +232,3 @@ public class Neon : MonoBehaviour {
 
     #endregion
 }
-
-#region Editor Operations
-
-[CustomEditor(typeof(Neon))]
-public class TMapInspector : Editor
-{
-
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        if (GUILayout.Button("Update"))
-        {
-            Neon neon = (Neon)target;
-            neon.UpdateLineRenderers();
-        }
-        if (GUILayout.Button("Flash"))
-        {
-            Neon neon = (Neon)target;
-            neon.Flash();
-        }
-    }
-}
-
-#endregion
