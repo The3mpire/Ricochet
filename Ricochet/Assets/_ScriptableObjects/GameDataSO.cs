@@ -42,6 +42,8 @@ public class GameDataSO : ScriptableObject
     [Range(30, 600)]
     [SerializeField]
     private int defaultTimeLimit;
+    [SerializeField]
+    private bool skipToModeSelect;
 
     private int blueTeamScore, redTeamScore;
     private ETeam gameWinner;
@@ -114,6 +116,16 @@ public class GameDataSO : ScriptableObject
     public void SetGameMode(EMode mode)
     {
         gameMode = mode;
+    }
+
+    public bool GetSkipToMode()
+    {
+        return skipToModeSelect;
+    }
+
+    public void SetSkipToMode(bool value)
+    {
+        skipToModeSelect = value;
     }
 
     public ECharacter[] GetPlayerCharacters()
