@@ -6,25 +6,25 @@ public class PanelSlide : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("Position to move from.")]
-    private Vector3 _from;
+    private Transform _from;
     [SerializeField]
     [Tooltip("Position to move to.")]
-    private Vector3 _to = Vector3.zero;
+    private Transform _to;
 
     private void Start()
     {
-        _from = transform.position;
+        _from = transform;
     }
 
     public void ExecuteMoveTo(float duration)
     {
         Debug.Log("Panel sliding in");
-        transform.DOMove(_to, duration);
+        transform.DOMove(_to.position, duration);
     }
 
     public void ExecuteMoveBack(float duration)
     {
         Debug.Log("Panel sliding out");
-        transform.DOMove(_from, duration);
+        transform.DOMove(_from.position, duration);
     }
 }

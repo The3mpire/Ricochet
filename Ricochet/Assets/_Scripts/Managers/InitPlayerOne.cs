@@ -27,7 +27,7 @@ public class InitPlayerOne : MonoBehaviour
             // Chec if a button was pressed on the joystick
             if (joystick.GetAnyButtonDown())
             {
-                Player player = ReInput.players.Players[1];
+                Player player = ReInput.players.Players[0];
                 player.controllers.AddController(joystick, false);
                 Debug.Log("Player One assigned");
                 _splashScreenManager.StartLogIn();

@@ -14,6 +14,7 @@ public class CatMainMenuFlyby : MonoBehaviour
     private float _duration = 10.0f;
 
     private Tween _moving;
+    private bool restarting = false;
 
 	// Use this for initialization
 	void Start ()
@@ -25,9 +26,14 @@ public class CatMainMenuFlyby : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    if (transform.position.x >= _endPoint.position.x)
+	    if (Math.Round(transform.position.x) >= Math.Round(_endPoint.position.x) && !restarting)
 	    {
+	        restarting = true;
 	        _moving.Restart(true, 3f);
+	    }
+	    else
+	    {
+	        restarting = false;
 	    }
 	}
 }

@@ -5,6 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using Rewired;
+using UnityEngine.EventSystems;
 
 public class SplashScreenManager : MonoBehaviour
 {
@@ -14,11 +15,20 @@ public class SplashScreenManager : MonoBehaviour
     [SerializeField]
     private MainMenuFunctions _mainMenuFunctions;
     private Image _panel;
+    [SerializeField]
+    private EventSystem es;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
 	{
-	    _panel = GetComponentInChildren<Image>();
+	    es.enabled = false;
+        _panel = GetComponentInChildren<Image>();
+	    if (ReInput.players.GetPlayer(0).controllers.joystickCount > 0)
+	    {
+	        _panel.gameObject.SetActive(false);
+	        _titlePanel.GetComponent<PanelSlide>().ExecuteMoveTo(0.0f);
+	        _mainMenuPanel.GetComponent<PanelSlide>().ExecuteMoveTo(1);
+        }
 
 	}
 	
@@ -33,6 +43,7 @@ public class SplashScreenManager : MonoBehaviour
         Debug.Log("Log In");
         Destroy(_panel.transform.Find("ButtonImage").gameObject);
         StartCoroutine(BeginSplashFadeOut());
+        es.enabled = true;
         SlideInMainMenu();
         _mainMenuFunctions.SelectDefaultOption();
     }
