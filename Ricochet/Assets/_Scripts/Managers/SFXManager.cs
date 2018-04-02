@@ -42,8 +42,12 @@ public class SFXManager : MonoBehaviour
     }
     #endregion
 
-
     #region SFX
+    public void PlaySound(AudioClip clip)
+    {
+        fxSource.PlayOneShot(clip);
+    }
+
     public void PlayMenuClickSound()
     {
         fxSource.PlayOneShot(soundStorage.GetMenuClickSound());
@@ -70,6 +74,11 @@ public class SFXManager : MonoBehaviour
         {
             fxSource.PlayOneShot(soundStorage.GetMenuTraverseSounds());
         }
+    }
+
+    public void PlaySceneTraversalSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetSceneTransitionSound());
     }
     #endregion
 

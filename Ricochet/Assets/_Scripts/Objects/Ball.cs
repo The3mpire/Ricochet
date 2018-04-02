@@ -159,7 +159,7 @@ public class Ball : MonoBehaviour
         Collider2D hitCollider = col.collider;
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
-            audioSource.PlayOneShot(gameManagerInstance.GetBallSound(hitCollider.tag));
+            audioSource.PlayOneShot(gameManagerInstance.GetBallSound(hitCollider.tag, col.relativeVelocity.magnitude >= 35));
             beenHit = true;
             if (hitCollider.tag == "Shield")
             {

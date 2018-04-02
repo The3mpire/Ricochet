@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using Enumerables;
 
 public class Neon : MonoBehaviour {
@@ -118,9 +118,6 @@ public class Neon : MonoBehaviour {
         nf.gameObject.SetActive(true);
         nf.Initialize();
         nf.HitTheLights();
-
-        //StopCoroutine("TempChangeFrequency");
-        //IEnumerator coroutine = TempChangeFrequency(9f, 2.5f);
         if (tcf != null)
             StopCoroutine(tcf);
         tcf = TempChangeFrequency(9f, 2.5f);
@@ -235,27 +232,3 @@ public class Neon : MonoBehaviour {
 
     #endregion
 }
-
-#region Editor Operations
-
-[CustomEditor(typeof(Neon))]
-public class TMapInspector : Editor
-{
-
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        if (GUILayout.Button("Update"))
-        {
-            Neon neon = (Neon)target;
-            neon.UpdateLineRenderers();
-        }
-        if (GUILayout.Button("Flash"))
-        {
-            Neon neon = (Neon)target;
-            neon.Flash();
-        }
-    }
-}
-
-#endregion

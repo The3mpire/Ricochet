@@ -51,13 +51,13 @@ public class PauseMenuManager : MonoBehaviour
                 if (p.GetButtonDown("UIMenu") && !pausePanel.activeSelf)
                 {
                     pausePanel.SetActive(true);
-                    //TODO play the pause soundddddd
                     EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
                     Time.timeScale = 0;
                     lastPlayer = p;
                     if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                     {
                         gameManagerInstance.PausePlayers(true);
+                        fxSource.PlayOneShot(gameManagerInstance.GetPauseSound());
                     }
                 }
                 else if (p.GetButtonDown("UIMenu") && pausePanel.activeSelf)
