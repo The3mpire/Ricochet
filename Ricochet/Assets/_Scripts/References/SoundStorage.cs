@@ -282,14 +282,17 @@ public class SoundStorage : ScriptableObject
         return ballGoalSounds[Random.Range(0, ballGoalSounds.Count)];
     }
 
-    public AudioClip GetBallSound(string tag)
+    public AudioClip GetBallSound(string tag, bool highVelocity)
     {
         switch (tag)
         {
             case "Wall":
                 return ballWallBumpSounds[Random.Range(0, ballWallBumpSounds.Count)];
             default: // "Shield":
-                return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
+                if (highVelocity)
+                    return ballShieldHitSounds[Random.Range(0, ballFastShieldHitSounds.Count)];
+                else
+                    return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
         }
     }
     #endregion
@@ -353,6 +356,28 @@ public class SoundStorage : ScriptableObject
                 return null;
         }
 
+    }
+    #endregion
+
+    #region Misc Sounds
+    public AudioClip GetCountdownSound()
+    {
+        return countdownTimerSound;
+    }
+
+    public AudioClip GetMatchBeginSound()
+    {
+        return matchBeginSound;
+    }
+
+    public AudioClip GetMatchEndSound()
+    {
+        return matchEndSound;
+    }
+
+    public AudioClip GetSceneTransitionSound()
+    {
+        return sceneTransitionSound;
     }
     #endregion
 }

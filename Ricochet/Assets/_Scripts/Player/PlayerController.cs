@@ -198,6 +198,7 @@ public class PlayerController : MonoBehaviour
         player = ReInput.players.GetPlayer(playerNumber - 1);
         sprite.color = PlayerColorData.getColor(playerNumber, team);
         transform.GetComponentInChildren<BasePlayerSetup>().SetupCharacter(chosenCharacter, 0);
+        audioSource.PlayOneShot(gameManagerInstance.GetCharacterRespawnSFX(chosenCharacter));
     }
 
     private void Update()
@@ -292,6 +293,7 @@ public class PlayerController : MonoBehaviour
                         if(otherPlayerPowUp == EPowerUp.Freeze)
                         {
                             powerupParticleController.PlayPowerupEffect(EPowerUp.Freeze, 1, true);
+                            audioSource.PlayOneShot(gameManagerInstance.GetPowerupUsedSound(EPowerUp.Freeze));
                             isFrozen = true;
                             rigid.gravityScale = 0.0f;
                             rigid.velocity = new Vector3(0, 0, 0);
@@ -575,6 +577,7 @@ public class PlayerController : MonoBehaviour
         {
             powerupParticleController.PlayPowerupEffect(powerUp, 0, true);
         }
+        audioSource.PlayOneShot(gameManagerInstance.GetPowerupPickupSound(powerUp));
         hasPowerUp = true;
         currPowerUp = powerUp;
     }
@@ -614,6 +617,16 @@ public class PlayerController : MonoBehaviour
         EnableSecondaryShield(false);
 
         currPowerUp = EPowerUp.None;
+    }
+
+    public void PlayPowerupUsedSound()
+    {
+        audioSource.PlayOneShot(gameManagerInstance.GetPowerupUsedSound(currPowerUp));
+    }
+
+    public void PlayPauseSound()
+    {
+        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound());
     }
 
     public void RegisterKill(PlayerController otherPlayer)
