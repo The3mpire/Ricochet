@@ -200,6 +200,7 @@ public class CharSelectManager : MonoBehaviour
         if (!_goingBack)
         {
             sfxManager.PlayMenuBackSound();
+            gameData.SetSkipToMode(true);
             LevelSelect.LoadMainMenu();
         }
     }
