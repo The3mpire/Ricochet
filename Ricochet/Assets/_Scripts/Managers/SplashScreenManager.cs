@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using DG.Tweening;
-using Microsoft.Xbox.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using Rewired;

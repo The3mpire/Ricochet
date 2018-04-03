@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -163,16 +162,21 @@ public class MainMenuFunctions : MonoBehaviour
         var charPanelSlide = _characterArtPanel.GetComponent<PanelSlide>();
         var mainPanelSlide = mainMenuPanel.GetComponent<PanelSlide>();
         //Move panels out
-        charPanelSlide.ExecuteMoveBack(2);
-        mainPanelSlide.ExecuteMoveBack(2);
-        //Swap menu panels
-        fromPanel.SetActive(false);
-        toPanel.SetActive(true);
-        //Switch out character art/animation
-        SwapCharacterArt(toCharacter);
+        Tween cTween = charPanelSlide.ExecuteMoveBack(1);
+        Tween mTween = mainPanelSlide.ExecuteMoveBack(1);
+        
+        if (cTween.IsComplete() && mTween.IsComplete())
+        {
+            //Swap menu panels
+            fromPanel.SetActive(false);
+            toPanel.SetActive(true);
+            //Switch out character art/animation
+            SwapCharacterArt(toCharacter);
+        }
+        
         //Move panels in
-        charPanelSlide.ExecuteMoveTo(2);
-        mainPanelSlide.ExecuteMoveTo(2);
+        cTween = charPanelSlide.ExecuteMoveTo(1);
+        mTween = mainPanelSlide.ExecuteMoveTo(1);
     }
     private void SwapCharacterArt(ECharacter character)
     {

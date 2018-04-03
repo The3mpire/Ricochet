@@ -16,13 +16,13 @@ public class PanelSlide : MonoBehaviour
         _from = transform;
     }
 
-    public void ExecuteMoveTo(float duration)
+    public Tween ExecuteMoveTo(float duration)
     {
-        transform.DOMove(_to.position, duration);
+        return transform.DOMove(_to.position, duration);
     }
 
-    public void ExecuteMoveBack(float duration)
+    public Tween ExecuteMoveBack(float duration)
     {
-        transform.DOMove(_from.position, duration);
+        return transform.DOMove(_from.position, duration);
     }
 }
