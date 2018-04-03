@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Enumerables;
+using Rewired.Integration.UnityUI;
 
 public class MainMenuFunctions : MonoBehaviour
 {
@@ -43,12 +44,18 @@ public class MainMenuFunctions : MonoBehaviour
 
     public void Start()
     {
+        //if (EventSystem.current.currentInputModule == null)
+        //{
+        //    RewiredStandaloneInputModule inMod =
+        //        EventSystem.current.gameObject.GetComponent<RewiredStandaloneInputModule>();
+        //    EventSystem.current.gameObject.GetComponent<RewiredStandaloneInputModule>().ActivateModule();
+        //}
         _dashSettingToggle.isOn = gameData.GetDashSetting();
-        if (gameData.GetSkipToMode())
-        {
-            gameData.SetSkipToMode(false);
-            OpenPlayMenu();
-        }
+        //if (gameData.GetSkipToMode())
+        //{
+        //    gameData.SetSkipToMode(false);
+        //    OpenPlayMenu();
+        //}
     }
 
     #region Public Functions
@@ -60,6 +67,7 @@ public class MainMenuFunctions : MonoBehaviour
         }
         mainMenuPanel.SetActive(false);
         playPanel.SetActive(true);
+        Debug.Log(EventSystem.current.currentInputModule);
         EventSystem.current.SetSelectedGameObject(playPanelDefaultItem);
     }
 
