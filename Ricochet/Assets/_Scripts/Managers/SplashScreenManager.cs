@@ -18,7 +18,6 @@ public class SplashScreenManager : MonoBehaviour
     [SerializeField] private EventSystem es;
     private Image _panel;
     private UserProfile _userProfile;
-    private bool _skipSignIn = false;
     
 
     // Use this for initialization
@@ -34,16 +33,6 @@ public class SplashScreenManager : MonoBehaviour
         }
 #if UNITY_WSA_10_0 || UNITY_XBOXONE
         _userProfile = _xboxLiveGameObject.GetComponent<UserProfile>();
-#endif
-    }
-	
-	// Update is called once per frame
-	void Update () {
-#if UNITY_WSA_10_0 || UNITY_XBOXONE
-	    //if (ReInput.players.GetPlayer(0).GetButtonDown("UICancel") && _userProfile.signInPanel.transform.Find("SkipSignInButton").gameObject.activeSelf)
-	    //{
-	    //    SkipSignIn();
-	    //}
 #endif
     }
 
@@ -62,7 +51,7 @@ public class SplashScreenManager : MonoBehaviour
 #else
         Destroy(_panel.transform.Find("ButtonImage").gameObject);
         StartCoroutine(BeginSplashFadeOut());
-        SlideInMainMenu();
+        SlideInMainMenu(3f);
         _mainMenuFunctions.SelectDefaultOption();
 #endif
 
@@ -82,7 +71,7 @@ public class SplashScreenManager : MonoBehaviour
 #if UNITY_WSA_10_0 || UNITY_XBOXONE
     IEnumerator WaitForSignIn()
     {
-        yield return new WaitUntil(() => !_userProfile.signInPanel.activeSelf || _skipSignIn);
+        yield return new WaitUntil(() => !_userProfile.signInPanel.activeSelf);
         StartCoroutine(BeginSplashFadeOut());
         SlideInMainMenu(3f);
 
@@ -96,11 +85,4 @@ public class SplashScreenManager : MonoBehaviour
         _characterArtPanel.GetComponent<PanelSlide>().ExecuteMoveTo(duration);
         
     }
-
-#if UNITY_WSA_10_0 || UNITY_XBOXONE
-    public void SkipSignIn()
-    {
-        _skipSignIn = true;
-    }
-#endif
 }
