@@ -274,6 +274,10 @@ public class CharSelectManager : MonoBehaviour
         _playerObjects[playerNumber].JoinIcon.SetActive(false);
         _playerObjects[playerNumber].DefaultToken.SetActive(true);
         _playerObjects[playerNumber].ActiveToken = _playerObjects[playerNumber].DefaultToken;
+        if (playerSettings[playerNumber] == null)
+        {
+            playerSettings[playerNumber] = LoadPlayerSettings(playerNumber);
+        }
         _playerObjects[playerNumber].ActiveToken = MoveSelectionTokenTo(playerSettings[playerNumber].Character, _playerObjects[playerNumber].ActiveToken, _playerObjects[playerNumber].Tokens);
         gameData.SetPlayerActive(playerNumber + 1);
     }
@@ -356,6 +360,10 @@ public class CharSelectManager : MonoBehaviour
     {
         var character = gameData.GetPlayerCharacter(playerNumber);
         var team = gameData.GetPlayerTeam(playerNumber);
+        if (character == ECharacter.None)
+        {
+            character = ECharacter.Cat;
+        }
         
         return new PSettings(character, team);
     }

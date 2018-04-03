@@ -23,7 +23,7 @@ PlayerSettings:
   m_SplashScreenLogoStyle: 1
   m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 0
-  m_SplashScreenLogoAnimationZoom: 0
+  m_SplashScreenLogoAnimationZoom: 0.354
   m_SplashScreenBackgroundLandscapeAspect: 1
   m_SplashScreenBackgroundPortraitAspect: 1
   m_SplashScreenBackgroundLandscapeUvs:
@@ -245,13 +245,13 @@ PlayerSettings:
     height: 180
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
-  resolutionDialogBanner: {fileID: 2800000, guid: 95ab7b3371b780b48bd49a6df01b8a31,
+  resolutionDialogBanner: {fileID: 2800000, guid: a8290268ad79a444298db11aff6656d2,
     type: 3}
   m_BuildTargetIcons:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 95ab7b3371b780b48bd49a6df01b8a31, type: 3}
+      m_Icon: {fileID: 2800000, guid: 0716ecf014572d743be29028d81ecfd9, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -544,21 +544,22 @@ PlayerSettings:
     20: MOBILE_INPUT
     22: MOBILE_INPUT
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Metro: 2
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 0
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: _2D v3
-  metroPackageVersion: 
-  metroCertificatePath: 
+  metroPackageName: 52141RebootArcade.Glitchball
+  metroPackageVersion: 1.0.0.0
+  metroCertificatePath: 52141RebootArcade.Glitchball_StoreKey.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: _2D v3
+  metroCertificateSubject: E9F1B02E-812F-4FD4-A306-1B951A15B8BF
+  metroCertificateIssuer: E9F1B02E-812F-4FD4-A306-1B951A15B8BF
+  metroCertificateNotAfter: 009fc17880e8d401
+  metroApplicationDescription: Couch Co-op party game
   wsaImages: {}
   metroTileShortName: Glitch Ball
   metroCommandLineArgsFile: 
@@ -571,7 +572,33 @@ PlayerSettings:
   metroTileBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   metroSplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   metroSplashScreenUseBackgroundColor: 0
-  platformCapabilities: {}
+  platformCapabilities:
+    WindowsStoreApps:
+      AllJoyn: False
+      BlockedChatMessages: False
+      Bluetooth: False
+      Chat: False
+      CodeGeneration: False
+      EnterpriseAuthentication: False
+      HumanInterfaceDevice: False
+      InputInjectionBrokered: False
+      InternetClient: True
+      InternetClientServer: False
+      Location: False
+      Microphone: False
+      MusicLibrary: False
+      Objects3D: False
+      PhoneCall: False
+      PicturesLibrary: False
+      PrivateNetworkClientServer: False
+      Proximity: False
+      RemovableStorage: False
+      SharedUserCertificates: False
+      SpatialPerception: False
+      UserAccountInformation: False
+      VideosLibrary: False
+      VoipCall: False
+      WebCam: False
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 

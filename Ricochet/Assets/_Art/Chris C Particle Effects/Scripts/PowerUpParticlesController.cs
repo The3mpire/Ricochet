@@ -61,7 +61,7 @@ namespace CCParticles
             switch (version)
             {
                 case 1:
-                    this.systems.freezeCube.Stop();
+                    //this.systems.freezeCube.Stop();
                     this.systems.freezeCube.transform.parent.gameObject.SetActive(shouldPlay);
                     if (!shouldPlay)
                     {

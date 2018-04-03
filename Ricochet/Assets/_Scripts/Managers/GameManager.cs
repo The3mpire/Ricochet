@@ -1,4 +1,5 @@
-﻿using Enumerables;
+﻿using System;
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
 using CCParticles;
@@ -931,8 +932,19 @@ public class GameManager : MonoBehaviour
             player.SetAutoJetpack(false);
             player.SetAcceptingInput(false);
         }
-        blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>().enabled = false;
-        redGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+        //var blueCollider = blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>() != null
+        //    ? blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<Collider2D>()
+        //    : blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<BoxCollider2D>();
+        //var redCollider = redGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<PolygonCollider2D>() != null ? 
+        try
+        {
+            blueGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<Collider2D>().enabled = false;
+            redGoal.GetComponentInChildren<Goal>().gameObject.GetComponent<Collider2D>().enabled = false;
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log(e);
+        }
     }
     #endregion
 }

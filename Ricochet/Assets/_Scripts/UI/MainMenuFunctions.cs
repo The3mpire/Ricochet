@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Enumerables;
+using Rewired.Integration.UnityUI;
 
 public class MainMenuFunctions : MonoBehaviour
 {
@@ -39,26 +40,43 @@ public class MainMenuFunctions : MonoBehaviour
     private Toggle _dashSettingToggle;
     #endregion
 
+    private bool _blockInput = false;
+
     public void Start()
     {
+        //if (EventSystem.current.currentInputModule == null)
+        //{
+        //    RewiredStandaloneInputModule inMod =
+        //        EventSystem.current.gameObject.GetComponent<RewiredStandaloneInputModule>();
+        //    EventSystem.current.gameObject.GetComponent<RewiredStandaloneInputModule>().ActivateModule();
+        //}
         _dashSettingToggle.isOn = gameData.GetDashSetting();
-        if (gameData.GetSkipToMode())
-        {
-            gameData.SetSkipToMode(false);
-            OpenPlayMenu();
-        }
+        //if (gameData.GetSkipToMode())
+        //{
+        //    gameData.SetSkipToMode(false);
+        //    OpenPlayMenu();
+        //}
     }
 
     #region Public Functions
     public void OpenPlayMenu()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         mainMenuPanel.SetActive(false);
         playPanel.SetActive(true);
+        Debug.Log(EventSystem.current.currentInputModule);
         EventSystem.current.SetSelectedGameObject(playPanelDefaultItem);
     }
 
     public void ClosePlayMenu()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         mainMenuPanel.SetActive(true);
         playPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(defaultButton);
@@ -66,6 +84,10 @@ public class MainMenuFunctions : MonoBehaviour
 
     public void OpenOptionsMenu()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         mainMenuPanel.SetActive(false);
         optionsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(optionsPanelDefaultItem);
@@ -73,13 +95,31 @@ public class MainMenuFunctions : MonoBehaviour
 
     public void CloseOptionsMenu()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(defaultButton);
     }
 
+    public void OpenCredits()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        //TODO: Implement Credits page/panel.
+
+    }
+
     public void LaunchClassicMode()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         gameData.SetGameMode(EMode.Soccer);
         gameData.SetGameLevel(BuildIndex.LEVEL_SELECT);
         LevelSelect.LoadCharacterSelect();
@@ -87,6 +127,10 @@ public class MainMenuFunctions : MonoBehaviour
 
     public void LaunchDeathmatchMode()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         gameData.SetGameMode(EMode.Deathmatch);
         gameData.SetGameLevel(BuildIndex.LEVEL_SELECT);
         LevelSelect.LoadCharacterSelect();
@@ -94,12 +138,22 @@ public class MainMenuFunctions : MonoBehaviour
 
     public void ExitGame()
     {
+        if (_blockInput)
+        {
+            return;
+        }
         Application.Quit();
     }
 
     public void SetDashSetting()
     {
         gameData.SetDashSetting(_dashSettingToggle.isOn);
+    }
+
+    public void SelectDefaultOption()
+    {
+        EventSystem.current.SetSelectedGameObject(defaultButton);
+        defaultButton.GetComponent<Button>().Select();
     }
     #endregion
 }

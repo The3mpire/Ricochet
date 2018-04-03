@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace CCShaders
@@ -55,12 +56,21 @@ namespace CCShaders
             float endTime = Time.time + duration;
             while (currentTime <= endTime)
             {
-                float progress = currentTime / endTime;
-                mat.SetFloat("_Progress", progress);
-                currentTime = Time.time;
+                try
+                {
+                    float progress = currentTime / endTime;
+                    mat.SetFloat("_Progress", progress);
+                    currentTime = Time.time;
+                }
+                catch (NullReferenceException)
+                {
+
+                }
                 yield return new WaitForEndOfFrame();
             }
             mat.SetFloat("_Progress", 0);
+            
+
         }
 
         #endregion
