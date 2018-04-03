@@ -11,6 +11,9 @@ public class MainMenuFunctions : MonoBehaviour
     [SerializeField]
     private GameObject mainMenuPanel;
 
+    [SerializeField]
+    private GameObject _characterArtPanel;
+
     [Tooltip("The first button to be selected in the scene")]
     [SerializeField]
     private GameObject defaultButton;
@@ -37,9 +40,11 @@ public class MainMenuFunctions : MonoBehaviour
     [Header("Test Settings")]
     [SerializeField]
     private Toggle _dashSettingToggle;
-    #endregion
 
     private bool _blockInput = false;
+    #endregion
+
+    #region MonoBehaviour
 
     public void Start()
     {
@@ -50,6 +55,8 @@ public class MainMenuFunctions : MonoBehaviour
             OpenPlayMenu();
         }
     }
+
+    #endregion
 
     #region Public Functions
     public void OpenPlayMenu()
@@ -147,5 +154,30 @@ public class MainMenuFunctions : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(defaultButton);
         defaultButton.GetComponent<Button>().Select();
     }
+    #endregion
+
+    #region Private Functions
+
+    private void SwapPanels(GameObject fromPanel, GameObject toPanel, ECharacter toCharacter)
+    {
+        var charPanelSlide = _characterArtPanel.GetComponent<PanelSlide>();
+        var mainPanelSlide = mainMenuPanel.GetComponent<PanelSlide>();
+        //Move panels out
+        charPanelSlide.ExecuteMoveBack(2);
+        mainPanelSlide.ExecuteMoveBack(2);
+        //Swap menu panels
+        fromPanel.SetActive(false);
+        toPanel.SetActive(true);
+        //Switch out character art/animation
+        SwapCharacterArt(toCharacter);
+        //Move panels in
+        charPanelSlide.ExecuteMoveTo(2);
+        mainPanelSlide.ExecuteMoveTo(2);
+    }
+    private void SwapCharacterArt(ECharacter character)
+    {
+        
+    }
+
     #endregion
 }
