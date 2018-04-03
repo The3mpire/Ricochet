@@ -11,18 +11,13 @@ public class PanelSlide : MonoBehaviour
     [Tooltip("Position to move to.")]
     private Transform _to;
 
-    private void Start()
-    {
-        _from = transform;
-    }
-
     public Tween ExecuteMoveTo(float duration)
     {
-        return transform.DOMove(_to.position, duration);
+        return transform.DOMove(_to.position, duration, true);
     }
 
     public Tween ExecuteMoveBack(float duration)
     {
-        return transform.DOMove(_from.position, duration);
+        return transform.DOMove(_from.position, duration, true);
     }
 }
