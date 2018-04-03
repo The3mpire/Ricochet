@@ -115,9 +115,6 @@ public class Neon : MonoBehaviour {
         nf.gameObject.SetActive(true);
         nf.Initialize();
         nf.HitTheLights();
-
-        //StopCoroutine("TempChangeFrequency");
-        //IEnumerator coroutine = TempChangeFrequency(9f, 2.5f);
         if (tcf != null)
             StopCoroutine(tcf);
         tcf = TempChangeFrequency(9f, 2.5f);

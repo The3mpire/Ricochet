@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Drag the music manager here")]
     [SerializeField]
     private MusicManager musicManager;
+    [Tooltip("Drag the sfx manager here")]
+    [SerializeField]
+    private SFXManager sfxManager;
+    [Tooltip("Here be the Game Data me hearties")]
     [SerializeField]
     private GameDataSO gameData;
     [Tooltip("Drag the timer from the UI screen here")]
@@ -206,6 +210,7 @@ public class GameManager : MonoBehaviour
         {
             onTimerChanged.Raise();
             timeLeftTillStart--;
+            sfxManager.PlaySound(soundStorage.GetCountdownSound());
             yield return new WaitForSeconds(1);
         }
 
@@ -228,13 +233,17 @@ public class GameManager : MonoBehaviour
         {
             onTimerChanged.Raise();
             currentMatchTime--;
+            if (currentMatchTime <= 4)
+                sfxManager.PlaySound(soundStorage.GetCountdownSound());
             yield return new WaitForSeconds(1);
         }
 
+        onTimerChanged.Raise();
         GameRunning = false;
 
         gameData.SetGameWinner(modeManager.GetMaxScore());
         DeactivatePlayersAndGoals();
+        sfxManager.PlaySound(soundStorage.GetMatchEndSound());
         lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
 
         int postMatchTimer = 4;
@@ -277,6 +286,7 @@ public class GameManager : MonoBehaviour
     public void CharacterSelect()
     {
         gameData.ResetGameStatistics();
+
         LevelSelect.LoadCharacterSelect();
     }
 
@@ -320,12 +330,14 @@ public class GameManager : MonoBehaviour
                 case EPowerUp.Multiball:
                     if (!ball.GetTempStatus() && balls.Count <= powerUpManager.GetMaxBalls() - powerUpManager.GetBallSpawnCount())
                     {
+                        playerController.PlayPowerupUsedSound();
                         playerController.RemovePowerUp();
                         SpawnMultipleBalls(ball);
                         multiBallInPlay = false;
                     }
                     break;
                 case EPowerUp.CatchNThrow:
+                    playerController.PlayPowerupUsedSound();
                     playerController.RemovePowerUp();
                     playerController.SetBallHeld(ball);
                     ball.SetHeld(true);
@@ -349,6 +361,7 @@ public class GameManager : MonoBehaviour
             case EPowerUp.CircleShield:
                 ShieldBurst(playerController);
                 playerController.EnableSecondaryShield(false);
+                playerController.PlayPowerupUsedSound();
                 playerController.RemovePowerUp();
                 break;
         }
@@ -787,9 +800,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetScoringSound();
     }
 
-    public AudioClip GetBallSound(string tag)
+    public AudioClip GetBallSound(string tag, bool highVelocity)
     {
-        return soundStorage.GetBallSound(tag);
+        return soundStorage.GetBallSound(tag, highVelocity);
     }
     
     public AudioClip GetPowerupPickupSound(EPowerUp powerUp)
@@ -797,14 +810,26 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetPowerUpPickUpSound(powerUp);
     }
 
+    public AudioClip GetPowerupUsedSound(EPowerUp powerUp)
+    {
+        return soundStorage.GetPowerUpUsedSound(powerUp);
+    }
+
     public AudioClip GetMenuClickSound()
     {
         return soundStorage.GetMenuClickSound();
     }
+
+    public AudioClip GetPauseSound()
+    {
+        return soundStorage.GetPauseSound();
+    }
+
     public AudioClip GetTauntSound(ECharacter character)
     {
         return soundStorage.GetPlayerTauntSound(character);
     }
+
     #endregion
 
     #region Private Helpers

@@ -44,6 +44,11 @@ public class MainMenuFunctions : MonoBehaviour
     public void Start()
     {
         _dashSettingToggle.isOn = gameData.GetDashSetting();
+        if (gameData.GetSkipToMode())
+        {
+            gameData.SetSkipToMode(false);
+            OpenPlayMenu();
+        }
     }
 
     #region Public Functions
