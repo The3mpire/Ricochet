@@ -18,13 +18,11 @@ public class PanelSlide : MonoBehaviour
 
     public void ExecuteMoveTo(float duration)
     {
-        Debug.Log("Panel sliding in");
         transform.DOMove(_to.position, duration);
     }
 
     public void ExecuteMoveBack(float duration)
     {
-        Debug.Log("Panel sliding out");
         transform.DOMove(_from.position, duration);
     }
 }
