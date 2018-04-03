@@ -20,7 +20,7 @@ MonoBehaviour:
   copTauntSounds:
   - {fileID: 8300000, guid: 90236a004737f2d478c4f1c75cb4f66f, type: 3}
   copBumpSounds:
-  - {fileID: 8300000, guid: cfcce792752ad6147949a80eea743dbd, type: 3}
+  - {fileID: 8300000, guid: fc15741b4fb7fb84a8aa1b808791f62f, type: 3}
   copRespawnSounds:
   - {fileID: 8300000, guid: ac13b8bcccfb84a4d98fb5dcf0065496, type: 3}
   catJetpackSounds:
@@ -30,9 +30,9 @@ MonoBehaviour:
   catDeathSounds:
   - {fileID: 8300000, guid: 863f598c495504b4eb08f21078d0fce8, type: 3}
   catTauntSounds:
-  - {fileID: 8300000, guid: ffe602ee2994b0b48bcc4717d463a9fa, type: 3}
+  - {fileID: 8300000, guid: 27d4605d5e6e19849ade44aa5d98949d, type: 3}
   catBumpSounds:
-  - {fileID: 8300000, guid: cfcce792752ad6147949a80eea743dbd, type: 3}
+  - {fileID: 8300000, guid: 9cfbadd536482854bb2f5a0724215161, type: 3}
   catRespawnSounds:
   - {fileID: 8300000, guid: ac13b8bcccfb84a4d98fb5dcf0065496, type: 3}
   computerJetpackSounds:
@@ -42,9 +42,9 @@ MonoBehaviour:
   computerDeathSounds:
   - {fileID: 8300000, guid: 863f598c495504b4eb08f21078d0fce8, type: 3}
   computerTauntSounds:
-  - {fileID: 8300000, guid: 27d4605d5e6e19849ade44aa5d98949d, type: 3}
+  - {fileID: 8300000, guid: ffe602ee2994b0b48bcc4717d463a9fa, type: 3}
   computerBumpSounds:
-  - {fileID: 8300000, guid: cfcce792752ad6147949a80eea743dbd, type: 3}
+  - {fileID: 8300000, guid: abec85018345f2f4fa1cc521a74e7881, type: 3}
   computerRespawnSounds:
   - {fileID: 8300000, guid: ac13b8bcccfb84a4d98fb5dcf0065496, type: 3}
   fishJetpackSounds:
@@ -56,7 +56,7 @@ MonoBehaviour:
   fishTauntSounds:
   - {fileID: 8300000, guid: aeae9ab247060984ab059a57e0a56104, type: 3}
   fishBumpSounds:
-  - {fileID: 8300000, guid: cfcce792752ad6147949a80eea743dbd, type: 3}
+  - {fileID: 8300000, guid: 7e12feeab515bd34d930efa208c3048e, type: 3}
   fishRespawnSounds:
   - {fileID: 8300000, guid: ac13b8bcccfb84a4d98fb5dcf0065496, type: 3}
   multiballPickedUp: {fileID: 8300000, guid: ca73de5de3f66544a88f755bab1e1724, type: 3}
@@ -77,14 +77,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a364d2111438f0446aaf979771ddf5f2, type: 3}
   ballShieldHitSounds:
   - {fileID: 8300000, guid: 09bd0d286bd520946829f611fea9df1e, type: 3}
+  - {fileID: 8300000, guid: 075874d24c5cb2a4085f75bb296208cc, type: 3}
+  - {fileID: 8300000, guid: 3f9804f14c095ed41a06d90807b55887, type: 3}
+  - {fileID: 8300000, guid: 652e4287739344349865ad1fad057592, type: 3}
   ballFastShieldHitSounds: []
   ballGoalSounds:
   - {fileID: 8300000, guid: 3c86f0735457bdc4a80f8021deb90ef3, type: 3}
   menuTraversalSound: {fileID: 8300000, guid: e2071ca35170f984790e3b0fddd769c5, type: 3}
   menuConfirmSound: {fileID: 8300000, guid: 0e42d15293974c244bb144421cacb234, type: 3}
   menuBackSound: {fileID: 8300000, guid: 339189503a1e82444b1ee1e2313aa13c, type: 3}
-  menuPauseSound: {fileID: 8300000, guid: ed0f8d28b4d46ba4e83757ab1175446c, type: 3}
-  menuUnpauseSound: {fileID: 8300000, guid: 2bc99b2777fa9ca41afa8ed1bc5185e6, type: 3}
+  menuPauseSound: {fileID: 8300000, guid: 61c829a9169730245a856a4e7f6d033d, type: 3}
+  menuUnpauseSound: {fileID: 8300000, guid: d3df076eda0089e4d802b0f2453a39bf, type: 3}
   mainMenuMusic:
   - {fileID: 8300000, guid: c4758a34b919f9b408ac8c2b74a3e75b, type: 3}
   characterSelectMusic:
@@ -103,11 +106,11 @@ MonoBehaviour:
   diagonalAlleyMusic:
   - {fileID: 8300000, guid: 6cb87ccf93c8eb24a8bb24ef6834b352, type: 3}
   - {fileID: 8300000, guid: 6fab22fd11f98644f9a741cd9b937a3a, type: 3}
-  initialSpawnSound: {fileID: 8300000, guid: 739b13e74a7df5f41bf2eee8464615a0, type: 3}
-  countdownTimerSound: {fileID: 8300000, guid: ed0f8d28b4d46ba4e83757ab1175446c, type: 3}
-  matchBeginSound: {fileID: 8300000, guid: 2bc99b2777fa9ca41afa8ed1bc5185e6, type: 3}
-  matchEndSound: {fileID: 8300000, guid: 3c86f0735457bdc4a80f8021deb90ef3, type: 3}
-  redTeamWinSound: {fileID: 8300000, guid: 2bc99b2777fa9ca41afa8ed1bc5185e6, type: 3}
-  blueTeamWinSound: {fileID: 8300000, guid: 2bc99b2777fa9ca41afa8ed1bc5185e6, type: 3}
-  sceneTransitionSound: {fileID: 8300000, guid: 8979079687d0292468c915c43ae0f92d,
+  initialSpawnSound: {fileID: 8300000, guid: 055df8d0fc338cc4a87a16e542cf97cd, type: 3}
+  countdownTimerSound: {fileID: 8300000, guid: 9d1884a8e625790419164894e979dcb5, type: 3}
+  matchBeginSound: {fileID: 8300000, guid: e65e15e47b78a844383f61ad78d74041, type: 3}
+  matchEndSound: {fileID: 8300000, guid: b34ea38a49f5f8d43be16269f2bae089, type: 3}
+  redTeamWinSound: {fileID: 8300000, guid: 61c829a9169730245a856a4e7f6d033d, type: 3}
+  blueTeamWinSound: {fileID: 8300000, guid: d3df076eda0089e4d802b0f2453a39bf, type: 3}
+  sceneTransitionSound: {fileID: 8300000, guid: a62839a5940de2e4393c8ad2e2e10387,
     type: 3}
