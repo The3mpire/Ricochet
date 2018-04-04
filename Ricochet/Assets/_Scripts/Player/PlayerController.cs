@@ -227,8 +227,6 @@ public class PlayerController : MonoBehaviour
 
         if (player.GetAxis("Taunt") != 0)
         {
-            Debug.Log("Taunting");
-            //Put down taunt animations here along with the boolean
             animator.SetBool("isTaunting", true);
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
