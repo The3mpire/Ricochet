@@ -227,6 +227,7 @@ public class PlayerController : MonoBehaviour
 
         if (player.GetAxis("Taunt") != 0)
         {
+            //Put down taunt animations here along with the boolean
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
                 if (!audioSource.isPlaying)
