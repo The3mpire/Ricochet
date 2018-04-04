@@ -19,6 +19,10 @@ public class MainMenuFunctions : MonoBehaviour
     [Tooltip("0 - Main Menu. 1 - Play Menu, 2 - Options Menu, 3 - Credits")]
     private GameObject[] _characterImages = new GameObject[4];
 
+    [SerializeField]
+    [Tooltip("The how fast the panels move in or out.")]
+    private float _panelSwapSpeed = 1f;
+
     [Tooltip("The first button to be selected in the scene")]
     [SerializeField]
     private GameObject defaultButton;
@@ -82,11 +86,8 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        //mainMenuPanel.SetActive(false);
-        //playPanel.SetActive(true);
         SwapPanels(mainMenuPanel, playPanel, _currentCharacterArt, _characterImages[1], playPanelDefaultItem);
         //Debug.Log(EventSystem.current.currentInputModule);
-        //EventSystem.current.SetSelectedGameObject(playPanelDefaultItem);
     }
 
     public void ClosePlayMenu()
@@ -95,10 +96,7 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        //mainMenuPanel.SetActive(true);
-        //playPanel.SetActive(false);
         SwapPanels(playPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
-        //EventSystem.current.SetSelectedGameObject(defaultButton);
     }
 
     public void OpenOptionsMenu()
@@ -107,10 +105,7 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        //mainMenuPanel.SetActive(false);
-        //optionsPanel.SetActive(true);
         SwapPanels(mainMenuPanel, optionsPanel, _currentCharacterArt, _characterImages[2], optionsPanelDefaultItem);
-        //EventSystem.current.SetSelectedGameObject(optionsPanelDefaultItem);
     }
 
     public void CloseOptionsMenu()
@@ -119,10 +114,7 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        //mainMenuPanel.SetActive(true);
-        //optionsPanel.SetActive(false);
         SwapPanels(optionsPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
-        //EventSystem.current.SetSelectedGameObject(defaultButton);
     }
 
     public void OpenCredits()
@@ -142,8 +134,6 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        //mainMenuPanel.SetActive(true);
-        //optionsPanel.SetActive(false);
         SwapPanels(mainMenuPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
     }
 
@@ -191,14 +181,21 @@ public class MainMenuFunctions : MonoBehaviour
     #endregion
 
     #region Private Functions
-
+    /// <summary>
+    /// Swaps out MainMenu and CharacterArt panel contents.
+    /// </summary>
+    /// <param name="fromPanel">The panel changing from</param>
+    /// <param name="toPanel">The panel to change to</param>
+    /// <param name="fromCharacter">The current displayed character panel</param>
+    /// <param name="toCharacter">The character panel to change to</param>
+    /// <param name="button">The button on the new menu panel to set as active</param>
     private void SwapPanels(GameObject fromPanel, GameObject toPanel, GameObject fromCharacter, GameObject toCharacter, GameObject button)
     {
         var charPanelSlide = _characterArtPanel.GetComponent<PanelSlide>();
         var mainPanelSlide = _menuPanel.GetComponent<PanelSlide>();
         //Move panels out
-        Tween cTween = charPanelSlide.ExecuteMoveBack(1);
-        Tween mTween = mainPanelSlide.ExecuteMoveBack(1);
+        Tween cTween = charPanelSlide.ExecuteMoveBack(_panelSwapSpeed);
+        Tween mTween = mainPanelSlide.ExecuteMoveBack(_panelSwapSpeed);
 
         StartCoroutine(DoSwap(cTween, mTween, fromPanel, toPanel, fromCharacter, toCharacter, button));
 
@@ -210,6 +207,17 @@ public class MainMenuFunctions : MonoBehaviour
         _currentCharacterArt = toCharacter;
     }
 
+    /// <summary>
+    /// Swap coroutine. Swaps out menu panels and character art panels after the provided Tween has stopped playing.
+    /// </summary>
+    /// <param name="cTween">Character panel Tween</param>
+    /// <param name="mTween">Menu panel Tween</param>
+    /// <param name="fromPanel">The panel changing from</param>
+    /// <param name="toPanel">The panel to change to</param>
+    /// <param name="fromCharacter">The current displayed character panel</param>
+    /// <param name="toCharacter">The character panel to change to</param>
+    /// <param name="button">The button on the new menu panel to set as active</param>
+    /// <returns></returns>
     IEnumerator DoSwap(Tween cTween, Tween mTween, GameObject fromPanel, GameObject toPanel, GameObject fromCharacter, GameObject toCharacter, GameObject button)
     {
         //wait until panels have finished moving out
@@ -221,12 +229,19 @@ public class MainMenuFunctions : MonoBehaviour
         SwapCharacterArt(fromCharacter, toCharacter);
 
         //Move panels in
-        cTween = _characterArtPanel.GetComponent<PanelSlide>().ExecuteMoveTo(1);
-        mTween = _menuPanel.GetComponent<PanelSlide>().ExecuteMoveTo(1);
+        cTween = _characterArtPanel.GetComponent<PanelSlide>().ExecuteMoveTo(_panelSwapSpeed);
+        mTween = _menuPanel.GetComponent<PanelSlide>().ExecuteMoveTo(_panelSwapSpeed);
 
         StartCoroutine(SetSelectedButton(cTween, mTween, button));
     }
 
+    /// <summary>
+    /// Sets the selected GameObject to the provided button/Selectable object after provided Tweens have stopped playing.
+    /// </summary>
+    /// <param name="cTween">Character panel tween</param>
+    /// <param name="mTween">Menu panel Tween</param>
+    /// <param name="button">Button to set as selected</param>
+    /// <returns></returns>
     IEnumerator SetSelectedButton(Tween cTween, Tween mTween, GameObject button)
     {
         yield return new WaitUntil(() => !cTween.IsPlaying() && !mTween.IsPlaying());
