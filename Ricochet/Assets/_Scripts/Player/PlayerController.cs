@@ -227,6 +227,7 @@ public class PlayerController : MonoBehaviour
 
         if (player.GetAxis("Taunt") != 0)
         {
+            animator.SetBool("isTaunting", true);
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
                 if (!audioSource.isPlaying)
@@ -236,6 +237,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            animator.SetBool("isTaunting", false);
+        }
+
+
         
         if (remainingFreezeTime > 0)
         {

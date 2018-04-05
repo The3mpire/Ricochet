@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using DG.Tweening;
-using Microsoft.Xbox.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using Rewired;
@@ -14,6 +11,12 @@ public class SplashScreenManager : MonoBehaviour
     [SerializeField] private GameObject _xboxLiveGameObject;
     [SerializeField] private GameObject _mainMenuPanel;
     [SerializeField] private GameObject _characterArtPanel;
+    [SerializeField]
+    [Tooltip("Time in seconds that it takes to fade out the Splash Screen")]
+    private float _fadeOutDuration = 2f;
+    [SerializeField]
+    [Tooltip("Time in seconds that it takes to slide in the main menu")]
+    private float _menuSlideInDuration = 2f;
     [SerializeField] private MainMenuFunctions _mainMenuFunctions;
     [SerializeField] private EventSystem es;
     private Image _panel;
@@ -40,7 +43,8 @@ public class SplashScreenManager : MonoBehaviour
     {
         
 #if UNITY_WSA_10_0 || UNITY_XBOXONE
-        if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork) {
+        if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+        {
             Destroy(_panel.transform.Find("ButtonImage").gameObject);
             _xboxLiveGameObject.SetActive(true);
             _userProfile = _xboxLiveGameObject.GetComponent<UserProfile>();
@@ -48,10 +52,19 @@ public class SplashScreenManager : MonoBehaviour
             es.SetSelectedGameObject(signinButton);
             StartCoroutine(WaitForSignIn());
         }
+        else
+        {
+            Destroy(_panel.transform.Find("ButtonImage").gameObject);
+            StartCoroutine(BeginSplashFadeOut());
+            SlideInMainMenu(_menuSlideInDuration);
+            _mainMenuFunctions.SelectDefaultOption();
+            _xboxLiveGameObject.SetActive(true);
+            _userProfile = _xboxLiveGameObject.GetComponent<UserProfile>();
+        }
 #else
         Destroy(_panel.transform.Find("ButtonImage").gameObject);
         StartCoroutine(BeginSplashFadeOut());
-        SlideInMainMenu(3f);
+        SlideInMainMenu(_menuSlideInDuration);
         _mainMenuFunctions.SelectDefaultOption();
 #endif
 
@@ -60,8 +73,8 @@ public class SplashScreenManager : MonoBehaviour
 
     IEnumerator BeginSplashFadeOut()
     {
-        _panel.DOFade(0.0f, 2.0f);
-        _titlePanel.GetComponent<Image>().DOFade(0.0f, 2.0f);
+        _panel.DOFade(0.0f, _fadeOutDuration);
+        _titlePanel.GetComponent<Image>().DOFade(0.0f, _fadeOutDuration);
 
         yield return new WaitUntil(() => _panel.color.a == 0);
 
@@ -73,7 +86,7 @@ public class SplashScreenManager : MonoBehaviour
     {
         yield return new WaitUntil(() => !_userProfile.signInPanel.activeSelf);
         StartCoroutine(BeginSplashFadeOut());
-        SlideInMainMenu(3f);
+        SlideInMainMenu(_menuSlideInDuration);
 
     }
 #endif

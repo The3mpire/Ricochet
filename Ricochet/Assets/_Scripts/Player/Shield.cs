@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Enumerables;
+using System;
 
 [RequireComponent(typeof(EdgeCollider2D), typeof(LineRenderer))]
 public class Shield : MonoBehaviour
@@ -13,6 +14,9 @@ public class Shield : MonoBehaviour
     [SerializeField] private Vector2 startPointHandler;
     [SerializeField] private Vector2 endPointHandler;
 
+    [SerializeField] private Sprite blueShieldSprite;
+    [SerializeField] private Sprite redShieldSprite;
+    [SerializeField] private SpriteRenderer shieldSpriteRenderer;
     [SerializeField] private float lineRendererWidth;
     [SerializeField] private Gradient lineRendererColor = new Gradient();
 
@@ -127,15 +131,19 @@ public class Shield : MonoBehaviour
     {
         if (team == ETeam.RedTeam)
         {
-            var red = new Color32(255, 0, 0, 255);
-            lineRenderer.startColor = red;
-            lineRenderer.endColor = red;
+            // Used for non-sprite color changes
+            // var red = new Color32(255, 0, 0, 255);
+            // lineRenderer.startColor = red;
+            // lineRenderer.endColor = red;
+            shieldSpriteRenderer.sprite = redShieldSprite;
         }
         else if (team == ETeam.BlueTeam)
         {
-            var blue = new Color32(0, 0, 255, 255);
-            lineRenderer.startColor = blue;
-            lineRenderer.endColor = blue;
+            // Used for non-sprite color changes
+            // var blue = new Color32(0, 0, 255, 255);
+            // lineRenderer.startColor = blue;
+            // lineRenderer.endColor = blue;
+            shieldSpriteRenderer.sprite = blueShieldSprite;
         }
     }
 
@@ -173,4 +181,5 @@ public class Shield : MonoBehaviour
         return endPointHandler;
     }
     #endregion
+
 }

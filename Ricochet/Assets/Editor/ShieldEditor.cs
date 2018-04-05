@@ -16,6 +16,10 @@ public class ShieldEditor : Editor
     private SerializedProperty colliderMaterial;
     private SerializedProperty colliderEdgeRadius;
 
+    private SerializedProperty shieldSpriteRenderer;
+    private SerializedProperty blueShieldSprite;
+    private SerializedProperty redShieldSprite;
+
     private SerializedProperty lineRendererMaterial;
     private SerializedProperty lineRendererWidth;
     private SerializedProperty lineRendererColor;
@@ -33,6 +37,10 @@ public class ShieldEditor : Editor
 
         colliderMaterial = serializedObject.FindProperty("colliderMaterial");
         colliderEdgeRadius = serializedObject.FindProperty("colliderEdgeRadius");
+
+        shieldSpriteRenderer = serializedObject.FindProperty("shieldSpriteRenderer");
+        blueShieldSprite = serializedObject.FindProperty("blueShieldSprite");
+        redShieldSprite = serializedObject.FindProperty("redShieldSprite");
 
         lineRendererMaterial = serializedObject.FindProperty("lineRendererMaterial");
         lineRendererWidth = serializedObject.FindProperty("lineRendererWidth");
@@ -93,6 +101,11 @@ public class ShieldEditor : Editor
         EditorGUILayout.LabelField(new GUIContent("Edge Collider Properties"), header);
         EditorGUILayout.PropertyField(colliderMaterial);
         EditorGUILayout.PropertyField(colliderEdgeRadius);
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField(new GUIContent("Shield Sprites"), header);
+        EditorGUILayout.PropertyField(shieldSpriteRenderer);
+        EditorGUILayout.PropertyField(blueShieldSprite);
+        EditorGUILayout.PropertyField(redShieldSprite);
         EditorGUILayout.Space();
         EditorGUILayout.LabelField(new GUIContent("Line Renderer Properties"), header);
         EditorGUILayout.PropertyField(lineRendererMaterial);
