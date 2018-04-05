@@ -44,6 +44,10 @@ public class PlayerDashController : MonoBehaviour
     [SerializeField]
     private GameObject revupCircle;
 
+    [Tooltip("Drag the player's sprite here")]
+    [SerializeField]
+    private SpriteRenderer sprite;
+
     private PlayerController pc;
     private Player player;
     private Animator anim;
@@ -148,6 +152,10 @@ public class PlayerDashController : MonoBehaviour
             if (gameData.GetDashSetting() || Mathf.Abs(rigid.velocity.magnitude) <= dashThreshold)
             {
                 dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
+                if (!((pc.GetNormalizedLeftStick().x >= 0) ^ (dashVelocity.x < 0)))
+                {
+                    sprite.flipX = dashVelocity.x > 0 ? true : false;
+                }
             }
             else
             {
