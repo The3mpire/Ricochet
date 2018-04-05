@@ -1776,6 +1776,9 @@ MonoBehaviour:
   endPoint: {x: -0.15305734, y: -1.3273559}
   startPointHandler: {x: 0, y: 0}
   endPointHandler: {x: 0, y: 0}
+  blueShieldSprite: {fileID: 0}
+  redShieldSprite: {fileID: 0}
+  shieldSpriteRenderer: {fileID: 0}
   lineRendererWidth: 0.2
   lineRendererColor:
     serializedVersion: 2
@@ -2515,6 +2518,9 @@ MonoBehaviour:
   endPoint: {x: -0.15305734, y: -1.3273563}
   startPointHandler: {x: 0, y: 0}
   endPointHandler: {x: 0, y: 0}
+  blueShieldSprite: {fileID: 0}
+  redShieldSprite: {fileID: 0}
+  shieldSpriteRenderer: {fileID: 0}
   lineRendererWidth: 0.2
   lineRendererColor:
     serializedVersion: 2
@@ -2719,12 +2725,12 @@ Prefab:
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: weights.Array.data[2].type
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
       propertyPath: weights.Array.data[2].probability
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114973131078113992, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
         type: 2}
@@ -2740,6 +2746,11 @@ Prefab:
         type: 2}
       propertyPath: weights.Array.data[0].probability
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 82334312911913028, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e6bea0f2be9c5a47b13abff42c7bbfe, type: 2}
