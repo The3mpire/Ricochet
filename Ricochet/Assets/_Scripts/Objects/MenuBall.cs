@@ -10,6 +10,12 @@ public class MenuBall : MonoBehaviour
     [Tooltip("The ball travel direction on spawn")]
     [SerializeField]
     private Vector2 initialDirection = new Vector2(0, -1);
+    [Tooltip("The slowest the ball can travel")]
+    [SerializeField]
+    private float minimumSpeed = 20f;
+    [Tooltip("The fastest the ball can travel")]
+    [SerializeField]
+    private float maximumSpeed = 30f;
 
     [Tooltip("Drag the ball here")]
     [SerializeField]
@@ -32,6 +38,19 @@ public class MenuBall : MonoBehaviour
     {
         Collider2D hitCollider = col.collider;
         audioSource.PlayOneShot(soundStorage.GetBallSound(hitCollider.tag, col.relativeVelocity.magnitude >= 35));
+    }
+
+    void LateUpdate()
+    {
+        if (body.velocity.magnitude < minimumSpeed)
+        {
+            body.velocity = body.velocity.normalized * minimumSpeed;
+        }
+        // make sure we're not going super mega fast
+        else if (body.velocity.magnitude > maximumSpeed)
+        {
+            body.velocity = body.velocity.normalized * maximumSpeed;
+        }
     }
 
     #endregion

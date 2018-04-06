@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 public class SplashScreenManager : MonoBehaviour
 {
     [Header("Title Panel")]
+    [SerializeField] private Image _background;
     [SerializeField] private GameObject _titlePanel;
     [SerializeField] private PanelSlide _glitchPanelSlide;
     [SerializeField] private PanelSlide _ballPanelSlide;
@@ -37,8 +38,8 @@ public class SplashScreenManager : MonoBehaviour
     void Start ()
 	{
 	    es.enabled = false;
-        _panel = GetComponentInChildren<Image>();
-	    _buttonImage = _panel.transform.Find("ButtonImage").gameObject;
+        _panel = transform.Find("SplashPanel").GetComponent<Image>();
+        _buttonImage = _panel.transform.Find("ButtonImage").gameObject;
 
         if (ReInput.players.GetPlayer(0).controllers.joystickCount > 0)
 	    {
@@ -110,6 +111,7 @@ public class SplashScreenManager : MonoBehaviour
     IEnumerator BeginSplashFadeOut()
     {
         _panel.DOFade(0.0f, _fadeOutDuration);
+        _background.DOFade(0.0f, _fadeOutDuration);
         _glitchPanelSlide.gameObject.GetComponent<Image>().DOFade(0.0f, _fadeOutDuration);
         _ballPanelSlide.gameObject.GetComponent<Image>().DOFade(0.0f, _fadeOutDuration);
         _flyby.gameObject.transform.DOScale(Vector3.zero, _fadeOutDuration);
@@ -117,6 +119,7 @@ public class SplashScreenManager : MonoBehaviour
 
         yield return new WaitUntil(() => _panel.color.a == 0);
 
+        _background.gameObject.SetActive(false);
         _panel.gameObject.SetActive(false);
         _flyby.gameObject.SetActive(false);
         _ball.SetActive(false);
