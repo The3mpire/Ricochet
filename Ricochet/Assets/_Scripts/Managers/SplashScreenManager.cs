@@ -51,6 +51,8 @@ public class SplashScreenManager : MonoBehaviour
             GameObject signinButton = _userProfile.signInPanel.transform.Find("SignInButton").gameObject;
             es.SetSelectedGameObject(signinButton);
             StartCoroutine(WaitForSignIn());
+            StartCoroutine(BeginSplashFadeOut());
+            SlideInMainMenu(_menuSlideInDuration);
         }
         else
         {
@@ -85,9 +87,6 @@ public class SplashScreenManager : MonoBehaviour
     IEnumerator WaitForSignIn()
     {
         yield return new WaitUntil(() => !_userProfile.signInPanel.activeSelf);
-        StartCoroutine(BeginSplashFadeOut());
-        SlideInMainMenu(_menuSlideInDuration);
-
     }
 #endif
     public void SlideInMainMenu(float duration)
