@@ -227,10 +227,6 @@ public class PlayerController : MonoBehaviour
 
         if (player.GetAxis("Taunt") != 0)
         {
-            if (chosenCharacter == ECharacter.Computer && sprite.flipX)
-            {
-                sprite.flipX = flip;
-            }
             animator.SetBool("isTaunting", true);
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
@@ -262,8 +258,7 @@ public class PlayerController : MonoBehaviour
         if (!isFrozen)
         {
             RotateShield();
-            if (!movementDisabled &&
-                !(chosenCharacter == ECharacter.Computer && animator.GetBool("isTaunting")))
+            if (!movementDisabled)
             {
                 Flip();
             }
@@ -358,6 +353,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                if (chosenCharacter == ECharacter.Computer && sprite.flipX)
+                {
+                    sprite.flipX = flip;
+                }
                 animator.SetBool("isWalking", false);
             }
         }
