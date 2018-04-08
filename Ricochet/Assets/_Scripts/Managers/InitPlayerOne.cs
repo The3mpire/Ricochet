@@ -29,7 +29,11 @@ public class InitPlayerOne : MonoBehaviour
             {
                 Player player = ReInput.players.Players[0];
                 player.controllers.AddController(joystick, false);
-                Debug.Log("Player One assigned");
+                SFXManager sfx;
+                if (SFXManager.TryGetInstance(out sfx))
+                {
+                    sfx.PlayMenuClickSound();
+                }
                 _splashScreenManager.StartLogIn();
                 ReInput.configuration.autoAssignJoysticks = true;
                 enabled = false; // disable this script
