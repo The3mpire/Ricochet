@@ -819,9 +819,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetMenuClickSound();
     }
 
-    public AudioClip GetPauseSound()
+    public AudioClip GetPauseSound(bool pausing)
     {
-        return soundStorage.GetPauseSound();
+        return pausing == true ? soundStorage.GetPauseSound() : soundStorage.GetUnpauseSound();
     }
 
     public AudioClip GetTauntSound(ECharacter character)

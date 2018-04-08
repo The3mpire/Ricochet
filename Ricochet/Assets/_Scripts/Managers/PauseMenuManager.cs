@@ -57,7 +57,7 @@ public class PauseMenuManager : MonoBehaviour
                     if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
                     {
                         gameManagerInstance.PausePlayers(true);
-                        fxSource.PlayOneShot(gameManagerInstance.GetPauseSound());
+                        fxSource.PlayOneShot(gameManagerInstance.GetPauseSound(true));
                     }
                 }
                 else if (p.GetButtonDown("UIMenu") && pausePanel.activeSelf)
@@ -79,6 +79,7 @@ public class PauseMenuManager : MonoBehaviour
         if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
         {
             gameManagerInstance.PausePlayers(false);
+            fxSource.PlayOneShot(gameManagerInstance.GetPauseSound(false));
         }
     }
 

@@ -633,7 +633,7 @@ public class PlayerController : MonoBehaviour
 
     public void PlayPauseSound()
     {
-        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound());
+        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound(true));
     }
 
     public void RegisterKill(PlayerController otherPlayer)
