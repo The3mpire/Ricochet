@@ -108,8 +108,6 @@ public class SoundStorage : ScriptableObject
     [SerializeField]
     private List<AudioClip> ballShieldHitSounds;
     [SerializeField]
-    private List<AudioClip> ballFastShieldHitSounds;
-    [SerializeField]
     private List<AudioClip> ballGoalSounds;
 
     [Space]
@@ -290,17 +288,14 @@ public class SoundStorage : ScriptableObject
         return ballGoalSounds[Random.Range(0, ballGoalSounds.Count)];
     }
 
-    public AudioClip GetBallSound(string tag, bool highVelocity)
+    public AudioClip GetBallSound(string tag)
     {
         switch (tag)
         {
             case "Wall":
                 return ballWallBumpSounds[Random.Range(0, ballWallBumpSounds.Count)];
             default: // "Shield":
-                if (highVelocity)
-                    return ballShieldHitSounds[Random.Range(0, ballFastShieldHitSounds.Count)];
-                else
-                    return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
+                return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
         }
     }
     #endregion

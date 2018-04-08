@@ -807,9 +807,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetScoringSound();
     }
 
-    public AudioClip GetBallSound(string tag, bool highVelocity)
+    public AudioClip GetBallSound(string tag)
     {
-        return soundStorage.GetBallSound(tag, highVelocity);
+        return soundStorage.GetBallSound(tag);
     }
     
     public AudioClip GetPowerupPickupSound(EPowerUp powerUp)
