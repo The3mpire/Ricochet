@@ -782,6 +782,8 @@ public class GameManager : MonoBehaviour
                 return soundStorage.GetPlayerDashSound(character);
             case ECharacterAction.Death:
                 return soundStorage.GetPlayerDeathSound(character);
+            case ECharacterAction.Jetpack:
+                return soundStorage.GetPlayerJetpackSound(character);
             default: //ECharacterMovement.Jetpack:
                 return soundStorage.GetPlayerJetpackSound(character);
         }

@@ -444,6 +444,11 @@ public class PlayerController : MonoBehaviour
             {
                 jetpackParticle.Stop();
             }
+            if (player.GetAxisRawPrev("Jetpack") == 0)
+            {
+                ECharacter character = gameData.GetPlayerCharacter(playerNumber - 1);
+                audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(character,ECharacterAction.Jetpack));
+            }
             else
             {
                 if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
