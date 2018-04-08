@@ -53,6 +53,12 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField] private GameObject char3TeamPanel;
     [SerializeField] private GameObject char4TeamPanel;
 
+    [Header("Team Text")]
+    [SerializeField] private Text char1TeamText;
+    [SerializeField] private Text char2TeamText;
+    [SerializeField] private Text char3TeamText;
+    [SerializeField] private Text char4TeamText;
+
     private readonly SelectionPhase[] playerPhase = new SelectionPhase[4];
     private readonly PSettings[] playerSettings = new PSettings[4];
     private float timer;
@@ -240,23 +246,33 @@ public class CharSelectManager : MonoBehaviour
             }
         }
         
+        Color teamColor = GetTeamColor(_playerObjects[playerNumber].Team);
+        string teamText;
+        if(_playerObjects[playerNumber].Team == ETeam.RedTeam)
+            teamText = "Red Team";
+        else
+            teamText = "Blue Team";
         switch (selectedChar)
         {
             case ECharacter.Cat:
-                char1Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char1Image.color = teamColor;
                 char1TeamPanel.SetActive(true);
+                char1TeamText.text = teamText;
                 break;
             case ECharacter.Computer:
-                char2Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char2Image.color = teamColor;
                 char2TeamPanel.SetActive(true);
+                char2TeamText.text = teamText;
                 break;
             case ECharacter.MallCop:
-                char3Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char3Image.color = teamColor;
                 char3TeamPanel.SetActive(true);
+                char3TeamText.text = teamText;
                 break;
             case ECharacter.Sushi:
-                char4Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char4Image.color = teamColor;
                 char4TeamPanel.SetActive(true);
+                char4TeamText.text = teamText;
                 break;
         }
     }
@@ -264,21 +280,30 @@ public class CharSelectManager : MonoBehaviour
     private void ChangeTeam(int playerNumber, int direction)
     {
         //TODO: Move to CharacterSelectObjects class?
-        ECharacter selectedChar = gameData.GetPlayerCharacter(playerNumber);
         _playerObjects[playerNumber].Team = GetNextTeam(_playerObjects[playerNumber].Team);
+        ECharacter selectedChar = gameData.GetPlayerCharacter(playerNumber);
+        string teamText;
+        if(_playerObjects[playerNumber].Team == ETeam.RedTeam)
+            teamText = "Red Team";
+        else
+            teamText = "Blue Team";
         switch (selectedChar)
         {
             case ECharacter.Cat:
                 char1Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char1TeamText.text = teamText;
                 break;
             case ECharacter.Computer:
                 char2Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char2TeamText.text = teamText;
                 break;
             case ECharacter.MallCop:
                 char3Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char3TeamText.text = teamText;
                 break;
             case ECharacter.Sushi:
                 char4Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char4TeamText.text = teamText;
                 break;
         }
     }
@@ -286,8 +311,23 @@ public class CharSelectManager : MonoBehaviour
     private void SelectTeam(int playerNumber)
     {
         playerPhase[playerNumber] = SelectionPhase.Ready;
-        _playerObjects[playerNumber].ReadyTag.SetActive(true);
         gameData.SetPlayerTeam(playerNumber, _playerObjects[playerNumber].Team);
+        ECharacter selectedChar = gameData.GetPlayerCharacter(playerNumber);
+        switch (selectedChar)
+        {
+            case ECharacter.Cat:
+                char1TeamText.text = "Ready";
+                break;
+            case ECharacter.Computer:
+                char2TeamText.text = "Ready";
+                break;
+            case ECharacter.MallCop:
+                char3TeamText.text = "Ready";
+                break;
+            case ECharacter.Sushi:
+                char4TeamText.text = "Ready";
+                break;
+        }
     }
 
     private void PlayerJoin(int playerNumber)
@@ -454,7 +494,32 @@ public class CharSelectManager : MonoBehaviour
         timer = waitTime;
         timerText.text = "Waiting...";
         playerPhase[playerNumber] = SelectionPhase.TeamSelect;
-        _playerObjects[playerNumber].ReadyTag.SetActive(false);
+
+        ECharacter selectedChar = gameData.GetPlayerCharacter(playerNumber);
+        string teamText;
+        if(_playerObjects[playerNumber].Team == ETeam.RedTeam)
+            teamText = "Red Team";
+        else
+            teamText = "Blue Team";
+        switch (selectedChar)
+        {
+            case ECharacter.Cat:
+                char1Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char1TeamText.text = teamText;
+                break;
+            case ECharacter.Computer:
+                char2Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char2TeamText.text = teamText;
+                break;
+            case ECharacter.MallCop:
+                char3Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char3TeamText.text = teamText;
+                break;
+            case ECharacter.Sushi:
+                char4Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char4TeamText.text = teamText;
+                break;
+        }
     }
     #endregion
 }
