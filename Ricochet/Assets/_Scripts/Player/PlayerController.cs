@@ -357,6 +357,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                if (chosenCharacter == ECharacter.Computer && sprite.flipX)
+                {
+                    sprite.flipX = flip;
+                }
                 animator.SetBool("isWalking", false);
             }
         }
