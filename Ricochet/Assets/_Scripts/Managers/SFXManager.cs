@@ -85,6 +85,11 @@ public class SFXManager : MonoBehaviour
     {
         fxSource.PlayOneShot(soundStorage.GetTeamWinSound(team));
     }
+
+    public void PlayPingSound()
+    {
+        fxSource.PlayOneShot(soundStorage.GetPingSound());
+    }
     #endregion
 
     #region Helpers

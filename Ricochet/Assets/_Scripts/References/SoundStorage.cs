@@ -148,6 +148,8 @@ public class SoundStorage : ScriptableObject
     [SerializeField]
     private AudioClip initialSpawnSound;
     [SerializeField]
+    private AudioClip pingSound;
+    [SerializeField]
     private AudioClip countdownTimerSound;
     [SerializeField]
     private AudioClip matchBeginSound;
@@ -363,6 +365,11 @@ public class SoundStorage : ScriptableObject
     #endregion
 
     #region Misc Sounds
+    public AudioClip GetPingSound()
+    {
+        return pingSound;
+    }
+
     public AudioClip GetCountdownSound()
     {
         return countdownTimerSound;
