@@ -29,6 +29,10 @@ public class PlayerDashController : MonoBehaviour
     private Rigidbody2D rigid;
 
     [SerializeField]
+    [Tooltip("Drag Sprite from Player here")]
+    private SpriteRenderer sprite;
+
+    [SerializeField]
     [Tooltip("Delay until grounded dash recharge rate begins")]
     private float rechargeDelay = .66666f;
 
@@ -148,6 +152,11 @@ public class PlayerDashController : MonoBehaviour
             if (gameData.GetDashSetting() || Mathf.Abs(rigid.velocity.magnitude) <= dashThreshold)
             {
                 dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
+                if (dashVelocity.x > 0 && !sprite.flipX ||
+                    dashVelocity.x <= 0 && sprite.flipX)
+                {
+                    sprite.flipX = !sprite.flipX;
+                }
             }
             else
             {

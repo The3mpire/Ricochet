@@ -227,6 +227,10 @@ public class PlayerController : MonoBehaviour
 
         if (player.GetAxis("Taunt") != 0)
         {
+            if (chosenCharacter == ECharacter.Computer && sprite.flipX)
+            {
+                sprite.flipX = flip;
+            }
             animator.SetBool("isTaunting", true);
             if (gameManagerInstance != null || GameManager.TryGetInstance(out gameManagerInstance))
             {
@@ -258,7 +262,8 @@ public class PlayerController : MonoBehaviour
         if (!isFrozen)
         {
             RotateShield();
-            if (!movementDisabled)
+            if (!movementDisabled &&
+                !(chosenCharacter == ECharacter.Computer && animator.GetBool("isTaunting")))
             {
                 Flip();
             }
