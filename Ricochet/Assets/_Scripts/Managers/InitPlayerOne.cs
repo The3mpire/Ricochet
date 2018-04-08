@@ -39,5 +39,13 @@ public class InitPlayerOne : MonoBehaviour
                 enabled = false; // disable this script
             }
         }
+        Keyboard keyboard = ReInput.controllers.Keyboard;
+        if(keyboard.GetAnyButtonDown())
+        {
+            //Debug.Log("Player One assigned");
+            _splashScreenManager.StartLogIn();
+            //ReInput.configuration.autoAssignJoysticks = true;
+            enabled = false; // disable this script
+        }
     }
 }
