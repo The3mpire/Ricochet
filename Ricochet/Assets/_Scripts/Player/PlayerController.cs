@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!audioSource.isPlaying)
                 {
-                    ECharacter character = gameData.GetPlayerCharacter(playerNumber);
+                    ECharacter character = gameData.GetPlayerCharacter(playerNumber - 1);
                     audioSource.PlayOneShot(gameManagerInstance.GetTauntSound(character));
                 }
             }

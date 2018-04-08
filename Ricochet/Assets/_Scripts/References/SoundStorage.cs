@@ -198,8 +198,14 @@ public class SoundStorage : ScriptableObject
         switch (character)
         {
             case ECharacter.Cat:
+                return catTauntSounds[Random.Range(0, catTauntSounds.Count)];
             case ECharacter.Computer:
-            default: // for now we only have one asset, and its super standin, i mean quality
+                return computerTauntSounds[Random.Range(0, computerTauntSounds.Count)];
+            case ECharacter.Sushi:
+                return fishTauntSounds[Random.Range(0, fishTauntSounds.Count)];
+            case ECharacter.MallCop:
+                return copTauntSounds[Random.Range(0, copTauntSounds.Count)];
+            default: // for now we only have one asset, and its super standin, i mean quality (R.I.P. 4/8/18)
                 return computerTauntSounds[Random.Range(0, computerTauntSounds.Count)];
         }
     }
