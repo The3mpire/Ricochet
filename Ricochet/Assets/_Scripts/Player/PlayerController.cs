@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!audioSource.isPlaying)
                 {
-                    ECharacter character = gameData.GetPlayerCharacter(playerNumber);
+                    ECharacter character = gameData.GetPlayerCharacter(playerNumber - 1);
                     audioSource.PlayOneShot(gameManagerInstance.GetTauntSound(character));
                 }
             }
@@ -444,6 +444,11 @@ public class PlayerController : MonoBehaviour
             {
                 jetpackParticle.Stop();
             }
+            if (player.GetAxisRawPrev("Jetpack") == 0)
+            {
+                ECharacter character = gameData.GetPlayerCharacter(playerNumber - 1);
+                audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(character,ECharacterAction.Jetpack));
+            }
             else
             {
                 if (jetpackParticle && !jetpackParticle.isPlaying && !isFrozen)
@@ -633,7 +638,7 @@ public class PlayerController : MonoBehaviour
 
     public void PlayPauseSound()
     {
-        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound());
+        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound(true));
     }
 
     public void RegisterKill(PlayerController otherPlayer)

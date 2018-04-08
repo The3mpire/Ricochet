@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
     private GameEvent onGoal;
     [SerializeField]
     private GameEvent onTimerChanged;
+    public delegate void TimerAction();
+    public static event TimerAction OnStartTimerFinished;
 
     [Header("Timers")]
     [Tooltip("Time before game start")]
@@ -212,6 +214,12 @@ public class GameManager : MonoBehaviour
             timeLeftTillStart--;
             sfxManager.PlaySound(soundStorage.GetCountdownSound());
             yield return new WaitForSeconds(1);
+        }
+
+        sfxManager.PlaySound(soundStorage.GetMatchBeginSound());
+        if (OnStartTimerFinished != null)
+        {
+            OnStartTimerFinished();
         }
 
         gameTimerActive = true;
@@ -489,8 +497,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                GameRunning = false;
-
+                StopCoroutine("StartGameTimer");
                 gameData.SetGameWinner(GetOpposingTeam(team));
                 DeactivatePlayersAndGoals();
                 lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
@@ -775,6 +782,8 @@ public class GameManager : MonoBehaviour
                 return soundStorage.GetPlayerDashSound(character);
             case ECharacterAction.Death:
                 return soundStorage.GetPlayerDeathSound(character);
+            case ECharacterAction.Jetpack:
+                return soundStorage.GetPlayerJetpackSound(character);
             default: //ECharacterMovement.Jetpack:
                 return soundStorage.GetPlayerJetpackSound(character);
         }
@@ -800,9 +809,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetScoringSound();
     }
 
-    public AudioClip GetBallSound(string tag, bool highVelocity)
+    public AudioClip GetBallSound(string tag)
     {
-        return soundStorage.GetBallSound(tag, highVelocity);
+        return soundStorage.GetBallSound(tag);
     }
     
     public AudioClip GetPowerupPickupSound(EPowerUp powerUp)
@@ -820,9 +829,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetMenuClickSound();
     }
 
-    public AudioClip GetPauseSound()
+    public AudioClip GetPauseSound(bool pausing)
     {
-        return soundStorage.GetPauseSound();
+        return pausing == true ? soundStorage.GetPauseSound() : soundStorage.GetUnpauseSound();
     }
 
     public AudioClip GetTauntSound(ECharacter character)

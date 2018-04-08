@@ -90,18 +90,21 @@ public class MusicManager : MonoBehaviour
 
     private IEnumerator FadeIn(float startVol, float duration)
     {
-        volumeLock = true;
-        float finalVol = musicSource.volume;
-        musicSource.volume = startVol;
-        float volumesPerUpdate = (finalVol - startVol) / duration;
-        while (musicSource.volume <= finalVol)
+        if (startVol != 0)
         {
-            finalVol = musicVol;
-            musicSource.volume += volumesPerUpdate * Time.deltaTime;
-            yield return new WaitForFixedUpdate();
+            volumeLock = true;
+            float finalVol = musicSource.volume;
+            musicSource.volume = startVol;
+            float volumesPerUpdate = (finalVol - startVol) / duration;
+            while (musicSource.volume <= finalVol)
+            {
+                finalVol = musicVol;
+                musicSource.volume += volumesPerUpdate * Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            musicSource.volume = musicVol;
+            volumeLock = false;
         }
-        musicSource.volume = musicVol;
-        volumeLock = false;
     }
 
     public void SceneMusic(AudioClip song)
@@ -119,6 +122,11 @@ public class MusicManager : MonoBehaviour
         musicVol = vol;
         if (!volumeLock)
             musicSource.volume = vol;
+    }
+
+    public float GetManagerVolume()
+    {
+        return musicVol;
     }
 
     public float GetMusicVolume()

@@ -76,11 +76,11 @@ public class SoundStorage : ScriptableObject
     [SerializeField]
     private AudioClip multiballUsed;
 
-    [Header("Freeze Sounds")]
-    [SerializeField]
-    private AudioClip freezePickedUp;
-    [SerializeField]
-    private AudioClip freezeUsed;
+    //[Header("Freeze Sounds")]
+    //[SerializeField]
+    //private AudioClip freezePickedUp;
+    //[SerializeField]
+    //private AudioClip freezeUsed;
 
     [Header("CatchNThrow")]
     [SerializeField]
@@ -107,8 +107,6 @@ public class SoundStorage : ScriptableObject
     private List<AudioClip> ballWallBumpSounds;
     [SerializeField]
     private List<AudioClip> ballShieldHitSounds;
-    [SerializeField]
-    private List<AudioClip> ballFastShieldHitSounds;
     [SerializeField]
     private List<AudioClip> ballGoalSounds;
 
@@ -150,6 +148,8 @@ public class SoundStorage : ScriptableObject
     [SerializeField]
     private AudioClip initialSpawnSound;
     [SerializeField]
+    private AudioClip pingSound;
+    [SerializeField]
     private AudioClip countdownTimerSound;
     [SerializeField]
     private AudioClip matchBeginSound;
@@ -159,6 +159,8 @@ public class SoundStorage : ScriptableObject
     private AudioClip redTeamWinSound;
     [SerializeField]
     private AudioClip blueTeamWinSound;
+    [SerializeField]
+    private AudioClip tieGameSound;
     [SerializeField]
     private AudioClip sceneTransitionSound;
     #endregion
@@ -198,8 +200,14 @@ public class SoundStorage : ScriptableObject
         switch (character)
         {
             case ECharacter.Cat:
+                return catTauntSounds[Random.Range(0, catTauntSounds.Count)];
             case ECharacter.Computer:
-            default: // for now we only have one asset, and its super standin, i mean quality
+                return computerTauntSounds[Random.Range(0, computerTauntSounds.Count)];
+            case ECharacter.Sushi:
+                return fishTauntSounds[Random.Range(0, fishTauntSounds.Count)];
+            case ECharacter.MallCop:
+                return copTauntSounds[Random.Range(0, copTauntSounds.Count)];
+            default: // for now we only have one asset, and its super standin, i mean quality (R.I.P. 4/8/18)
                 return computerTauntSounds[Random.Range(0, computerTauntSounds.Count)];
         }
     }
@@ -282,17 +290,14 @@ public class SoundStorage : ScriptableObject
         return ballGoalSounds[Random.Range(0, ballGoalSounds.Count)];
     }
 
-    public AudioClip GetBallSound(string tag, bool highVelocity)
+    public AudioClip GetBallSound(string tag)
     {
         switch (tag)
         {
             case "Wall":
                 return ballWallBumpSounds[Random.Range(0, ballWallBumpSounds.Count)];
             default: // "Shield":
-                if (highVelocity)
-                    return ballShieldHitSounds[Random.Range(0, ballFastShieldHitSounds.Count)];
-                else
-                    return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
+                return ballShieldHitSounds[Random.Range(0, ballShieldHitSounds.Count)];
         }
     }
     #endregion
@@ -306,8 +311,8 @@ public class SoundStorage : ScriptableObject
                 return catchNThrowPickedUp;
             case EPowerUp.CircleShield:
                 return circleShieldPickedup;
-            case EPowerUp.Freeze:
-                return freezePickedUp;
+            //case EPowerUp.Freeze:
+            //    return freezePickedUp;
             case EPowerUp.Multiball:
                 return multiballPickedUp;
             default: // EPowerUp.Shrink:
@@ -323,10 +328,10 @@ public class SoundStorage : ScriptableObject
                 return catchNThrowUsed;
             case EPowerUp.CircleShield:
                 return circleShieldUsed;
-            case EPowerUp.Freeze:
-                return freezeUsed;
+            //case EPowerUp.Freeze:
+            //    return freezeUsed;
             case EPowerUp.Multiball:
-                return freezeUsed;
+                return multiballUsed;
             default: //EPowerUp.Shrink
                 return shrinkUsed;
         }
@@ -360,6 +365,11 @@ public class SoundStorage : ScriptableObject
     #endregion
 
     #region Misc Sounds
+    public AudioClip GetPingSound()
+    {
+        return pingSound;
+    }
+
     public AudioClip GetCountdownSound()
     {
         return countdownTimerSound;
@@ -373,6 +383,21 @@ public class SoundStorage : ScriptableObject
     public AudioClip GetMatchEndSound()
     {
         return matchEndSound;
+    }
+
+    public AudioClip GetTeamWinSound(ETeam team)
+    {
+        switch (team)
+        {
+            case ETeam.BlueTeam:
+                return blueTeamWinSound;
+            case ETeam.RedTeam:
+                return redTeamWinSound;
+            case ETeam.None:
+                return tieGameSound;
+            default:
+                return tieGameSound;
+        }
     }
 
     public AudioClip GetSceneTransitionSound()
