@@ -9,7 +9,7 @@ public class PlayerDashController : MonoBehaviour
 {
     #region Private Variables
     [SerializeField]
-    private float dashSpeedBoost = 10f;
+    private float defaultDashSpeedBoost = 10f;
 
     [SerializeField]
     private int maxDashCount = 5;
@@ -58,6 +58,7 @@ public class PlayerDashController : MonoBehaviour
 
     private float miniDashCharge;
     private float rechargeTimer;
+    private float dashSpeedBoost;
     private float delayTimer;
 
     [SerializeField]
@@ -67,6 +68,7 @@ public class PlayerDashController : MonoBehaviour
     #region Monobehaviours
     public void Awake()
     {
+        dashSpeedBoost = defaultDashSpeedBoost;
         pc = GetComponent<PlayerController>();
         audioSource = GetComponentInChildren<AudioSource>();
         ResetDashController();
@@ -122,6 +124,10 @@ public class PlayerDashController : MonoBehaviour
         {
             StartCoroutine("StartingBoostCoroutine");
         }
+    }
+    public void AlterDashSpeed(float multiplier)
+    {
+        dashSpeedBoost = defaultDashSpeedBoost * multiplier;
     }
     #endregion
 
