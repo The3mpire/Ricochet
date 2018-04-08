@@ -38,9 +38,8 @@ public class InitPlayerOne : MonoBehaviour
         Keyboard keyboard = ReInput.controllers.Keyboard;
         if(keyboard.GetAnyButtonDown())
         {
-            //Debug.Log("Player One assigned");
             _splashScreenManager.StartLogIn();
-            //ReInput.configuration.autoAssignJoysticks = true;
+            ReInput.configuration.autoAssignJoysticks = true;
             enabled = false; // disable this script
         }
     }
