@@ -52,6 +52,7 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField] private GameObject char2TeamPanel;
     [SerializeField] private GameObject char3TeamPanel;
     [SerializeField] private GameObject char4TeamPanel;
+    [SerializeField] private GameObject pressToJoinPanel;
 
     [Header("Team Text")]
     [SerializeField] private Text char1TeamText;
@@ -67,6 +68,8 @@ public class CharSelectManager : MonoBehaviour
 
     private bool bHeld;
     private bool _goingBack = false;
+
+    public int playersIn = 0;
     #endregion
 
     #region Phase Enum
@@ -333,7 +336,11 @@ public class CharSelectManager : MonoBehaviour
     private void PlayerJoin(int playerNumber)
     {
         playerPhase[playerNumber] = SelectionPhase.CharacterSelect;
-        _playerObjects[playerNumber].JoinIcon.SetActive(false);
+        playersIn++;
+        if(playersIn == 4)
+        {
+            pressToJoinPanel.SetActive(false);
+        }
         _playerObjects[playerNumber].DefaultToken.SetActive(true);
         _playerObjects[playerNumber].ActiveToken = _playerObjects[playerNumber].DefaultToken;
         if (playerSettings[playerNumber] == null)
