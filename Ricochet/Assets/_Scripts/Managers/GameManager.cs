@@ -491,10 +491,8 @@ public class GameManager : MonoBehaviour
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
                 
-                float m_multiplier = powerUpManager.GetShrinkMass();
-                float s_multiplier = powerUpManager.GetShrinkSpeed();
-                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f, m_multiplier, s_multiplier));
-                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f, m_multiplier, s_multiplier));
+                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f));
+                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f));
             }
             else
             {
@@ -917,10 +915,10 @@ public class GameManager : MonoBehaviour
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, true);
             }
         }
-        StartCoroutine(ResetTeamScale(team, delay, m_multiplier, s_multiplier));
+        StartCoroutine(ResetTeamScale(team, delay));
     }
 
-    IEnumerator ResetTeamScale(ETeam team, float delay, float m_mult, float s_mult)
+    IEnumerator ResetTeamScale(ETeam team, float delay)
     {
         yield return new WaitForSeconds(delay);
 
@@ -930,8 +928,8 @@ public class GameManager : MonoBehaviour
             {
                 player.GiveIFrames(powerUpManager.GetIFrames());
                 player.transform.localScale = new Vector3(1, 1, 1);
-                player.ChangeMomentum(1/m_mult);
-                player.AlterMaxSpeed(1 / s_mult);
+                player.ChangeMomentum(1);
+                player.AlterMaxSpeed(1);
                 player.SetIsShrunken(false);
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, false);
             }
