@@ -119,6 +119,10 @@ public class PlayerDashController : MonoBehaviour
             StartCoroutine("StartingBoostCoroutine");
         }
     }
+    public void AlterDashSpeed(float multiplier)
+    {
+        dashSpeedBoost *= multiplier;
+    }
     #endregion
 
     #region Getters

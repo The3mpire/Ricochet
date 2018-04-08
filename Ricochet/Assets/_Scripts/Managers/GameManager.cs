@@ -491,9 +491,10 @@ public class GameManager : MonoBehaviour
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
                 
-                float multiplier = powerUpManager.GetShrinkMass();
-                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f, multiplier));
-                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f, multiplier));
+                float m_multiplier = powerUpManager.GetShrinkMass();
+                float s_multiplier = powerUpManager.GetShrinkSpeed();
+                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f, m_multiplier, s_multiplier));
+                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f, m_multiplier, s_multiplier));
             }
             else
             {
@@ -902,22 +903,24 @@ public class GameManager : MonoBehaviour
     {
         float scale = powerUpManager.GetShrinkScale();
         float delay = powerUpManager.GetShrinkDuration();
-        float multiplier = powerUpManager.GetShrinkMass();
+        float m_multiplier = powerUpManager.GetShrinkMass();
+        float s_multiplier = powerUpManager.GetShrinkSpeed();
 
         foreach (PlayerController player in playerControllers)
         {
             if (player.GetTeamNumber() == team)
             {
                 player.transform.localScale = new Vector3(scale, scale, scale);
-                player.ChangeMomentum(multiplier);
+                player.ChangeMomentum(m_multiplier);
+                player.AlterMaxSpeed(s_multiplier);
                 player.SetIsShrunken(true);
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, true);
             }
         }
-        StartCoroutine(ResetTeamScale(team, delay, multiplier));
+        StartCoroutine(ResetTeamScale(team, delay, m_multiplier, s_multiplier));
     }
 
-    IEnumerator ResetTeamScale(ETeam team, float delay, float mult)
+    IEnumerator ResetTeamScale(ETeam team, float delay, float m_mult, float s_mult)
     {
         yield return new WaitForSeconds(delay);
 
@@ -927,7 +930,8 @@ public class GameManager : MonoBehaviour
             {
                 player.GiveIFrames(powerUpManager.GetIFrames());
                 player.transform.localScale = new Vector3(1, 1, 1);
-                player.ChangeMomentum(1/mult);
+                player.ChangeMomentum(1/m_mult);
+                player.AlterMaxSpeed(1 / s_mult);
                 player.SetIsShrunken(false);
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, false);
             }

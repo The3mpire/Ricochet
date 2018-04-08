@@ -578,6 +578,12 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
+    public void AlterMaxSpeed(float multiplier)
+    {
+        thrusterSpeed *= multiplier;
+        dashController.AlterDashSpeed(multiplier);
+    }
+
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
