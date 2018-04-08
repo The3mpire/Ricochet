@@ -3948,7 +3948,6 @@ MonoBehaviour:
   - {fileID: 647781615}
   _defaultToken: {fileID: 685786614}
   _teamPanel: {fileID: 0}
-  _teamImage: {fileID: 0}
   _readyTag: {fileID: 1591869609}
   _joinIcon: {fileID: 0}
 --- !u!1 &88593201
@@ -4322,7 +4321,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 197403165}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.90404, y: 4.23, z: 90.2022}
+  m_LocalPosition: {x: 0, y: 0, z: 90.2022}
   m_LocalScale: {x: 0.08317461, y: 0.08317461, z: 0.08317461}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8931,6 +8930,10 @@ MonoBehaviour:
   char3Image: {fileID: 0}
   char4Image: {fileID: 0}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  char1TeamPanel: {fileID: 0}
+  char2TeamPanel: {fileID: 0}
+  char3TeamPanel: {fileID: 0}
+  char4TeamPanel: {fileID: 0}
 --- !u!222 &465805032
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9289,7 +9292,6 @@ MonoBehaviour:
   - {fileID: 1188133382}
   _defaultToken: {fileID: 8097798}
   _teamPanel: {fileID: 0}
-  _teamImage: {fileID: 0}
   _readyTag: {fileID: 92073087}
   _joinIcon: {fileID: 0}
 --- !u!1 &528220719
@@ -9482,12 +9484,16 @@ MonoBehaviour:
   - {fileID: 527393661}
   - {fileID: 1151348671}
   timerText: {fileID: 1548041770}
-  backSlider: {fileID: 0}
+  backSlider: {fileID: 88593203}
   char1Image: {fileID: 1555541167}
   char2Image: {fileID: 996273524}
   char3Image: {fileID: 261025936}
   char4Image: {fileID: 697131084}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  char1TeamPanel: {fileID: 668411818}
+  char2TeamPanel: {fileID: 672667364}
+  char3TeamPanel: {fileID: 1543697182}
+  char4TeamPanel: {fileID: 713102214}
 --- !u!114 &542277407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38706,6 +38712,7 @@ GameObject:
   - component: {fileID: 976904987}
   - component: {fileID: 976904988}
   - component: {fileID: 976904990}
+  - component: {fileID: 976904989}
   m_Layer: 5
   m_Name: PressAToJoin
   m_TagString: Untagged
@@ -38740,6 +38747,39 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 976904986}
+--- !u!114 &976904989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 976904986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.105516136, g: 0.698085, b: 0.027344167, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: ec59365ec90dced48add1897ca612511, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Press Any Button To Join
 --- !u!114 &976904990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38881,7 +38921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &995934282
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39701,7 +39741,6 @@ MonoBehaviour:
   - {fileID: 1805659396}
   _defaultToken: {fileID: 1805659396}
   _teamPanel: {fileID: 0}
-  _teamImage: {fileID: 0}
   _readyTag: {fileID: 891768012}
   _joinIcon: {fileID: 0}
 --- !u!1 &1175697436
@@ -39868,7 +39907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1180100842
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47517,7 +47556,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1425075546
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47632,7 +47671,6 @@ MonoBehaviour:
   - {fileID: 1518919419}
   _defaultToken: {fileID: 1703562180}
   _teamPanel: {fileID: 0}
-  _teamImage: {fileID: 0}
   _readyTag: {fileID: 910322451}
   _joinIcon: {fileID: 976904986}
 --- !u!1 &1439817225

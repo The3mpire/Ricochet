@@ -17,9 +17,6 @@ public class CharacterSelectObjects : MonoBehaviour
     [Tooltip("Drag player 1 Team panel here.")]
     private Image _teamPanel;
     [SerializeField]
-    [Tooltip("Drag player 1 Team Image here.")]
-    private Image _teamImage;
-    [SerializeField]
     [Tooltip("Drag player 1 ready tag here.")]
     private GameObject _readyTag;
     [SerializeField]
@@ -45,10 +42,6 @@ public class CharacterSelectObjects : MonoBehaviour
     public Image TeamPanel
     {
         get { return _teamPanel; }
-    }
-    public Image TeamImage
-    {
-        get { return _teamImage; }
     }
     public GameObject ReadyTag
     {

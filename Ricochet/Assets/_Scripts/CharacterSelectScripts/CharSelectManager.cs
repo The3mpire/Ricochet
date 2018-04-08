@@ -47,6 +47,12 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField]
     private Color defaultColor;
 
+    [Header("Team Selection Panels")]
+    [SerializeField] private GameObject char1TeamPanel;
+    [SerializeField] private GameObject char2TeamPanel;
+    [SerializeField] private GameObject char3TeamPanel;
+    [SerializeField] private GameObject char4TeamPanel;
+
     private readonly SelectionPhase[] playerPhase = new SelectionPhase[4];
     private readonly PSettings[] playerSettings = new PSettings[4];
     private float timer;
@@ -226,13 +232,10 @@ public class CharSelectManager : MonoBehaviour
                     selected.SetIsSelectable(false);
                     selectedChar = selected.getCharacterId();
                     gameData.SetPlayerCharacter(playerNumber, selected.getCharacterId());
-                    _playerObjects[playerNumber].TeamImage.sprite = selected.getCharacterImage();
-                    color.a = 1;
-                    _playerObjects[playerNumber].TeamImage.color = color;
+
                     token.GetComponent<Shadow>().enabled = false;
                     token.GetComponent<ParticleSystem>().Play();
                     playerPhase[playerNumber] = SelectionPhase.TeamSelect;
-                    _playerObjects[playerNumber].TeamPanel.color = GetTeamColor(_playerObjects[playerNumber].Team);
                 }
             }
         }
@@ -240,16 +243,20 @@ public class CharSelectManager : MonoBehaviour
         switch (selectedChar)
         {
             case ECharacter.Cat:
-                char1Image.color = playerColor;
+                char1Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char1TeamPanel.SetActive(true);
                 break;
             case ECharacter.Computer:
-                char2Image.color = playerColor;
+                char2Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char2TeamPanel.SetActive(true);
                 break;
             case ECharacter.MallCop:
-                char3Image.color = playerColor;
+                char3Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char3TeamPanel.SetActive(true);
                 break;
             case ECharacter.Sushi:
-                char4Image.color = playerColor;
+                char4Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                char4TeamPanel.SetActive(true);
                 break;
         }
     }
@@ -257,8 +264,23 @@ public class CharSelectManager : MonoBehaviour
     private void ChangeTeam(int playerNumber, int direction)
     {
         //TODO: Move to CharacterSelectObjects class?
+        ECharacter selectedChar = gameData.GetPlayerCharacter(playerNumber);
         _playerObjects[playerNumber].Team = GetNextTeam(_playerObjects[playerNumber].Team);
-        _playerObjects[playerNumber].TeamPanel.color = GetTeamColor(_playerObjects[playerNumber].Team);
+        switch (selectedChar)
+        {
+            case ECharacter.Cat:
+                char1Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                break;
+            case ECharacter.Computer:
+                char2Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                break;
+            case ECharacter.MallCop:
+                char3Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                break;
+            case ECharacter.Sushi:
+                char4Image.color = GetTeamColor(_playerObjects[playerNumber].Team);
+                break;
+        }
     }
 
     private void SelectTeam(int playerNumber)
@@ -394,15 +416,19 @@ public class CharSelectManager : MonoBehaviour
         {
             case ECharacter.Cat:
                 char1Image.color = defaultColor;
+                char1TeamPanel.SetActive(false);
                 break;
             case ECharacter.Computer:
                 char2Image.color = defaultColor;
+                char2TeamPanel.SetActive(false);
                 break;
             case ECharacter.MallCop:
                 char3Image.color = defaultColor;
+                char3TeamPanel.SetActive(false);
                 break;
             case ECharacter.Sushi:
                 char4Image.color = defaultColor;
+                char4TeamPanel.SetActive(false);
                 break;
         }
     }
@@ -415,10 +441,6 @@ public class CharSelectManager : MonoBehaviour
     {
         var color = Color.white;
         gameData.SetPlayerCharacter(playerNumber, ECharacter.None);
-        _playerObjects[playerNumber].TeamImage.sprite = null;
-        color = _playerObjects[playerNumber].TeamImage.color;
-        color.a = 0;
-        _playerObjects[playerNumber].TeamImage.color = color;
         _playerObjects[playerNumber].ActiveToken.GetComponent<Shadow>().enabled = true;
         _playerObjects[playerNumber].ActiveToken.GetComponent<ParticleSystem>().Stop();
         playerPhase[playerNumber] = SelectionPhase.CharacterSelect;
