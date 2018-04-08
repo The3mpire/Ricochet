@@ -42,9 +42,8 @@ public class SplashScreenManager : MonoBehaviour
         _buttonImage = _panel.transform.Find("ButtonImage").gameObject;
 
         if (ReInput.players.GetPlayer(0).controllers.joystickCount > 0)
-	    {
-	        _panel.gameObject.SetActive(false);
-	        _titlePanel.SetActive(false);
+        {
+            DeactivateSplashScreen();
             SlideInMainMenu(1);
         }
 #if UNITY_WSA_10_0 || UNITY_XBOXONE
@@ -96,6 +95,14 @@ public class SplashScreenManager : MonoBehaviour
 
     }
 
+    private void DeactivateSplashScreen()
+    {
+        _background.gameObject.SetActive(false);
+        _panel.gameObject.SetActive(false);
+        _flyby.gameObject.SetActive(false);
+        _ball.SetActive(false);
+    }
+
     #region Coroutines
 
     IEnumerator DoTitleFlyIn()
@@ -119,10 +126,7 @@ public class SplashScreenManager : MonoBehaviour
 
         yield return new WaitUntil(() => _panel.color.a == 0);
 
-        _background.gameObject.SetActive(false);
-        _panel.gameObject.SetActive(false);
-        _flyby.gameObject.SetActive(false);
-        _ball.SetActive(false);
+        DeactivateSplashScreen();
     }
 
 #if UNITY_WSA_10_0 || UNITY_XBOXONE
