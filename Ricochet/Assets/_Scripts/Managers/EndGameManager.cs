@@ -9,11 +9,18 @@ public class EndGameManager : MonoBehaviour
     [SerializeField] private GameObject defaultSelectedButton;
     [SerializeField] private GameDataSO gameData;
 
+    private SFXManager sfxManager;
+
     #region MonoBehaviours
     private void Start()
     {
         ShowGameOverMenu();
         EndGameText.text = (gameData.GetGameWinner() == Enumerables.ETeam.None) ? "Tie Game!" : "Congratulations " + gameData.GetGameWinner().ToString() + "!"; 
+        if (SFXManager.TryGetInstance(out sfxManager))
+        {
+            sfxManager.PlayTeamWinSound(gameData.GetGameWinner());
+        }
+        
     }
     #endregion
 

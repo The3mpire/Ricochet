@@ -76,11 +76,11 @@ public class SoundStorage : ScriptableObject
     [SerializeField]
     private AudioClip multiballUsed;
 
-    [Header("Freeze Sounds")]
-    [SerializeField]
-    private AudioClip freezePickedUp;
-    [SerializeField]
-    private AudioClip freezeUsed;
+    //[Header("Freeze Sounds")]
+    //[SerializeField]
+    //private AudioClip freezePickedUp;
+    //[SerializeField]
+    //private AudioClip freezeUsed;
 
     [Header("CatchNThrow")]
     [SerializeField]
@@ -159,6 +159,8 @@ public class SoundStorage : ScriptableObject
     private AudioClip redTeamWinSound;
     [SerializeField]
     private AudioClip blueTeamWinSound;
+    [SerializeField]
+    private AudioClip tieGameSound;
     [SerializeField]
     private AudioClip sceneTransitionSound;
     #endregion
@@ -312,8 +314,8 @@ public class SoundStorage : ScriptableObject
                 return catchNThrowPickedUp;
             case EPowerUp.CircleShield:
                 return circleShieldPickedup;
-            case EPowerUp.Freeze:
-                return freezePickedUp;
+            //case EPowerUp.Freeze:
+            //    return freezePickedUp;
             case EPowerUp.Multiball:
                 return multiballPickedUp;
             default: // EPowerUp.Shrink:
@@ -329,10 +331,10 @@ public class SoundStorage : ScriptableObject
                 return catchNThrowUsed;
             case EPowerUp.CircleShield:
                 return circleShieldUsed;
-            case EPowerUp.Freeze:
-                return freezeUsed;
+            //case EPowerUp.Freeze:
+            //    return freezeUsed;
             case EPowerUp.Multiball:
-                return freezeUsed;
+                return multiballUsed;
             default: //EPowerUp.Shrink
                 return shrinkUsed;
         }
@@ -379,6 +381,21 @@ public class SoundStorage : ScriptableObject
     public AudioClip GetMatchEndSound()
     {
         return matchEndSound;
+    }
+
+    public AudioClip GetTeamWinSound(ETeam team)
+    {
+        switch (team)
+        {
+            case ETeam.BlueTeam:
+                return blueTeamWinSound;
+            case ETeam.RedTeam:
+                return redTeamWinSound;
+            case ETeam.None:
+                return tieGameSound;
+            default:
+                return tieGameSound;
+        }
     }
 
     public AudioClip GetSceneTransitionSound()

@@ -59,10 +59,13 @@ public static class LevelSelect
 
     private static void PlaySceneTransitionSFX(Scene scene, LoadSceneMode mode)
     {
-        SFXManager sfx;
-        if (SFXManager.TryGetInstance(out sfx))
+        if (scene.buildIndex != (int)BuildIndex.END_GAME)
         {
-            sfx.PlaySceneTraversalSound();
+            SFXManager sfx;
+            if (SFXManager.TryGetInstance(out sfx))
+            {
+                sfx.PlaySceneTraversalSound();
+            }
         }
     }
 }
