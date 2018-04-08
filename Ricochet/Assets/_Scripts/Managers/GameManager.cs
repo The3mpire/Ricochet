@@ -489,8 +489,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                GameRunning = false;
-
+                StopCoroutine("StartGameTimer");
                 gameData.SetGameWinner(GetOpposingTeam(team));
                 DeactivatePlayersAndGoals();
                 lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
