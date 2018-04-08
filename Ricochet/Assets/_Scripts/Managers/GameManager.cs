@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
     private GameEvent onGoal;
     [SerializeField]
     private GameEvent onTimerChanged;
+    public delegate void TimerAction();
+    public static event TimerAction OnStartTimerFinished;
 
     [Header("Timers")]
     [Tooltip("Time before game start")]
@@ -212,6 +214,12 @@ public class GameManager : MonoBehaviour
             timeLeftTillStart--;
             sfxManager.PlaySound(soundStorage.GetCountdownSound());
             yield return new WaitForSeconds(1);
+        }
+
+        sfxManager.PlaySound(soundStorage.GetMatchBeginSound());
+        if (OnStartTimerFinished != null)
+        {
+            OnStartTimerFinished();
         }
 
         gameTimerActive = true;
