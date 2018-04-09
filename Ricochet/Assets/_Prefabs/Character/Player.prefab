@@ -1656,8 +1656,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158271850568408}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18, y: -11, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -15, y: -11.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224102686627786838}
@@ -1722,7 +1722,7 @@ CircleCollider2D:
   m_Radius: 0.36
 --- !u!68 &68093811809357706
 EdgeCollider2D:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1936325338366724}
@@ -2092,7 +2092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3ca238087deb348b90b1b579fb61d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeedBoost: 100
+  defaultDashSpeedBoost: 85
   maxDashCount: 3
   dashThreshold: 3
   rechargeRate: 3
@@ -2283,14 +2283,14 @@ MonoBehaviour:
   fallingLateralSpeed: 5
   thrusterAcceleration: 1.6
   upThrusterSpeed: 12
-  thrusterSpeed: 30
+  defaultThrusterSpeed: 30
   downwardMovementSpeedup: 1.3
   precisionThrusterAcceleration: 0.5
   precisionThrusterSpeed: 10
   airMoveSpeed: 14
   groundedMoveSpeed: 18
   directionSwitchRatio: 0.4
-  boingFactor: 1
+  boingFactor: -1.1
   gravityScale: 1
   motorIndex: 0
   motorLevel: 0
@@ -2348,7 +2348,7 @@ MonoBehaviour:
   m_DynamicPixelsPerUnit: 1
 --- !u!120 &120864174213652354
 LineRenderer:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1936325338366724}
