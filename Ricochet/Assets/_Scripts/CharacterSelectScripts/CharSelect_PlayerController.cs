@@ -1,9 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System;
 
 public class CharSelect_PlayerController : MonoBehaviour
@@ -52,6 +49,11 @@ public class CharSelect_PlayerController : MonoBehaviour
             joystickAcceptingInput = false;
             manager.RouteInputAxis(playerNumber - 1, moveX);
             StartCoroutine(ReactivateAfterDelay());
+        }
+
+        if (player.GetAnyButtonDown())
+        {
+            manager.RouteActivationInput(playerNumber - 1);
         }
 
         if (player.GetButtonDown("UISubmit"))

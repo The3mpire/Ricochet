@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Enumerables;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CharacterSelectObjects : MonoBehaviour
 {

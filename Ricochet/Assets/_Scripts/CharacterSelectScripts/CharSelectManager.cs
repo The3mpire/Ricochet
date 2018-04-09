@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Enumerables;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class CharSelectManager : MonoBehaviour
 {
@@ -163,7 +162,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void RouteInputA(int playerNumber, Color playerColor)
+    public void RouteActivationInput(int playerNumber)
     {
         var phase = playerPhase[playerNumber];
         switch (phase)
@@ -172,6 +171,14 @@ public class CharSelectManager : MonoBehaviour
                 PlayerJoin(playerNumber);
                 sfxManager.PlayMenuClickSound();
                 break;
+        }
+    }
+
+    public void RouteInputA(int playerNumber, Color playerColor)
+    {
+        var phase = playerPhase[playerNumber];
+        switch (phase)
+        {
             case SelectionPhase.CharacterSelect:
                 SelectCharacter(playerNumber, playerColor);
                 sfxManager.PlayMenuClickSound();
