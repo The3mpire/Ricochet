@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Enumerables;
 using UnityEngine;
@@ -9,11 +10,13 @@ public class EndGameManager : MonoBehaviour
 {
     [Header("Game Stats")]
     [SerializeField] private GameDataSO gameData;
+    [SerializeField] private Transform _tickerObject;
+    [SerializeField] private Transform _tickerEnd;
+    [SerializeField] private float _tickerDuration;
     [Tooltip("Drag the winning team text here")]
     [SerializeField] private Text _winTeamText;
     [Tooltip("Drag the winning message here")]
     [SerializeField] private Text _winMessageText;
-    [SerializeField] private Transform _winMessageEnd;
     [Tooltip("Drag the winning team text here")]
     [SerializeField] private Text _redScoreText;
     [Tooltip("Drag the winning team text here")]
@@ -21,76 +24,157 @@ public class EndGameManager : MonoBehaviour
 
     [Header("Characters")]
     [SerializeField]
-    [Tooltip("0 - Cop, 1 - Cat, 2 - Sushi, 3 - Computer")]
-    private GameObject[] _panel1Characters = new GameObject[4];
-    [SerializeField]
-    [Tooltip("0 - Cop, 1 - Cat, 2 - Sushi, 3 - Computer")]
-    private GameObject[] _panel2Characters = new GameObject[4];
+    [Tooltip("0 - Cop, 1 - Cat, 2 - Sushi, 3 - Computer, 4 - Tie Game")]
+    private GameObject[] _panelCharacters = new GameObject[5];
     [SerializeField]
     [Tooltip("Position to move Character Panel 1 to.")]
-    private Transform _charPanel1to;
-    [SerializeField]
-    [Tooltip("Position to move Character Panel 1 to.")]
-    private Transform _charPanel2to;
+    private Transform _charPanelTo;
 
     [Header("Menu")]
     [SerializeField] private GameObject _menuPanel;
     [SerializeField] private GameObject defaultSelectedButton;
 
-    private Transform _charPanel1;
-    private Transform _charPanel2;
+    private Transform _charPanel;
     private Sequence _winTeamSequence;
     private Sequence _winMessageSequence;
+    private int _blueScore = 0;
+    private int _redScore = 0;
+    private ETeam _winTeam = ETeam.None;
+    private List<ECharacter> _winCharacters = new List<ECharacter>();
+    private int charCount;
 
     #region MonoBehaviours
     private void Start()
     {
-        _charPanel1 = _panel1Characters[0].transform.parent.transform;
-        _charPanel2 = _panel2Characters[0].transform.parent.transform;
-        SetUpSequences();
-        StartCoroutine(ShowGameWinner());
+        _charPanel = _panelCharacters[0].transform.parent.transform;
+
+        LoadRoundStats();
+        SetStatText();
+        RunTicker();
         ShowMenu();
-        
+        MoveCharacterPanel();
+
     }
     #endregion
 
     #region Coroutines
 
-    IEnumerator ShowGameWinner()
-    {
-        _winTeamSequence.Play();
-        _winMessageSequence.Play();
-        yield return _winTeamSequence.WaitForCompletion();
-        _charPanel1.DOMove(_charPanel1to.position, 2f);
-        _charPanel2.DOMove(_charPanel2to.position, 2f);
-    }
 
     #endregion
 
     #region Private Functions
 
-    private void SetUpSequences()
+    private void SwapCharacter()
     {
-        _winTeamSequence = DOTween.Sequence();
-        _winTeamSequence.Append(_winTeamText.transform.DOPunchScale(Vector3.one, 2f, 2, 0f));
-        _winTeamSequence.Pause();
+        int selected = -1;
+        
+        switch (_winCharacters[charCount])
+        {
+            case ECharacter.MallCop:
+                selected = 0;
+                break;
+            case ECharacter.Cat:
+                selected = 1;
+                break;
+            case ECharacter.Sushi:
+                selected = 2;
+                break;
+            case ECharacter.Computer:
+                selected = 3;
+                break;
+            default:
+                selected = -1;
+                break;
+        }
 
-        _winMessageSequence = DOTween.Sequence();
-        _winMessageSequence.SetDelay(1f);
-        _winMessageSequence.Append(_winMessageText.transform.DOMove(_winMessageEnd.position, 1f));
-        _winMessageSequence.Append(_winMessageText.transform.DOPunchPosition(_winMessageText.transform.right*10, 2f, 10, 0));
-        _winMessageSequence.Pause();
+        for (int i = 0; i < _panelCharacters.Length; i++)
+        {
+            if (i == selected)
+            {
+                _panelCharacters[i].SetActive(true);
+            }
+            else
+            {
+                _panelCharacters[i].SetActive(false);
+            }
+        }
+
+        if (charCount >= _winCharacters.Count-1)
+        {
+            charCount = 0;
+        }
+        else
+        {
+            charCount++;
+        }
+
     }
 
+    private void MoveCharacterPanel()
+    {
+        if (_winCharacters.Count == 0)
+        {
+            _panelCharacters[4].SetActive(true);
+        }
+        Vector3 charStartPos = _charPanel.position;
+        Sequence charSequence = DOTween.Sequence();
+        charSequence.Append(_charPanel.DOMove(_charPanelTo.position, 2f));
+        charSequence.AppendInterval(5f);
+        charSequence.PrependCallback(SwapCharacter);
+        if (_winCharacters.Count == 0)
+        {
+            charSequence.SetLoops(0);
+        }
+        else
+        {
+            charSequence.Append(_charPanel.DOMove(charStartPos, 2f));
+            charSequence.SetLoops(-1);
+        }
+        charSequence.Play();
+    }
+
+    private void LoadRoundStats()
+    {
+        _blueScore = gameData.GetBlueScore();
+        _redScore = gameData.GetRedScore();
+        _winTeam = gameData.GetGameWinner();
+        ETeam[] playerTeams = gameData.GetPlayerTeams();
+        for (int i = 0; i<playerTeams.Length;i++)    
+        {
+            if (playerTeams[i] == _winTeam && gameData.GetPlayerCharacter(i) != ECharacter.None && gameData.GetActive(i+1))
+            {
+                _winCharacters.Add(gameData.GetPlayerCharacter(i));
+            }
+        }
+    }
+
+    private void SetStatText()
+    {
+        _blueScoreText.text = "Blue score: " + _blueScore;
+        _blueScoreText.color = Color.blue;
+        _redScoreText.text = "Red score: " + _redScore;
+        _redScoreText.color = Color.red;
+        _winTeamText.text = _winTeam == ETeam.BlueTeam ? "Blue Team" : _winTeam == ETeam.RedTeam ? "Red Team": "Tie Game!";
+        _winTeamText.color = _winTeam == ETeam.BlueTeam ? Color.blue : _winTeam == ETeam.RedTeam ? Color.red : Color.green;
+        if (_winTeam == ETeam.None)
+        {
+            _winMessageText.text = "Step it up!!";
+        }
+
+    }
+
+    private void RunTicker()
+    {
+        Tween tickerTween = _tickerObject.DOMove(_tickerEnd.position, _tickerDuration).SetEase(Ease.Linear).SetLoops(-1);
+    }
     #endregion
 
-
+    #region Menu Functions
     public void ShowMenu()
     {
         EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
     }
 
-    #region Menu Functions
     public void PlayAgain()
     {
         gameData.ResetGameStatistics();
