@@ -46,6 +46,14 @@ public class MainMenuFunctions : MonoBehaviour
     [SerializeField]
     private GameObject optionsPanelDefaultItem;
 
+    [Tooltip("The panel to be enabled when Credits is selected")]
+    [SerializeField]
+    private GameObject creditsPanel;
+
+    [Tooltip("The first button to be selected when the panel is on")]
+    [SerializeField]
+    private GameObject creditsPanelDefaultItem;
+
     [SerializeField]
     private GameDataSO gameData;
 
@@ -123,8 +131,7 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        //TODO: Implement Credits page/panel.
-        SwapPanels(mainMenuPanel, mainMenuPanel, _currentCharacterArt, _characterImages[3], defaultButton);
+        SwapPanels(mainMenuPanel, creditsPanel, _currentCharacterArt, _characterImages[3], creditsPanelDefaultItem);
 
     }
 
@@ -134,7 +141,7 @@ public class MainMenuFunctions : MonoBehaviour
         {
             return;
         }
-        SwapPanels(mainMenuPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
+        SwapPanels(creditsPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
     }
 
     public void LaunchClassicMode()
