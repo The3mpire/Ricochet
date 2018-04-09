@@ -51,11 +51,6 @@ public class CharSelect_PlayerController : MonoBehaviour
             StartCoroutine(ReactivateAfterDelay());
         }
 
-        if (player.GetAnyButtonDown())
-        {
-            manager.RouteActivationInput(playerNumber - 1);
-        }
-
         if (player.GetButtonDown("UISubmit"))
         {
             manager.RouteInputA(playerNumber - 1, playerColor);
@@ -67,6 +62,10 @@ public class CharSelect_PlayerController : MonoBehaviour
         if (player.GetButton("UICancel"))
         {
             manager.RouteInputAltB(playerNumber - 1);
+        }
+        if (player.GetAnyButtonDown())
+        {
+            manager.RouteActivationInput(playerNumber - 1);
         }
     }
     #endregion

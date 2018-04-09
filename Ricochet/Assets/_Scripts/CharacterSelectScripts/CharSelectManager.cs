@@ -356,6 +356,9 @@ public class CharSelectManager : MonoBehaviour
         }
         _playerObjects[playerNumber].ActiveToken = MoveSelectionTokenTo(playerSettings[playerNumber].Character, _playerObjects[playerNumber].ActiveToken, _playerObjects[playerNumber].Tokens);
         gameData.SetPlayerActive(playerNumber + 1);
+        StopCoroutine("LevelSelectTimer");
+        StopCoroutine("CountdownToLevelSelect");
+        timerText.text = "Waiting...";
     }
 
     #endregion
