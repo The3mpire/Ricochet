@@ -43,6 +43,8 @@ public class EndGameManager : MonoBehaviour
     private List<ECharacter> _winCharacters = new List<ECharacter>();
     private int charCount;
 
+    private SFXManager sfxManager;
+
     #region MonoBehaviours
     private void Start()
     {
@@ -53,7 +55,10 @@ public class EndGameManager : MonoBehaviour
         RunTicker();
         ShowMenu();
         MoveCharacterPanel();
-
+        if (SFXManager.TryGetInstance(out sfxManager))
+        {
+            sfxManager.PlayTeamWinSound(gameData.GetGameWinner());
+        }
     }
     #endregion
 

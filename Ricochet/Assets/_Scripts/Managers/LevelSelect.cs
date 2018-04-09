@@ -5,6 +5,11 @@ using Enumerables;
 
 public static class LevelSelect
 {
+    static LevelSelect()
+    {
+        SceneManager.sceneLoaded += PlaySceneTransitionSFX;
+    }
+
     public static List<BuildIndex> glitchBallClassicLevels = new List<BuildIndex>() {
             BuildIndex.ELEVATOR,
             BuildIndex.UP_N_OVER_WIDE,
@@ -14,58 +19,53 @@ public static class LevelSelect
 
     public static void LoadRandomLevel(List<BuildIndex> levelSelection)
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync((int)levelSelection[Random.Range(0, levelSelection.Count)]);
     }
 
     public static void LoadEndGameScene()
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync((int)BuildIndex.END_GAME);
     }
 
     public static void LoadLevel(string sceneName)
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync(sceneName);
     }
 
     public static void LoadLevel(int buildIndex)
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync(buildIndex);
     }
 
     public static void LoadLevel(BuildIndex buildIndex)
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync((int)buildIndex);
     }
 
     public static void LoadCharacterSelect()
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync((int)BuildIndex.CHARACTER_SELECT);
     }
 
     public static void LoadLevelSelect()
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync((int)BuildIndex.LEVEL_SELECT);
     }
 
     public static void LoadMainMenu()
     {
-        PlaySceneTransitionSFX();
         SceneManager.LoadSceneAsync((int)BuildIndex.MAIN_MENU);
     }
 
-    private static void PlaySceneTransitionSFX()
+    private static void PlaySceneTransitionSFX(Scene scene, LoadSceneMode mode)
     {
-        SFXManager sfx;
-        if (SFXManager.TryGetInstance(out sfx))
+        if (scene.buildIndex != (int)BuildIndex.END_GAME)
         {
-            sfx.PlaySceneTraversalSound();
+            SFXManager sfx;
+            if (SFXManager.TryGetInstance(out sfx))
+            {
+                sfx.PlaySceneTraversalSound();
+            }
         }
     }
 }

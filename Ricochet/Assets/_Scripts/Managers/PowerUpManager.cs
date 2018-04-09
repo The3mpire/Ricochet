@@ -72,6 +72,9 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("Mass of shrunken players multiplier of starting mass")]
     [SerializeField]
     private float shrinkMass = .2f;
+    [Tooltip("Multiplier for shrunken move speed")]
+    [SerializeField]
+    private float shrinkSpeed = .4f;
     [Tooltip("Seconds of invulnerability given to players when they expand to prevent colliding with walls")]
     [SerializeField]
     private float shrinkIFrames = .001f;
@@ -89,6 +92,10 @@ public class PowerUpManager : MonoBehaviour
     public float GetShrinkMass()
     {
         return shrinkMass;
+    }
+    public float GetShrinkSpeed()
+    {
+        return shrinkSpeed;
     }
     public float GetIFrames()
     {

@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
     private GameEvent onGoal;
     [SerializeField]
     private GameEvent onTimerChanged;
+    public delegate void TimerAction();
+    public static event TimerAction OnStartTimerFinished;
 
     [Header("Timers")]
     [Tooltip("Time before game start")]
@@ -212,6 +214,12 @@ public class GameManager : MonoBehaviour
             timeLeftTillStart--;
             sfxManager.PlaySound(soundStorage.GetCountdownSound());
             yield return new WaitForSeconds(1);
+        }
+
+        sfxManager.PlaySound(soundStorage.GetMatchBeginSound());
+        if (OnStartTimerFinished != null)
+        {
+            OnStartTimerFinished();
         }
 
         gameTimerActive = true;
@@ -380,28 +388,41 @@ public class GameManager : MonoBehaviour
 
         // Check if the ball has been touched by anyone
         PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
-        if (lastTouchedBy != null)
+        if (lastTouchedBy != null && GameRunning)
         {
             lastTouchedBy.RegisterKill(playerController);
 
             if (gameMode == EMode.Deathmatch)
             {
                 if (lastTouchedBy.GetTeamNumber() == playerController.GetTeamNumber())
-                {
-                    if(lastTouchedBy.GetTeamNumber() == ETeam.RedTeam)
+                {   // Suicide
+                    ETeam scorer = lastTouchedBy.GetTeamNumber() == ETeam.RedTeam ? ETeam.BlueTeam : ETeam.RedTeam;
+                    if (lightsController != null)
                     {
-                        modeManager.AltUpdateScore(ETeam.BlueTeam, 1);
+                        lightsController.HitTheTeamLights(scorer, 3);
                     }
-                    else
+                    if (modeManager.AltUpdateScore(scorer,1))
                     {
-                        modeManager.AltUpdateScore(ETeam.RedTeam, 1);
+                        GameRunning = false;
+                        StopCoroutine("StartGameTimer");
+                        gameData.SetGameWinner(scorer);
+                        lightsController.HitAllTheLightsAsTeam(scorer, 10);
+                        StartCoroutine("DelayedWinScreen");
                     }
                 }
                 else
                 {
+                    if (lightsController != null)
+                    {
+                        lightsController.HitTheTeamLights(lastTouchedBy.GetTeamNumber(), 3);
+                    }
                     if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
                     {
-                        SetWinningTeam(lastTouchedBy.GetTeamNumber());
+                        GameRunning = false;
+                        StopCoroutine("StartGameTimer");
+                        gameData.SetGameWinner(lastTouchedBy.GetTeamNumber());
+                        lightsController.HitAllTheLightsAsTeam(lastTouchedBy.GetTeamNumber(), 10);
+                        StartCoroutine("DelayedWinScreen");
                     }
                 }
             }
@@ -410,36 +431,19 @@ public class GameManager : MonoBehaviour
         {
             if (gameMode == EMode.Deathmatch)
             {
-                if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                ETeam scorer = playerController.GetTeamNumber() == ETeam.BlueTeam ? ETeam.RedTeam : ETeam.BlueTeam;
+                if (lightsController != null)
                 {
-                    if (modeManager.AltUpdateScore(ETeam.RedTeam, 1))
-                    {
-                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
-                        {
-                            SetWinningTeam(ETeam.RedTeam);
-                        }
-                        else
-                        {
-                            SetWinningTeam(ETeam.BlueTeam);
-
-                        }
-                        BallHandling(ball);
-                    }
+                    lightsController.HitTheTeamLights(scorer, 3);
                 }
-                else
+                if (modeManager.AltUpdateScore(scorer, 1))
                 {
-                    if (modeManager.AltUpdateScore(ETeam.BlueTeam, 1))
-                    {
-                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
-                        {
-                            SetWinningTeam(ETeam.RedTeam);
-                        }
-                        else
-                        {
-                            SetWinningTeam(ETeam.BlueTeam);
-                        }
-                        BallHandling(ball);
-                    }
+                    GameRunning = false;
+                    StopCoroutine("StartGameTimer");
+                    gameData.SetGameWinner(scorer);
+                    lightsController.HitAllTheLightsAsTeam(scorer, 10);
+                    BallHandling(ball);
+                    StartCoroutine("DelayedWinScreen");
                 }
             }
         }
@@ -483,14 +487,12 @@ public class GameManager : MonoBehaviour
                 RespawnBall(ball);
                 NoWaitRespawnAllPlayers();
                 
-                float multiplier = powerUpManager.GetShrinkMass();
-                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f, multiplier));
-                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f, multiplier));
+                StartCoroutine(ResetTeamScale(ETeam.RedTeam, 0.0f));
+                StartCoroutine(ResetTeamScale(ETeam.BlueTeam, 0.0f));
             }
             else
             {
-                GameRunning = false;
-
+                StopCoroutine("StartGameTimer");
                 gameData.SetGameWinner(GetOpposingTeam(team));
                 DeactivatePlayersAndGoals();
                 lightsController.HitAllTheLightsAsTeam(modeManager.GetMaxScore(), 10);
@@ -775,6 +777,8 @@ public class GameManager : MonoBehaviour
                 return soundStorage.GetPlayerDashSound(character);
             case ECharacterAction.Death:
                 return soundStorage.GetPlayerDeathSound(character);
+            case ECharacterAction.Jetpack:
+                return soundStorage.GetPlayerJetpackSound(character);
             default: //ECharacterMovement.Jetpack:
                 return soundStorage.GetPlayerJetpackSound(character);
         }
@@ -800,9 +804,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetScoringSound();
     }
 
-    public AudioClip GetBallSound(string tag, bool highVelocity)
+    public AudioClip GetBallSound(string tag)
     {
-        return soundStorage.GetBallSound(tag, highVelocity);
+        return soundStorage.GetBallSound(tag);
     }
     
     public AudioClip GetPowerupPickupSound(EPowerUp powerUp)
@@ -820,9 +824,9 @@ public class GameManager : MonoBehaviour
         return soundStorage.GetMenuClickSound();
     }
 
-    public AudioClip GetPauseSound()
+    public AudioClip GetPauseSound(bool pausing)
     {
-        return soundStorage.GetPauseSound();
+        return pausing == true ? soundStorage.GetPauseSound() : soundStorage.GetUnpauseSound();
     }
 
     public AudioClip GetTauntSound(ECharacter character)
@@ -893,22 +897,24 @@ public class GameManager : MonoBehaviour
     {
         float scale = powerUpManager.GetShrinkScale();
         float delay = powerUpManager.GetShrinkDuration();
-        float multiplier = powerUpManager.GetShrinkMass();
+        float m_multiplier = powerUpManager.GetShrinkMass();
+        float s_multiplier = powerUpManager.GetShrinkSpeed();
 
         foreach (PlayerController player in playerControllers)
         {
             if (player.GetTeamNumber() == team)
             {
                 player.transform.localScale = new Vector3(scale, scale, scale);
-                player.ChangeMomentum(multiplier);
+                player.ChangeMomentum(m_multiplier);
+                player.AlterMaxSpeed(s_multiplier);
                 player.SetIsShrunken(true);
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, true);
             }
         }
-        StartCoroutine(ResetTeamScale(team, delay, multiplier));
+        StartCoroutine(ResetTeamScale(team, delay));
     }
 
-    IEnumerator ResetTeamScale(ETeam team, float delay, float mult)
+    IEnumerator ResetTeamScale(ETeam team, float delay)
     {
         yield return new WaitForSeconds(delay);
 
@@ -918,7 +924,8 @@ public class GameManager : MonoBehaviour
             {
                 player.GiveIFrames(powerUpManager.GetIFrames());
                 player.transform.localScale = new Vector3(1, 1, 1);
-                player.ChangeMomentum(1/mult);
+                player.ChangeMomentum(1);
+                player.AlterMaxSpeed(1);
                 player.SetIsShrunken(false);
                 player.gameObject.GetComponentInChildren<PowerUpParticlesController>().PlayPowerupEffect(EPowerUp.Shrink, 0, false);
             }
