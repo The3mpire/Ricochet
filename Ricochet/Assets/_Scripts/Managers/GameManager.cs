@@ -388,28 +388,41 @@ public class GameManager : MonoBehaviour
 
         // Check if the ball has been touched by anyone
         PlayerController lastTouchedBy = ball.GetLastTouchedBy(playerController);
-        if (lastTouchedBy != null)
+        if (lastTouchedBy != null && GameRunning)
         {
             lastTouchedBy.RegisterKill(playerController);
 
             if (gameMode == EMode.Deathmatch)
             {
                 if (lastTouchedBy.GetTeamNumber() == playerController.GetTeamNumber())
-                {
-                    if(lastTouchedBy.GetTeamNumber() == ETeam.RedTeam)
+                {   // Suicide
+                    ETeam scorer = lastTouchedBy.GetTeamNumber() == ETeam.RedTeam ? ETeam.BlueTeam : ETeam.RedTeam;
+                    if (lightsController != null)
                     {
-                        modeManager.AltUpdateScore(ETeam.BlueTeam, 1);
+                        lightsController.HitTheTeamLights(scorer, 3);
                     }
-                    else
+                    if (modeManager.AltUpdateScore(scorer,1))
                     {
-                        modeManager.AltUpdateScore(ETeam.RedTeam, 1);
+                        GameRunning = false;
+                        StopCoroutine("StartGameTimer");
+                        gameData.SetGameWinner(scorer);
+                        lightsController.HitAllTheLightsAsTeam(scorer, 10);
+                        StartCoroutine("DelayedWinScreen");
                     }
                 }
                 else
                 {
+                    if (lightsController != null)
+                    {
+                        lightsController.HitTheTeamLights(lastTouchedBy.GetTeamNumber(), 3);
+                    }
                     if (modeManager.AltUpdateScore(lastTouchedBy.GetTeamNumber(), 1))
                     {
-                        SetWinningTeam(lastTouchedBy.GetTeamNumber());
+                        GameRunning = false;
+                        StopCoroutine("StartGameTimer");
+                        gameData.SetGameWinner(lastTouchedBy.GetTeamNumber());
+                        lightsController.HitAllTheLightsAsTeam(lastTouchedBy.GetTeamNumber(), 10);
+                        StartCoroutine("DelayedWinScreen");
                     }
                 }
             }
@@ -418,36 +431,19 @@ public class GameManager : MonoBehaviour
         {
             if (gameMode == EMode.Deathmatch)
             {
-                if (playerController.GetTeamNumber() == ETeam.BlueTeam)
+                ETeam scorer = playerController.GetTeamNumber() == ETeam.BlueTeam ? ETeam.RedTeam : ETeam.BlueTeam;
+                if (lightsController != null)
                 {
-                    if (modeManager.AltUpdateScore(ETeam.RedTeam, 1))
-                    {
-                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
-                        {
-                            SetWinningTeam(ETeam.RedTeam);
-                        }
-                        else
-                        {
-                            SetWinningTeam(ETeam.BlueTeam);
-
-                        }
-                        BallHandling(ball);
-                    }
+                    lightsController.HitTheTeamLights(scorer, 3);
                 }
-                else
+                if (modeManager.AltUpdateScore(scorer, 1))
                 {
-                    if (modeManager.AltUpdateScore(ETeam.BlueTeam, 1))
-                    {
-                        if (playerController.GetTeamNumber() == ETeam.BlueTeam)
-                        {
-                            SetWinningTeam(ETeam.RedTeam);
-                        }
-                        else
-                        {
-                            SetWinningTeam(ETeam.BlueTeam);
-                        }
-                        BallHandling(ball);
-                    }
+                    GameRunning = false;
+                    StopCoroutine("StartGameTimer");
+                    gameData.SetGameWinner(scorer);
+                    lightsController.HitAllTheLightsAsTeam(scorer, 10);
+                    BallHandling(ball);
+                    StartCoroutine("DelayedWinScreen");
                 }
             }
         }
