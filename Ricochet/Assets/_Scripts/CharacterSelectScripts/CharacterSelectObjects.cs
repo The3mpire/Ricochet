@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Enumerables;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CharacterSelectObjects : MonoBehaviour
 {
@@ -14,17 +12,8 @@ public class CharacterSelectObjects : MonoBehaviour
     [Tooltip("Drag default active token for Player 1 here")]
     private GameObject _defaultToken;
     [SerializeField]
-    [Tooltip("Drag player 1 Team panel here.")]
-    private Image _teamPanel;
-    [SerializeField]
-    [Tooltip("Drag player 1 Team Image here.")]
-    private Image _teamImage;
-    [SerializeField]
     [Tooltip("Drag player 1 ready tag here.")]
     private GameObject _readyTag;
-    [SerializeField]
-    [Tooltip("Drag player 1 Join Icon here.")]
-    private GameObject _joinIcon;
     #endregion
 
     #region Private
@@ -42,21 +31,9 @@ public class CharacterSelectObjects : MonoBehaviour
         get { return _defaultToken; }
         set { _defaultToken = value; }
     }
-    public Image TeamPanel
-    {
-        get { return _teamPanel; }
-    }
-    public Image TeamImage
-    {
-        get { return _teamImage; }
-    }
     public GameObject ReadyTag
     {
         get { return _readyTag; }
-    }
-    public GameObject JoinIcon
-    {
-        get { return _joinIcon; }
     }
     public GameObject ActiveToken
     {
