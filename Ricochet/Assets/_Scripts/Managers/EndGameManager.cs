@@ -43,6 +43,9 @@ public class EndGameManager : MonoBehaviour
     private List<ECharacter> _winCharacters = new List<ECharacter>();
     private int charCount;
 
+    private Color blueColor = new Color(0,118,255);
+    private Color redColor = Color.red;
+
     private SFXManager sfxManager;
 
     #region MonoBehaviours
@@ -156,11 +159,11 @@ public class EndGameManager : MonoBehaviour
     private void SetStatText()
     {
         _blueScoreText.text = "Blue score: " + _blueScore;
-        _blueScoreText.color = Color.blue;
+        _blueScoreText.color = blueColor;
         _redScoreText.text = "Red score: " + _redScore;
-        _redScoreText.color = Color.red;
+        _redScoreText.color = redColor;
         _winTeamText.text = _winTeam == ETeam.BlueTeam ? "Blue Team" : _winTeam == ETeam.RedTeam ? "Red Team": "Tie Game!";
-        _winTeamText.color = _winTeam == ETeam.BlueTeam ? Color.blue : _winTeam == ETeam.RedTeam ? Color.red : Color.green;
+        _winTeamText.color = _winTeam == ETeam.BlueTeam ? blueColor : _winTeam == ETeam.RedTeam ? redColor : Color.green;
         if (_winTeam == ETeam.None)
         {
             _winMessageText.text = "Step it up!!";
