@@ -268,21 +268,25 @@ public class CharSelectManager : MonoBehaviour
         {
             case ECharacter.Cat:
                 char1Image.color = teamColor;
+                char1Image.fillCenter = true;
                 char1TeamPanel.SetActive(true);
                 char1TeamText.text = teamText;
                 break;
             case ECharacter.Computer:
                 char2Image.color = teamColor;
+                char2Image.fillCenter = true;
                 char2TeamPanel.SetActive(true);
                 char2TeamText.text = teamText;
                 break;
             case ECharacter.MallCop:
                 char3Image.color = teamColor;
+                char3Image.fillCenter = true;
                 char3TeamPanel.SetActive(true);
                 char3TeamText.text = teamText;
                 break;
             case ECharacter.Sushi:
                 char4Image.color = teamColor;
+                char4Image.fillCenter = true;
                 char4TeamPanel.SetActive(true);
                 char4TeamText.text = teamText;
                 break;
@@ -479,18 +483,22 @@ public class CharSelectManager : MonoBehaviour
         {
             case ECharacter.Cat:
                 char1Image.color = defaultColor;
+                char1Image.fillCenter = false;
                 char1TeamPanel.SetActive(false);
                 break;
             case ECharacter.Computer:
                 char2Image.color = defaultColor;
+                char2Image.fillCenter = false;
                 char2TeamPanel.SetActive(false);
                 break;
             case ECharacter.MallCop:
                 char3Image.color = defaultColor;
+                char3Image.fillCenter = false;
                 char3TeamPanel.SetActive(false);
                 break;
             case ECharacter.Sushi:
                 char4Image.color = defaultColor;
+                char4Image.fillCenter = false;
                 char4TeamPanel.SetActive(false);
                 break;
         }
