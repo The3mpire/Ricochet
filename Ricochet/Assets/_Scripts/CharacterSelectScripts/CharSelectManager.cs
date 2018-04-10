@@ -69,6 +69,8 @@ public class CharSelectManager : MonoBehaviour
     private bool _goingBack = false;
 
     public int playersIn = 0;
+
+    private Coroutine _levelSelectCoroutine;
     #endregion
 
     #region Phase Enum
@@ -118,7 +120,7 @@ public class CharSelectManager : MonoBehaviour
             if (!timerActive)
             {
                 timerActive = true;
-                StartCoroutine(LevelSelectTimer());
+                _levelSelectCoroutine = StartCoroutine(LevelSelectTimer());
             }
             CountdownToLevelSelect();
         }
@@ -356,8 +358,12 @@ public class CharSelectManager : MonoBehaviour
         }
         _playerObjects[playerNumber].ActiveToken = MoveSelectionTokenTo(playerSettings[playerNumber].Character, _playerObjects[playerNumber].ActiveToken, _playerObjects[playerNumber].Tokens);
         gameData.SetPlayerActive(playerNumber + 1);
-        StopCoroutine("LevelSelectTimer");
-        StopCoroutine("CountdownToLevelSelect");
+        if (_levelSelectCoroutine != null)
+        {
+            StopCoroutine(_levelSelectCoroutine);
+        }
+        timerActive = false;
+        timer = waitTime;
         timerText.text = "Waiting...";
     }
 
