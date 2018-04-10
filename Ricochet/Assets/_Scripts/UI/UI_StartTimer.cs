@@ -17,6 +17,16 @@ public class UI_StartTimer : MonoBehaviour
         GameManager.TryGetInstance(out manager);
     }
 
+    private void OnEnable()
+    {
+        GameManager.OnStartTimerFinished += StartGameText;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnStartTimerFinished -= StartGameText;
+    }
+
     public void UpdateText()
     {
         if (!manager.GameRunning)
@@ -30,6 +40,12 @@ public class UI_StartTimer : MonoBehaviour
             text.text = manager.MatchTimeLeft.ToString();
             StartCoroutine(Timer());
         }
+    }
+
+    private void StartGameText()
+    {
+        text.text = "GO";
+        StartCoroutine(Timer());
     }
 
     private IEnumerator Timer()

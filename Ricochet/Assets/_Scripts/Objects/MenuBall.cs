@@ -37,7 +37,7 @@ public class MenuBall : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         Collider2D hitCollider = col.collider;
-        audioSource.PlayOneShot(soundStorage.GetBallSound(hitCollider.tag, col.relativeVelocity.magnitude >= 35));
+        audioSource.PlayOneShot(soundStorage.GetBallSound(hitCollider.tag));
     }
 
     void LateUpdate()

@@ -45,7 +45,8 @@ public class PlayerController : MonoBehaviour
     private float upThrusterSpeed = 5f;
     [Tooltip("Move speed while using jetpack w/ directional input")]
     [SerializeField]
-    private float thrusterSpeed = 15f;
+    private float defaultThrusterSpeed = 15f;
+    private float thrusterSpeed;
     [Tooltip("How much faster is downward movement? 1.0 is the same. > 1 is faster")]
     [SerializeField]
     private float downwardMovementSpeedup = 1.3f;
@@ -161,6 +162,7 @@ public class PlayerController : MonoBehaviour
     private bool acceptingInput;
 
     private PlayerDashController dashController;
+    private float defaultMass;
     #endregion
 
     #region Monobehaviour
@@ -174,6 +176,8 @@ public class PlayerController : MonoBehaviour
         isFrozen = false;
         isShrunken = false;
 
+        thrusterSpeed = defaultThrusterSpeed;
+        defaultMass = rigid.mass;
         killList = new List<PlayerController>();
         rigid.gravityScale = 0;
         rightStickHorz = 1;
@@ -232,7 +236,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!audioSource.isPlaying)
                 {
-                    ECharacter character = gameData.GetPlayerCharacter(playerNumber);
+                    ECharacter character = gameData.GetPlayerCharacter(playerNumber - 1);
                     audioSource.PlayOneShot(gameManagerInstance.GetTauntSound(character));
                 }
             }
@@ -353,6 +357,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                if (chosenCharacter == ECharacter.Computer && sprite.flipX)
+                {
+                    sprite.flipX = flip;
+                }
                 animator.SetBool("isWalking", false);
             }
         }
@@ -443,6 +451,11 @@ public class PlayerController : MonoBehaviour
             if (jetpackParticle)
             {
                 jetpackParticle.Stop();
+            }
+            if (player.GetAxisRawPrev("Jetpack") == 0)
+            {
+                ECharacter character = gameData.GetPlayerCharacter(playerNumber - 1);
+                audioSource.PlayOneShot(gameManagerInstance.GetCharacterSFX(character,ECharacterAction.Jetpack));
             }
             else
             {
@@ -573,6 +586,12 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region External Functions
+    public void AlterMaxSpeed(float multiplier)
+    {
+        thrusterSpeed = defaultThrusterSpeed * multiplier;
+        dashController.AlterDashSpeed(multiplier);
+    }
+
     public void Rumble(float multiplier = 1f)
     {
         player.SetVibration(motorIndex, motorLevel * multiplier, rumbleDuration * multiplier);
@@ -602,7 +621,7 @@ public class PlayerController : MonoBehaviour
     }
     public void ChangeMomentum(float m)
     {
-        rigid.mass *= m;
+        rigid.mass = defaultMass * m;
     }
 
     public void AddVelocity(Vector2 velocity)
@@ -633,7 +652,7 @@ public class PlayerController : MonoBehaviour
 
     public void PlayPauseSound()
     {
-        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound());
+        audioSource.PlayOneShot(gameManagerInstance.GetPauseSound(true));
     }
 
     public void RegisterKill(PlayerController otherPlayer)

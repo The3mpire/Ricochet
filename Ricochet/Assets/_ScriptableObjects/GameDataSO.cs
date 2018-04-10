@@ -133,6 +133,11 @@ public class GameDataSO : ScriptableObject
         return playerCharacters;
     }
 
+    public ETeam[] GetPlayerTeams()
+    {
+        return playerTeams;
+    }
+
     public void SetPlayerCharacters(ECharacter[] characters)
     {
         playerCharacters = characters;

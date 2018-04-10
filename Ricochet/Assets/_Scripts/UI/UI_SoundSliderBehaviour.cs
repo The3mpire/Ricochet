@@ -25,6 +25,7 @@ public class UI_SoundSliderBehaviour : MonoBehaviour
         }
         if (musicManagerInstance != null || MusicManager.TryGetInstance(out musicManagerInstance))
         {
+            slider.value = musicManagerInstance.GetManagerVolume();
             slider.onValueChanged.AddListener(SetMusicVolume);
         }
     }

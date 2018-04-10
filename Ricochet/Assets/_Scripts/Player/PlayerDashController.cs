@@ -9,7 +9,7 @@ public class PlayerDashController : MonoBehaviour
 {
     #region Private Variables
     [SerializeField]
-    private float dashSpeedBoost = 10f;
+    private float defaultDashSpeedBoost = 10f;
 
     [SerializeField]
     private int maxDashCount = 5;
@@ -27,6 +27,10 @@ public class PlayerDashController : MonoBehaviour
     [SerializeField]
     [Tooltip("Drag Rigidbody from Player here")]
     private Rigidbody2D rigid;
+
+    [SerializeField]
+    [Tooltip("Drag Sprite from Player here")]
+    private SpriteRenderer sprite;
 
     [SerializeField]
     [Tooltip("Delay until grounded dash recharge rate begins")]
@@ -54,6 +58,7 @@ public class PlayerDashController : MonoBehaviour
 
     private float miniDashCharge;
     private float rechargeTimer;
+    private float dashSpeedBoost;
     private float delayTimer;
 
     [SerializeField]
@@ -63,6 +68,7 @@ public class PlayerDashController : MonoBehaviour
     #region Monobehaviours
     public void Awake()
     {
+        dashSpeedBoost = defaultDashSpeedBoost;
         pc = GetComponent<PlayerController>();
         audioSource = GetComponentInChildren<AudioSource>();
         ResetDashController();
@@ -119,6 +125,10 @@ public class PlayerDashController : MonoBehaviour
             StartCoroutine("StartingBoostCoroutine");
         }
     }
+    public void AlterDashSpeed(float multiplier)
+    {
+        dashSpeedBoost = defaultDashSpeedBoost * multiplier;
+    }
     #endregion
 
     #region Getters
@@ -148,6 +158,11 @@ public class PlayerDashController : MonoBehaviour
             if (gameData.GetDashSetting() || Mathf.Abs(rigid.velocity.magnitude) <= dashThreshold)
             {
                 dashVelocity = pc.GetShieldDirection() * (dashSpeedBoost * modifier);
+                if (dashVelocity.x > 0 && !sprite.flipX ||
+                    dashVelocity.x <= 0 && sprite.flipX)
+                {
+                    sprite.flipX = !sprite.flipX;
+                }
             }
             else
             {
