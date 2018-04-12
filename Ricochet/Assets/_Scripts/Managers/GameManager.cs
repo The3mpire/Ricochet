@@ -729,6 +729,16 @@ public class GameManager : MonoBehaviour
         return powerUpManager.GetPowerUpShieldColor(powerup);
     }
 
+    public RuntimeAnimatorController GetPowerUpAC(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpAC(powerup);
+    }
+
+    public Sprite GetPowerUpSprite(EPowerUp powerup)
+    {
+        return powerUpManager.GetPowerUpSprite(powerup);
+    }
+
     #endregion
 
     #region Public Helpers

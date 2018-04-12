@@ -56,18 +56,29 @@ MonoBehaviour:
   tempBallScale: 0.8
   maxActiveBalls: 3
   numBallsSpawned: 2
+  multiBallAC: {fileID: 9100000, guid: 9204bfdcd284b1740bcfb32b62ebc980, type: 2}
+  multiBallSprite: {fileID: 21300000, guid: 84805af941e05764db190403d11955b3, type: 3}
   catchNThrowPowerUpColor: {r: 1, g: 0.5586207, b: 0, a: 1}
   catchNThrowShieldColor: {r: 1, g: 0.5568628, b: 0, a: 1}
+  catchNThrowAC: {fileID: 9100000, guid: f8cca0746c3419f4bb614aed8c7ce36a, type: 2}
+  catchNThrowSprite: {fileID: 21300000, guid: 188b73cbbf8c7714e84605b64485059a, type: 3}
   circleShieldColor: {r: 0, g: 0.92941177, b: 0.68235296, a: 1}
   circleShieldShieldColor: {r: 0, g: 0.92941177, b: 0.68235296, a: 1}
   burstForce: 500
   burstRadius: 10
+  circleShieldAC: {fileID: 9100000, guid: f5549ab3569a1c94398227fdee956206, type: 2}
+  circleShieldSprite: {fileID: 21300000, guid: 1e8a1ed7fc1c5454b86f3bf7a2aeaf51, type: 3}
   freezeColor: {r: 1, g: 0, b: 0.84827566, a: 1}
   freezeShieldColor: {r: 1, g: 0, b: 0.84705883, a: 1}
   freezeTime: 3.5
+  freezeAC: {fileID: 9100000, guid: da7ce482d29496e49a2215544b382721, type: 2}
+  freezeSprite: {fileID: 21300000, guid: e8470427e3c94554db1499a244f41d83, type: 3}
   shrinkColor: {r: 0, g: 1, b: 0, a: 1}
   shrinkShieldColor: {r: 0, g: 1, b: 0, a: 1}
   shrinkScale: 0.5
   shrinkDuration: 8
   shrinkMass: 0.2
+  shrinkSpeed: 0.4
   shrinkIFrames: 0.001
+  shrinkAC: {fileID: 9100000, guid: 0594812083b0313438937711ff7816ae, type: 2}
+  shrinkSprite: {fileID: 21300000, guid: 0448e61ee9d95ae40a0a50375fc6a0b7, type: 3}

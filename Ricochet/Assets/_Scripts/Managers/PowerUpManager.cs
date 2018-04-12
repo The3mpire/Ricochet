@@ -21,6 +21,10 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("Number of balls spawned")]
     [SerializeField]
     private int numBallsSpawned = 2;
+    [SerializeField]
+    private RuntimeAnimatorController multiBallAC;
+    [SerializeField]
+    private Sprite multiBallSprite;
 
 
     [Header("Catch N Throw")]
@@ -30,6 +34,10 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("The color of shields with a catch n throw powerup")]
     [SerializeField]
     private Color catchNThrowShieldColor;
+    [SerializeField]
+    private RuntimeAnimatorController catchNThrowAC;
+    [SerializeField]
+    private Sprite catchNThrowSprite;
 
     [Header("Circle Shield")]
     [Tooltip("The color of circle shield powerup objects")]
@@ -44,6 +52,10 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("Radius of the burst when shield ends")]
     [SerializeField]
     private float burstRadius = 8f;
+    [SerializeField]
+    private RuntimeAnimatorController circleShieldAC;
+    [SerializeField]
+    private Sprite circleShieldSprite;
 
     [Header("Freeze")]
     [Tooltip("The color of freeze powerup objects")]
@@ -55,6 +67,10 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("The amount of time a character stays frozen")]
     [SerializeField]
     private float freezeTime;
+    [SerializeField]
+    private RuntimeAnimatorController freezeAC;
+    [SerializeField]
+    private Sprite freezeSprite;
 
     [Header("Shrink")]
     [Tooltip("The color of shrink powerup objects")]
@@ -78,6 +94,10 @@ public class PowerUpManager : MonoBehaviour
     [Tooltip("Seconds of invulnerability given to players when they expand to prevent colliding with walls")]
     [SerializeField]
     private float shrinkIFrames = .001f;
+    [SerializeField]
+    private RuntimeAnimatorController shrinkAC;
+    [SerializeField]
+    private Sprite shrinkSprite;
     #endregion
 
     #region External Functions
@@ -148,6 +168,44 @@ public class PowerUpManager : MonoBehaviour
                 return shrinkShieldColor;
             default:
                 return Color.white;
+        }
+    }
+
+    public RuntimeAnimatorController GetPowerUpAC(EPowerUp ePowerUp)
+    {
+        switch(ePowerUp)
+        {
+            case EPowerUp.Multiball:
+                return multiBallAC;
+            case EPowerUp.CatchNThrow:
+                return catchNThrowAC;
+            case EPowerUp.CircleShield:
+                return circleShieldAC;
+            case EPowerUp.Freeze:
+                return freezeAC;
+            case EPowerUp.Shrink:
+                return shrinkAC;
+            default:
+                return null;
+        }
+    }
+
+    public Sprite GetPowerUpSprite(EPowerUp ePowerUp)
+    {
+        switch(ePowerUp)
+        {
+            case EPowerUp.Multiball:
+                return multiBallSprite;
+            case EPowerUp.CatchNThrow:
+                return catchNThrowSprite;
+            case EPowerUp.CircleShield:
+                return circleShieldSprite;
+            case EPowerUp.Freeze:
+                return freezeSprite;
+            case EPowerUp.Shrink:
+                return shrinkSprite;
+            default:
+                return null;
         }
     }
 
