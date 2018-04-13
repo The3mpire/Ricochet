@@ -305,8 +305,20 @@ public class GameManager : MonoBehaviour
 
     private void ToggleGoals(bool active)
     {
-        redGoal.SetActive(active);
-        blueGoal.SetActive(active);
+        if (gameData.GetGameLevel() == BuildIndex.EMPTY_LEVEL)
+        {
+            redGoal.GetComponentInChildren<Goal>().gameObject.SetActive(active);
+            redGoal.GetComponentInChildren<PointingArrows>().gameObject.SetActive(active);
+            redGoal.transform.Find("GoalBlank").gameObject.SetActive(!active);
+            blueGoal.GetComponentInChildren<Goal>().gameObject.SetActive(active);
+            blueGoal.GetComponentInChildren<PointingArrows>().gameObject.SetActive(active);
+            blueGoal.transform.Find("GoalBlank").gameObject.SetActive(!active);
+        }
+        else
+        {
+            redGoal.SetActive(active);
+            blueGoal.SetActive(active);
+        }
     }
     #endregion
 
