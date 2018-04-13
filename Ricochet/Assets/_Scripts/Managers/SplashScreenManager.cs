@@ -111,8 +111,15 @@ public class SplashScreenManager : MonoBehaviour
         yield return glitchTween.WaitForCompletion();
         Tween ballTween = _ballPanelSlide.ExecuteMoveTo(_titleSlideDuration);
         yield return ballTween.WaitForCompletion();
-        _buttonImage.GetComponent<Image>().DOFade(1f, 2f);
-        _flyby.StartFlyby();
+        try
+        {
+            _buttonImage.GetComponent<Image>().DOFade(1f, 2f);
+            _flyby.StartFlyby();
+        }
+        catch (MissingReferenceException e)
+        {
+            
+        }
     }
 
     IEnumerator BeginSplashFadeOut()
