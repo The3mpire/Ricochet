@@ -31,7 +31,9 @@ public class SplashScreenManager : MonoBehaviour
     
     private Image _panel;
     private GameObject _buttonImage;
+    #if UNITY_WSA_10_0 || UNITY_XBOXONE
     private UserProfile _userProfile;
+    #endif
     
 
     // Use this for initialization
@@ -103,7 +105,7 @@ public class SplashScreenManager : MonoBehaviour
         _ball.SetActive(false);
     }
 
-    #region Coroutines
+#region Coroutines
 
     IEnumerator DoTitleFlyIn()
     {
