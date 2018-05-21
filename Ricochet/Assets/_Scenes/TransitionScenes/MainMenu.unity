@@ -5535,8 +5535,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundStorage: {fileID: 11400000, guid: f3742bc292919044ca874d1cefbe6f0f, type: 2}
   fxSource: {fileID: 1046821921}
+  gameData: {fileID: 11400000, guid: 6917d0f765fc08a4f8d8df810283f1f5, type: 2}
+  sfxSlider: {fileID: 1508200428}
   lowPitchRange: 0.95
   highPitchRange: 1.05
+  volume: 0
 --- !u!82 &1046821921
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8361,8 +8364,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 400687606}
-        m_MethodName: SetMusicVolume
+      - m_Target: {fileID: 1046821920}
+        m_MethodName: SetSFXVolume
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8528,7 +8531,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1508200427}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53b757ed574f3a5408745e9632f81cf3, type: 3}
   m_Name: 
@@ -9962,6 +9965,7 @@ MonoBehaviour:
   body: {fileID: 1817446850}
   audioSource: {fileID: 1817446844}
   soundStorage: {fileID: 11400000, guid: f3742bc292919044ca874d1cefbe6f0f, type: 2}
+  sfxManager: {fileID: 1046821920}
 --- !u!58 &1817446849
 CircleCollider2D:
   m_ObjectHideFlags: 0

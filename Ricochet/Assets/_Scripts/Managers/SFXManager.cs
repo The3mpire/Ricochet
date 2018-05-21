@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-using DG.Tweening;
+using UnityEngine.UI;
 using Enumerables;
 
 public class SFXManager : MonoBehaviour
@@ -11,20 +8,27 @@ public class SFXManager : MonoBehaviour
     [Tooltip("Drag the SoundStorage object here")]
     [SerializeField]
     private SoundStorage soundStorage;
-    [Tooltip("Drag  in FXSource here")]
+    [Tooltip("Drag in FXSource here")]
     [SerializeField]
     private AudioSource fxSource;
+    [Tooltip("Drag the GameData scriptable object here")]
+    [SerializeField]
+    private GameDataSO gameData;
+    [Tooltip("(Optional) Drag the sfx volume slider here to set the starting value correctly")]
+    [SerializeField]
+    private Slider sfxSlider;
     [Tooltip("The lowest a sound effect will randomly pitched")]
     [SerializeField]
     private float lowPitchRange = .95f;
     [Tooltip("The highest a sound effect will be randomly pitched")]
     [SerializeField]
     private float highPitchRange = 1.05f;
+    
     #endregion
 
     #region Hidden Variables
     private static SFXManager instance = null;
-    private bool volumeLock;
+    private float volume;
     #endregion
 
     #region Mono Behaviour
@@ -38,11 +42,17 @@ public class SFXManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        volumeLock = false;
+
+        volume = gameData.SFXVolume;
+        if (sfxSlider != null)
+        {
+            sfxSlider.value = volume;
+        }
+        fxSource.volume = volume;
     }
     #endregion
 
-    #region SFX
+    #region Play SFX
     public void PlaySound(AudioClip clip)
     {
         fxSource.PlayOneShot(clip);
@@ -91,6 +101,18 @@ public class SFXManager : MonoBehaviour
         fxSource.PlayOneShot(soundStorage.GetPingSound());
     }
     #endregion
+
+    public float GetSFXVolume()
+    {
+        return volume;
+    }
+
+    public void SetSFXVolume(float _volume)
+    {
+        gameData.SFXVolume = _volume;
+        volume = _volume;
+        fxSource.volume = volume;
+    }
 
     #region Helpers
     public static bool TryGetInstance(out SFXManager sm)

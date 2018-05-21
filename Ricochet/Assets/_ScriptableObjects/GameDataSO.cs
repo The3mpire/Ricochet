@@ -1,11 +1,12 @@
 ﻿using Enumerables;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 
 [CreateAssetMenu(menuName = "Game Data")]
 public class GameDataSO : ScriptableObject
 {
+    #region Inspector Variables
+
     [Header("Test Settings")] [SerializeField]
     [Tooltip("Dash in direction of Shield = true. Dash in direction of movement = false.")]
     private bool _dashInShieldDirection = true;
@@ -45,10 +46,27 @@ public class GameDataSO : ScriptableObject
     [SerializeField]
     private bool skipToModeSelect;
 
+    #endregion
+
+    #region Hidden Variables
+
     private int blueTeamScore, redTeamScore;
     private ETeam gameWinner;
     private Dictionary<string, List<string>> playerKills;
     private Dictionary<string, int> playerDeaths;
+    private float sfxVolume;
+
+    #endregion
+
+    #region Properties
+
+    public float SFXVolume
+    {
+        get { return sfxVolume; }
+        set { sfxVolume = Mathf.Clamp(value, 0, 1); }
+    }
+
+    #endregion
 
     #region Scriptable Object Methods
     public void OnEnable()
@@ -220,5 +238,4 @@ public class GameDataSO : ScriptableObject
         redTeamScore = 0;
         gameWinner = ETeam.None;
     }
-
 }

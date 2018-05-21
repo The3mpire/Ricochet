@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MenuBall : MonoBehaviour
 {
@@ -26,11 +22,15 @@ public class MenuBall : MonoBehaviour
     [Tooltip("Drag the sound storage here")]
     [SerializeField]
     private SoundStorage soundStorage;
+    [Tooltip("Drag the SFXManager game object here")]
+    [SerializeField]
+    private SFXManager sfxManager;
     #endregion
 
     #region MonoBehaviour
    void Start()
     {
+        audioSource.volume = sfxManager.GetSFXVolume();
         body.AddForce(initialDirection);
     }
 
