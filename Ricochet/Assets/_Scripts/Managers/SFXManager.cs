@@ -8,9 +8,12 @@ public class SFXManager : MonoBehaviour
     [Tooltip("Drag the SoundStorage object here")]
     [SerializeField]
     private SoundStorage soundStorage;
-    [Tooltip("Drag in FXSource here")]
+    [Tooltip("Drag the AudioSource for global sfx here")]
     [SerializeField]
     private AudioSource fxSource;
+    [Tooltip("Drag other AudioSources that need their volume controlled here")]
+    [SerializeField]
+    private AudioSource[] otherSources;
     [Tooltip("Drag the GameData scriptable object here")]
     [SerializeField]
     private GameDataSO gameData;
@@ -49,6 +52,13 @@ public class SFXManager : MonoBehaviour
             sfxSlider.value = volume;
         }
         fxSource.volume = volume;
+        if (otherSources != null)
+        {
+            foreach (AudioSource otherSource in otherSources)
+            {
+                otherSource.volume = volume;
+            }
+        }
     }
     #endregion
 
@@ -112,6 +122,13 @@ public class SFXManager : MonoBehaviour
         gameData.SFXVolume = _volume;
         volume = _volume;
         fxSource.volume = volume;
+        if (otherSources != null)
+        {
+            foreach (AudioSource otherSource in otherSources)
+            {
+                otherSource.volume = volume;
+            }
+        }
     }
 
     #region Helpers
