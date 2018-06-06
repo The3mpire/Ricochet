@@ -98,7 +98,7 @@ public class MusicManager : MonoBehaviour
 
     private IEnumerator FadeIn(float startVol, float duration)
     {
-        if (startVol != 0)
+        if (startVol >= 0)
         {
             volumeLock = true;
             float finalVol = volume;
