@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 using DG.Tweening;
 using Enumerables;
+using UnityEngine.UI;
 
 public class MusicManager : MonoBehaviour
 {
@@ -11,9 +11,15 @@ public class MusicManager : MonoBehaviour
     [Tooltip("Drag the SoundStorage object here")]
     [SerializeField]
     private SoundStorage soundStorage;
-    [Tooltip("Drag in Music Source here")]
+    [Tooltip("Drag the AudioSource for music here")]
     [SerializeField]
     private AudioSource musicSource;
+    [Tooltip("Drag the GameData scriptable object here")]
+    [SerializeField]
+    private GameDataSO gameData;
+    [Tooltip("(Optional) Drag the music volume slider here to set the starting value correctly")]
+    [SerializeField]
+    private Slider musicSlider;
     [Tooltip("The lowest a sound effect will randomly pitched")]
     [SerializeField]
     private float lowPitchRange = .95f;
@@ -23,9 +29,6 @@ public class MusicManager : MonoBehaviour
     [Tooltip("The current song")]
     [SerializeField]
     private AudioClip currentSong;
-    [Tooltip("The music volume at when the level is loaded")]
-    [SerializeField]
-    private float musicVol;
     [Tooltip("The menu song")]
     [SerializeField]
     private float musicFadeDuration;
@@ -33,6 +36,7 @@ public class MusicManager : MonoBehaviour
 
     #region Hidden Variables
     private static MusicManager instance = null;
+    private float volume;
     private bool volumeLock;
     #endregion
 
@@ -49,7 +53,12 @@ public class MusicManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-        musicVol = 1f;
+        volume = gameData.MusicVolume;
+        if (musicSlider != null)
+        {
+            musicSlider.value = volume;
+        }
+        //musicSource.volume = volume;
         volumeLock = false;
         OnLevelWasLoaded();
     }
@@ -78,13 +87,12 @@ public class MusicManager : MonoBehaviour
     #region Music
     public void FadeOutMusic()
     {
-        musicVol = musicSource.volume;
         musicSource.DOFade(0, musicFadeDuration);
     }
 
     public void FadeInMusic()
     {
-        musicSource.DOFade(musicVol, musicFadeDuration);
+        musicSource.DOFade(volume, musicFadeDuration);
 
     }
 
@@ -93,16 +101,16 @@ public class MusicManager : MonoBehaviour
         if (startVol != 0)
         {
             volumeLock = true;
-            float finalVol = musicSource.volume;
+            float finalVol = volume;
             musicSource.volume = startVol;
             float volumesPerUpdate = (finalVol - startVol) / duration;
             while (musicSource.volume <= finalVol)
             {
-                finalVol = musicVol;
+                finalVol = volume;
                 musicSource.volume += volumesPerUpdate * Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
-            musicSource.volume = musicVol;
+            musicSource.volume = volume;
             volumeLock = false;
         }
     }
@@ -117,16 +125,17 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    public void SetMusicVolume(float vol = .8f)
+    public void SetMusicVolume(float _volume)
     {
-        musicVol = vol;
+        gameData.MusicVolume = _volume;
+        volume = _volume;
         if (!volumeLock)
-            musicSource.volume = vol;
+            musicSource.volume = volume;
     }
 
     public float GetManagerVolume()
     {
-        return musicVol;
+        return volume;
     }
 
     public float GetMusicVolume()
