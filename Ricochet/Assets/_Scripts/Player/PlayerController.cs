@@ -212,15 +212,9 @@ public class PlayerController : MonoBehaviour
             leftStickHorz = player.GetAxis("MoveHorizontal");
             leftStickVert = player.GetAxis("MoveVertical");
             leftTriggerAxis = player.GetAxis("Jetpack");
-
-            if (player.GetAxis("RightStickHorizontal") != 0)
-            {
-                rightStickHorz = player.GetAxis("RightStickHorizontal");
-            }
-            if (player.GetAxis("RightStickVertical") != 0)
-            {
-                rightStickVert = player.GetAxis("RightStickVertical");
-            }
+            
+            rightStickHorz = player.GetAxis("RightStickHorizontal");
+            rightStickVert = player.GetAxis("RightStickVertical");
         }
         else
         {
