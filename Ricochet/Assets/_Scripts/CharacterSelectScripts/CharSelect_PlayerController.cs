@@ -79,12 +79,10 @@ public class CharSelect_PlayerController : MonoBehaviour
     #endregion
 
     #region Getters and Setters
-
     public Color GetPlayerColor()
     {
         return playerColor;
     }
-
     #endregion
 
 }

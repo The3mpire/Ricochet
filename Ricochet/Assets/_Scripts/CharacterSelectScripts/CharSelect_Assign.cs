@@ -1,41 +1,43 @@
-﻿using UnityEngine;
-using Rewired;
+﻿using Rewired;
+using UnityEngine;
 
 public class CharSelect_Assign : MonoBehaviour
 {
-    #region Private
-    [SerializeField]
     [Tooltip("Drag CharSelectManager here")]
-    private GameObject managerPanel;
-    private CharSelectManager manager;
-    #endregion
-    #region MonoBehaviour
-    void Awake()
-    {
-        manager = managerPanel.GetComponent<CharSelectManager>();
-        ReInput.ControllerConnectedEvent += OnControllerConnected;
+    [SerializeField] private GameObject managerPanel;
 
-        // Assign each Joystick to a Player initially
+    private bool canAddKeyboard;
+    private CharSelectManager manager;
+    private Keyboard keyboard;
+    private Player playerOne;
+
+    #region MonoBehaviour
+    private void Awake()
+    {
+        canAddKeyboard = true;
+        manager = managerPanel.GetComponent<CharSelectManager>();
+        playerOne = ReInput.players.GetPlayer(0);
+        keyboard = ReInput.controllers.Keyboard;
+
+        // remove keyboard and controllers from player one to make things conceptually simple
+        playerOne.controllers.ClearAllControllers();
+
+        ReInput.ControllerConnectedEvent += OnControllerConnected;
+    }
+
+    private void Update()
+    {
         foreach (Joystick j in ReInput.controllers.Joysticks)
         {
-            if (ReInput.controllers.IsJoystickAssigned(j))
-            {
-                continue;
-            }
-
-            AssignJoystickToNextOpenPlayer(j);
+            if (!ReInput.controllers.IsJoystickAssigned(j) && j.GetAnyButtonDown())
+                AssignJoystickToNextOpenPlayer(j);
         }
-        foreach (var player in ReInput.players.Players)
-        {
-            if (player.controllers.joystickCount > 0)
-            {
-                manager.ActivatePlayer(player.id);
-            }
-        }
+        if (canAddKeyboard && keyboard.GetAnyButtonDown())
+            AssignKeyboardToPlayerOne();
     }
     #endregion
-    #region Rewired
 
+    #region Rewired
     void OnControllerConnected(ControllerStatusChangedEventArgs args)
     {
         if (args.controllerType != ControllerType.Joystick) return;
@@ -43,23 +45,42 @@ public class CharSelect_Assign : MonoBehaviour
             if (p.controllers.ContainsController(args.controllerType, args.controllerId)) 
             {
                 manager.ActivatePlayer(p.id);
+                manager.RouteActivationInput(p.id);
             }
         
         }
     }
     #endregion
+
     #region Helpers
-    void AssignJoystickToNextOpenPlayer(Joystick j)
+    private bool AssignJoystickToNextOpenPlayer(Joystick j)
     {
         foreach (Player p in ReInput.players.Players)
         {
-            if (p.controllers.joystickCount > 0)
+            if (p.controllers.joystickCount == 0 && !p.controllers.hasKeyboard)
             {
-                continue;
+                p.controllers.AddController(j, true);
+                manager.ActivatePlayer(p.id);
+                manager.RouteActivationInput(p.id);
+                return true;
             }
-            p.controllers.AddController(j, true);
-            return;
         }
+        return false;
+    }
+
+    private void AssignKeyboardToPlayerOne()
+    {
+        if (playerOne.controllers.joystickCount > 0)
+        {
+            Joystick j = playerOne.controllers.Joysticks[0];
+            if (!AssignJoystickToNextOpenPlayer(j))
+                return;
+        }
+
+        playerOne.controllers.hasKeyboard = true;
+        manager.ActivatePlayer(playerOne.id);
+        manager.RouteActivationInput(playerOne.id);
+        canAddKeyboard = false;
     }
     #endregion
 }
