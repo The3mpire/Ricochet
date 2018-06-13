@@ -1,14 +1,14 @@
 ﻿#pragma warning disable CS0649
 
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
-using Enumerables;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharSelectManager : MonoBehaviour
 {
-    #region Private
+    #region Inspector Variables
     [SerializeField]
     private GameDataSO gameData;
 
@@ -58,7 +58,9 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField] private Text char2TeamText;
     [SerializeField] private Text char3TeamText;
     [SerializeField] private Text char4TeamText;
+    #endregion
 
+    #region Private
     private readonly SelectionPhase[] playerPhase = new SelectionPhase[4];
     private readonly PSettings[] playerSettings = new PSettings[4];
     private float timer;
@@ -124,7 +126,6 @@ public class CharSelectManager : MonoBehaviour
             }
             CountdownToLevelSelect();
         }
-        
     }
     #endregion
 

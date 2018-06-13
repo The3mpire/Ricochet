@@ -2,11 +2,14 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using Rewired;
 using UnityEngine.EventSystems;
 
 public class SplashScreenManager : MonoBehaviour
 {
+    #region Inspector Variables
+    [Tooltip("Drag InitializeManager/InitPlayerOne object here")]
+    [SerializeField] private InitPlayerOne _initPlayerOne;
+
     [Header("Title Panel")]
     [SerializeField] private Image _background;
     [SerializeField] private GameObject _titlePanel;
@@ -14,34 +17,34 @@ public class SplashScreenManager : MonoBehaviour
     [SerializeField] private PanelSlide _ballPanelSlide;
     [SerializeField] private Flyby _flyby;
     [SerializeField] private GameObject _ball;
+
     [Header("Main Menu Panel")]
     [SerializeField] private GameObject _xboxLiveGameObject;
     [SerializeField] private GameObject _mainMenuPanel;
     [SerializeField] private GameObject _characterArtPanel;
     [SerializeField] private MainMenuFunctions _mainMenuFunctions;
     [SerializeField] private EventSystem es;
+
     [Header("Variables")]
+    [Tooltip("Time in seconds that it takes to slide in the title screen")]
     [SerializeField] private float _titleSlideDuration = 1f;
-    [SerializeField]
     [Tooltip("Time in seconds that it takes to fade out the Splash Screen")]
-    private float _fadeOutDuration = 2f;
-    [SerializeField]
+    [SerializeField] private float _fadeOutDuration = 2f;
     [Tooltip("Time in seconds that it takes to slide in the main menu")]
-    private float _menuSlideInDuration = 2f;
-    
+    [SerializeField] private float _menuSlideInDuration = 2f;
+    #endregion
+
     private Image _panel;
     private GameObject _buttonImage;
     private UserProfile _userProfile;
-    
 
-    // Use this for initialization
     void Start ()
 	{
 	    es.enabled = false;
         _panel = transform.Find("SplashPanel").GetComponent<Image>();
         _buttonImage = _panel.transform.Find("ButtonImage").gameObject;
 
-        if (ReInput.players.GetPlayer(0).controllers.joystickCount > 0)
+        if (_initPlayerOne.CanSkipSplash())
         {
             DeactivateSplashScreen();
             SlideInMainMenu(1);

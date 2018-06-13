@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using System.Collections.Generic;
 using Rewired;
 
 [AddComponentMenu("")]
@@ -8,43 +6,78 @@ public class InitPlayerOne : MonoBehaviour
 {
     [SerializeField] private SplashScreenManager _splashScreenManager;
 
+    private bool hadKeyboard;
+    private Player playerOne;
+    private Joystick joystickOne;
+    private Keyboard keyboard;
+    private SFXManager sfx;
+
+    // called when main menu loads to undo character select mappings
+    void Awake()
+    {
+        hadKeyboard = false;
+
+        // see if we've already assigned the keyboard, and can thus
+        //   skip the splash screen when returning to the main meu
+        playerOne = ReInput.players.GetPlayer(0);
+        if (playerOne.controllers.hasKeyboard)
+            hadKeyboard = true;
+
+        // unmap all controllers and keyboard from all players
+        foreach (Player p in ReInput.players.Players)
+        {
+            p.controllers.ClearAllControllers();
+            p.controllers.hasKeyboard = false;
+        }
+
+        // return the first controller to the first player
+        if (ReInput.controllers.joystickCount > 0)
+        {
+            joystickOne = ReInput.controllers.GetJoystick(0);
+            playerOne.controllers.AddController(joystickOne, true);
+        }
+
+        // return the keyboard to the first player
+        keyboard = ReInput.controllers.Keyboard;
+        playerOne.controllers.hasKeyboard = true;
+
+        ReInput.ControllerConnectedEvent += OnControllerConnected;
+        foreach (Controller c in playerOne.controllers.Controllers)
+            Debug.Log(c.type);
+    }
+
     private void Update()
     {
         if (!ReInput.isReady) return;
-        AssignJoysticksToPlayerOne();
+        if(!hadKeyboard)
+            CheckForButtonPress();
     }
 
-    private void AssignJoysticksToPlayerOne()
+    private void CheckForButtonPress()
     {
-        // Check all joysticks for a button press and assign it to player 1
-        IList<Joystick> joysticks = ReInput.controllers.Joysticks;
-        for (int i = 0; i < joysticks.Count; i++)
+        if(playerOne.GetAnyButtonDown())
         {
-
-            Joystick joystick = joysticks[i];
-            if (ReInput.controllers.IsControllerAssigned(joystick.type, joystick.id)) continue; // joystick is already assigned to a Player
-
-            // Chec if a button was pressed on the joystick
-            if (joystick.GetAnyButtonDown())
-            {
-                Player player = ReInput.players.Players[0];
-                player.controllers.AddController(joystick, false);
-                SFXManager sfx;
-                if (SFXManager.TryGetInstance(out sfx))
-                {
-                    sfx.PlayMenuClickSound();
-                }
-                _splashScreenManager.StartLogIn();
-                ReInput.configuration.autoAssignJoysticks = true;
-                enabled = false; // disable this script
-            }
-        }
-        Keyboard keyboard = ReInput.controllers.Keyboard;
-        if(keyboard.GetAnyButtonDown())
-        {
+            if (SFXManager.TryGetInstance(out sfx))
+                sfx.PlayMenuClickSound();
             _splashScreenManager.StartLogIn();
-            ReInput.configuration.autoAssignJoysticks = true;
-            enabled = false; // disable this script
+            hadKeyboard = true;
         }
+    }
+
+    // if we add a controller when there was none, give it to player one
+    private void OnControllerConnected(ControllerStatusChangedEventArgs data)
+    {
+        if (playerOne != null && playerOne.controllers.joystickCount == 0)
+        {
+            joystickOne = ReInput.controllers.GetJoystick(data.controllerId);
+            playerOne.controllers.AddController(joystickOne, true);
+        }
+        foreach (Controller c in playerOne.controllers.Controllers)
+            Debug.Log(c.type);
+    }
+
+    public bool CanSkipSplash()
+    {
+        return hadKeyboard;
     }
 }
