@@ -144,6 +144,16 @@ public class CharSelectManager : MonoBehaviour
         }
         _playerObjects[playerNumber].Team = playerSettings[playerNumber].Team;
     }
+
+    public void RemoveExtraP1Token()
+    {
+        _playerObjects[0].ActiveToken = _playerObjects[0].DefaultToken;
+        foreach (GameObject token in _playerObjects[0].Tokens)
+        {
+            if (!Equals(token, _playerObjects[0].ActiveToken))
+                token.SetActive(false);
+        }
+    }
     #endregion
 
     #region InputRouting
@@ -209,6 +219,24 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.Ready:
                 UndoReady(playerNumber);
                 sfxManager.PlayMenuBackSound();
+                break;
+        }
+    }
+    public void RouteBackToCharPhase(int playerNumber)
+    {
+        var phase = playerPhase[playerNumber];
+        switch (phase)
+        {
+            case SelectionPhase.CharacterSelect:
+                break;
+            case SelectionPhase.TeamSelect:
+                ClearImages(playerNumber);
+                ClearSelection(playerNumber);
+                RouteBackToCharPhase(playerNumber);
+                break;
+            case SelectionPhase.Ready:
+                UndoReady(playerNumber);
+                RouteBackToCharPhase(playerNumber);
                 break;
         }
     }

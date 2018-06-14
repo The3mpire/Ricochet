@@ -42,8 +42,6 @@ public class InitPlayerOne : MonoBehaviour
         playerOne.controllers.hasKeyboard = true;
 
         ReInput.ControllerConnectedEvent += OnControllerConnected;
-        foreach (Controller c in playerOne.controllers.Controllers)
-            Debug.Log(c.type);
     }
 
     private void Update()
@@ -72,8 +70,6 @@ public class InitPlayerOne : MonoBehaviour
             joystickOne = ReInput.controllers.GetJoystick(data.controllerId);
             playerOne.controllers.AddController(joystickOne, true);
         }
-        foreach (Controller c in playerOne.controllers.Controllers)
-            Debug.Log(c.type);
     }
 
     public bool CanSkipSplash()

@@ -28,7 +28,8 @@ public class CharSelect_PlayerController : MonoBehaviour
 
     private Player player;
     private CharSelectManager manager;
-    private bool joystickAcceptingInput = true;
+    private bool joystickAcceptingInput;
+    private bool keyboardPlayer;
 
     #endregion
 
@@ -36,6 +37,8 @@ public class CharSelect_PlayerController : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        joystickAcceptingInput = true;
+        keyboardPlayer = false;
         player = ReInput.players.GetPlayer(playerNumber - 1);
         manager = managerPanel.GetComponent<CharSelectManager>();
     }
@@ -43,6 +46,14 @@ public class CharSelect_PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Controller controller = player.controllers.GetLastActiveController();
+        if (controller != null && controller.type == ControllerType.Keyboard
+            && !keyboardPlayer)
+        {
+            keyboardPlayer = true;
+            return;
+        }
+
         var moveX = Math.Sign(player.GetAxis("UIHorizontal"));
         if (moveX != 0 && joystickAcceptingInput)
         {

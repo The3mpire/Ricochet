@@ -6,6 +6,9 @@ public class CharSelect_Assign : MonoBehaviour
     [Tooltip("Drag CharSelectManager here")]
     [SerializeField] private GameObject managerPanel;
 
+    [Tooltip("Drag CharSelect_PlayerController for player 1 here")]
+    [SerializeField] private CharSelect_PlayerController playerOneController;
+
     private bool canAddKeyboard;
     private CharSelectManager manager;
     private Keyboard keyboard;
@@ -47,13 +50,12 @@ public class CharSelect_Assign : MonoBehaviour
                 manager.ActivatePlayer(p.id);
                 manager.RouteActivationInput(p.id);
             }
-        
         }
     }
     #endregion
 
     #region Helpers
-    private bool AssignJoystickToNextOpenPlayer(Joystick j)
+    private int AssignJoystickToNextOpenPlayer(Joystick j)
     {
         foreach (Player p in ReInput.players.Players)
         {
@@ -62,19 +64,23 @@ public class CharSelect_Assign : MonoBehaviour
                 p.controllers.AddController(j, true);
                 manager.ActivatePlayer(p.id);
                 manager.RouteActivationInput(p.id);
-                return true;
+                return p.id;
             }
         }
-        return false;
+        return -1;
     }
 
     private void AssignKeyboardToPlayerOne()
     {
         if (playerOne.controllers.joystickCount > 0)
         {
+            manager.RouteBackToCharPhase(0);
             Joystick j = playerOne.controllers.Joysticks[0];
-            if (!AssignJoystickToNextOpenPlayer(j))
+            int newPlayer = AssignJoystickToNextOpenPlayer(j);
+            if (newPlayer < 0)
                 return;
+            manager.RemoveExtraP1Token();
+            manager.RouteBackToCharPhase(newPlayer);
         }
 
         playerOne.controllers.hasKeyboard = true;
