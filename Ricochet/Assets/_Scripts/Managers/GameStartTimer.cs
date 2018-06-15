@@ -1,15 +1,19 @@
-﻿using System.Collections;
+﻿using Rewired;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameStartTimer : MonoBehaviour {
-    #region Serialized
-    [SerializeField]
-    private GameDataSO _gameData;
+    #region Inspector Variables
+    [Tooltip("Drag GameData scriptable object here")]
+    [SerializeField] private GameDataSO _gameData;
     [Tooltip("Number of seconds until the level loads")]
-    [SerializeField]
-    private float _waitTime = 3;
+    [SerializeField] private float _waitTime = 3;
+    [Tooltip("Drag ControllerMap here")]
+    [SerializeField] private GameObject controllerMap;
+    [Tooltip("Drag KeyboardMap here")]
+    [SerializeField] private GameObject keyboardMap;
     #endregion
 
     #region Private  
@@ -21,8 +25,21 @@ public class GameStartTimer : MonoBehaviour {
     #region MonoBehaviour
     private void Start () {
         _loadingText = gameObject.GetComponent<Text>();
+        controllerMap.SetActive(false);
+        keyboardMap.SetActive(false);
+        if (ReInput.players.GetPlayer(0).controllers.hasKeyboard)
+        {
+            keyboardMap.SetActive(true);
+            _waitTime *= 2;
+            StartCoroutine(SwitchMap());
+        }
+        else
+        {
+            controllerMap.SetActive(true);
+        }
 	    StartCoroutine(LoadSelectedScene());
 	}
+
     private void Update()
     {
         Tick();
@@ -39,7 +56,14 @@ public class GameStartTimer : MonoBehaviour {
         yield return new WaitForSeconds(_waitTime);
         SceneManager.LoadScene((int)_gameData.GetGameLevel());
     }
-    
+
+    private IEnumerator SwitchMap()
+    {
+        yield return new WaitForSeconds(_waitTime/2);
+        keyboardMap.SetActive(false);
+        controllerMap.SetActive(true);
+    }
+
     /// <summary>
     /// Tick periods after Loading string every .5 seconds.
     /// </summary>
