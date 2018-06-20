@@ -17,7 +17,7 @@ public class CharacterSelectObjects : MonoBehaviour
     #endregion
 
     #region Private
-    private GameObject _activeToken;
+    [SerializeField] private GameObject _activeToken;
     private ETeam _team;
     #endregion
 

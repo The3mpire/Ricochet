@@ -9,58 +9,63 @@ using Rewired.Integration.UnityUI;
 public class MainMenuFunctions : MonoBehaviour
 {
     #region Reference Variables
-    [SerializeField]
-    private GameObject _menuPanel;
+    [SerializeField] private GameObject _menuPanel;
+    [SerializeField] private GameObject _characterArtPanel;
 
-    [SerializeField]
-    private GameObject _characterArtPanel;
-
-    [SerializeField]
     [Tooltip("0 - Main Menu. 1 - Play Menu, 2 - Options Menu, 3 - Credits")]
-    private GameObject[] _characterImages = new GameObject[4];
+    [SerializeField] private GameObject[] _characterImages = new GameObject[4];
 
-    [SerializeField]
     [Tooltip("The how fast the panels move in or out.")]
-    private float _panelSwapSpeed = 1f;
+    [SerializeField] private float _panelSwapSpeed = 1f;
 
     [Tooltip("The first button to be selected in the scene")]
-    [SerializeField]
-    private GameObject defaultButton;
+    [SerializeField] private GameObject defaultButton;
 
-    [SerializeField]
-    private GameObject mainMenuPanel;
+    [SerializeField] private GameObject mainMenuPanel;
 
     [Tooltip("The panel to be enabled when Play is selected")]
-    [SerializeField]
-    private GameObject playPanel;
+    [SerializeField] private GameObject playPanel;
 
     [Tooltip("The first button to be selected when the panel is on")]
-    [SerializeField]
-    private GameObject playPanelDefaultItem;
+    [SerializeField] private GameObject playPanelDefaultItem;
+
+    [Tooltip("The panel to be enabled when Controls is selected")]
+    [SerializeField] private GameObject controlsPanel;
+
+    [Tooltip("The first button to be selected when the panel is on")]
+    [SerializeField] private GameObject controlsPanelDefaultItem;
+
+    [Tooltip("The panel to be enabled when Controls is selected")]
+    [SerializeField] private GameObject controllerMapPanel;
+
+    [Tooltip("The first button to be selected when the panel is on")]
+    [SerializeField] private GameObject controllerMapDefaultItem;
+
+    [Tooltip("The panel to be enabled when Controls is selected")]
+    [SerializeField] private GameObject keyboardMapPanel;
+
+    [Tooltip("The first button to be selected when the panel is on")]
+    [SerializeField] private GameObject keyboardMapDefaultItem;
 
     [Tooltip("The panel to be enabled when Options is selected")]
-    [SerializeField]
-    private GameObject optionsPanel;
+    [SerializeField] private GameObject optionsPanel;
 
     [Tooltip("The first button to be selected when the panel is on")]
-    [SerializeField]
-    private GameObject optionsPanelDefaultItem;
+    [SerializeField] private GameObject optionsPanelDefaultItem;
 
     [Tooltip("The panel to be enabled when Credits is selected")]
-    [SerializeField]
-    private GameObject creditsPanel;
+    [SerializeField] private GameObject creditsPanel;
 
     [Tooltip("The first button to be selected when the panel is on")]
-    [SerializeField]
-    private GameObject creditsPanelDefaultItem;
+    [SerializeField] private GameObject creditsPanelDefaultItem;
 
-    [SerializeField]
-    private GameDataSO gameData;
+    [SerializeField] private GameDataSO gameData;
 
     [Header("Test Settings")]
-    [SerializeField]
-    private Toggle _dashSettingToggle;
+    [SerializeField] private Toggle _dashSettingToggle;
+    #endregion
 
+    #region Private Variables
     private bool _blockInput = false;
     private GameObject _currentCharacterArt;
     #endregion
@@ -107,6 +112,24 @@ public class MainMenuFunctions : MonoBehaviour
         SwapPanels(playPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
     }
 
+    public void OpenControlsMenu()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        SwapPanels(mainMenuPanel, controlsPanel, _currentCharacterArt, _characterImages[3], controlsPanelDefaultItem);
+    }
+
+    public void CloseControlsMenu()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        SwapPanels(controlsPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
+    }
+
     public void OpenOptionsMenu()
     {
         if (_blockInput)
@@ -142,6 +165,42 @@ public class MainMenuFunctions : MonoBehaviour
             return;
         }
         SwapPanels(creditsPanel, mainMenuPanel, _currentCharacterArt, _characterImages[0], defaultButton);
+    }
+
+    public void OpenControllerMap()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        SwapPanels(controlsPanel, controllerMapPanel, _currentCharacterArt, _characterImages[3], controllerMapDefaultItem);
+    }
+
+    public void CloseControllerMap()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        SwapPanels(controllerMapPanel, controlsPanel, _currentCharacterArt, _characterImages[3], controlsPanelDefaultItem);
+    }
+
+    public void OpenKeyboardMap()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        SwapPanels(controlsPanel, keyboardMapPanel, _currentCharacterArt, _characterImages[3], keyboardMapDefaultItem);
+    }
+
+    public void CloseKeyboardMap()
+    {
+        if (_blockInput)
+        {
+            return;
+        }
+        SwapPanels(keyboardMapPanel, controlsPanel, _currentCharacterArt, _characterImages[3], controlsPanelDefaultItem);
     }
 
     public void LaunchClassicMode()
