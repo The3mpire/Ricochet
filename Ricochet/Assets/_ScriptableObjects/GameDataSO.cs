@@ -46,6 +46,14 @@ public class GameDataSO : ScriptableObject
     [SerializeField]
     private bool skipToModeSelect;
 
+    [Header("Sound Settings")]
+    [Tooltip("The volume of the music when the game starts")]
+    [SerializeField]
+    private float defaultMusicVolume;
+    [Tooltip("The volume of the sound effects when the game starts")]
+    [SerializeField]
+    private float defaultSFXVolume;
+
     #endregion
 
     #region Hidden Variables
@@ -54,11 +62,17 @@ public class GameDataSO : ScriptableObject
     private ETeam gameWinner;
     private Dictionary<string, List<string>> playerKills;
     private Dictionary<string, int> playerDeaths;
-    private float sfxVolume;
+    private float musicVolume, sfxVolume;
 
     #endregion
 
     #region Properties
+
+    public float MusicVolume
+    {
+        get { return musicVolume; }
+        set { musicVolume = Mathf.Clamp(value, 0, 1); }
+    }
 
     public float SFXVolume
     {
@@ -73,6 +87,8 @@ public class GameDataSO : ScriptableObject
     {
         timeLimit = defaultTimeLimit;
         scoreLimit = defaultScoreLimit;
+        MusicVolume = defaultMusicVolume;
+        SFXVolume = defaultSFXVolume;
     }
     #endregion
 

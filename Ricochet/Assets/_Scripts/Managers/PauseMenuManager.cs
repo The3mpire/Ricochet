@@ -12,6 +12,9 @@ public class PauseMenuManager : MonoBehaviour
     [Tooltip("The button that is first highlighted")]
     [SerializeField]
     private GameObject defaultSelectedButton;
+    [Tooltip("All menu button indicators (for deactivating on menu close)")]
+    [SerializeField]
+    private UI_Indicator[] allButtonIndicators;
     [SerializeField]
     private GameDataSO gameData;
     [SerializeField]
@@ -72,6 +75,10 @@ public class PauseMenuManager : MonoBehaviour
     #region Button Functions
     public void ResumeGame()
     {
+        foreach(UI_Indicator indicator in allButtonIndicators)
+        {
+            indicator.DeactivateIndicator();
+        }
         pausePanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
         Time.timeScale = 1;

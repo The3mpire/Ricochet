@@ -1,14 +1,14 @@
 ﻿#pragma warning disable CS0649
 
+using Enumerables;
 using System.Collections;
 using System.Collections.Generic;
-using Enumerables;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharSelectManager : MonoBehaviour
 {
-    #region Private
+    #region Inspector Variables
     [SerializeField]
     private GameDataSO gameData;
 
@@ -58,7 +58,9 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField] private Text char2TeamText;
     [SerializeField] private Text char3TeamText;
     [SerializeField] private Text char4TeamText;
+    #endregion
 
+    #region Private
     private readonly SelectionPhase[] playerPhase = new SelectionPhase[4];
     private readonly PSettings[] playerSettings = new PSettings[4];
     private float timer;
@@ -124,7 +126,6 @@ public class CharSelectManager : MonoBehaviour
             }
             CountdownToLevelSelect();
         }
-        
     }
     #endregion
 
@@ -142,6 +143,16 @@ public class CharSelectManager : MonoBehaviour
             playerSettings[playerNumber].Character = _playerObjects[playerNumber].DefaultToken.GetComponentInParent<CharacterInfo>().getCharacterId();
         }
         _playerObjects[playerNumber].Team = playerSettings[playerNumber].Team;
+    }
+
+    public void RemoveExtraP1Token()
+    {
+        _playerObjects[0].ActiveToken = _playerObjects[0].DefaultToken;
+        foreach (GameObject token in _playerObjects[0].Tokens)
+        {
+            if (!Equals(token, _playerObjects[0].ActiveToken))
+                token.SetActive(false);
+        }
     }
     #endregion
 
@@ -208,6 +219,24 @@ public class CharSelectManager : MonoBehaviour
             case SelectionPhase.Ready:
                 UndoReady(playerNumber);
                 sfxManager.PlayMenuBackSound();
+                break;
+        }
+    }
+    public void RouteBackToCharPhase(int playerNumber)
+    {
+        var phase = playerPhase[playerNumber];
+        switch (phase)
+        {
+            case SelectionPhase.CharacterSelect:
+                break;
+            case SelectionPhase.TeamSelect:
+                ClearImages(playerNumber);
+                ClearSelection(playerNumber);
+                RouteBackToCharPhase(playerNumber);
+                break;
+            case SelectionPhase.Ready:
+                UndoReady(playerNumber);
+                RouteBackToCharPhase(playerNumber);
                 break;
         }
     }
